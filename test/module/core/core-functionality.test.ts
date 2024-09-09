@@ -1633,7 +1633,8 @@ describe("Core functionality", () => {
 
 			assert.isDefined(instance.programCtx);
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-			let written = instance.write();
+
+			const written = instance.write();
 			assert.include(
 				written,
 				"class Test {\n" +
@@ -1656,7 +1657,8 @@ describe("Core functionality", () => {
 
 			assert.isDefined(instance.programCtx);
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-			let written = instance.write();
+
+			const written = instance.write();
 			assert.include(
 				written,
 				`interface Test {\n` +
@@ -1669,6 +1671,9 @@ describe("Core functionality", () => {
 					"__kipper.print(x.a);",
 				"Invalid TypeScript code (Expected different output)",
 			);
+
+			const jsCode = ts.transpile(written);
+			testPrintOutput((message: any) => assert.equal(message, "3", "Expected different output"), jsCode);
 		});
 
 		it("it should be able to instantiate a class with new", async () => {
@@ -1677,7 +1682,8 @@ describe("Core functionality", () => {
 
 			assert.isDefined(instance.programCtx);
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-			let written = instance.write();
+
+			const written = instance.write();
 			assert.include(
 				written,
 				"class Test {\n" +
@@ -1691,6 +1697,9 @@ describe("Core functionality", () => {
 					"__kipper.print(x.a);",
 				"Invalid TypeScript code (Expected different output)",
 			);
+
+			const jsCode = ts.transpile(written);
+			testPrintOutput((message: any) => assert.equal(message, "3", "Expected different output"), jsCode);
 		});
 
 		it("it should be able to instantiate a class with new and two properties", async () => {
@@ -1699,7 +1708,8 @@ describe("Core functionality", () => {
 
 			assert.isDefined(instance.programCtx);
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-			let written = instance.write();
+
+			const written = instance.write();
 			assert.include(
 				written,
 				"class Test {\n" +
@@ -1715,6 +1725,9 @@ describe("Core functionality", () => {
 					"__kipper.print(x.x);",
 				"Invalid TypeScript code (Expected different output)",
 			);
+
+			const jsCode = ts.transpile(written);
+			testPrintOutput((message: any) => assert.equal(message, "hello", "Expected different output"), jsCode);
 		});
 
 		it("it should be able to use instanceof operator", async () => {
@@ -1723,19 +1736,21 @@ describe("Core functionality", () => {
 
 			assert.isDefined(instance.programCtx);
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-			let written = instance.write();
+
+			const written = instance.write();
 			assert.include(
 				written,
 				"class Test {\n" +
-					"  a: string;\n" +
-					"  constructor(b: string)\n" +
-					"  {\n" +
-					"    a = b;\n" +
-					"  }\n" +
 					"}\n" +
-					'let x: Test = new Test("3");\n',
+					'let x: Test = new Test();\n' +
+					"if (x instanceof Test) {\n" +
+					'  __kipper.print("works");\n' +
+					"}",
 				"Invalid TypeScript code (Expected different output)",
 			);
+
+			const jsCode = ts.transpile(written);
+			testPrintOutput((message: any) => assert.equal(message, "works", "Expected different output"), jsCode);
 		});
 	});
 });
