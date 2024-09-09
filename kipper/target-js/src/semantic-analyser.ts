@@ -7,7 +7,7 @@ import type {
 	ClassMethodDeclaration,
 	Declaration,
 	FunctionDeclaration,
-	InstanceofExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -324,5 +324,5 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 */
 	typeofExpression = undefined;
 
-	instanceofExpression = undefined;
+	instanceOfExpression = undefined;
 }

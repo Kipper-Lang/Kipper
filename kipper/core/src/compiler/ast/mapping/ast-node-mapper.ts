@@ -127,7 +127,7 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../nodes";
-import { InstanceofExpression } from "../nodes/expressions/instanceof-expression/instanceof-expression";
+import { InstanceOfExpression } from "../nodes/expressions/instanceof-expression/instanceof-expression";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.
@@ -194,7 +194,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
 		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpression,
 		[ParseRuleKindMapping.RULE_typeofExpression]: TypeofExpression,
-		[ParseRuleKindMapping.RULE_instanceofExpression]: InstanceofExpression,
+		[ParseRuleKindMapping.RULE_instanceofExpression]: InstanceOfExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any, any>>;
 
 	/**
@@ -355,7 +355,7 @@ export class ASTNodeMapper {
 		RULE_lambdaPrimaryExpression: LambdaPrimaryExpression,
 		RULE_typeofExpression: TypeofExpression,
 		RULE_newInstantiationExpression: NewInstantiationExpression,
-		RULE_instanceofExpression: InstanceofExpression,
+		RULE_instanceofExpression: InstanceOfExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any, any>>;
 
 	/**

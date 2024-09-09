@@ -60,7 +60,7 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	InstanceofExpression,
+	InstanceOfExpression,
 } from "@kipper/core";
 import {
 	AssignmentExpression,
@@ -1098,7 +1098,21 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [TargetJS.getBuiltInIdentifier("typeOf"), "(", ...operand, ")"];
 	};
 
-	instanceofExpression = async (node: InstanceofExpression): Promise<TranslatedExpression> => {
-		return ["Jo here i am"];
+	/**
+	 * Translates a {@link InstanceOfExpression} into the JavaScript language.
+	 */
+	instanceOfExpression = async (node: InstanceOfExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
+		const operand = await semanticData.operand.translateCtxAndChildren();
+		const classType = TargetJS.getRuntimeType(typeData.classType);
+
+		return [
+			...operand,
+			" ",
+			"instanceof",
+			" ",
+			classType,
+		];
 	};
 }

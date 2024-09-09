@@ -4,11 +4,16 @@ import type { InstanceofExpressionTypeSemantics } from "./instanceof-expression-
 import type { InstanceOfExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
-import {UnableToDetermineSemanticDataError} from "../../../../../errors";
-import type {IdentifierTypeSpecifierExpression} from "../type-specifier-expression";
-import {BuiltInTypes, CustomType} from "../../../../semantics";
+import { UnableToDetermineSemanticDataError } from "../../../../../errors";
+import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
+import type { CustomType } from "../../../../semantics";
+import { BuiltInTypes } from "../../../../semantics";
 
-export class InstanceofExpression extends Expression<InstanceofExpressionSemantics, InstanceofExpressionTypeSemantics, Expression> {
+export class InstanceOfExpression extends Expression<
+	InstanceofExpressionSemantics,
+	InstanceofExpressionTypeSemantics,
+	Expression
+> {
 	/**
 	 * The static kind for this AST Node.
 	 * @since 0.12.0
@@ -41,7 +46,7 @@ export class InstanceofExpression extends Expression<InstanceofExpressionSemanti
 	 * @since 0.10.0
 	 */
 	public override get kind() {
-		return InstanceofExpression.kind;
+		return InstanceOfExpression.kind;
 	}
 
 	/**
@@ -53,7 +58,7 @@ export class InstanceofExpression extends Expression<InstanceofExpressionSemanti
 	 * @since 0.11.0
 	 */
 	public override get ruleName() {
-		return InstanceofExpression.ruleName;
+		return InstanceOfExpression.ruleName;
 	}
 
 	public async primarySemanticAnalysis(): Promise<void> {
@@ -81,8 +86,8 @@ export class InstanceofExpression extends Expression<InstanceofExpressionSemanti
 		};
 	}
 
-	public targetCodeGenerator = this.codeGenerator.instanceofExpression;
-	targetSemanticAnalysis = this.semanticAnalyser.instanceofExpression;
+	public targetCodeGenerator = this.codeGenerator.instanceOfExpression;
+	public targetSemanticAnalysis = this.semanticAnalyser.instanceOfExpression;
 
 	public checkForWarnings = undefined; // TODO!
 }

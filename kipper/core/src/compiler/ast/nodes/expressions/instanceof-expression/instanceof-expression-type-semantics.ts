@@ -1,6 +1,5 @@
 import type { ExpressionTypeSemantics } from "../expression-type-semantics";
 import type { CustomType } from "../../../../semantics";
-import {Expression} from "../expression";
 
 /**
  * The type semantics for an instanceof expression.

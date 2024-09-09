@@ -22,9 +22,10 @@ and the [Kipper website](https://kipper-lang.org)._
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
 <!-- toc -->
-* [Kipper CLI - `@kipper/cli` 🦊✨](#kipper-cli---kippercli-)
-* [Usage](#usage)
-* [Commands](#commands)
+
+- [Kipper CLI - `@kipper/cli` 🦊✨](#kipper-cli---kippercli-)
+- [Usage](#usage)
+- [Commands](#commands)
 <!-- tocstop -->
 
 ## General Information
@@ -39,6 +40,7 @@ and the [Kipper website](https://kipper-lang.org)._
 # Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @kipper/cli
 $ kipper COMMAND
@@ -50,16 +52,18 @@ USAGE
   $ kipper COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 # Commands
 
 <!-- commands -->
-* [`kipper compile [FILE]`](#kipper-compile-file)
-* [`kipper help [COMMAND]`](#kipper-help-command)
-* [`kipper new [LOCATION]`](#kipper-new-location)
-* [`kipper run [FILE]`](#kipper-run-file)
-* [`kipper version`](#kipper-version)
+
+- [`kipper compile [FILE]`](#kipper-compile-file)
+- [`kipper help [COMMAND]`](#kipper-help-command)
+- [`kipper new [LOCATION]`](#kipper-new-location)
+- [`kipper run [FILE]`](#kipper-run-file)
+- [`kipper version`](#kipper-version)
 
 ## `kipper compile [FILE]`
 
@@ -202,6 +206,7 @@ USAGE
 ```
 
 _See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.12.0-alpha.3/kipper/cli/src/commands/version.ts)_
+
 <!-- commandsstop -->
 
 ## Contributing to Kipper

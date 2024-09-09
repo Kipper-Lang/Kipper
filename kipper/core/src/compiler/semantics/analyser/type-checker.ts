@@ -45,7 +45,7 @@ import {
 	kipperPlusOperator,
 	kipperSupportedConversions,
 } from "../../const";
-import {InvalidInstanceOfTypeError, TypeError} from "../../../errors";
+import type { TypeError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -55,6 +55,7 @@ import {
 	InvalidAmountOfArgumentsError,
 	InvalidAmountOfGenericArgumentsError,
 	InvalidConversionTypeError,
+	InvalidInstanceOfTypeError,
 	InvalidKeyTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidUnaryExpressionOperandError,
@@ -69,7 +70,7 @@ import {
 	ValueTypeNotIndexableWithGivenAccessor,
 } from "../../../errors";
 import type { BuiltInTypeArray, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
-import { CustomType, BuiltInTypeFunc, BuiltInTypeObj, UndefinedType } from "../types";
+import { BuiltInTypeFunc, BuiltInTypeObj, CustomType, UndefinedType } from "../types";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
