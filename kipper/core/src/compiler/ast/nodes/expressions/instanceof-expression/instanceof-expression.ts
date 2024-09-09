@@ -1,12 +1,14 @@
-import type { TargetASTNodeSemanticAnalyser } from "../../../../target-presets";
 import { Expression } from "../expression";
 import type { InstanceofExpressionSemantics } from "./instanceof-expression-semantics";
 import type { InstanceofExpressionTypeSemantics } from "./instanceof-expression-type-semantics";
 import type { InstanceOfExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import type { CompilableASTNode } from "../../../compilable-ast-node";
+import {UnableToDetermineSemanticDataError} from "../../../../../errors";
+import type {IdentifierTypeSpecifierExpression} from "../type-specifier-expression";
+import {BuiltInTypes, CustomType} from "../../../../semantics";
 
-export class InstanceofExpression extends Expression<InstanceofExpressionSemantics, InstanceofExpressionTypeSemantics> {
+export class InstanceofExpression extends Expression<InstanceofExpressionSemantics, InstanceofExpressionTypeSemantics, Expression> {
 	/**
 	 * The static kind for this AST Node.
 	 * @since 0.12.0
@@ -55,12 +57,28 @@ export class InstanceofExpression extends Expression<InstanceofExpressionSemanti
 	}
 
 	public async primarySemanticAnalysis(): Promise<void> {
-		console.log("InstanceofExpression primarySemanticAnalysis");
-		throw new Error("Method not implemented.");
+		const children = this.children;
+		if (!children || children.length < 2) {
+			throw new UnableToDetermineSemanticDataError();
+		}
+
+		const operand = children[0];
+		const classTypeSpecifier = <IdentifierTypeSpecifierExpression>children[1];
+		this.semanticData = {
+			operand: operand,
+			classTypeSpecifier: classTypeSpecifier,
+		};
 	}
 
 	public async primarySemanticTypeChecking(): Promise<void> {
-		throw new Error("Method not implemented.");
+		const semanticData = this.getSemanticData();
+		const classType = semanticData.classTypeSpecifier.getTypeSemanticData().storedType;
+
+		this.programCtx.typeCheck(this).validInstanceofClassType(classType);
+		this.typeSemantics = {
+			classType: <CustomType>classType,
+			evaluatedType: BuiltInTypes.bool,
+		};
 	}
 
 	public targetCodeGenerator = this.codeGenerator.instanceofExpression;
