@@ -82,7 +82,7 @@ pnpm run lint:fix
 Whenever `package.json` is changed, run the following command:
 
 ```sh
-npm install
+pnpm install
 ```
 
 ## Run the application
@@ -90,7 +90,7 @@ npm install
 To start the Application use the command:
 
 ```sh
-npm start
+pnpm run dev
 ```
 
 ## Build the project
@@ -98,5 +98,5 @@ npm start
 To build the project:
 
 ```sh
-npm run build
+pnpm run build
 ```
