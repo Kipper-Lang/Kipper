@@ -147,6 +147,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"  TypeError: (class KipperTypeError extends KipperError { constructor(msg) { super(msg); this.name = 'KipTypeError'; } })," +
 					"  IndexError: (class KipperIndexError extends KipperError { constructor(msg) { super(msg); this.name = 'KipIndexError'; } })," +
 					"  Property: class KipperProperty { constructor(name, type) { this.name = name; this.type = type; } }," +
+					"  MethodParameter: class MethodParameter { constructor(name, type) { this.name = name; this.type = type; } }," +
 					"  Method: class KipperMethod { constructor(name, returnType, parameters) { this.name = name; this.returnType = returnType; this.parameters = parameters; } }," +
 					"  Type: KipperType," +
 					"  builtIn: {" +
@@ -218,7 +219,21 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"        return false;" +
 					"      }" +
 					"      const fieldValue = value[fieldName];" +
-					"      return fieldReturnType === fieldValue.__kipType.genericArgs.R;" +
+					"      const isSameType = fieldReturnType === fieldValue.__kipType.genericArgs.R;" +
+					"      if (!isSameType) {" +
+					"        return false;" +
+					"      }" +
+					"      const methodParameters = fieldValue.__kipType.genericArgs.T;" +
+					"      if (parameters.length !== methodParameters.length) {" +
+					"        return false;" +
+					"      }" +
+					"      let count = 0;" +
+					"      for (let param of parameters) {" +
+					"        if (param.type.name !== methodParameters[count].name) {" +
+					"          return false;" +
+					"        }" +
+					"        count++;" +
+					"      }" +
 					"    }" +
 					"  }" +
 					"  return true;" +

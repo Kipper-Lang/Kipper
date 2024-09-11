@@ -1,6 +1,6 @@
 interface Y {
 	v: bool;
-	t(): num;
+	t(gr: str): num;
 }
 
 interface X {
@@ -11,7 +11,7 @@ interface X {
 var x: X = {
 	y: {
 		v: true,
-		t: (): num -> {
+		t: (gr: str): num -> {
 			return 0;
 		}
 	},
