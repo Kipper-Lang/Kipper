@@ -4,6 +4,7 @@ import { assert } from "chai";
 import * as ts from "typescript";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { jsConfig } from "./errors";
+import {ScriptTarget} from "typescript";
 
 /**
  * Tests the 'print' function of Kipper.
@@ -156,7 +157,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(instance.write());
+			const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "4", "Expected different output"), jsCode);
 		});
 	});
@@ -326,7 +327,7 @@ describe("Core functionality", () => {
 					"Invalid TypeScript code (Expected different output)",
 				);
 
-				const jsCode = ts.transpile(code);
+				const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 				// Overwrite built-in to access output
 				const prevLog = console.log;
 				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
@@ -353,7 +354,7 @@ describe("Core functionality", () => {
 					"Invalid TypeScript code (Expected different output)",
 				);
 
-				const jsCode = ts.transpile(code);
+				const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 				testPrintOutput(() => assert(false, "Expected no output"), jsCode);
 			});
 
@@ -371,7 +372,7 @@ describe("Core functionality", () => {
 					"Invalid TypeScript code (Expected different output)",
 				);
 
-				const jsCode = ts.transpile(code);
+				const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 				testPrintOutput(() => assert(false, "Expected no output"), jsCode);
 			});
 
@@ -389,7 +390,7 @@ describe("Core functionality", () => {
 					"Invalid TypeScript code (Expected different output)",
 				);
 
-				const jsCode = ts.transpile(code);
+				const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 				testPrintOutput(() => assert(false, "Expected no output"), jsCode);
 			});
 		});
@@ -409,7 +410,7 @@ describe("Core functionality", () => {
 					"Invalid TypeScript code (Expected different output)",
 				);
 
-				const jsCode = ts.transpile(code);
+				const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 				testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 			});
 
@@ -427,7 +428,7 @@ describe("Core functionality", () => {
 					"Invalid TypeScript code (Expected different output)",
 				);
 
-				const jsCode = ts.transpile(code);
+				const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 				testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 			});
 
@@ -445,7 +446,7 @@ describe("Core functionality", () => {
 					"Invalid TypeScript code (Expected different output)",
 				);
 
-				const jsCode = ts.transpile(code);
+				const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 				testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 			});
 
@@ -463,7 +464,7 @@ describe("Core functionality", () => {
 					"Invalid TypeScript code (Expected different output)",
 				);
 
-				const jsCode = ts.transpile(code);
+				const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 				testPrintOutput(() => assert(false, "Expected no output"), jsCode);
 			});
 		});
@@ -485,7 +486,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
@@ -503,7 +504,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
@@ -521,7 +522,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
@@ -539,7 +540,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
@@ -557,7 +558,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
@@ -575,7 +576,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 	});
@@ -684,7 +685,7 @@ describe("Core functionality", () => {
 			const code = instance.write();
 			assert.include(code, "while (x <= 5) {\n  x += 1;\n}", "Invalid TypeScript code (Expected different output)");
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "6", "Expected different output"), jsCode);
 		});
 
@@ -698,7 +699,7 @@ describe("Core functionality", () => {
 			const code = instance.write();
 			assert.include(code, "while (x <= 10) \n  x += 1;", "Invalid TypeScript code (Expected different output)");
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "11", "Expected different output"), jsCode);
 		});
 
@@ -716,7 +717,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "10", "Expected different output"), jsCode);
 		});
 
@@ -734,7 +735,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different output"), jsCode);
 		});
 
@@ -753,7 +754,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different output"), jsCode);
 		});
 	});
@@ -773,7 +774,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "9", "Expected different output"), jsCode);
 		});
 
@@ -791,7 +792,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "9", "Expected different output"), jsCode);
 		});
 
@@ -809,7 +810,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "9", "Expected different output"), jsCode);
 		});
 
@@ -828,7 +829,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "4", "Expected different output"), jsCode);
 		});
 
@@ -847,7 +848,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "9", "Expected different output"), jsCode);
 		});
 	});
@@ -864,7 +865,7 @@ describe("Core functionality", () => {
 			const code = instance.write();
 			assert.include(code, "do {\n  x += 1;\n} while (x <= 5)", "Invalid TypeScript code (Expected different output)");
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "6", "Expected different output"), jsCode);
 		});
 
@@ -878,7 +879,7 @@ describe("Core functionality", () => {
 			const code = instance.write();
 			assert.include(code, "do \n  x += 1;\nwhile (x <= 10)", "Invalid TypeScript code (Expected different output)");
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "11", "Expected different output"), jsCode);
 		});
 
@@ -896,7 +897,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "10", "Expected different output"), jsCode);
 		});
 
@@ -914,7 +915,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different output"), jsCode);
 		});
 
@@ -933,7 +934,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different output"), jsCode);
 		});
 	});
@@ -955,7 +956,7 @@ describe("Core functionality", () => {
 					"Expected different TypeScript code",
 				);
 
-				const jsCode = ts.transpile(instance.write());
+				const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 				testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
 			});
 		});
@@ -975,7 +976,7 @@ describe("Core functionality", () => {
 						"Expected different TypeScript code",
 					);
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
 				});
 
@@ -992,7 +993,7 @@ describe("Core functionality", () => {
 						"Expected different TypeScript code",
 					);
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput((message: any) => assert.equal(message, "234", "Expected different output"), jsCode);
 				});
 
@@ -1009,7 +1010,7 @@ describe("Core functionality", () => {
 						"Expected different TypeScript code",
 					);
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput((message: any) => assert.equal(message, "12", "Expected different output"), jsCode);
 				});
 
@@ -1026,7 +1027,7 @@ describe("Core functionality", () => {
 						"Expected different TypeScript code",
 					);
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput((message: any) => assert.equal(message, "1234", "Expected different output"), jsCode);
 				});
 			});
@@ -1110,7 +1111,7 @@ describe("Core functionality", () => {
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput(
 						(msg: any) =>
 							assert.equal(
@@ -1130,7 +1131,7 @@ describe("Core functionality", () => {
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput(
 						(msg: any) =>
 							assert.equal(
@@ -1150,7 +1151,7 @@ describe("Core functionality", () => {
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput(
 						(msg: any) =>
 							assert.equal(
@@ -1178,7 +1179,7 @@ describe("Core functionality", () => {
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput(
 						(msg: any) =>
 							assert.equal(
@@ -1198,7 +1199,7 @@ describe("Core functionality", () => {
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput(
 						(msg: any) =>
 							assert.equal(
@@ -1218,7 +1219,7 @@ describe("Core functionality", () => {
 					assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 					assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-					const jsCode = ts.transpile(instance.write());
+					const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 					testPrintOutput(
 						(msg: any) =>
 							assert.equal(
@@ -1246,7 +1247,7 @@ describe("Core functionality", () => {
 				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-				const jsCode = ts.transpile(instance.write());
+				const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 				testPrintOutput(
 					(msg: any) =>
 						assert.equal(
@@ -1266,7 +1267,7 @@ describe("Core functionality", () => {
 				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-				const jsCode = ts.transpile(instance.write());
+				const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 				testPrintOutput(
 					(msg: any) =>
 						assert.equal(
@@ -1286,7 +1287,7 @@ describe("Core functionality", () => {
 				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-				const jsCode = ts.transpile(instance.write());
+				const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 				testPrintOutput(
 					(msg: any) =>
 						assert.equal(
@@ -1308,7 +1309,7 @@ describe("Core functionality", () => {
 				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-				const jsCode = ts.transpile(instance.write());
+				const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 				testPrintOutput(
 					(msg: any) =>
 						assert.equal(
@@ -1328,7 +1329,7 @@ describe("Core functionality", () => {
 				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-				const jsCode = ts.transpile(instance.write());
+				const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 				testPrintOutput(
 					(msg: any) =>
 						assert.equal(
@@ -1348,7 +1349,7 @@ describe("Core functionality", () => {
 				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
-				const jsCode = ts.transpile(instance.write());
+				const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 				testPrintOutput(
 					(msg: any) =>
 						assert.equal(
@@ -1399,7 +1400,7 @@ describe("Core functionality", () => {
 			assert.isDefined(instance.programCtx);
 			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
-			const jsCode = ts.transpile(instance.write());
+			const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
 		});
 
@@ -1410,7 +1411,7 @@ describe("Core functionality", () => {
 			assert.isDefined(instance.programCtx);
 			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
-			const jsCode = ts.transpile(instance.write());
+			const jsCode = ts.transpile(instance.write(), {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
 		});
 	});
@@ -1507,7 +1508,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "Works", "Expected different output"), jsCode);
 		});
 
@@ -1525,7 +1526,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "5", "Expected different result"), jsCode);
 		});
 
@@ -1543,7 +1544,7 @@ describe("Core functionality", () => {
 				"Invalid TypeScript code (Expected different output)",
 			);
 
-			const jsCode = ts.transpile(code);
+			const jsCode = ts.transpile(code, {target: ScriptTarget.ES2015});
 			testPrintOutput((message: any) => assert.equal(message, "6", "Expected different result"), jsCode);
 		});
 	});
@@ -1715,6 +1716,9 @@ describe("Core functionality", () => {
 					"__kipper.print(x.x);",
 				"Invalid TypeScript code (Expected different output)",
 			);
+
+			const jsCode = ts.transpile(written, {target: ScriptTarget.ES2015});
+			testPrintOutput((message: any) => assert.equal(message, "hello", "Expected different output"), jsCode);
 		});
 	});
 });
