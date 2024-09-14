@@ -13,13 +13,13 @@
 <div id="main-frame">
     <div id="actual-content">
         <!-- The top element: menu and search bar -->
-        <%- include('./partials/header-nav-bar', { isHomepage: false, header: true, title: title, description: description })  %>
+        <%- include('./partials/header-nav-bar', { isHomepage: false, header: true, title: title, description: description, locale: locale })  %>
 
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div class="text-page-content-container">
             <div id="download-content" class="text-content shadowed-box">
                 <section class="markdown-content">
-                    <%- markdownContent %>
+                    <%- htmlMarkdownContent %>
                 </section>
             </div>
         </div>

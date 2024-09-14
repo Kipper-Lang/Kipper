@@ -79,7 +79,7 @@ your HTML file with the following script tag:
 This will globally register the identifier `Kipper`, which can then be used to access the Kipper package.
 
 For more info on how to get started with Kipper in the web go to the section
-[Running the Compiler in an HTML file](./docs/quickstart.html#running-the-compiler-in-an-html-file) in the
+[Running the Compiler in an HTML file](<%- rootDir %>/docs/quickstart.html#running-the-compiler-in-an-html-file) in the
 Quickstart guide.
 
 <div class="red-highlight-text">
@@ -87,7 +87,7 @@ Quickstart guide.
   <p>
   Prior to v0.10.0 the web bundle was not available yet, so you will have to use an alternative method to include Kipper
 	in your web project. For more info on how to do that, go to the versions-specific
-	<a href="./docs/0.9.2/quickstart.html">Quickstart Guide for <code>v0.9.2</code></a>.
+	<a href="<%- rootDir %>/docs/0.9.2/quickstart.html">Quickstart Guide for <code>v0.9.2</code></a>.
   </p>
 </div>
 

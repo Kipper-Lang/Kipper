@@ -6,7 +6,7 @@
 <html lang="en">
 <head>
     <%- include('./partials/meta-head', { title: title, description: description }) %>
-    <link rel="stylesheet" href="./css/changelog.scss" />
+    <link rel="stylesheet" href="<%= rootDir %>/css/changelog.scss" />
 </head>
 <body>
 <%- include('./partials/default-body-top', { rootDir: rootDir }) %>
@@ -14,15 +14,15 @@
 <div id="main-frame">
     <div id="actual-content">
         <!-- The top element: menu and search bar -->
-        <%- include('./partials/header-nav-bar', { isHomepage: false, header: true, title: title, description: description }) %>
+        <%- include('./partials/header-nav-bar', { isHomepage: false, header: true, title: title, description: description, locale: locale }) %>
 
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div class="text-page-content-container">
             <div id="changelog-content" class="text-content shadowed-box">
                 <section id="changelog">
-                    <script src="./showdown/showdown.min.js"></script>
+                    <script src="<%= rootDir %>/showdown/showdown.min.js"></script>
                     <!-- Markdown will be added here -->
-                    <article class="markdown-content"><%- markdownContent %></article>
+                    <article class="markdown-content"><%- htmlMarkdownContent %></article>
                 </section>
             </div>
         </div>

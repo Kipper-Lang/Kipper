@@ -1,0 +1,11 @@
+{
+  "name": "ja-JP",
+  "values": {
+    "homepage": {
+      "welcome": "Kipperへようこそ！",
+      "description": "新しいカスタマイズ可能で使いやすいWebとNode.jsのための型安全な言語！",
+      "play-button": "プレイグラウンドを試してみる",
+      "docs-button": "ドキュメントを見る"
+    }
+  }
+}

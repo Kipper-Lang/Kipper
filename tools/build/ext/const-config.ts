@@ -18,3 +18,4 @@ export const debuggerMessage = [ // Debugger messages that should be ignored in 
 	"Debugger attached.",
 	"Waiting for the debugger to disconnect...",
 ];
+export const localsPath = path.resolve(`${srcRootDir}/locales`);

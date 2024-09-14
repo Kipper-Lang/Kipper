@@ -124,14 +124,104 @@ nav#phone-header-nav-bar {
 
       a,
       h1 {
-        color: white;
         text-align: center;
         text-decoration: none;
       }
     }
   }
 
-  .version-identifier {
+  #locales-menu {
+    margin: 0.5rem;
+    padding: 0 0.5rem;
+    gap: 0.5rem;
+    color: #fffc;
+    z-index: 2;
+    position: relative;
+
+    &, #locale-button-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #locales-dropdown {
+      /* Hide the dropdown at first */
+      display: none;
+      visibility: hidden;
+      position: absolute;
+      top: 100%;
+      width: calc(100% - 8px);
+      margin: 4px 0 0 4px;
+      z-index: 2;
+      overflow-y: auto;
+      max-height: 60vh;
+      border-radius: 5px;
+      box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
+
+      &:last-child.locale-selector-button-wrapper {
+        /* Remove the border from the last element */
+        border-bottom: none;
+      }
+
+      li.locale-selector-button-wrapper {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        border-bottom: 2px solid $scheme-gray;
+
+        a {
+          /* Similar styles like in the playground button */
+          padding: 0.8rem 0.8rem;
+          background-color: white;
+          border: none;
+
+          /* Make the button grow to the size of the parent */
+          flex-grow: 1;
+
+          &:hover {
+            color: $scheme-primary;
+            background-color: $scheme-gray;
+          }
+        }
+      }
+    }
+
+    #locale-button-wrapper button#locale-menu-root-button {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: row;
+      align-content: center;
+      justify-content: center;
+      column-gap: 0.4rem;
+      text-decoration: none;
+      background: none;
+      border: none;
+      color: inherit;
+
+      .fa-caret-down::before {
+        display: block;
+        margin-top: 0.7em;
+      }
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:hover,
+    &:focus {
+      // There should be a slight color change when hovering over the locale menu
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 0.25rem;
+      color: white;
+    }
+  }
+
+  #version-identifier {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;

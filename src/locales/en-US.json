@@ -1,0 +1,11 @@
+{
+  "name": "en-US",
+  "values": {
+    "homepage": {
+      "welcome": "Welcome to Kipper!",
+      "description": "The new customisable and easy to use type-safe language for the web and Node.js!",
+      "play-button": "Try our Playground",
+      "docs-button": "View the Docs"
+    }
+  }
+}

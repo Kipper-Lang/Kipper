@@ -69,10 +69,10 @@ export class MarkdownDocsBuilder {
 		data: Record<string, any>,
 	): Promise<string> {
 		// Set markdown content to the generated HTML and render it again if there are any ejs tags
-		data["markdownContent"] = ejs.render(markdownHtml, data, ejsOptions);
+		data["htmlMarkdownContent"] = ejs.render(markdownHtml, data, ejsOptions);
 
 		// Evaluate title and description
-		const metadata = determineMarkdownFileMetadata(data["markdownContent"]);
+		const metadata = determineMarkdownFileMetadata(data["htmlMarkdownContent"]);
 
 		// File metadata can overwrite the default title and description evaluated by 'determineFileMetadata'
 		data["title"] = fileMetadata["title"] ?? metadata.title;

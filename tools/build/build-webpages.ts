@@ -23,8 +23,6 @@ import {
 	buildEjsFiles,
 	copyNonEJSFiles,
 	ensureValidSrcAndDest,
-	getBuildData,
-	getDocsVersions,
 	processDirContents,
 } from "./ext/tools";
 import {
@@ -44,6 +42,8 @@ import { MarkdownDocsBuilder } from "./ext/markdown-docs-builder";
 import { log } from "./ext/logger";
 import { parcelBuild } from "./ext/parcel-build";
 import { registerChangelogFixExtension } from "./ext/changelog";
+import { getBuildData } from "./ext/get-build-data";
+import { getDocsVersions } from "./ext/get-docs-version";
 
 // @ts-ignore
 // eslint-disable-next-line no-import-assign
@@ -287,7 +287,7 @@ export class DocsBuilder extends MarkdownDocsBuilder {
 		await ensureValidSrcAndDest(docsSrc, docsDest);
 
 		// For every version build the docs (every folder in the docs folder)
-		const versions = await getDocsVersions(docsSrc);
+		const versions = await getDocsVersions();
 		const versionSidebars: { [v: string]: DocsSidebar } = {};
 		for (let version of versions) {
 			const versionPath = path.resolve(`${docsSrc}/${version}`);
@@ -358,7 +358,12 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 	const ejsDocsTemplate = path.resolve(`${srcRootDir}/partials/docs/page-template.ejs`);
 	const docsBuilder = new DocsBuilder(ejsDocsTemplate, showdownConverter);
 	const versionSidebars = await docsBuilder.build(
-    srcRootDocs, destRootDocs, data
+    srcRootDocs,
+    destRootDocs,
+    {
+      ...data,
+      locale: data["locales"]["en-US"] // Docs are for now only in English
+    }
   );
 
 	log.info("Built docs for versions: " + Object.keys(versionSidebars).join(", "));
@@ -366,7 +371,7 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 	// Build API docs
 	const exclusions: Array<string> = ["0.9.2", "0.10.4"]; // Versions to exclude from the API docs (as they are too outdated)
 	const apiPath: RelativeDocsURLPath = `/api/module/`; // Path to the API docs of the @kipper/core package
-	const versions: Array<string> = (await getDocsVersions(srcRootDocs)).filter((v) => !exclusions.includes(v));
+	const versions: Array<string> = (await getDocsVersions()).filter((v) => !exclusions.includes(v));
 
 	// Copy all remaining files
 	await copyNonEJSFiles(srcRootDir, destRootDir);

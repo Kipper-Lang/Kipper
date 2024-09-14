@@ -69,7 +69,7 @@ export async function search(searchBar, searchBarInput): Promise<void> {
 
 export async function loadSearch(): Promise<void> {
 	// Verify that the index is complete
-	if (searchIndex !== []) {
+	if (Array.isArray(searchIndex) && searchIndex.length > 0) {
 		console.log("Index initialised!");
 	} else {
 		console.error("Critical Error: Index for the search failed to load! Searching is disabled.");

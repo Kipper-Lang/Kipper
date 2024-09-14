@@ -32,6 +32,7 @@ const pages = {
             <% } %>
         </ul>
         <%- include('./search-bar', { searchBarId: "std-search-bar" }) %>
+        <%- include('./locales-dropdown', { locale: locale, isDocsFile: isDocsFile }) %>
     </nav>
 
     <!-- Per default invisible phone nav bar, which is shown on smaller screens -->

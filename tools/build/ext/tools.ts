@@ -22,6 +22,8 @@ import * as ejs from "ejs";
 import fetch from "node-fetch";
 import { KIPPER_NPMJS_URL } from "../const";
 import { downloadLatestChangelog } from "./changelog";
+import { getDocsVersions } from "./get-docs-version";
+import { getLocales } from "./get-locales";
 
 /**
  * Returns whether 'copyToRoot' is true for the specified version.
@@ -134,46 +136,7 @@ export async function ensureValidSrcAndDest(src: AbsolutePath, dest: AbsolutePat
 	}
 }
 
-/**
- * Gets the data for the ejs build. This simply is a JSON file with some additional data.
- * @param dataFile The path to the data file.
- */
-export async function getBuildData(dataFile: Path): Promise<Record<string, any>> {
-	// Read const config.json
-	log.debug("Requesting package metadata from registry.npmjs.org");
-	const data = JSON.parse((await fs.readFile(dataFile)).toString());
 
-	const resp = await fetch(KIPPER_NPMJS_URL);
-	const json = await resp.json();
-
-	return {
-		...data,
-		path: path,
-		existsSync: existsSync,
-		absoluteSrcRootDir: srcRootDir,
-		latestVersion: json["dist-tags"]["latest"],
-		docsVersion: undefined, // Unless we are in a docs folder, this will be undefined
-		devVersion: json["dist-tags"]["next"],
-		versions: {
-			next: json["dist-tags"]["next"],
-			latest: json["dist-tags"]["latest"],
-			"0.10.4": "0.10.4",
-			"0.9.2": "0.9.2",
-		},
-		docsVersions: await (async () => {
-			// Get all directories in the docs folder that are not current, next, or latest,
-			let entries = await fs.readdir(srcRootDocs);
-
-			// Filter out  non-directories
-			entries = entries.filter((entry) => {
-				const entryPath = path.join(srcRootDocs, entry);
-				return statSync(entryPath).isDirectory();
-			});
-
-			return entries;
-		})(),
-	};
-}
 
 /**
  * Copies all non-ejs files to the destination folder.
@@ -239,41 +202,53 @@ export async function buildEjsFiles(
   mdFiles.push("changelog.md");
 
 	// Secondly process the EJS files and insert the Markdown content (if it exists for the specific file)
-	for (let file of result) {
-		// If the file is an ejs file compile it to HTML
-		if (file.endsWith(".ejs")) {
-			const htmlFile: FileOrDirName = file.replace(".ejs", ".html");
-			const pathSrc: AbsolutePath = path.resolve(src, file);
-			const pathDest: AbsolutePath = path.resolve(dest, htmlFile);
-			const itemData = {
-				...data,
-				filename: htmlFile, // This should only contain the filename without any directory
-				urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
-				urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
-				editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
-				isDocsFile: false,
-				rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
-				markdownContent: undefined,
-			};
+  for (const localeKey in data["locales"]) {
+    const locale = data["locales"][localeKey];
 
-			// If there is a markdown file with the same name as the ejs file, then get the markdown file, build it
-			// and insert it into the ejs file
-			let mdFile = mdFiles.find((mdFile) => mdFile === file.replace(".ejs", ".md"));
-			if (mdFile !== undefined) {
-        let md: string;
-				if (mdFile === "changelog.md") {
-          md = changelogMd;
-        } else {
-          md = (await fs.readFile(path.resolve(src, mdFile))).toString();
+    // Ensure the locale directory exists in the destination folder
+    const localeDest = path.resolve(dest, localeKey === "default" ? "" : localeKey);
+    if (!existsSync(localeDest)) {
+      await fs.mkdir(localeDest, { recursive: true });
+    }
+
+    for (let file of result) {
+      // If the file is an ejs file compile it to HTML
+      if (file.endsWith(".ejs")) {
+        const htmlFile: FileOrDirName = file.replace(".ejs", ".html");
+        const pathSrc: AbsolutePath = path.resolve(src, file);
+        const pathDest: AbsolutePath = path.resolve(localeDest, htmlFile);
+        const itemData = {
+          ...data,
+          filename: htmlFile, // This should only contain the filename without any directory
+          urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
+          urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
+          editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
+          isDocsFile: false,
+          rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
+          htmlMarkdownContent: undefined,
+          locale: locale,
+        };
+
+        // If there is a markdown file with the same name as the ejs file, then get the markdown file, build it
+        // and insert it into the ejs file
+        let mdFile = mdFiles.find((mdFile) => mdFile === file.replace(".ejs", ".md"));
+        if (mdFile !== undefined) {
+          let md: string;
+          if (mdFile === "changelog.md") {
+            md = changelogMd;
+          } else {
+            md = (await fs.readFile(path.resolve(src, mdFile))).toString();
+          }
+          const html = showdownConverter.makeHtml(md);
+          itemData.htmlMarkdownContent = await ejs.render(html, itemData, ejsOptions);
         }
-				itemData.markdownContent = showdownConverter.makeHtml(md);
-			}
 
-			// Build ejs file
-			const result: string = await ejs.renderFile(pathSrc, itemData, ejsOptions);
-			await fs.writeFile(pathDest, result);
-		}
-	}
+        // Build ejs file
+        const result: string = await ejs.renderFile(pathSrc, itemData, ejsOptions);
+        await fs.writeFile(pathDest, result);
+      }
+    }
+  }
 }
 
 /**
@@ -334,14 +309,6 @@ export function determineMarkdownFileMetadata(
 	metaData.description = metaData.description.trim();
 
 	return metaData;
-}
-
-/**
- * Gets the versions of the docs.
- * @param docsSrc The source directory of the docs.
- */
-export async function getDocsVersions(docsSrc: string): Promise<Array<string>> {
-	return await fs.readdir(docsSrc);
 }
 
 /**

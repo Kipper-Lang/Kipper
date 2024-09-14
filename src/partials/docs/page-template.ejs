@@ -19,7 +19,7 @@
 <div id="main-frame">
     <div id="actual-content">
         <!-- The top element: menu and search bar -->
-        <%- include('../header-nav-bar', { isHomepage: false, header: false, title: title, description: description }) %>
+        <%- include('../header-nav-bar', { isHomepage: false, header: false, title: title, description: description, locale: locale }) %>
 
         <!-- Main Content, where the text is located and the items unique to this site are defined -->
         <div class="flex-parent-container flex-fill-to-parent">
@@ -74,7 +74,7 @@
                             </a>
                         </nav>
                         <article class="markdown-content">
-                            <%- markdownContent %>
+                            <%- htmlMarkdownContent %>
                         </article>
                     </section>
                 </li>

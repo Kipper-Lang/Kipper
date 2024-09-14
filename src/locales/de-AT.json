@@ -1,0 +1,11 @@
+{
+  "name": "de-AT",
+  "values": {
+    "homepage": {
+      "welcome": "Willkommen bei Kipper!",
+      "description": "Die neue anpassbare und einfach zu bedienende typsichere Sprache fürs Web und Node.js!",
+      "play-button": "Playground ausprobieren",
+      "docs-button": "Doku anzeigen"
+    }
+  }
+}
