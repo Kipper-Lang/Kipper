@@ -11,9 +11,7 @@ const phoneHeaderMenuToggle = <HTMLLIElement>document.querySelector(".phone-head
  * Only works on phones.
  */
 function togglePhoneHeaderMenu() {
-	console.log(phoneHeaderMenu);
 	const isVisible = window.getComputedStyle(phoneHeaderMenu).visibility === "visible";
-	console.log(isVisible);
 	if (isVisible) {
 		phoneHeaderMenu.classList.add("invisible");
 		phoneHeaderMenu.classList.remove("visible");
@@ -22,6 +20,4 @@ function togglePhoneHeaderMenu() {
 		phoneHeaderMenu.classList.remove("invisible");
 	}
 }
-
 phoneHeaderMenuToggle.addEventListener("click", togglePhoneHeaderMenu);
-console.log(phoneHeaderMenuToggle);

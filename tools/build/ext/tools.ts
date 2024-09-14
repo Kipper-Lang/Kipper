@@ -204,12 +204,16 @@ export async function buildEjsFiles(
 	// Secondly process the EJS files and insert the Markdown content (if it exists for the specific file)
   for (const localeKey in data["locales"]) {
     const locale = data["locales"][localeKey];
+    const isDef = localeKey === "default";
 
     // Ensure the locale directory exists in the destination folder
-    const localeDest = path.resolve(dest, localeKey === "default" ? "" : localeKey);
+    const localeDest = path.resolve(dest, isDef ? "" : localeKey);
     if (!existsSync(localeDest)) {
       await fs.mkdir(localeDest, { recursive: true });
     }
+    const rootDir = getRelativePathToSrc(destRootDir, `${localeDest}/sample`);
+    const lc = isDef ? "" : localeKey;
+    const rlc = isDef ? rootDir : `${rootDir}/${lc}`;
 
     for (let file of result) {
       // If the file is an ejs file compile it to HTML
@@ -224,9 +228,11 @@ export async function buildEjsFiles(
           urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
           editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
           isDocsFile: false,
-          rootDir: getRelativePathToSrc(destRootDir, pathDest), // Relative path to the root directory
+          rootDir: rootDir, // Relative path to the root directory
           htmlMarkdownContent: undefined,
           locale: locale,
+          lc: lc,
+          rlc: rlc,
         };
 
         // If there is a markdown file with the same name as the ejs file, then get the markdown file, build it

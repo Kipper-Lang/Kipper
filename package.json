@@ -29,7 +29,8 @@
     "tslint:fix": "eslint ./src/ --ext .ts --config .eslintrc --fix",
     "posttest": "pnpm run lint & pnpm run prettier",
     "predev": "pnpm run build",
-    "dev": "http-server ./dist -p 1234 -e html --cors",
+    "host": "http-server ./dist -p 1234 -e html --cors",
+    "dev": "pnpm run host",
     "push-new-version": "ts-node ./tools/versioning/push-new-version.ts"
   },
   "devDependencies": {

@@ -99,9 +99,11 @@ export class MarkdownDocsBuilder {
 		existingData: Record<string, any>,
 		navTreeItem: SidebarFile,
 	): Record<string, any> {
+    const rootDir = ensureURLSlashes(getRelativePathToSrc(destRootDir, pathDest));
+
 		return {
 			...existingData,
-			rootDir: ensureURLSlashes(getRelativePathToSrc(destRootDir, pathDest)), // Relative path to the root directory
+			rootDir: rootDir, // Relative path to the root directory
 			filename: htmlFilename, // This should only contain the filename without any directory
 			urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
 			urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
@@ -112,6 +114,9 @@ export class MarkdownDocsBuilder {
 			isHiddenFile: navTreeItem === undefined,
 			isIndexFile: navTreeItem && navTreeItem.filename === "index.html",
 			dropdownTitle: navTreeItem?.dropdownTitle,
+      locale: existingData["locales"]["default"],
+      lc: "",
+      rlc: rootDir,
 		};
 	}
 

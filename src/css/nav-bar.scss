@@ -145,9 +145,6 @@ nav#phone-header-nav-bar {
     }
 
     #locales-dropdown {
-      /* Hide the dropdown at first */
-      display: none;
-      visibility: hidden;
       position: absolute;
       top: 100%;
       width: calc(100% - 8px);
@@ -158,9 +155,23 @@ nav#phone-header-nav-bar {
       border-radius: 5px;
       box-shadow: rgba(0, 0, 0, 0.35) 0 4px 12px;
 
+      /* Hide per default */
+      display: none;
+      visibility: hidden;
+
       &:last-child.locale-selector-button-wrapper {
         /* Remove the border from the last element */
         border-bottom: none;
+      }
+
+      &.visible {
+        visibility: visible;
+        display: block;
+      }
+
+      &.invisible {
+        visibility: hidden;
+        display: none;
       }
 
       li.locale-selector-button-wrapper {

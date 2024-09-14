@@ -19,7 +19,8 @@
                 <!-- Main navigation links - 'pages' is a global variable added by the parent 'header-nav-bar.ejs' -->
                 <% for (const page in pages) { %>
                     <%  const pageName = pages[page]; %>
-                    <%  const pagePath = rootDir + "/" + page; %>
+                    <%  const isDocs = pageName === "Docs"; %>
+                    <%  const pagePath = `${isDocs ? rootDir : rlc}/${page}` %>
                     <li>
                         <a href="<%= pagePath %>"
                            class="underline-button top-nav-menu-item top-nav-button
