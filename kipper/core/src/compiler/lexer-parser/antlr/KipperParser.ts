@@ -2,28 +2,29 @@
 
 // Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 // kind values.
-import { ASTKind, KipperParserRuleContext, ParseRuleKindMapping } from "..";
+import type { ASTKind } from "..";
+import { KipperParserRuleContext, ParseRuleKindMapping } from "..";
 import KipperParserBase from "./base/KipperParserBase";
 
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import { NoViableAltException } from "antlr4ts/NoViableAltException";
-import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
+import type { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
 import { RecognitionException } from "antlr4ts/RecognitionException";
-import { RuleContext } from "antlr4ts/RuleContext";
+import type { RuleContext } from "antlr4ts/RuleContext";
 //import { RuleVersion } from "antlr4ts/RuleVersion";
-import { TerminalNode } from "antlr4ts/tree/TerminalNode";
+import type { TerminalNode } from "antlr4ts/tree/TerminalNode";
 import { Token } from "antlr4ts/Token";
-import { TokenStream } from "antlr4ts/TokenStream";
-import { Vocabulary } from "antlr4ts/Vocabulary";
+import type { TokenStream } from "antlr4ts/TokenStream";
+import type { Vocabulary } from "antlr4ts/Vocabulary";
 import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
 
 import * as Utils from "antlr4ts/misc/Utils";
 
-import { KipperParserListener } from "./KipperParserListener";
-import { KipperParserVisitor } from "./KipperParserVisitor";
+import type { KipperParserListener } from "./KipperParserListener";
+import type { KipperParserVisitor } from "./KipperParserVisitor";
 
 export class KipperParser extends KipperParserBase {
 	public static readonly FStringExpStart = 1;

@@ -185,14 +185,12 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.7.0
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
+	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Get the type that will be returned using the value type specifier
@@ -201,6 +199,17 @@ export class VariableDeclaration extends Declaration<VariableDeclarationSemantic
 		this.typeSemantics = {
 			valueType: valueType,
 		};
+	}
+
+	/**
+	 * The primary type checking for this AST node. This will throw an error if the type checking fails.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
+	 * @since 0.7.0
+	 */
+	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
 
 		// If the variable is defined, check whether the assignment is valid
 		if (semanticData.value) {

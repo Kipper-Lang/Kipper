@@ -30,7 +30,6 @@ import type {
 } from "./semantics";
 import {
 	BuiltInFunctions,
-	BuiltInTypes,
 	BuiltInVariables,
 	KipperSemanticChecker,
 	KipperTypeChecker,
@@ -212,7 +211,9 @@ export class KipperProgramContext {
 		this._internalReferences = [];
 		this._warnings = [];
 		this._errors = [];
-		this._initUniversalReferencables(compileConfig);
+
+		this.logger.debug("Setting up built-ins in global scope.");
+		this._initUniversalReferenceables(compileConfig);
 	}
 
 	// @ts-ignore
@@ -485,19 +486,6 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Sets up the built-ins for this program. This function should be called before the semantic analysis is run.
-	 *
-	 * TODO! For now this only registers the built-in types in the global scope so they can be use, but in the future
-	 * this should also generate the built-in functions and variables.
-	 * @since 0.11.0
-	 */
-	public async setUpBuiltInsInGlobalScope(): Promise<void> {
-		for (const [_, type] of Object.entries(BuiltInTypes)) {
-			this._universeScope.addType(type);
-		}
-	}
-
-	/**
 	 * Runs the semantic analysis for this {@link KipperProgramContext program}. This function will log debugging messages
 	 * and warnings using the {@link this.logger logger of this instance} and throw errors in case any logical issues are
 	 * detected.
@@ -599,8 +587,6 @@ export class KipperProgramContext {
 		this._rootASTNode = await this.generateAbstractSyntaxTree();
 
 		// Running the semantic analysis for the AST
-		this.logger.debug("Setting up built-ins in global scope.");
-		await this.setUpBuiltInsInGlobalScope();
 		this.logger.info(`Analysing semantics.`);
 		await this.semanticAnalysis();
 
@@ -796,7 +782,7 @@ export class KipperProgramContext {
 	}
 
 	/**
-	 * Initialises the universal referencables for the program context, by registering all built-in functions and
+	 * Initialises the universal Referenceables for the program context, by registering all built-in functions and
 	 * variables as well as adding all the extension functions and variables.
 	 *
 	 * This will initialise {@link this._universeScope}.
@@ -804,7 +790,7 @@ export class KipperProgramContext {
 	 * @private
 	 * @since 0.11.0
 	 */
-	private _initUniversalReferencables(compileConfig: EvaluatedCompileConfig) {
+	private _initUniversalReferenceables(compileConfig: EvaluatedCompileConfig) {
 		// Register all built-in functions
 		const globalFunctions = [...Object.values(BuiltInFunctions), ...compileConfig.extendBuiltInFunctions];
 		this.registerBuiltInFunctions(globalFunctions);
@@ -821,9 +807,11 @@ export class KipperProgramContext {
 
 		this._universeScope.init();
 		for (const extFunction of compileConfig.extendBuiltInFunctions) {
+			this.logger.debug(`Adding extended built-in function '${extFunction.identifier}'.`);
 			this._universeScope.addFunction(extFunction);
 		}
 		for (const extVariable of compileConfig.extendBuiltInVariables) {
+			this.logger.debug(`Adding extended built-in variable '${extVariable.identifier}'.`);
 			this._universeScope.addVariable(extVariable);
 		}
 	}

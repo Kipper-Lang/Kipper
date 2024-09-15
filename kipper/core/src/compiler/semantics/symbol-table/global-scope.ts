@@ -6,20 +6,20 @@
 import type { ScopeDeclaration } from "./entry";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
 import type { FunctionDeclaration, RootASTNode, TypeDeclaration, VariableDeclaration } from "../../ast";
-import { Scope } from "./base/scope";
 import type { UniverseScope } from "./universe-scope";
+import { UserScope } from "./base/user-scope";
 
 /**
  * The global scope of a {@link KipperProgramContext}, which contains the global variables and functions of a
  * Kipper program.
  * @since 0.8.0
  */
-export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration, TypeDeclaration> {
+export class GlobalScope extends UserScope<VariableDeclaration, FunctionDeclaration, TypeDeclaration> {
 	constructor(
 		public readonly ctx: RootASTNode,
 		public readonly universe: UniverseScope,
 	) {
-		super();
+		super(ctx);
 	}
 
 	/**
@@ -30,9 +30,7 @@ export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration,
 
 	public addFunction(declaration: FunctionDeclaration): ScopeFunctionDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-
-		// Ensuring that the declaration does not overwrite other declarations
-		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
+		this.ensureNotUsed(identifier, declaration);
 
 		const scopeDeclaration = ScopeFunctionDeclaration.fromFunctionDeclaration(declaration);
 		this.entries.set(identifier, scopeDeclaration);
@@ -41,18 +39,19 @@ export class GlobalScope extends Scope<VariableDeclaration, FunctionDeclaration,
 
 	public addVariable(declaration: VariableDeclaration): ScopeVariableDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-
-		// Ensuring that the declaration does not overwrite other declarations
-		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
+		this.ensureNotUsed(identifier, declaration);
 
 		const scopeDeclaration = ScopeVariableDeclaration.fromVariableDeclaration(declaration);
 		this.entries.set(identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}
 
-	public addType(declarationOrIdentifier: TypeDeclaration): ScopeTypeDeclaration {
+	public addType(declaration: TypeDeclaration): ScopeTypeDeclaration {
+		const identifier = declaration.getSemanticData().identifier;
+		this.ensureNotUsed(identifier, declaration);
+
 		// Depending on the type of the argument, create either a built-in type or a custom type
-		const scopeDeclaration = ScopeTypeDeclaration.fromTypeDeclaration(declarationOrIdentifier);
+		const scopeDeclaration = ScopeTypeDeclaration.fromTypeDeclaration(declaration);
 
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;

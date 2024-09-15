@@ -101,11 +101,12 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.8.0
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
+	 *
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
+	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.rawType, this.scope);
 		const providedArguments = semanticData.genericArguments.map((arg) => arg.getTypeSemanticData().storedType);
@@ -179,6 +180,7 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 			storedType: (<GenericType<GenericTypeArguments>>valueType).changeGenericTypeArguments(newGenericArguments),
 		};
 	}
+	public readonly primarySemanticTypeChecking: undefined;
 
 	public checkForWarnings = undefined; // TODO!
 

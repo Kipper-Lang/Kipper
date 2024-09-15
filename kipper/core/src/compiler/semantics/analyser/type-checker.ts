@@ -143,10 +143,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		// Assuming obj.fields is a Map or an iterable collection of [key, value] pairs
-		for (const [fieldIdentifier, type] of obj.fields) {
-			if (fieldIdentifier === identifier) {
-				return type;
-			}
+		const fieldType = obj.getProperty(identifier);
+		if (fieldType) {
+			return fieldType;
 		}
 
 		// If no matching field was found, throw an error
@@ -543,12 +542,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// If the return statement has no return value, then the value is automatically 'void'
 		const statementValueType = semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? BuiltInTypes.void;
 
-		// TODO! DON'T DO THIS. THIS IS PUTTING TYPE CHECKING OF A PARENT INTO A CHILD
-		// TODO! REALLY WE NEED TO REMOVE THIS SOON
-		const functionReturnType = this.getCheckedType(
-			semanticData.function.getSemanticData().returnType,
-			semanticData.function.scope,
-		);
+		// As the function type is evaluated preliminary, we can safely assume that the type is valid and use it
+		const functionReturnType = semanticData.function.getTypeSemanticData().type.returnType;
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
 		if (statementValueType === undefined || functionReturnType === undefined) {
@@ -652,6 +647,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	/**
 	 * Checks whether the members of the passed {@link objLike} can be accessed. (As well if there are members)
 	 * @param objLike The object-like expression to check.
+	 * @param accessType The type of accessor that is used to access the members.
 	 * @throws {TypeError} If the object expression is not an object.
 	 * @since 0.10.0
 	 */

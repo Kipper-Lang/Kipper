@@ -3,16 +3,20 @@
  * invalid use of tokens is detected.
  * @since 0.7.0
  */
-import type { KipperReferenceable } from "../../const";
+import type { KipperCallable, KipperReferenceable } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
 import type {
 	CompilableNodeChild,
 	CompilableNodeParent,
+	Declaration,
 	JumpStatement,
 	ReturnStatement,
 	VariableDeclaration,
 } from "../../ast";
 import {
+	ClassMemberDeclaration,
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 	CompoundStatement,
 	Expression,
 	FunctionDeclaration,
@@ -28,6 +32,7 @@ import {
 	BuiltInOrInternalGeneratorFunctionNotFoundError,
 	BuiltInOverwriteError,
 	IdentifierAlreadyUsedByFunctionError,
+	IdentifierAlreadyUsedByMemberError,
 	IdentifierAlreadyUsedByParameterError,
 	IdentifierAlreadyUsedByVariableError,
 	InvalidAssignmentError,
@@ -88,6 +93,7 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 
 	/**
 	 * Recursively ensures that the identifier does not overwrite any declarations in this scope or parent scopes.
+	 * @param declaration The declaration to check.
 	 * @param identifier The identifier to search for in this scope and its parent scopes.
 	 * @param scopeCtx The context instance of the scope.
 	 * @throws {IdentifierAlreadyUsedByVariableError} If the identifier is already used by a variable.
@@ -96,20 +102,35 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @throws {BuiltInOverwriteError} If the identifier is already in use by a built-in function.
 	 * @since 0.10.0
 	 */
-	public identifierNotUsed(identifier: string, scopeCtx: Scope): void {
+	public identifierNotUsed(declaration: Declaration, identifier: string, scopeCtx: Scope): void {
 		// Ensure beforehand that also no built-in has the same identifier
 		this.builtInNotDefined(identifier);
 
 		const ref = scopeCtx.getEntryRecursively(identifier);
 		if (ref) {
 			if (ref instanceof ScopeVariableDeclaration) {
-				throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
+				if (ref.node instanceof ClassPropertyDeclaration) {
+					if (declaration instanceof ClassMemberDeclaration) {
+						throw this.assertError(new IdentifierAlreadyUsedByMemberError(identifier, "class"));
+					}
+					// If the declaration is a class property and the reference is a class property, throw an error
+					// Otherwise we are dealing with a variable shadowing a class property, which is allowed, as the user already
+					// needs to use "this" to access the class property
+				} else {
+					throw this.assertError(new IdentifierAlreadyUsedByVariableError(identifier));
+				}
 			} else if (ref instanceof ScopeFunctionDeclaration) {
-				throw this.assertError(new IdentifierAlreadyUsedByFunctionError(identifier));
+				if (ref.node instanceof ClassMethodDeclaration) {
+					if (declaration instanceof ClassMemberDeclaration) {
+						throw this.assertError(new IdentifierAlreadyUsedByMemberError(identifier, "class"));
+					}
+					// If the declaration is a class property and the reference is a class property, throw an error
+					// Otherwise we are dealing with a variable shadowing a class method, which is allowed, as the user already
+					// needs to use "this" to access the class method
+				} else {
+					throw this.assertError(new IdentifierAlreadyUsedByFunctionError(identifier));
+				}
 			} else {
-				// Currently, all other possible possibilities are narrowed to only being a parameter
-				// This is due to the fact that no other classes inheriting from abstract class ScopeDeclaration are
-				// implemented yet.
 				throw this.assertError(new IdentifierAlreadyUsedByParameterError(identifier));
 			}
 		}
@@ -207,12 +228,16 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @returns The parent function if found.
 	 * @since 0.10.0
 	 */
-	public getReturnStatementParent(retStatement: ReturnStatement): FunctionDeclaration | LambdaPrimaryExpression {
+	public getReturnStatementParent(retStatement: ReturnStatement): KipperCallable {
 		// Move up the parent chain and continue as long as there are parents and the current parent is not a function
 		// declaration. This is to ensure a return statement is always used inside a function.
 		let currentParent: CompilableNodeParent | undefined = retStatement.parent;
 		while (
-			!(currentParent instanceof FunctionDeclaration || currentParent instanceof LambdaPrimaryExpression) &&
+			!(
+				currentParent instanceof FunctionDeclaration ||
+				currentParent instanceof LambdaPrimaryExpression ||
+				currentParent instanceof ClassMethodDeclaration
+			) &&
 			currentParent
 		) {
 			currentParent = currentParent.parent;

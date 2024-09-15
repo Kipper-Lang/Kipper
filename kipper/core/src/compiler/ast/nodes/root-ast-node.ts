@@ -190,6 +190,16 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> imp
 			}
 		}
 
+		// Perform preliminary semantic analysis in case any specific type evaluation is required prematurely (ahead of
+		// time type evaluation)
+		for (let child of this.children) {
+			try {
+				await child.preliminaryTypeChecking();
+			} catch (e) {
+				await this.handleSemanticError(<Error>e);
+			}
+		}
+
 		// Perform type-checking based on the existing AST nodes and evaluated semantics
 		for (let child of this.children) {
 			try {

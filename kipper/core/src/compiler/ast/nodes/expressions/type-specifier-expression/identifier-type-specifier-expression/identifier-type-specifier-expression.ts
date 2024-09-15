@@ -97,11 +97,12 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.8.0
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
+	 *
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
+	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Create a checked type instance (this function handles error recovery and invalid types)
@@ -112,6 +113,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 			storedType: valueType,
 		};
 	}
+	public readonly primarySemanticTypeChecking: undefined;
 
 	public checkForWarnings = undefined; // TODO!
 
