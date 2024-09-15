@@ -1418,63 +1418,44 @@ describe("Core functionality", () => {
 	describe("Lambdas", () => {
 		describe("js", () => {
 			it("parses simple lambda expression without syntax errors", async () => {
-				const code = `var add: Func<num, num, num> = (x: num, y: num): num -> x + y;`;
-				try {
-					const result = await compiler.compile(code, jsConfig);
+				const code = `var add: Func<num, num, num> = (x: num, y: num): num -> x + y; print(add(1, 2));`;
+				const result = await compiler.compile(code, jsConfig);
+				const stringResult = result.write();
 
-					// Evaluate the compiled code
-					let stringResult = result.result!.map((x) => x.join("")).join("\n");
-					stringResult = stringResult.concat("\nadd(1, 2);");
-					const res = eval(stringResult);
-					assert.equal(res, 3, "Lambda expression evaluated correctly");
-				} catch (e) {
-					assert.fail("Failed to analyze lambda expression semantically");
-				}
+				testPrintOutput((message: any) => assert.equal(message, "3", "Expected different output"), stringResult);
 			});
 
 			it("correctly identifies semantic data for a lambda with compound statement", async () => {
-				const code = `var greet: Func<str, str> = (name: str): str -> { return "Hello, " + name; };`;
-				try {
-					const result = await compiler.compile(code, jsConfig);
+				const code = `var greet: Func<str, str> = (name: str): str -> { return "Hello, " + name; }; print(greet('John'));`;
+				const result = await compiler.compile(code, jsConfig);
+				const stringResult = result.write();
 
-					// Evaluate the compiled code
-					let stringResult = result.result!.map((x) => x.join("")).join("\n");
-					stringResult = stringResult.concat("\ngreet('John');");
-					const res = eval(stringResult);
-					assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
-				} catch (e) {
-					assert.fail("Failed to analyze lambda expression semantically");
-				}
+				testPrintOutput(
+					(message: any) => assert.equal(message, "Hello, John", "Expected different output"),
+					stringResult,
+				);
 			});
 
 			it("correctly identifies semantic data for a lambda with single statement", async () => {
-				const code = `var greet: Func<str, str> = (name: str): str -> "Hello, " + name;`;
-				try {
-					const result = await compiler.compile(code, jsConfig);
+				const code = `var greet: Func<str, str> = (name: str): str -> "Hello, " + name; print(greet('John'));`;
+				const result = await compiler.compile(code, jsConfig);
+				const stringResult = result.write();
 
-					// Evaluate the compiled code
-					let stringResult = result.result!.map((x) => x.join("")).join("\n");
-					stringResult = stringResult.concat("\ngreet('John');");
-					const res = eval(stringResult);
-					assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
-				} catch (e) {
-					assert.fail("Failed to analyze lambda expression semantically");
-				}
+				testPrintOutput(
+					(message: any) => assert.equal(message, "Hello, John", "Expected different output"),
+					stringResult,
+				);
 			});
 
 			it("correctly identifies semantic data for a lambda with no parameters", async () => {
-				const code = `var greet: Func<str> = (): str -> "Hello, World!";`;
-				try {
-					const result = await compiler.compile(code, jsConfig);
+				const code = `var greet: Func<str> = (): str -> "Hello, World!"; print(greet());`;
+				const result = await compiler.compile(code, jsConfig);
+				const stringResult = result.write();
 
-					// Evaluate the compiled code
-					let stringResult = result.result!.map((x) => x.join("")).join("\n");
-					stringResult = stringResult.concat("\ngreet();");
-					const res = eval(stringResult);
-					assert.equal(res, "Hello, World!", "Lambda expression evaluated correctly");
-				} catch (e) {
-					assert.fail("Failed to analyze lambda expression semantically");
-				}
+				testPrintOutput(
+					(message: any) => assert.equal(message, "Hello, World!", "Expected different output"),
+					stringResult,
+				);
 			});
 		});
 
