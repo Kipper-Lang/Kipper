@@ -3,6 +3,7 @@
  * @since 0.3.0
  */
 import type { ScopeDeclaration } from "./semantics";
+import type { ClassMethodDeclaration, FunctionDeclaration, LambdaPrimaryExpression } from "./ast";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -646,6 +647,12 @@ export type KipperReferenceable = ScopeDeclaration;
  * @since 0.10.0
  */
 export type JmpStatementType = "continue" | "break";
+
+/**
+ * Represents all possible callable ast nodes inside Kipper.
+ * @since 0.12.0
+ */
+export type KipperCallable = FunctionDeclaration | LambdaPrimaryExpression | ClassMethodDeclaration;
 
 /**
  * Represents the internal identifier for a Kipper constructor.

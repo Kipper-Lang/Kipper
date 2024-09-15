@@ -12,8 +12,8 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { ScopeNode } from "../../../../scope-node";
 import type { Statement } from "../../../statements";
-import { CompoundStatement } from "../../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
+import { CompoundStatement } from "../../../statements";
 import { ParameterDeclaration } from "../../../declarations";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { BuiltInTypeFunc, LambdaScope } from "../../../../../semantics";
@@ -143,14 +143,12 @@ export class LambdaPrimaryExpression
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.11.0
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
+	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
@@ -166,6 +164,7 @@ export class LambdaPrimaryExpression
 			this.programCtx.typeCheck(this).validReturnCodePathsInFunctionBody(this);
 		}
 	}
+	public readonly primarySemanticTypeChecking: undefined;
 
 	public checkForWarnings = undefined;
 

@@ -2,12 +2,12 @@
 
 import KipperLexerBase from "./base/KipperLexerBase";
 
-import { ATN } from "antlr4ts/atn/ATN";
+import type { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
-import { CharStream } from "antlr4ts/CharStream";
+import type { CharStream } from "antlr4ts/CharStream";
 import { LexerATNSimulator } from "antlr4ts/atn/LexerATNSimulator";
-import { RuleContext } from "antlr4ts/RuleContext";
-import { Vocabulary } from "antlr4ts/Vocabulary";
+import type { RuleContext } from "antlr4ts/RuleContext";
+import type { Vocabulary } from "antlr4ts/Vocabulary";
 import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
 
 import * as Utils from "antlr4ts/misc/Utils";

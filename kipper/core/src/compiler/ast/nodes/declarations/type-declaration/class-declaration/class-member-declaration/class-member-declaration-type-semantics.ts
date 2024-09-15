@@ -1,14 +1,7 @@
-import type { DeclarationTypeSemantics } from "../../../declaration-type-semantics";
-import type { ProcessedType } from "../../../../../../semantics";
+import type { TypeDeclarationPropertyTypeSemantics } from "../../type-declaration-property-type-semantics";
 
 /**
  * Type semantics for a {@link InterfaceMemberDeclaration}.
  * @since 0.12.0
  */
-export interface ClassMemberDeclarationTypeSemantics extends DeclarationTypeSemantics {
-	/**
-	 * The processed type of this member property.
-	 * @since 0.12.0
-	 */
-	valueType: ProcessedType;
-}
+export interface ClassMemberDeclarationTypeSemantics extends TypeDeclarationPropertyTypeSemantics {}

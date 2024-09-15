@@ -229,6 +229,39 @@ export abstract class AnalysableASTNode<
 	}
 
 	/**
+	 * Performs preliminary type checking on this AST node and all {@link this.children children nodes}. This uses the
+	 * {@link this.semanticData semantic data} that was evaluated during {@link this.semanticAnalysis semantic analysis}.
+	 *
+	 * This preliminarily sets the {@link this.typeSemantics type semantics} of this node and allows the use of
+	 * {@link this.getTypeSemanticData} in any child that may need the data, without getting any error.
+	 *
+	 * This is a special step in the type checking process, where the type semantics are evaluated before the actual type
+	 * checking is done. This is useful for cases where children need parent data to be already evaluated, like for
+	 * example inside a class when the class type is needed for checking the "this" keyword.
+	 *
+	 * We will call this "Ahead of time" type evaluation, as it is done before the actual proper type checking of the
+	 * node, preceding any other type checking in the entire tree.
+	 * @since 0.12.0
+	 */
+	public async preliminaryTypeChecking(): Promise<void> {
+		// Start with the evaluation of the children
+		await this.preliminaryTypeCheckingChildren();
+
+		// If the semantic analysis until now has evaluated data, do the target semantic analysis of this node (if defined)
+		// Per default, we will say the nodes themselves handle all errors, so we don't need to do anything here
+		if (this.semanticData && this.primaryPreliminaryTypeChecking !== undefined) {
+			try {
+				await this.primaryPreliminaryTypeChecking();
+			} catch (e) {
+				if (e instanceof MissingRequiredSemanticDataError) {
+					this._skippedSemanticTypeChecking = true;
+				}
+				throw e; // Pass on the error to the parent
+			}
+		}
+	}
+
+	/**
 	 * Performs type checking on this AST node and all {@link this.children children nodes}. This uses the
 	 * {@link this.semanticData semantic data} that was evaluated during {@link this.semanticAnalysis semantic analysis}.
 	 * @since 0.10.0
@@ -242,12 +275,16 @@ export abstract class AnalysableASTNode<
 		// Note! Expressions do this differently and abort immediately all processing if one of the children failed.
 		// Additionally, this will also not check for 'this.hasFailed', as we still want to run type checking if possible
 		// even with a logic error in the code (so we only check for the semantic data)
-		if (this.semanticData && this.primarySemanticTypeChecking !== undefined) {
+		if (
+			this.semanticData &&
+			this.primarySemanticTypeChecking !== undefined &&
+			(!this.primaryPreliminaryTypeChecking || this.typeSemantics !== undefined)
+		) {
 			try {
 				await this.primarySemanticTypeChecking();
 			} catch (e) {
 				if (e instanceof MissingRequiredSemanticDataError) {
-					this._skippedSemanticAnalysis = true;
+					this._skippedSemanticTypeChecking = true;
 				}
 				throw e; // Pass on the error to the parent
 			}
@@ -323,6 +360,21 @@ export abstract class AnalysableASTNode<
 	}
 
 	/**
+	 * Runs {@link preliminaryTypeChecking} of all children nodes.
+	 * @since 0.12.0
+	 * @protected
+	 */
+	protected async preliminaryTypeCheckingChildren(): Promise<void> {
+		for (const child of this.children) {
+			try {
+				await child.preliminaryTypeChecking();
+			} catch (e) {
+				this.handleSemanticError(<Error>e);
+			}
+		}
+	}
+
+	/**
 	 * Runs {@link semanticTypeChecking} of all children nodes.
 	 * @since 0.10.0
 	 * @protected
@@ -361,6 +413,17 @@ export abstract class AnalysableASTNode<
 	 * @since 0.8.0
 	 */
 	protected abstract primarySemanticAnalysis?(): Promise<void>;
+
+	/**
+	 * Preliminary type checks the code inside this AST node.
+	 *
+	 * This is a special step in the type checking process, where the type semantics are evaluated before the actual type
+	 * checking is done. This is useful for cases where children need parent data to be already evaluated, like for
+	 * example inside a class when the class type is needed for checking the "this" keyword.
+	 * @protected
+	 * @since 0.12.0
+	 */
+	protected primaryPreliminaryTypeChecking?(): Promise<void>;
 
 	/**
 	 * Type checks the code inside this AST node.

@@ -14,6 +14,7 @@ import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { ClassScope } from "../../../../../semantics/symbol-table/class-scope";
 import { TypeDeclaration } from "../type-declaration";
 import type { ClassConstructorDeclaration, ClassMemberDeclaration } from "./class-member-declaration";
+import { ClassScopeThisDeclaration } from "../../../../../semantics/symbol-table/entry/class-scope-this-declaration";
 
 /**
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
@@ -24,31 +25,24 @@ export class ClassDeclaration
 	implements ScopeNode<ClassScope>
 {
 	/**
-	/**
-	* The static kind for this AST Node.
+	 * The static kind for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_classDeclaration;
+
 	/**
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.11.0
-	 */
-	public checkForWarnings = undefined; // TODO!
-	readonly targetSemanticAnalysis = this.semanticAnalyser.classDeclaration;
-	readonly targetCodeGenerator = this.codeGenerator.classDeclaration;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ClassDeclarationContext;
+
 	/**
 	 * The private field '_innerScope' that actually stores the variable data,
 	 * which is returned inside the {@link this.innerScope}.
@@ -56,10 +50,18 @@ export class ClassDeclaration
 	 */
 	private readonly _innerScope: ClassScope;
 
+	/**
+	 * The 'this' keyword declaration for this class.
+	 * @private
+	 * @since 0.12.0
+	 */
+	private readonly _thisAliasDeclaration: ClassScopeThisDeclaration;
+
 	constructor(antlrRuleCtx: ClassDeclarationContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._innerScope = new ClassScope(this);
+		this._thisAliasDeclaration = new ClassScopeThisDeclaration(this);
 	}
 
 	/**
@@ -80,6 +82,15 @@ export class ClassDeclaration
 
 	protected set scopeDeclaration(declaration: ScopeTypeDeclaration | undefined) {
 		this._scopeDeclaration = declaration;
+	}
+
+	/**
+	 * Gets the "this" keyword which is simply a reference to the class declaration itself, like it were referenced
+	 * in the class itself.
+	 * @since 0.12.0
+	 */
+	public get thisAliasDeclaration(): ClassScopeThisDeclaration {
+		return this._thisAliasDeclaration;
 	}
 
 	/**
@@ -154,16 +165,26 @@ export class ClassDeclaration
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.11.0
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
+	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		this.typeSemantics = {
 			valueType: CustomType.fromClassDeclaration(this),
 		};
 	}
+	public readonly primarySemanticTypeChecking: undefined;
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.11.0
+	 */
+	public checkForWarnings = undefined; // TODO!
+
+	readonly targetSemanticAnalysis = this.semanticAnalyser.classDeclaration;
+	readonly targetCodeGenerator = this.codeGenerator.classDeclaration;
 }
