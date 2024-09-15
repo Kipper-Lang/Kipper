@@ -176,13 +176,20 @@ To use development versions of Kipper download the
   now enables proper type checking for function references.
 - CLI command `run` not properly reporting internal or unexpected errors, as they were already prettified in the
   internally called up command `compile`.
+- Previously invalid parent type checking and evaluation performed in `ReturnStatement`. This was now made absolute by
+	the introduction of the preliminary type checking and "ahead of time" type evaluation, as that now allows for
+	self-referential types and type checking of recursive types i.e. the return statement now knows the type of its 
+	function even though it is not yet fully processed.
+- Duplicate universe entry registration in the `KipperProgramContext` for built-in types, functions and variables.
 
 ### Deprecated
 
 ### Removed
 
 - Type `Reference` as it is no longer needed and has been replaced by `KipperReferenceable`.
-- `FunctionCallExpressionTypeSemantics.func`, which is now has been replaced by `funcOrExp`.
+- Function `FunctionCallExpressionTypeSemantics.func`, which is now has been replaced by `funcOrExp`.
+- Function `KipperProgramContext.setUpBuiltInsInGlobalScope()`, which is no longer needed as the universe scope now
+	handles all built-in types, functions and variables.
 
 </details>
 
