@@ -1555,7 +1555,11 @@ describe("Core functionality", () => {
 			assert.isDefined(instance.programCtx);
 			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			const written = instance.write();
-			assert.include(written, "{\n  numProp: 1,\n  strProp: '2',\n  boolProp: true,\n};", "Invalid TypeScript code (Expected different output)");
+			assert.include(
+				written,
+				"{\n  numProp: 1,\n  strProp: '2',\n  boolProp: true,\n};",
+				"Invalid TypeScript code (Expected different output)",
+			);
 		});
 
 		it("should create an object with nested objects", async () => {
@@ -1565,7 +1569,11 @@ describe("Core functionality", () => {
 			assert.isDefined(instance.programCtx);
 			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 			const written = instance.write();
-			assert.include(written, "{\n  outerProp: {\n  innerProp: 1,\n},\n};", "Invalid TypeScript code (Expected different output)");
+			assert.include(
+				written,
+				"{\n  outerProp: {\n  innerProp: 1,\n},\n};",
+				"Invalid TypeScript code (Expected different output)",
+			);
 		});
 
 		it("should create an object with array properties", async () => {
@@ -1618,13 +1626,13 @@ describe("Core functionality", () => {
 			assert.include(
 				written,
 				`interface Test {\n` +
-				`  a: string;\n` +
-				`}\n` +
-				`const __intf_Test = new __kipper.Type("Test", [new __kipper.Property("a", __kipper.builtIn.str),], [])\n` +
-				"let x: Test = {\n" +
-				'  a: "3",\n' +
-				"};\n" +
-				"__kipper.print(x.a);",
+					`  a: string;\n` +
+					`}\n` +
+					`const __intf_Test = new __kipper.Type("Test", [new __kipper.Property("a", __kipper.builtIn.str),], [])\n` +
+					"let x: Test = {\n" +
+					'  a: "3",\n' +
+					"};\n" +
+					"__kipper.print(x.a);",
 				"Invalid TypeScript code (Expected different output)",
 			);
 		});
@@ -1653,7 +1661,7 @@ describe("Core functionality", () => {
 			assert.include(
 				written,
 				"interface Test {\n  x: number;\n  isTrue(f: boolean): string;\n  y: string;\n  greet(name: string):" +
-				" string;\n}",
+					" string;\n}",
 				"Invalid TypeScript code (Expected different output)",
 			);
 		});

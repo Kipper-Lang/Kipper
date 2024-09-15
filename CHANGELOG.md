@@ -26,11 +26,11 @@ To use development versions of Kipper download the
 - Support for calling lambdas and functions stored in variables or expressions.
   ([#674](https://github.com/Kipper-Lang/Kipper/issues/674))
 - Semantic checking and code generation for the `new` keyword expression to be able to create new instances of
-	classes. ([#679](https://github.com/Kipper-Lang/Kipper/issues/679))
+  classes. ([#679](https://github.com/Kipper-Lang/Kipper/issues/679))
 - Support for the `this` keyword inside a class method to access the current instance of the class.
-	([#697](https://github.com/Kipper-Lang/Kipper/issues/697))
+  ([#697](https://github.com/Kipper-Lang/Kipper/issues/697))
 - Support for the typeof operator, which returns the runtime type of a value.
-	([#663](https://github.com/Kipper-Lang/Kipper/issues/663))
+  ([#663](https://github.com/Kipper-Lang/Kipper/issues/663))
 - Implemented the generic `Array<T>` type and single-type array initializers.
   ([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
 - Support for index-based array assignments. ([#669](https://github.com/Kipper-Lang/Kipper/issues/669))
@@ -44,11 +44,11 @@ To use development versions of Kipper download the
 - Support for internal type unions in built-in and internal functions.
   ([#496](https://github.com/Kipper-Lang/Kipper/issues/496))
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
-	the entire core type system has been reworked and adjusted to also support custom types as well as complex types
-	(objects, arrays etc.). This does not inherently add functionality but serves as the stepping stone for the
-	implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
+  the entire core type system has been reworked and adjusted to also support custom types as well as complex types
+  (objects, arrays etc.). This does not inherently add functionality but serves as the stepping stone for the
+  implementation of all custom types in the future. ([#524](https://github.com/Kipper-Lang/Kipper/issues/524))
 - Implemented internal preliminary type checking and "ahead of time" type evaluation to allow for self-referential
-	types and type checking of recursive types.
+  types and type checking of recursive types.
 - New module:
   - `semantics/runtime-built-ins`, which contains runtime built-in functions, variables and types.
   - `semantics/runtime-internals`, which contains the runtime internal functions.
@@ -177,9 +177,9 @@ To use development versions of Kipper download the
 - CLI command `run` not properly reporting internal or unexpected errors, as they were already prettified in the
   internally called up command `compile`.
 - Previously invalid parent type checking and evaluation performed in `ReturnStatement`. This was now made absolute by
-	the introduction of the preliminary type checking and "ahead of time" type evaluation, as that now allows for
-	self-referential types and type checking of recursive types i.e. the return statement now knows the type of its 
-	function even though it is not yet fully processed.
+  the introduction of the preliminary type checking and "ahead of time" type evaluation, as that now allows for
+  self-referential types and type checking of recursive types i.e. the return statement now knows the type of its
+  function even though it is not yet fully processed.
 - Duplicate universe entry registration in the `KipperProgramContext` for built-in types, functions and variables.
 
 ### Deprecated
@@ -189,7 +189,7 @@ To use development versions of Kipper download the
 - Type `Reference` as it is no longer needed and has been replaced by `KipperReferenceable`.
 - Function `FunctionCallExpressionTypeSemantics.func`, which is now has been replaced by `funcOrExp`.
 - Function `KipperProgramContext.setUpBuiltInsInGlobalScope()`, which is no longer needed as the universe scope now
-	handles all built-in types, functions and variables.
+  handles all built-in types, functions and variables.
 
 </details>
 
