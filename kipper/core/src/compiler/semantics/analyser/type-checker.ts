@@ -543,7 +543,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		const statementValueType = semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? BuiltInTypes.void;
 
 		// As the function type is evaluated preliminary, we can safely assume that the type is valid and use it
-		const functionReturnType = semanticData.function.getTypeSemanticData().type.returnType;
+		const functionReturnType = semanticData.function.getTypeSemanticData().valueType.returnType;
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
 		if (statementValueType === undefined || functionReturnType === undefined) {
@@ -570,7 +570,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaPrimaryExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
-		const returnType = typeData.type.returnType;
+		const returnType = typeData.valueType.returnType;
 
 		// If the return type is undefined, skip type checking (the type is invalid anyway)
 		if (returnType === undefined) {

@@ -129,7 +129,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeData = node.getTypeSemanticData();
 		const params = semanticData.params;
 		const body = semanticData.functionBody;
-		const returnTypeSpecifier = TargetTS.getTypeScriptType(typeData.type.returnType);
+		const returnTypeSpecifier = TargetTS.getTypeScriptType(typeData.valueType.returnType);
 		const funcType = node.getTypeSemanticData().evaluatedType;
 
 		// Generate the function signature

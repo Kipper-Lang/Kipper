@@ -1789,5 +1789,31 @@ describe("Core functionality", () => {
 			const jsCode = ts.transpile(written);
 			testPrintOutput((message: any) => assert.equal(message, "hello", "Expected different output"), jsCode);
 		});
+
+		it("should be able to return a value inside a class method", async () => {
+			const fileContent = `class Test {x: str; constructor (a: str) {this.x = a;} greet(): str {return this.x;}}; var x: Test = new Test("hello"); print(x.greet());`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n" +
+					"  x: string;\n" +
+					"  greet(): string\n" +
+					"  {\n" +
+					"    return this.x;\n" +
+					"  }\n" +
+					"  constructor(a: string)\n" +
+					"  {\n" +
+					"    this.x = a;\n" +
+					"  }\n" +
+					"}\n" +
+					'let x: Test = new Test("hello");\n' +
+					"__kipper.print(x.greet());",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
 	});
 });

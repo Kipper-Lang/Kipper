@@ -13,7 +13,7 @@ export * from "@kipper/target-ts";
 // eslint-disable-next-line no-unused-vars
 export const name = "kipper";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.12.0-alpha.4";
+export const version = "0.12.0-alpha.5";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars

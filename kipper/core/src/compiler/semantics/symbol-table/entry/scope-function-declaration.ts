@@ -126,7 +126,7 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get type(): BuiltInTypeFunc {
-		return this.typeData?.type ?? this._builtInFunction!!.funcType;
+		return this.typeData?.valueType ?? this._builtInFunction!!.funcType;
 	}
 
 	/**
