@@ -7,7 +7,6 @@ import type {
 	ClassMethodDeclaration,
 	Declaration,
 	FunctionDeclaration,
-	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
