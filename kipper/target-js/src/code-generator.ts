@@ -32,6 +32,7 @@ import type {
 	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	JumpStatement,
 	KipperProgramContext,
@@ -60,7 +61,6 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	InstanceOfExpression,
 } from "@kipper/core";
 import {
 	AssignmentExpression,

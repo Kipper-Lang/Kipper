@@ -12,8 +12,8 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { ScopeNode } from "../../../../scope-node";
 import type { Statement } from "../../../statements";
-import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
 import { CompoundStatement } from "../../../statements";
+import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-expression";
 import { ParameterDeclaration } from "../../../declarations";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { BuiltInTypeFunc, LambdaScope } from "../../../../../semantics";

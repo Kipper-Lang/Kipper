@@ -1,7 +1,5 @@
 import type { KipperError, KipperProgramContext, LexerParserData } from "@kipper/core";
-import { BuiltInFunction } from "@kipper/core";
-import { BuiltInTypes } from "@kipper/core";
-import { KipperCompiler, KipperFileStream } from "@kipper/core";
+import { BuiltInFunction, BuiltInTypes, KipperCompiler, KipperFileStream } from "@kipper/core";
 import { defaultConfig } from "../index";
 import { assert } from "chai";
 
