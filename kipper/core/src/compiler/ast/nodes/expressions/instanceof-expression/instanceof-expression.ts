@@ -9,6 +9,10 @@ import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expres
 import type { CustomType } from "../../../../semantics";
 import { BuiltInTypes } from "../../../../semantics";
 
+/**
+ * Represents an instanceof expression in the AST.
+ * @since 0.12.0
+ */
 export class InstanceOfExpression extends Expression<
 	InstanceofExpressionSemantics,
 	InstanceofExpressionTypeSemantics,
@@ -43,7 +47,7 @@ export class InstanceOfExpression extends Expression<
 	 *
 	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
 	 * {@link ParseRuleKindMapping.RULE_expression}.
-	 * @since 0.10.0
+	 * @since 0.12.0
 	 */
 	public override get kind() {
 		return InstanceOfExpression.kind;
@@ -55,7 +59,7 @@ export class InstanceOfExpression extends Expression<
 	 *
 	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
 	 * {@link ParseRuleKindMapping.RULE_expression}.
-	 * @since 0.11.0
+	 * @since 0.12.0
 	 */
 	public override get ruleName() {
 		return InstanceOfExpression.ruleName;
