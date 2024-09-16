@@ -1673,4 +1673,52 @@ describe("Core functionality", () => {
 			);
 		});
 	});
+
+	describe("should be able to catch errors using try-catch", () => {
+		it("should be able to catch errors", async () => {
+			const fileContent = `var x: num = 4; try { x = 5; } catch (e: KipperError) { x = 6; } print(x);`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				`let x: num = 4;\ntry {\n  x = 5;\n} catch (__e_1: unknown) {\n  if (__e_1 instanceof Exception) {\n    x = 6;\n  }\n}\n__kipper.print(x);`,
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+	});
+
+	describe("should be able to catch errors using try-catch-finally", () => {
+		it("should be able to catch errors", async () => {
+			const fileContent = `var x: num = 4; try { x = 5; } catch (e: KipperError) { x = 6; } finally { x = 7; } print(x);`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				`let x: number = 1;\ntry\n{\n  x = 2;\n}\ncatch (__e_1: unknown) {\n  if (__e_1 instanceof Exception) {\n    x = 3;\n  }\n  if (__e_1 instanceof Exception2) {\n    x = 4;\n  }\n} finally {\n  x = 5;\n}\n__kipper.print(x);`,
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+	});
+
+	describe("should be able to catch errors using try-finally", () => {
+		it("should be able to catch errors", async () => {
+			const fileContent = `var x: num = 4; try { x = 5; } finally { x = 7; } print(x);`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				`let x: number = 4;\ntry\n{\n  x = 5;\n}\nfinally\n{\n  x = 7;\n}\n__kipper.print(x);`,
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+	});
 });

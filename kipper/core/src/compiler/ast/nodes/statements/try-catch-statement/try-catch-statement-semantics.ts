@@ -36,7 +36,7 @@ export interface CatchBlock extends SemanticData {
 	 * The variable that holds the exception thrown in the try block.
 	 * @since 0.12.0
 	 */
-	parameter: ParameterDeclaration;
+	parameter?: ParameterDeclaration;
 
 	/**
 	 * The block of code to be executed if an exception is thrown.

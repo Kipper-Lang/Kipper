@@ -479,10 +479,15 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	generateCatchIfCondition = async (catchBlock: CatchBlock): Promise<Array<TranslatedCodeLine>> => {
-		const parameterType = catchBlock.parameter.getTypeSemanticData().valueType.identifier;
 		const blockBody = await catchBlock.body.translateCtxAndChildren();
-		const x = [["if", " ", "(", "__e_1", " ", "instanceof", " ", parameterType, ")"], ...blockBody];
-		return x;
+
+		if (catchBlock.parameter === undefined) {
+			return [...blockBody];
+		}
+
+		const parameterType = catchBlock.parameter.getTypeSemanticData();
+
+		return [["if", " ", "(", "__e_1", " ", "instanceof", " ", parameterType.valueType.identifier, ")"], ...blockBody];
 	};
 
 	/**
@@ -498,6 +503,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			}),
 		);
 		const finallyBlock = semanticData.finallyBlock ? await semanticData.finallyBlock.translateCtxAndChildren() : [];
+
+		if (catchBlocks.length === 0) {
+			return [["try"], ...tryBlock, ...(finallyBlock.length > 0 ? [["finally"], ...finallyBlock] : [])];
+		}
 
 		return [
 			["try"],

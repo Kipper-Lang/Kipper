@@ -1,23 +1,5 @@
-class Exception {
-
-}
-
-class Exception2 {
-
-}
-
-var x: num = 1;
-try{
-	x = 2;
-}
-catch(e: Exception) {
-	x = 3;
-}
-catch(e: Exception2) {
-	x = 4;
-}
-finally {
-	x = 5;
-}
-
+var x: num = 4;
+try { x = 5; }
+catch () { x = 6; }
+finally { x = 7; }
 print(x);

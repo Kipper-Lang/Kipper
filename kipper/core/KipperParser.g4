@@ -194,7 +194,7 @@ returnStatement
 
 tryCatchStatement
 	:	'try' compoundStatement
-		('catch' '(' parameterDeclaration ')' compoundStatement)*
+		('catch' '(' parameterDeclaration? ')' compoundStatement)*
 		('finally' compoundStatement)?
  	;
 
