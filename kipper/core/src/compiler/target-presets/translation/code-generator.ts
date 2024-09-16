@@ -57,10 +57,11 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	MatchesExpression,
+	InstanceOfExpression,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { MatchesExpression } from "../../ast/nodes/expressions/matches-expression/matches-expression";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -442,4 +443,9 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link MatchesExpression} into a specific language.
 	 */
 	public abstract matchesExpression: TargetASTNodeCodeGenerator<MatchesExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@Link InstanceOfExpression} into a specific language.
+	 */
+	public abstract instanceOfExpression: TargetASTNodeCodeGenerator<InstanceOfExpression, TranslatedExpression>;
 }

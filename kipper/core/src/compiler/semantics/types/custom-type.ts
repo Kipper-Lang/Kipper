@@ -34,17 +34,43 @@ export type CustomTypeFields = Map<string, CustomTypeField>;
  * @since 0.12.0
  */
 export class CustomType extends ProcessedType {
+	private readonly _fields: CustomTypeFields;
+	private readonly _clsStaticFields?: CustomTypeFields;
+
 	/**
 	 * The kind of this type. This is simply used to differentiate between classes and interfaces.
 	 * @since 0.12.0
 	 */
 	public readonly kind: CustomTypeKind;
-	private readonly _fields: CustomTypeFields;
 
-	protected constructor(identifier: string, kind: CustomTypeKind, fields: CustomTypeFields) {
+	/**
+	 * The type that this type extends. This is only applicable to classes.
+	 * @since 0.12.0
+	 */
+	public readonly clsExtends?: CustomType;
+
+	/**
+	 * The types that this type implements. This is only applicable to classes.
+	 * @since 0.12.0
+	 */
+	public readonly clsImplements?: CustomType[];
+
+	/**
+	 * The interface that this type extends. This is only applicable to interfaces.
+	 * @since 0.12.0
+	 */
+	public readonly intfExtends?: CustomType;
+
+	protected constructor(
+		identifier: string,
+		kind: CustomTypeKind,
+		fields: CustomTypeFields,
+		staticFields?: CustomTypeFields,
+	) {
 		super(identifier);
-		this._fields = fields;
 		this.kind = kind;
+		this._fields = fields;
+		this._clsStaticFields = staticFields;
 	}
 
 	/**
@@ -64,6 +90,14 @@ export class CustomType extends ProcessedType {
 	 */
 	public get fields(): CustomTypeFields {
 		return this._fields;
+	}
+
+	/**
+	 * The static fields of this type. This is only applicable to classes.
+	 * @since 0.12.0
+	 */
+	public get clsStaticFields(): CustomTypeFields | undefined {
+		return this._clsStaticFields;
 	}
 
 	/**
@@ -161,5 +195,14 @@ export class CustomType extends ProcessedType {
 		} else {
 			throw new AssignmentTypeError(type.identifier, this.identifier);
 		}
+	}
+
+	/**
+	 * Returns the field type for the passed identifier. May return undefined if the field does not exist.
+	 * @param identifier The identifier of the field to get.
+	 * @since 0.12.0
+	 */
+	getProperty(identifier: string): CustomTypeField | undefined {
+		return this.fields.get(identifier);
 	}
 }

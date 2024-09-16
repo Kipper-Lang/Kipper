@@ -121,7 +121,6 @@ export class MatchesExpression extends Expression<
 		const semanticData = this.getSemanticData();
 
 		this.programCtx.typeCheck(this).validMatchesExpression(semanticData.expression, semanticData.pattern);
-
 		this.typeSemantics = {
 			evaluatedType: BuiltInTypes.bool,
 		};

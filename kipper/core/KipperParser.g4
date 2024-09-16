@@ -101,6 +101,7 @@ interfaceMethodDeclaration
     :   declarator '(' parameterList? ')' ':' typeSpecifierExpression SemiColon
     ;
 
+
 classDeclaration
 	:	'class' declarator '{' (classMemberDeclaration | SemiColon)* '}'
 	;
@@ -367,14 +368,19 @@ bitwiseShiftOperators
 	:   '<<' | '>>' | '>>>'
 	;
 
+instanceOfExpression
+    : 	bitwiseShiftExpression #passOnInstanceOfExpression
+    | 	instanceOfExpression 'instanceof' typeSpecifierExpression #actualInstanceOfExpression
+    ;
+
 matchesExpression
-	:	bitwiseShiftExpression # passOnMatchesExpression
-	|	matchesExpression 'matches' bitwiseShiftExpression # actualMatchesExpression
+	:	instanceOfExpression # passOnMatchesExpression
+	|	matchesExpression 'matches' typeSpecifierExpression # actualMatchesExpression
 	;
 
 relationalExpression
     :   matchesExpression # passOnRelationalExpression
-    |   relationalExpression ('<'|'>'|'<='|'>=') matchesExpression # actualRelationalExpression
+    |   relationalExpression ('<'|'>'|'<='|'>=') relationalExpression # actualRelationalExpression
     ;
 
 equalityExpression
@@ -426,7 +432,9 @@ expression
     ;
 
 typeSpecifierExpression
-    :   identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression
+    :   identifierTypeSpecifierExpression
+    |	genericTypeSpecifierExpression
+    |	typeofTypeSpecifierExpression
     ;
 
 identifierTypeSpecifierExpression

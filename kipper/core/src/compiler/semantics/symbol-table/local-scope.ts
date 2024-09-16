@@ -11,19 +11,19 @@ import type {
 	VariableDeclaration,
 } from "../../ast/";
 import type { GlobalScope } from "./global-scope";
-import { KipperNotImplementedError } from "../../../errors";
+import type { ClassScope } from "./class-scope";
 import type { ScopeDeclaration, ScopeFunctionDeclaration, ScopeTypeDeclaration } from "./entry";
 import { ScopeVariableDeclaration } from "./entry";
-import { Scope } from "./base/scope";
-import type { ClassScope } from "./class-scope";
+import { KipperNotImplementedError } from "../../../errors";
+import { UserScope } from "./base/user-scope";
 
 /**
  * A scope that is bound to a {@link CompoundStatement} and not the global namespace.
  * @since 0.8.0
  */
-export class LocalScope extends Scope<VariableDeclaration, FunctionDeclaration, TypeDeclaration> {
-	constructor(public ctx: ScopeNode<LocalScope> & CompilableASTNode) {
-		super();
+export class LocalScope extends UserScope<VariableDeclaration, FunctionDeclaration, TypeDeclaration> {
+	constructor(public readonly ctx: ScopeNode<LocalScope> & CompilableASTNode) {
+		super(ctx);
 	}
 
 	/**
@@ -43,9 +43,7 @@ export class LocalScope extends Scope<VariableDeclaration, FunctionDeclaration, 
 
 	public addVariable(declaration: VariableDeclaration): ScopeVariableDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-
-		// Ensuring that the declaration does not overwrite other declarations
-		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
+		this.ensureNotUsed(identifier, declaration);
 
 		const scopeDeclaration = ScopeVariableDeclaration.fromVariableDeclaration(declaration);
 		this._entries.set(identifier, scopeDeclaration);

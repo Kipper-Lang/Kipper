@@ -36,6 +36,8 @@ Pragma
 		-> channel(PRAGMA)
 	;
 
+InstanceOf : 'instanceof';
+
 // const / var
 Const : 'const';
 Var : 'var';
