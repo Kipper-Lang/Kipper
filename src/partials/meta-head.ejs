@@ -47,7 +47,7 @@ let displayTitle = (typeof dropdownTitle !== "undefined" ? `${dropdownTitle}/` :
 <link rel="stylesheet" href="<%= rootDir %>/css/footer.scss" />
 
 <!-- Phone header nav bar functionality script -->
-<script defer src="<%= rootDir %>/js/header-nav.ts"></script>
+<script defer type="module" src="<%= rootDir %>/js/header-nav.ts"></script>
 
 <!-- Including stylesheet for the Inter-Font -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter" />
@@ -74,4 +74,24 @@ See main.scss for the --scheme-primary variable
     window.locale = locale;
     var localeKey = 'locale';
     window.localeKey = localeKey;
+
+    let storedLocale = localStorage.getItem(localeKey);
+    if (storedLocale === null) {
+        localStorage.setItem(localeKey, locale.name);
+    }
+
+    // In case a site was loaded with a different locale than the one in the locale storage, then we redirect to
+    // the correct locale
+    if (
+      storedLocale !== undefined &&
+      storedLocale !== locale.name &&
+      !window.location.pathname.includes(`/${storedLocale}/`) &&
+      !window.location.pathname.includes("/docs/")
+    ) {
+      if (window.location.pathname.includes("/" + locale.name + "/")) {
+        window.location.pathname = window.location.pathname.replace(`/${locale.name}/`, `/${storedLocale}/`);
+      } else {
+        window.location.pathname = `/${storedLocale}${window.location.pathname}`;
+      }
+    }
 </script>

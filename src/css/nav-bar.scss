@@ -113,6 +113,8 @@ nav#phone-header-nav-bar {
 /* Styling for both desktop and phone nav bar */
 nav#header-nav-bar,
 nav#phone-header-nav-bar {
+  z-index: 100;
+
   ul#std-header-primary-content,
   ul#phone-header-primary-content {
     & > li {

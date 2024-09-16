@@ -4,6 +4,7 @@
 
 const phoneHeaderMenu = <HTMLOListElement>document.querySelector("ul#phone-header-nav-bar-menu");
 const phoneHeaderMenuToggle = <HTMLLIElement>document.querySelector(".phone-header-nav-bar-menu-toggle");
+const phoneLocaleSelectorDropdown: HTMLUListElement = document.querySelector("#phone-header-nav-bar #locales-dropdown");
 
 /**
  * Enables the visibility of the dropdown menu.
@@ -19,5 +20,9 @@ function togglePhoneHeaderMenu() {
 		phoneHeaderMenu.classList.add("visible");
 		phoneHeaderMenu.classList.remove("invisible");
 	}
+
+  // Make sure to close the locale menu when any other menu is opened
+  phoneLocaleSelectorDropdown.classList.add("invisible");
+  phoneLocaleSelectorDropdown.classList.remove("visible");
 }
 phoneHeaderMenuToggle.addEventListener("click", togglePhoneHeaderMenu);

@@ -109,7 +109,7 @@ export async function warmUpCompiler(): Promise<void> {
  * Runs the code using a web worker and writes the console output to the "virtual" terminal.
  */
 export async function runCode(): Promise<void> {
-	runCodeListItem.innerHTML = `<button>Stop</button>`;
+	runCodeListItem.innerHTML = `<button>${window.locale["values"]["playground"]["buttons"]["stop"]}</button>`;
 	runCodeButton = document.querySelector("#run-code-list-item button");
 	runCodeButton.addEventListener("click", stopCode);
 

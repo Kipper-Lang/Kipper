@@ -6,9 +6,16 @@ const phoneSelectorButton: HTMLButtonElement = document.querySelector("#phone-he
 /**
  * Toggles on or off the dropdown for the locale selector.
  */
-function toggleVisibility(dropdown: HTMLUListElement) {
+function toggleLocaleMenuVisibility(dropdown: HTMLUListElement) {
   const isVisible = window.getComputedStyle(dropdown).visibility === "visible";
-  if (isVisible) {
+  setLocaleMenuVisibility(dropdown, isVisible);
+}
+
+/**
+ * Sets the visibility of the locale menu.
+ */
+function setLocaleMenuVisibility(dropdown: HTMLUListElement, visible: boolean) {
+  if (visible) {
     dropdown.classList.add("invisible");
     dropdown.classList.remove("visible");
   } else {
@@ -17,9 +24,9 @@ function toggleVisibility(dropdown: HTMLUListElement) {
   }
 }
 
-localeSelectorButton.addEventListener("click", () => toggleVisibility(localeSelectorDropdown));
-phoneSelectorButton.addEventListener("click",  () => toggleVisibility(phoneSelectorDropdown));
-console.log(localeSelectorDropdown, localeSelectorButton, phoneSelectorDropdown, phoneSelectorButton);
+localeSelectorButton.addEventListener("click", () => toggleLocaleMenuVisibility(localeSelectorDropdown));
+phoneSelectorButton.addEventListener("click",  () => toggleLocaleMenuVisibility(phoneSelectorDropdown));
+
 
 const localeSelectorItems = document.querySelectorAll("#header-nav-bar #locales-dropdown li.locale-selector-button-wrapper");
 localeSelectorItems.forEach((item) => {

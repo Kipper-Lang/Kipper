@@ -38,6 +38,7 @@
     "playground": {
       "buttons": {
         "run": "実行",
+        "stop": "停止",
         "copy": "コピー",
         "clear": "クリア",
         "console": "コンソール",
@@ -47,6 +48,10 @@
         "saving": "保存中...",
         "saved": "保存されました！",
         "loaded": "ロードされました :)"
+      },
+      "actions": {
+        "cleared": "クリアされました！",
+        "copied": "コピーされました！"
       }
     },
     "footer": {

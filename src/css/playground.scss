@@ -295,11 +295,39 @@
       & > #playground-option-menu {
         flex-grow: 0; /* Do not allow the menu to grow */
 
+        // Make the menu a fixed size and allow scrolling
+        overflow-x: scroll;
+        overflow-y: hidden;
+
+        $height: 3rem;
+        height: $height; // 3rem (48px)
+        max-height: $height;
+        min-height: $height;
+
+        $width: 100vw;
+        width: $width;
+        max-width: $width;
+        min-width: $width;
+
+        margin-left: 0;
+        margin-right: 0;
+        padding: 0 2rem 0 0;
+
         & > #version-selection > #version-selector-root-button-wrapper,
         & > .playground-button-wrapper {
           & > button {
             padding: 0.8rem;
           }
+        }
+
+        p, button {
+          white-space: nowrap;
+        }
+
+        & > #text-saving-state {
+          margin-left: 0;
+          margin-right: 0;
+          padding: 0 2rem 0 0;
         }
 
         & > #version-selection > #version-selector-root-button-wrapper > button {

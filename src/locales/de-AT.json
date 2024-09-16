@@ -38,6 +38,7 @@
     "playground": {
       "buttons": {
         "run": "Ausführen",
+        "stop": "Stop",
         "copy": "Kopieren",
         "clear": "Löschen",
         "console": "Konsole",
@@ -47,6 +48,10 @@
         "saving": "Speichern...",
         "saved": "Gespeichert!",
         "loaded": "Geladen :)"
+      },
+      "actions": {
+        "cleared": "Gelöscht!",
+        "copied": "Kopiert!"
       }
     },
     "footer": {

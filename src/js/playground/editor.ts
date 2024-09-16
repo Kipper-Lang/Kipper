@@ -24,7 +24,7 @@ const clearContentButton: HTMLButtonElement = document.querySelector("#clear-con
  * Switches the interaction button to 'Run', so a new program can be started again.
  */
 export function switchButtonToRun(): void {
-	runCodeListItem.innerHTML = `<button>Run</button>`;
+	runCodeListItem.innerHTML = `<button>${window.locale["values"]["playground"]["buttons"]["run"]}</button>`;
 	runCodeButton = document.querySelector("#run-code-list-item button");
 	runCodeButton.addEventListener("click", runCode);
 }
@@ -37,7 +37,7 @@ export function clearEditorContent(): void {
 	codeTextArea.value = "";
 	codeTextAreaResult.innerHTML = "";
 	localStorage.setItem(localStorageIdentifier, "");
-	textSavingState.innerHTML = `<p class="gray-text">Code cleared!</p>`;
+	textSavingState.innerHTML = `<p class="gray-text">${window.locale["values"]["playground"]["actions"]["cleared"]}</p>`;
 }
 
 /**
@@ -46,7 +46,7 @@ export function clearEditorContent(): void {
 export function copyEditorContent(): void {
 	console.log("Code Copied!");
 	navigator.clipboard.writeText(codeTextArea.value).then(() => {
-		textSavingState.innerHTML = `<p class="gray-text">Code copied!</p>`;
+		textSavingState.innerHTML = `<p class="gray-text">${window.locale["values"]["playground"]["actions"]["copied"]}</p>`;
 	});
 }
 
@@ -200,6 +200,6 @@ export function init(): void {
 
   // If the input is not empty, signalize that code was restored
   if (codeTextArea.value.trim() !== "") {
-    textSavingState.innerHTML = `<p class="gray-text">${window.locale["values"]["playground"]["save-state"]["loaded"]} :)</p>`;
+    textSavingState.innerHTML = `<p class="gray-text">${window.locale["values"]["playground"]["save-state"]["loaded"]}</p>`;
   }
 }

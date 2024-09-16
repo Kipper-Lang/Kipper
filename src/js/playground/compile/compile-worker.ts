@@ -15,7 +15,7 @@ async function evalKipperCode(code: string) {
 	// Overwrite 'console.log'
 	const prevLog = console.log;
 	console.log = (msg: string) => {
-		postMessage(msg);
+		postMessage(String(msg)); // Make sure it's a string so we differentiate between log messages and exit codes
 	};
 
 	// Eval the Kipper code
@@ -132,13 +132,14 @@ onmessage = async function(event) {
 				presets: ["env", "typescript"],
 			}).code;
 		}
+    console.log("[compile-worker.ts] Generated code:\n", execCode);
 
 		// Switch to console output
 		postMessage(0);
 
 		await evalKipperCode(execCode);
 	} catch (e) {
-		postMessage(`\nEncountered Runtime error:\n  ${(<Error>e).name}: ${(<Error>e).message}`);
+		postMessage(`Encountered Runtime error:\n  ${(<Error>e).name}: ${(<Error>e).message}`);
 		postMessage(`\nIf this is unexpected, please report this bug to the developer on GitHub with your code snippet.`);
 		postMessage(1);
 		throw e;
