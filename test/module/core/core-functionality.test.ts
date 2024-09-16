@@ -1712,7 +1712,7 @@ describe("Core functionality", () => {
 						"    this.a = b;\n" +
 						"  }\n" +
 						"}\n" +
-						'let x: Test = {a: "3"};\n' +
+						'let x: object = {\n  a: "3",\n};\n' +
 						"__kipper.print(x instanceof Test);",
 					"Invalid TypeScript code (Expected different output)",
 				);
