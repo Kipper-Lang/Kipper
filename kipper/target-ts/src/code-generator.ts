@@ -129,7 +129,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeData = node.getTypeSemanticData();
 		const params = semanticData.params;
 		const body = semanticData.functionBody;
-		const returnTypeSpecifier = TargetTS.getTypeScriptType(typeData.type.returnType);
+		const returnTypeSpecifier = TargetTS.getTypeScriptType(typeData.valueType.returnType);
 		const funcType = node.getTypeSemanticData().evaluatedType;
 
 		// Generate the function signature
@@ -200,8 +200,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const identifier = semanticData.identifier;
 		const params = semanticData.parameters;
 		const body = semanticData.functionBody;
-		const evaluatedType = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().storedType);
-		const returnType = evaluatedType;
+		const returnType = TargetTS.getTypeScriptType(semanticData.returnTypeSpecifier.getTypeSemanticData().storedType);
 
 		const translatedParams = (
 			await Promise.all(

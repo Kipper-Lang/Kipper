@@ -1,4 +1,4 @@
-import type { ProcessedType } from "../../../../../../../semantics";
+import type { BuiltInTypeFunc } from "../../../../../../../semantics";
 import type { ClassMemberDeclarationTypeSemantics } from "../class-member-declaration-type-semantics";
 
 /**
@@ -7,8 +7,8 @@ import type { ClassMemberDeclarationTypeSemantics } from "../class-member-declar
  */
 export interface ClassConstructorDeclarationTypeSemantics extends ClassMemberDeclarationTypeSemantics {
 	/**
-	 * The processed type of this member property.
+	 * The processed type of this member property. This is always {@link BuiltInTypeFunc a function}.
 	 * @since 0.12.0
 	 */
-	valueType: ProcessedType;
+	valueType: BuiltInTypeFunc;
 }

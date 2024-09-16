@@ -1416,69 +1416,58 @@ describe("Core functionality", () => {
 	});
 
 	describe("Lambdas", () => {
-		describe("js", () => {
-			it("parses simple lambda expression without syntax errors", async () => {
-				const code = `var add: Func<num, num, num> = (x: num, y: num): num -> x + y;`;
-				try {
-					const result = await compiler.compile(code, jsConfig);
+		it("parses simple lambda expression without syntax errors", async () => {
+			const code = `var add: Func<num, num, num> = (x: num, y: num): num -> x + y; print(add(1, 2));`;
+			const result = await compiler.compile(code, jsConfig);
 
-					// Evaluate the compiled code
-					let stringResult = result.result!.map((x) => x.join("")).join("\n");
-					stringResult = stringResult.concat("\nadd(1, 2);");
-					const res = eval(stringResult);
-					assert.equal(res, 3, "Lambda expression evaluated correctly");
-				} catch (e) {
-					assert.fail("Failed to analyze lambda expression semantically");
-				}
-			});
+			assert.isDefined(result.programCtx);
+			assert.deepEqual(result.programCtx?.errors, [], "Expected no compilation errors");
+			const stringResult = result.write();
 
-			it("correctly identifies semantic data for a lambda with compound statement", async () => {
-				const code = `var greet: Func<str, str> = (name: str): str -> { return "Hello, " + name; };`;
-				try {
-					const result = await compiler.compile(code, jsConfig);
-
-					// Evaluate the compiled code
-					let stringResult = result.result!.map((x) => x.join("")).join("\n");
-					stringResult = stringResult.concat("\ngreet('John');");
-					const res = eval(stringResult);
-					assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
-				} catch (e) {
-					assert.fail("Failed to analyze lambda expression semantically");
-				}
-			});
-
-			it("correctly identifies semantic data for a lambda with single statement", async () => {
-				const code = `var greet: Func<str, str> = (name: str): str -> "Hello, " + name;`;
-				try {
-					const result = await compiler.compile(code, jsConfig);
-
-					// Evaluate the compiled code
-					let stringResult = result.result!.map((x) => x.join("")).join("\n");
-					stringResult = stringResult.concat("\ngreet('John');");
-					const res = eval(stringResult);
-					assert.equal(res, "Hello, John", "Lambda expression evaluated correctly");
-				} catch (e) {
-					assert.fail("Failed to analyze lambda expression semantically");
-				}
-			});
-
-			it("correctly identifies semantic data for a lambda with no parameters", async () => {
-				const code = `var greet: Func<str> = (): str -> "Hello, World!";`;
-				try {
-					const result = await compiler.compile(code, jsConfig);
-
-					// Evaluate the compiled code
-					let stringResult = result.result!.map((x) => x.join("")).join("\n");
-					stringResult = stringResult.concat("\ngreet();");
-					const res = eval(stringResult);
-					assert.equal(res, "Hello, World!", "Lambda expression evaluated correctly");
-				} catch (e) {
-					assert.fail("Failed to analyze lambda expression semantically");
-				}
-			});
+			testPrintOutput((message: any) => assert.equal(message, "3", "Expected different output"), stringResult);
 		});
 
-		describe("ts", () => {});
+		it("correctly identifies semantic data for a lambda with compound statement", async () => {
+			const code = `var greet: Func<str, str> = (name: str): str -> { return "Hello, " + name; }; print(greet('John'));`;
+			const result = await compiler.compile(code, jsConfig);
+
+			assert.isDefined(result.programCtx);
+			assert.deepEqual(result.programCtx?.errors, [], "Expected no compilation errors");
+			const stringResult = result.write();
+
+			testPrintOutput(
+				(message: any) => assert.equal(message, "Hello, John", "Expected different output"),
+				stringResult,
+			);
+		});
+
+		it("correctly identifies semantic data for a lambda with single statement", async () => {
+			const code = `var greet: Func<str, str> = (name: str): str -> "Hello, " + name; print(greet('John'));`;
+			const result = await compiler.compile(code, jsConfig);
+
+			assert.isDefined(result.programCtx);
+			assert.deepEqual(result.programCtx?.errors, [], "Expected no compilation errors");
+			const stringResult = result.write();
+
+			testPrintOutput(
+				(message: any) => assert.equal(message, "Hello, John", "Expected different output"),
+				stringResult,
+			);
+		});
+
+		it("correctly identifies semantic data for a lambda with no parameters", async () => {
+			const code = `var greet: Func<str> = (): str -> "Hello, World!"; print(greet());`;
+			const result = await compiler.compile(code, jsConfig);
+
+			assert.isDefined(result.programCtx);
+			assert.deepEqual(result.programCtx?.errors, [], "Expected no compilation errors");
+			const stringResult = result.write();
+
+			testPrintOutput(
+				(message: any) => assert.equal(message, "Hello, World!", "Expected different output"),
+				stringResult,
+			);
+		});
 	});
 
 	describe("Functions", () => {
@@ -1548,6 +1537,74 @@ describe("Core functionality", () => {
 		});
 	});
 
+	describe("Object literals", () => {
+		it("should be able to create an object literal", async () => {
+			const fileContent = "{ x: 1, y: '2' };";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(written, "{\n  x: 1,\n  y: '2',\n};", "Invalid TypeScript code (Expected different output)");
+		});
+
+		it("should create an object with different types of properties", async () => {
+			const fileContent = "{ numProp: 1, strProp: '2', boolProp: true };";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const written = instance.write();
+			assert.include(
+				written,
+				"{\n  numProp: 1,\n  strProp: '2',\n  boolProp: true,\n};",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("should create an object with nested objects", async () => {
+			const fileContent = "{ outerProp: { innerProp: 1 } };";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const written = instance.write();
+			assert.include(
+				written,
+				"{\n  outerProp: {\n  innerProp: 1,\n},\n};",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("should create an object with array properties", async () => {
+			const fileContent = "{ arrProp: [1, 2, 3] };";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const written = instance.write();
+			assert.include(
+				written,
+				"{\n  arrProp: __kipper.assignTypeMeta([1, 2, 3],",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
+		it("should create an object with method properties", async () => {
+			const fileContent = "{ methodProp: (): num -> 1 };";
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const written = instance.write();
+			assert.include(
+				written,
+				"{\n  methodProp: __kipper.assignTypeMeta((): number => 1,",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+	});
+
 	describe("Interfaces", async () => {
 		it("Can initialize empty interface", async () => {
 			const fileContent = "interface Test { }";
@@ -1559,7 +1616,27 @@ describe("Core functionality", () => {
 			assert.include(written, "interface Test {\n}", "Invalid TypeScript code (Expected different output)");
 		});
 
-		/* TODO Implement runtime code generation for functions in interfaces (Fabos task I guess)
+		it("should be able to to create object with interface blueprint", async () => {
+			const fileContent = `interface Test {a: str;}; var x: Test = {a: "3"}; print(x.a);`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				`interface Test {\n` +
+					`  a: string;\n` +
+					`}\n` +
+					`const __intf_Test = new __kipper.Type("Test", [new __kipper.Property("a", __kipper.builtIn.str),], [])\n` +
+					"let x: Test = {\n" +
+					'  a: "3",\n' +
+					"};\n" +
+					"__kipper.print(x.a);",
+				"Invalid TypeScript code (Expected different output)",
+			);
+		});
+
 		it("can initialize interface with members", async () => {
 			const fileContent = "interface Test {\n x: num;\n y: str;\n greet(name: str): str;}";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
@@ -1569,13 +1646,13 @@ describe("Core functionality", () => {
 			let written = instance.write();
 			assert.include(
 				written,
-				"interface Test {\n x: number;\n y: string;\n greet(name: string): string;\n}",
+				"interface Test {\n  x: number;\n  y: string;\n  greet(name: string): string;\n}",
 				"Invalid TypeScript code (Expected different output)",
 			);
 		});
 
 		it("should can initialize with mixed members", async () => {
-			const fileContent = "interface Test {\n x: num;\n isTrue(f: bool): str;\n y: str;\n greet(name: str) : str;}";
+			const fileContent = "interface Test {\n x: num;\n isTrue(f: bool): str;\n y: str;\n greet(name: str): str;}";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -1583,22 +1660,10 @@ describe("Core functionality", () => {
 			let written = instance.write();
 			assert.include(
 				written,
-				"interface Test {\n x: number;\n isTrue(f: boolean): string;\n y: string;\n greet(name: string): string;\n}",
+				"interface Test {\n  x: number;\n  isTrue(f: boolean): string;\n  y: string;\n  greet(name: string):" +
+					" string;\n}",
 				"Invalid TypeScript code (Expected different output)",
 			);
-		});
-		*/
-	});
-
-	describe("Object literals", () => {
-		it("should be able to create an Object literal", async () => {
-			const fileContent = "{ x: 1, y: '2' };";
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-			let written = instance.write();
-			assert.include(written, "{\n  x: 1,\n  y: '2',\n};", "Invalid TypeScript code (Expected different output)");
 		});
 	});
 
@@ -1651,33 +1716,8 @@ describe("Core functionality", () => {
 			);
 		});
 
-		it("should be able to to create object with interface blueprint", async () => {
-			const fileContent = `interface Test {a: str;}; var x : Test = {a: "3"}; print(x.a);`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-
-			const written = instance.write();
-			assert.include(
-				written,
-				`interface Test {\n` +
-					`  a: string;\n` +
-					`}\n` +
-					`const __intf_Test = new __kipper.Type("Test", [new __kipper.Property("a", __kipper.builtIn.str),], [])\n` +
-					"let x: Test = {\n" +
-					'  a: "3",\n' +
-					"};\n" +
-					"__kipper.print(x.a);",
-				"Invalid TypeScript code (Expected different output)",
-			);
-
-			const jsCode = ts.transpile(written);
-			testPrintOutput((message: any) => assert.equal(message, "3", "Expected different output"), jsCode);
-		});
-
-		it("it should be able to instantiate a class with new", async () => {
-			const fileContent = `class Test {a: str; constructor (b: str) {a = b;}}; var x : Test = new Test("3"); print(x.a);`;
+		it("should be able to instantiate a class with new", async () => {
+			const fileContent = `class Test {a: str; constructor (b: str) {this.a = b;}}; var x: Test = new Test("3"); print(x.a);`;
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -1690,7 +1730,7 @@ describe("Core functionality", () => {
 					"  a: string;\n" +
 					"  constructor(b: string)\n" +
 					"  {\n" +
-					"    a = b;\n" +
+					"    this.a = b;\n" +
 					"  }\n" +
 					"}\n" +
 					'let x: Test = new Test("3");\n' +
@@ -1702,8 +1742,8 @@ describe("Core functionality", () => {
 			testPrintOutput((message: any) => assert.equal(message, "3", "Expected different output"), jsCode);
 		});
 
-		it("it should be able to instantiate a class with new and two properties", async () => {
-			const fileContent = `class Test {x: str; y: num; constructor (a: str, b: num) {x = a; y = b;}}; var x : Test = new Test("hello", 42); print(x.x);`;
+		it("should be able to instantiate a class with new and two properties", async () => {
+			const fileContent = `class Test {x: str; y: num; constructor (a: str, b: num) {this.x = a; this.y = b;}}; var x: Test = new Test("hello", 42); print(x.x);`;
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -1717,8 +1757,8 @@ describe("Core functionality", () => {
 					"  y: number;\n" +
 					"  constructor(a: string, b: number)\n" +
 					"  {\n" +
-					"    x = a;\n" +
-					"    y = b;\n" +
+					"    this.x = a;\n" +
+					"    this.y = b;\n" +
 					"  }\n" +
 					"}\n" +
 					'let x: Test = new Test("hello", 42);\n' +
@@ -1742,7 +1782,7 @@ describe("Core functionality", () => {
 				written,
 				"class Test {\n" +
 					"}\n" +
-					'let x: Test = new Test();\n' +
+					"let x: Test = new Test();\n" +
 					"if (x instanceof Test) {\n" +
 					'  __kipper.print("works");\n' +
 					"}",
@@ -1751,6 +1791,61 @@ describe("Core functionality", () => {
 
 			const jsCode = ts.transpile(written);
 			testPrintOutput((message: any) => assert.equal(message, "works", "Expected different output"), jsCode);
+		});
+
+		it("should be able to access 'this' inside a class method", async () => {
+			const fileContent = `class Test {x: str; constructor (a: str) {this.x = a;} greet(): void {print(this.x);}}; var x: Test = new Test("hello"); x.greet();`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n" +
+					"  x: string;\n" +
+					"  greet(): void\n" +
+					"  {\n" +
+					"    __kipper.print(this.x);\n" +
+					"  }\n" +
+					"  constructor(a: string)\n" +
+					"  {\n" +
+					"    this.x = a;\n" +
+					"  }\n" +
+					"}\n" +
+					'let x: Test = new Test("hello");\n' +
+					"x.greet();",
+				"Invalid TypeScript code (Expected different output)",
+			);
+
+			const jsCode = ts.transpile(written);
+			testPrintOutput((message: any) => assert.equal(message, "hello", "Expected different output"), jsCode);
+		});
+
+		it("should be able to return a value inside a class method", async () => {
+			const fileContent = `class Test {x: str; constructor (a: str) {this.x = a;} greet(): str {return this.x;}}; var x: Test = new Test("hello"); print(x.greet());`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+			let written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n" +
+					"  x: string;\n" +
+					"  greet(): string\n" +
+					"  {\n" +
+					"    return this.x;\n" +
+					"  }\n" +
+					"  constructor(a: string)\n" +
+					"  {\n" +
+					"    this.x = a;\n" +
+					"  }\n" +
+					"}\n" +
+					'let x: Test = new Test("hello");\n' +
+					"__kipper.print(x.greet());",
+				"Invalid TypeScript code (Expected different output)",
+			);
 		});
 	});
 });

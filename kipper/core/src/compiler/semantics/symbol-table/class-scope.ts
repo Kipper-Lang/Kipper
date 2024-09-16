@@ -13,16 +13,17 @@ import type { LocalScope } from "./local-scope";
 import type { GlobalScope } from "./global-scope";
 import type { ScopeTypeDeclaration } from "./entry";
 import { type ScopeDeclaration, ScopeFunctionDeclaration, ScopeVariableDeclaration } from "./entry";
-import { Scope } from "./base";
 import { KipperNotImplementedError } from "../../../errors";
+import { UserScope } from "./base/user-scope";
+import type { ClassScopeThisDeclaration } from "./entry/class-scope-this-declaration";
 
 /**
  * A function-specific scope that is bound to a {@link FunctionDeclaration} and not the global namespace.
  * @since 0.11.0
  */
-export class ClassScope extends Scope {
-	constructor(public ctx: ClassDeclaration) {
-		super();
+export class ClassScope extends UserScope {
+	constructor(public readonly ctx: ClassDeclaration) {
+		super(ctx);
 	}
 
 	/**
@@ -36,9 +37,7 @@ export class ClassScope extends Scope {
 
 	public addConstructor(declaration: ClassConstructorDeclaration): ScopeFunctionDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-
-		// Ensuring that the declaration does not overwrite other declarations
-		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
+		this.ensureNotUsed(identifier, declaration);
 
 		const scopeDeclaration = ScopeFunctionDeclaration.fromClassConstructorDeclaration(declaration);
 		this.entries.set(identifier, scopeDeclaration);
@@ -47,9 +46,7 @@ export class ClassScope extends Scope {
 
 	public override addFunction(declaration: ClassMethodDeclaration): ScopeFunctionDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-
-		// Ensuring that the declaration does not overwrite other declarations
-		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
+		this.ensureNotUsed(identifier, declaration);
 
 		const scopeDeclaration = ScopeFunctionDeclaration.fromClassMethodDeclaration(declaration);
 		this.entries.set(identifier, scopeDeclaration);
@@ -58,9 +55,7 @@ export class ClassScope extends Scope {
 
 	public addVariable(declaration: ClassPropertyDeclaration): ScopeVariableDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-
-		// Ensuring that the declaration does not overwrite other declarations
-		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
+		this.ensureNotUsed(identifier, declaration);
 
 		const scopeDeclaration = ScopeVariableDeclaration.fromClassPropertyDeclaration(declaration);
 		this._entries.set(identifier, scopeDeclaration);
@@ -73,8 +68,16 @@ export class ClassScope extends Scope {
 			.notImplementedError(new KipperNotImplementedError("Local types have not been implemented yet."));
 	}
 
+	/**
+	 * Gets the "this" keyword which is simply a reference to the class.
+	 * @since 0.12.0
+	 */
+	public getThis(): ClassScopeThisDeclaration {
+		return this.ctx.thisAliasDeclaration;
+	}
+
 	public getEntry(identifier: string): ScopeDeclaration | undefined {
-		return this.entries.get(identifier);
+		return identifier === "this" ? this.getThis() : this.entries.get(identifier);
 	}
 
 	public getEntryRecursively(identifier: string): ScopeDeclaration | undefined {

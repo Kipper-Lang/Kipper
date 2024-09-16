@@ -1,7 +1,7 @@
 {
   "name": "@kipper/cli",
   "description": "The Kipper Command Line Interface (CLI).",
-  "version": "0.12.0-alpha.3",
+  "version": "0.12.0-alpha.5",
   "author": "Luna-Klatzer @Luna-Klatzer",
   "bin": {
     "kipper": "./bin/run",
@@ -25,7 +25,7 @@
     "inquirer": "7.3.3"
   },
   "devDependencies": {
-    "@types/node": "20.14.9",
+    "@types/node": "20.16.5",
     "@types/sinon": "17.0.3",
     "@types/inquirer": "7.3.3",
     "@sinonjs/fake-timers": "11.2.2",

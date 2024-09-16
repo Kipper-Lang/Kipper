@@ -3,9 +3,9 @@
 // Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 // kind values.
 
-import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
+import type { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
-import {
+import type {
 	ActualAdditiveExpressionContext,
 	ActualAssignmentExpressionContext,
 	ActualBitwiseAndExpressionContext,
