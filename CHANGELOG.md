@@ -31,6 +31,8 @@ To use development versions of Kipper download the
   ([#697](https://github.com/Kipper-Lang/Kipper/issues/697))
 - Support for the typeof operator, which returns the runtime type of a value.
   ([#663](https://github.com/Kipper-Lang/Kipper/issues/663))
+- Implemented `instanceof` operator expression, which checks if an object is an instance of a class.
+  ([#686](https://github.com/Kipper-Lang/Kipper/issues/686))
 - Implemented the generic `Array<T>` type and single-type array initializers.
   ([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
 - Support for index-based array assignments. ([#669](https://github.com/Kipper-Lang/Kipper/issues/669))
@@ -43,6 +45,7 @@ To use development versions of Kipper download the
 - Support for Nix Flakes and direnv, which allows for a more reproducible and consistent development environment.
 - Support for internal type unions in built-in and internal functions.
   ([#496](https://github.com/Kipper-Lang/Kipper/issues/496))
+- Support for the `obj` type translation to TypeScript.
 - Implemented internal representation for custom types such as objects, interfaces and classes. This change means that
   the entire core type system has been reworked and adjusted to also support custom types as well as complex types
   (objects, arrays etc.). This does not inherently add functionality but serves as the stepping stone for the
@@ -82,6 +85,7 @@ To use development versions of Kipper download the
   - `CustomType`, which is a class extending from `ProcessedType` and implementing the functionality for a custom type such as an interface or class.
   - `UserScope`, which represents a user scope i.e. any scope except the universe scope.
   - `ClassScopeThisDeclaration`, which represents the `this` declaration of a class.
+  - `InstanceOfExpression`, which represents the `instanceof` operator expression.
 - New errors:
   - `TypeCanNotBeUsedForTypeCheckingError`, which is thrown when a type is used for type checking, but is not a valid
     type. This is an error indicating an invalid logic that should be fixed.
@@ -125,6 +129,8 @@ To use development versions of Kipper download the
   - `KipperCallable`, which is an alias for `FunctionDeclaration`, `LambdaPrimaryExpression` and
     `ClassMethodDeclaration`.
   - `TypeDeclarationPropertyTypeSemantics`, which represents the type semantics of a type declaration property.
+  - `InstanceOfExpressionSemantics`, which represents the semantics of an instanceof expression.
+  - `InstanceOfExpressionTypeSemantics`, which represents the type semantics of an instanceof expression.
 - New functions:
   - `KipperTypeChecker.validArrayExpression()`, which ensures that an array expression is valid.
   - `ClassDeclaration.getThis()`, which returns the `this` type of the class.

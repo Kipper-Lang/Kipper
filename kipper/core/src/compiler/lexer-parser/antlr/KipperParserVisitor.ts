@@ -15,6 +15,7 @@ import type {
 	ActualCastOrConvertExpressionContext,
 	ActualConditionalExpressionContext,
 	ActualEqualityExpressionContext,
+	ActualInstanceOfExpressionContext,
 	ActualLogicalAndExpressionContext,
 	ActualLogicalOrExpressionContext,
 	ActualMultiplicativeExpressionContext,
@@ -73,6 +74,7 @@ import type {
 	IncrementOrDecrementUnaryExpressionContext,
 	InitDeclaratorContext,
 	InitializerContext,
+	InstanceOfExpressionContext,
 	InterfaceDeclarationContext,
 	InterfaceMemberDeclarationContext,
 	InterfaceMethodDeclarationContext,
@@ -100,6 +102,7 @@ import type {
 	PassOncomputedPrimaryExpressionContext,
 	PassOnConditionalExpressionContext,
 	PassOnEqualityExpressionContext,
+	PassOnInstanceOfExpressionContext,
 	PassOnLogicalAndExpressionContext,
 	PassOnLogicalOrExpressionContext,
 	PassOnMultiplicativeExpressionContext,
@@ -360,6 +363,22 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitActualRelationalExpression?: (ctx: ActualRelationalExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `passOnInstanceOfExpression`
+	 * labeled alternative in `KipperParser.instanceOfExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitPassOnInstanceOfExpression?: (ctx: PassOnInstanceOfExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `actualInstanceOfExpression`
+	 * labeled alternative in `KipperParser.instanceOfExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitActualInstanceOfExpression?: (ctx: ActualInstanceOfExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnConditionalExpression`
@@ -905,6 +924,13 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitBitwiseShiftOperators?: (ctx: BitwiseShiftOperatorsContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.instanceOfExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitInstanceOfExpression?: (ctx: InstanceOfExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.relationalExpression`.

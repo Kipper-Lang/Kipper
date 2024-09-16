@@ -15,6 +15,7 @@ import type {
 	ActualCastOrConvertExpressionContext,
 	ActualConditionalExpressionContext,
 	ActualEqualityExpressionContext,
+	ActualInstanceOfExpressionContext,
 	ActualLogicalAndExpressionContext,
 	ActualLogicalOrExpressionContext,
 	ActualMultiplicativeExpressionContext,
@@ -73,6 +74,7 @@ import type {
 	IncrementOrDecrementUnaryExpressionContext,
 	InitDeclaratorContext,
 	InitializerContext,
+	InstanceOfExpressionContext,
 	InterfaceDeclarationContext,
 	InterfaceMemberDeclarationContext,
 	InterfaceMethodDeclarationContext,
@@ -100,6 +102,7 @@ import type {
 	PassOncomputedPrimaryExpressionContext,
 	PassOnConditionalExpressionContext,
 	PassOnEqualityExpressionContext,
+	PassOnInstanceOfExpressionContext,
 	PassOnLogicalAndExpressionContext,
 	PassOnLogicalOrExpressionContext,
 	PassOnMultiplicativeExpressionContext,
@@ -497,6 +500,32 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitActualRelationalExpression?: (ctx: ActualRelationalExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `passOnInstanceOfExpression`
+	 * labeled alternative in `KipperParser.instanceOfExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterPassOnInstanceOfExpression?: (ctx: PassOnInstanceOfExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `passOnInstanceOfExpression`
+	 * labeled alternative in `KipperParser.instanceOfExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitPassOnInstanceOfExpression?: (ctx: PassOnInstanceOfExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by the `actualInstanceOfExpression`
+	 * labeled alternative in `KipperParser.instanceOfExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterActualInstanceOfExpression?: (ctx: ActualInstanceOfExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by the `actualInstanceOfExpression`
+	 * labeled alternative in `KipperParser.instanceOfExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitActualInstanceOfExpression?: (ctx: ActualInstanceOfExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by the `passOnConditionalExpression`
@@ -1356,6 +1385,17 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitBitwiseShiftOperators?: (ctx: BitwiseShiftOperatorsContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.instanceOfExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterInstanceOfExpression?: (ctx: InstanceOfExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.instanceOfExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitInstanceOfExpression?: (ctx: InstanceOfExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.relationalExpression`.

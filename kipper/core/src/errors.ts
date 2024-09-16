@@ -862,6 +862,16 @@ export class PropertyDoesNotExistError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a type is used for an instanceof expression that is not a class.
+ * @since 0.12.0
+ */
+export class InvalidInstanceOfTypeError extends TypeError {
+	constructor(type: string) {
+		super(`Type '${type}' can not be used with 'instanceof' operator. Expects a class.`);
+	}
+}
+
+/**
  * Error that is thrown whenever a constant declaration is not defined.
  * @since 0.8.3
  */

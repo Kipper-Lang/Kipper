@@ -87,6 +87,9 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 				);
 				return `Array<${memberType}>`;
 			}
+			case BuiltInTypes.obj.identifier: {
+				return "object";
+			}
 			case BuiltInTypes.any.identifier: {
 				return "any";
 			}

@@ -35,6 +35,7 @@ import {
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
+	InstanceOfExpressionContext,
 	InterfaceDeclarationContext,
 	InterfaceMethodDeclarationContext,
 	InterfacePropertyDeclarationContext,
@@ -126,6 +127,7 @@ import {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../nodes";
+import { InstanceOfExpression } from "../nodes/expressions/instanceof-expression/instanceof-expression";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.
@@ -192,6 +194,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
 		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpression,
 		[ParseRuleKindMapping.RULE_typeofExpression]: TypeofExpression,
+		[ParseRuleKindMapping.RULE_instanceofExpression]: InstanceOfExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any, any>>;
 
 	/**
@@ -268,6 +271,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_typeofExpression]: TypeofExpressionContext,
 		[ParseRuleKindMapping.RULE_newInstantiationExpression]: NewInstantiationExpressionContext,
+		[ParseRuleKindMapping.RULE_instanceofExpression]: InstanceOfExpressionContext,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,
@@ -351,6 +355,7 @@ export class ASTNodeMapper {
 		RULE_lambdaPrimaryExpression: LambdaPrimaryExpression,
 		RULE_typeofExpression: TypeofExpression,
 		RULE_newInstantiationExpression: NewInstantiationExpression,
+		RULE_instanceofExpression: InstanceOfExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any, any>>;
 
 	/**

@@ -32,6 +32,7 @@ import type {
 	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	JumpStatement,
 	KipperProgramContext,
@@ -1095,5 +1096,17 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const operand = await semanticData.operand.translateCtxAndChildren();
 
 		return [TargetJS.getBuiltInIdentifier("typeOf"), "(", ...operand, ")"];
+	};
+
+	/**
+	 * Translates a {@link InstanceOfExpression} into the JavaScript language.
+	 */
+	instanceOfExpression = async (node: InstanceOfExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
+		const operand = await semanticData.operand.translateCtxAndChildren();
+		const classType = TargetJS.getRuntimeType(typeData.classType);
+
+		return [...operand, " ", "instanceof", " ", classType];
 	};
 }

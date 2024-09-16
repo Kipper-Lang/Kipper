@@ -658,7 +658,7 @@ describe("Core functionality", () => {
 
 		// Test for multiple conditional expressions
 		it("Multiple conditional expressions", async () => {
-			const fileContent = "const x: num = true ? 5: false ? 10: 15;";
+			const fileContent = "const x: num = true ? 5 : false ? 10 : 15;";
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -960,7 +960,7 @@ describe("Core functionality", () => {
 			});
 		});
 
-		describe("Slice notation ", () => {
+		describe("Slice notation", () => {
 			describe("str", () => {
 				it("Simple slice with both start and end", async () => {
 					const fileContent = 'var x: str = "1234"[1:2]; print(x);';
@@ -1667,6 +1667,95 @@ describe("Core functionality", () => {
 		});
 	});
 
+	describe("Instanceof", () => {
+		it("should return true when object is instance of class", async () => {
+			const fileContent = `class Test {a: str; constructor (b: str) {this.a = b;}}; var x: Test = new Test("3"); print(x instanceof Test);`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+			const written = instance.write();
+			assert.include(
+				written,
+				"class Test {\n" +
+					"  a: string;\n" +
+					"  constructor(b: string)\n" +
+					"  {\n" +
+					"    this.a = b;\n" +
+					"  }\n" +
+					"}\n" +
+					'let x: Test = new Test("3");\n' +
+					"__kipper.print(x instanceof Test);",
+				"Invalid TypeScript code (Expected different output)",
+			);
+
+			const jsCode = ts.transpile(written);
+			testPrintOutput((message: any) => assert.equal(message, "true", "Expected different output"), jsCode);
+		});
+
+		describe("should return false when object is not instance of class", () => {
+			it("object literal instanceof class", async () => {
+				const fileContent = `class Test {a: str; constructor (b: str) {this.a = b;}}; var x: obj = {a: "3"}; print(x instanceof Test);`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+				const written = instance.write();
+				assert.include(
+					written,
+					"class Test {\n" +
+						"  a: string;\n" +
+						"  constructor(b: string)\n" +
+						"  {\n" +
+						"    this.a = b;\n" +
+						"  }\n" +
+						"}\n" +
+						'let x: object = {\n  a: "3",\n};\n' +
+						"__kipper.print(x instanceof Test);",
+					"Invalid TypeScript code (Expected different output)",
+				);
+
+				const jsCode = ts.transpile(written);
+				testPrintOutput((message: any) => assert.equal(message, "false", "Expected different output"), jsCode);
+			});
+
+			it("different class instanceof class", async () => {
+				const fileContent = `class Test {a: str; constructor (b: str) {this.a = b;}}; class Test2 {a: str; constructor (b: str) {this.a = b;}}; var x: Test2 = new Test2("3"); print(x instanceof Test);`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+
+				const written = instance.write();
+				assert.include(
+					written,
+					"class Test {\n" +
+						"  a: string;\n" +
+						"  constructor(b: string)\n" +
+						"  {\n" +
+						"    this.a = b;\n" +
+						"  }\n" +
+						"}\n" +
+						"class Test2 {\n" +
+						"  a: string;\n" +
+						"  constructor(b: string)\n" +
+						"  {\n" +
+						"    this.a = b;\n" +
+						"  }\n" +
+						"}\n" +
+						'let x: Test2 = new Test2("3");\n' +
+						"__kipper.print(x instanceof Test);",
+					"Invalid TypeScript code (Expected different output)",
+				);
+
+				const jsCode = ts.transpile(written);
+				testPrintOutput((message: any) => assert.equal(message, "false", "Expected different output"), jsCode);
+			});
+		});
+	});
+
 	describe("Class", () => {
 		it("should be able to create an empty class", async () => {
 			const fileContent = "class Test { }";
@@ -1698,7 +1787,8 @@ describe("Core functionality", () => {
 
 			assert.isDefined(instance.programCtx);
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-			let written = instance.write();
+
+			const written = instance.write();
 			assert.include(
 				written,
 				"class Test {\n" +
@@ -1721,7 +1811,8 @@ describe("Core functionality", () => {
 
 			assert.isDefined(instance.programCtx);
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-			let written = instance.write();
+
+			const written = instance.write();
 			assert.include(
 				written,
 				"class Test {\n" +
@@ -1735,6 +1826,9 @@ describe("Core functionality", () => {
 					"__kipper.print(x.a);",
 				"Invalid TypeScript code (Expected different output)",
 			);
+
+			const jsCode = ts.transpile(written);
+			testPrintOutput((message: any) => assert.equal(message, "3", "Expected different output"), jsCode);
 		});
 
 		it("should be able to instantiate a class with new and two properties", async () => {
@@ -1743,7 +1837,8 @@ describe("Core functionality", () => {
 
 			assert.isDefined(instance.programCtx);
 			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-			let written = instance.write();
+
+			const written = instance.write();
 			assert.include(
 				written,
 				"class Test {\n" +
@@ -1759,6 +1854,9 @@ describe("Core functionality", () => {
 					"__kipper.print(x.x);",
 				"Invalid TypeScript code (Expected different output)",
 			);
+
+			const jsCode = ts.transpile(written);
+			testPrintOutput((message: any) => assert.equal(message, "hello", "Expected different output"), jsCode);
 		});
 
 		it("should be able to access 'this' inside a class method", async () => {

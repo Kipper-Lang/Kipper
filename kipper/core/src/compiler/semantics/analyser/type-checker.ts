@@ -55,6 +55,7 @@ import {
 	InvalidAmountOfArgumentsError,
 	InvalidAmountOfGenericArgumentsError,
 	InvalidConversionTypeError,
+	InvalidInstanceOfTypeError,
 	InvalidKeyTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidUnaryExpressionOperandError,
@@ -68,8 +69,8 @@ import {
 	ValueNotIndexableTypeError,
 	ValueTypeNotIndexableWithGivenAccessor,
 } from "../../../errors";
-import type { BuiltInTypeArray, CustomType, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
-import { BuiltInTypeFunc, BuiltInTypeObj, UndefinedType } from "../types";
+import type { BuiltInTypeArray, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
+import { BuiltInTypeFunc, BuiltInTypeObj, CustomType, UndefinedType } from "../types";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -782,7 +783,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {KipperNotImplementedError} When the branch types are mismatching, as union types are not implemented yet.
 	 * @since 0.11.0
 	 */
-	validConditionalExpression(trueBranch: Expression, falseBranch: Expression) {
+	public validConditionalExpression(trueBranch: Expression, falseBranch: Expression) {
 		const trueBranchType = trueBranch.getTypeSemanticData().evaluatedType;
 		const falseBranchType = falseBranch.getTypeSemanticData().evaluatedType;
 
@@ -807,7 +808,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param param The array primary expression to check.
 	 * @since 0.12.0
 	 */
-	validArrayExpression(param: ArrayPrimaryExpression) {
+	public validArrayExpression(param: ArrayPrimaryExpression) {
 		const children = param.getSemanticData().value;
 		if (children.length > 0) {
 			const expectedType = children[0].getTypeSemanticData().evaluatedType;
@@ -820,6 +821,17 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					);
 				}
 			}
+		}
+	}
+
+	/**
+	 * Checks whether the passed object expression is valid.
+	 * @param type The object primary expression to check.
+	 * @since 0.12.0
+	 */
+	public validInstanceofClassType(type: ProcessedType) {
+		if (!(type instanceof CustomType) || type.kind !== "class") {
+			throw this.notImplementedError(new InvalidInstanceOfTypeError(type.toString()));
 		}
 	}
 }
