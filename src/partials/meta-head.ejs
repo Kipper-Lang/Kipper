@@ -83,7 +83,7 @@ See main.scss for the --scheme-primary variable
     // In case a site was loaded with a different locale than the one in the locale storage, then we redirect to
     // the correct locale
     if (
-      storedLocale !== undefined &&
+      !!storedLocale &&
       storedLocale !== locale.name &&
       !window.location.pathname.includes(`/${storedLocale}/`) &&
       !window.location.pathname.includes("/docs/")
