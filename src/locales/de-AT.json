@@ -1,11 +1,64 @@
 {
   "name": "de-AT",
   "values": {
+    "pages": {
+      "homepage": {
+        "title": "Willkommen bei Kipper!",
+        "description": "Die neue anpassbare und einfach zu bedienende typsichere Sprache fürs Web und Node.js!"
+      },
+      "downloads": {
+        "title": "Downloads",
+        "description": "Lade die neueste Version von Kipper für dein Betriebssystem herunter."
+      },
+      "docs": {
+        "title": "Dokumentation",
+        "description": "Lerne, wie du Kipper mit unserer umfassenden Dokumentation verwenden kannst."
+      },
+      "playground": {
+        "title": "Playground",
+        "description": "Probiere Kipper in unserem Online-Playground aus."
+      },
+      "changelog": {
+        "title": "Änderungen",
+        "description": "Sieh dir die neuesten Änderungen an Kipper an."
+      }
+    },
     "homepage": {
       "welcome": "Willkommen bei Kipper!",
       "description": "Die neue anpassbare und einfach zu bedienende typsichere Sprache fürs Web und Node.js!",
       "play-button": "Playground ausprobieren",
       "docs-button": "Doku anzeigen"
+    },
+    "nav-bar": {
+      "downloads": "Downloads",
+      "docs": "Doku",
+      "playground": "Playground",
+      "changelog": "Änderungen"
+    },
+    "playground": {
+      "buttons": {
+        "run": "Ausführen",
+        "copy": "Kopieren",
+        "clear": "Löschen",
+        "console": "Konsole",
+        "compiler": "Compiler"
+      },
+      "save-state": {
+        "saving": "Speichern...",
+        "saved": "Gespeichert!",
+        "loaded": "Geladen :)"
+      }
+    },
+    "footer": {
+      "supported-by": "Entwickelt bei und unterstützt von:",
+      "list": {
+        "releases": "Versionen",
+        "github": "GitHub",
+        "security": "Sicherheit",
+        "issues": "Issues",
+        "license": "Lizenz"
+      },
+      "license": "Kipper ist unter der GPL-3.0-or-later lizenziert."
     }
   }
 }

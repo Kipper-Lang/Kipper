@@ -1,11 +1,64 @@
 {
   "name": "en-US",
   "values": {
+    "pages": {
+      "homepage": {
+        "title": "Welcome to Kipper!",
+        "description": "The new customisable and easy to use type-safe language for the web and Node.js!"
+      },
+      "downloads": {
+        "title": "Downloads",
+        "description": "Download the latest version of Kipper for your platform."
+      },
+      "docs": {
+        "title": "Documentation",
+        "description": "Learn how to use Kipper with our comprehensive documentation."
+      },
+      "playground": {
+        "title": "Playground",
+        "description": "Try out Kipper in our online playground."
+      },
+      "changelog": {
+        "title": "Changelog",
+        "description": "View the latest changes to Kipper."
+      }
+    },
     "homepage": {
       "welcome": "Welcome to Kipper!",
       "description": "The new customisable and easy to use type-safe language for the web and Node.js!",
       "play-button": "Try our Playground",
       "docs-button": "View the Docs"
+    },
+    "nav-bar": {
+      "downloads": "Downloads",
+      "docs": "Docs",
+      "playground": "Playground",
+      "changelog": "Changelog"
+    },
+    "playground": {
+      "buttons": {
+        "run": "Run",
+        "copy": "Copy",
+        "clear": "Clear",
+        "console": "Console",
+        "compiler": "Compiler"
+      },
+      "save-state": {
+        "saving": "Saving...",
+        "saved": "Saved!",
+        "loaded": "Loaded :)"
+      }
+    },
+    "footer": {
+      "supported-by": "Developed at and supported by:",
+      "list": {
+        "releases": "Releases",
+        "github": "GitHub",
+        "security": "Security",
+        "issues": "Issue Tracker",
+        "license": "License"
+      },
+      "license": "Kipper is licensed under the GPL-3.0-or-later license."
     }
   }
 }

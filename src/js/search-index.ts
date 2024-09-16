@@ -23,7 +23,7 @@ export const rawSearchIndex: Array<string> = [
 	"Playground;/playground.html;Playground;Online Playground for using Kipper in your browser.",
 	"Docs;/docs/index.html;Documentation;Kipper Documentation and API Reference.",
 	"Changelog;/changelog.html;Changelog;Detailed Changelog documenting changes in Kipper.",
-	"Downloads;/download.html;Downloads;Downloads.",
+	"Downloads;/downloads.html;Downloads;Downloads.",
 	"Comments;/docs/comments.html;Comments;Comments in the Kipper language.",
 ];
 

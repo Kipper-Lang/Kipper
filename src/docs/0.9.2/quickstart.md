@@ -82,7 +82,7 @@ Example `package.json`:
 	"version": "0.1.0",
 	"description": "An example program using Kipper",
 	"keywords": ["kipper", "example"],
-	"license": "GPL-3.0",
+	"license": "GPL-3.0-or-later",
 	"dependencies": {
 		"@kipper/cli": "latest"
 	}
@@ -131,7 +131,7 @@ Example package.json
 	"version": "0.1.0",
 	"description": "An example program using Kipper",
 	"keywords": ["kipper", "example"],
-	"license": "GPL-3.0",
+	"license": "GPL-3.0-or-later",
 	"dependencies": {
 		"@kipper/core": "latest"
 	}

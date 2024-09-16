@@ -350,7 +350,7 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 	const data = await getBuildData(configPath);
 
 	// Build all ejs files (Convert from EJS to HTML)
-  // This also includes all root Markdown files (e.g. download.md) which is then loaded into those ejs files as well
+  // This also includes all root Markdown files (e.g. download.mds) which is then loaded into those ejs files as well
 	log.info("Building static EJS files");
 	await buildEjsFiles(srcRootDir, destRootDir, data, showdownConverter);
 

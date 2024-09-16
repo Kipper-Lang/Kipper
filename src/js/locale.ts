@@ -20,3 +20,11 @@ function toggleVisibility(dropdown: HTMLUListElement) {
 localeSelectorButton.addEventListener("click", () => toggleVisibility(localeSelectorDropdown));
 phoneSelectorButton.addEventListener("click",  () => toggleVisibility(phoneSelectorDropdown));
 console.log(localeSelectorDropdown, localeSelectorButton, phoneSelectorDropdown, phoneSelectorButton);
+
+const localeSelectorItems = document.querySelectorAll("#header-nav-bar #locales-dropdown li.locale-selector-button-wrapper");
+localeSelectorItems.forEach((item) => {
+  item.addEventListener("click", () => {
+    const locale = item.getAttribute("data-locale");
+    localStorage.setItem(window.localeKey, locale);
+  });
+});

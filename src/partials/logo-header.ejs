@@ -3,6 +3,16 @@
         <img class="kipper-logo" src="<%= rootDir %>/img/icons/kipper-base-head.png" alt="" />
     </a>
     <a class="underline-button kipper-logo-identifier" href="<%= rlc %>/index.html">
+        <script defer>
+          (() => {
+            const link = document.querySelector(".kipper-version-and-logo .underline-button.kipper-logo-identifier");
+            const localeName = localStorage.getItem(window.localeKey);
+            const href = link.getAttribute("href");
+            if (!href.includes(localeName)) {
+              link.setAttribute("href", `/${localeName}${href}`);
+            }
+          })();
+        </script>
         <h2>Kipper</h2>
     </a>
     <a id="version-identifier" href="https://github.com/Luna-Klatzer/Kipper/releases/tag/v<%= latestVersion %>">

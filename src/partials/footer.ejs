@@ -1,7 +1,7 @@
 <footer id="footer-bar" class="flex-parent-container flex-column">
     <ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
         <li id="development-and-support-notice">
-            <p>Developed at and supported by:</p>
+            <p><%- locale["values"]["footer"]["supported-by"] %></p>
         </li>
         <li id="footer-logos">
             <img id="htlleonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="">
@@ -11,34 +11,34 @@
             <ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
                 <li>
                     <small>
-                        <a class="underline-button" href="<%= releasesURL; %>">Releases</a>
+                        <a class="underline-button" href="<%= releasesURL; %>"><%- locale["values"]["footer"]["list"]["releases"] %></a>
                     </small>
                 </li>
                 <li>
                     <small>
-                        <a class="underline-button" href="<%= kipperGithubURL; %>">GitHub</a>
+                        <a class="underline-button" href="<%= kipperGithubURL; %>"><%- locale["values"]["footer"]["list"]["github"] %></a>
                     </small>
                 </li>
                 <li>
                     <small>
-                        <a class="underline-button" href="<%= securityURL; %>">Security</a>
+                        <a class="underline-button" href="<%= securityURL; %>"><%- locale["values"]["footer"]["list"]["security"] %></a>
                     </small>
                 </li>
                 <li>
                     <small>
-                        <a class="underline-button" href="<%= issueTrackerURL; %>">Issue Tracker</a>
+                        <a class="underline-button" href="<%= issueTrackerURL; %>"><%- locale["values"]["footer"]["list"]["issues"] %></a>
                     </small>
                 </li>
                 <li>
                     <small>
-                        <a class="underline-button" href="<%= licenseURL; %>">License</a>
+                        <a class="underline-button" href="<%= licenseURL; %>"><%- locale["values"]["footer"]["list"]["license"] %></a>
                     </small>
                 </li>
             </ul>
         </li>
         <li id="copyright">
             <small class="centered-text white-text">
-                <%= copyright; %>. <br> Kipper is licensed under the GPL-3.0 license.
+                <%= copyright %>. <br> <%- locale["values"]["footer"]["license"] %>
             </small>
         </li>
     </ul>

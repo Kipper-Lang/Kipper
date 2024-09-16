@@ -8,7 +8,7 @@
     "documentation",
     "kipper"
   ],
-  "license": "GPL-3.0",
+  "license": "GPL-3.0-or-later",
   "author": "Luna Klatzer",
   "engines": {
     "node": ">=16.0.0",

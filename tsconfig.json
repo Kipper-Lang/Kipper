@@ -10,9 +10,12 @@
     "moduleResolution": "node",
     "lib": [
       "DOM",
-      "WebWorker"
+      "WebWorker",
+      "ES5"
     ]
   },
-  "include": ["src"],
+  "include": [
+    "src"
+  ],
   "exclude": ["node_modules"]
 }

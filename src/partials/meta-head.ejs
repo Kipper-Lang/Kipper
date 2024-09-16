@@ -67,3 +67,11 @@ See main.scss for the --scheme-primary variable
 <meta property="og:url" content="<%= `${websitePublicURL}${urlPath}` ;%>">
 <meta property="og:image" content="<%= `${rootDir}/img/icons/kipper-head-icon.png` %>">
 <meta property="og:locale" content="en_GB">
+
+<!-- Load in the entire locale object -->
+<script>
+    var locale = <%- JSON.stringify(locale) %>;
+    window.locale = locale;
+    var localeKey = 'locale';
+    window.localeKey = localeKey;
+</script>

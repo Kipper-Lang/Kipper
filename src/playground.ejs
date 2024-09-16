@@ -1,5 +1,5 @@
-<% let title = "Online Playground"; %>
-<% let description = "Online Playground for trying out Kipper in an already set up environment."; %>
+<% let title = locale["values"]["pages"]["playground"]["title"]; %>
+<% let description = locale["values"]["pages"]["playground"]["description"]; %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,13 +38,13 @@
                         </ul>
                     </div>
                     <div class="playground-button-wrapper" id="run-code-list-item">
-                        <button>Run</button>
+                        <button><%= locale["values"]["playground"]["buttons"]["run"] %></button>
                     </div>
                     <div class="playground-button-wrapper" id="copy-code-list-item">
-                        <button>Copy</button>
+                        <button><%= locale["values"]["playground"]["buttons"]["copy"] %></button>
                     </div>
                     <div class="playground-button-wrapper" id="clear-content-list-item">
-                        <button>Clear</button>
+                        <button><%= locale["values"]["playground"]["buttons"]["clear"] %></button>
                     </div>
                     <!--
                       Independent text saving state list item for letting the user
@@ -57,7 +57,7 @@
                     <textarea
                             id="code-editor-textarea"
                             type="text"
-                            placeholder="Write your Code here"
+                            placeholder=""
                             spellcheck="false"
                             autocomplete="off"
                             autocorrect="off"
@@ -72,10 +72,10 @@
             <div id="shell-sidebar" class="flex-column">
                 <div id="shell-menu" class="flex-parent-container flex-row">
                     <div id="console-output-button" class="playground-button-wrapper">
-                        <button>Console</button>
+                        <button><%= locale["values"]["playground"]["buttons"]["console"] %></button>
                     </div>
                     <div id="compiler-output-button" class="playground-button-wrapper">
-                        <button>Compiler</button>
+                        <button><%= locale["values"]["playground"]["buttons"]["compiler"] %></button>
                     </div>
                 </div>
                 <div id="shell-output">

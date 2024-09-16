@@ -1,11 +1,64 @@
 {
   "name": "ja-JP",
   "values": {
+    "pages": {
+      "homepage": {
+        "title": "Kipperへようこそ！",
+        "description": "新しいカスタマイズ可能で使いやすいWebとNode.jsのための型安全な言語！"
+      },
+      "downloads": {
+        "title": "ダウンロード",
+        "description": "お使いのプラットフォーム用のKipperの最新バージョンをダウンロードしてください。"
+      },
+      "docs": {
+        "title": "ドキュメント",
+        "description": "包括的なドキュメントでKipperの使い方を学びます。"
+      },
+      "playground": {
+        "title": "プレイグラウンド",
+        "description": "オンラインプレイグラウンドでKipperを試してみてください。"
+      },
+      "changelog": {
+        "title": "変更履歴",
+        "description": "Kipperの最新の変更を表示します。"
+      }
+    },
     "homepage": {
       "welcome": "Kipperへようこそ！",
       "description": "新しいカスタマイズ可能で使いやすいWebとNode.jsのための型安全な言語！",
       "play-button": "プレイグラウンドを試してみる",
       "docs-button": "ドキュメントを見る"
+    },
+    "nav-bar": {
+      "downloads": "ダウンロード",
+      "docs": "ドキュメント",
+      "playground": "プレイグラウンド",
+      "changelog": "変更履歴"
+    },
+    "playground": {
+      "buttons": {
+        "run": "実行",
+        "copy": "コピー",
+        "clear": "クリア",
+        "console": "コンソール",
+        "compiler": "コンパイラ"
+      },
+      "save-state": {
+        "saving": "保存中...",
+        "saved": "保存されました！",
+        "loaded": "ロードされました :)"
+      }
+    },
+    "footer": {
+      "supported-by": "開発元・サポート元:",
+      "list": {
+        "releases": "リリース",
+        "github": "GitHub",
+        "security": "セキュリティ",
+        "issues": "問題トラッカー",
+        "license": "ライセンス"
+      },
+      "license": "KipperはGPL-3.0-or-laterライセンスで提供されます。"
     }
   }
 }

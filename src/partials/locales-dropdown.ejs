@@ -7,7 +7,7 @@
         </div>
         <ul id="locales-dropdown" class="no-style-list flex-column">
             <% Object.keys(locales).filter(locale => locale !== "default").forEach((localeName) => { %>
-                <li id="locale-selector-<%= localeName %>" class="locale-selector-button-wrapper">
+                <li id="locale-selector-<%= localeName %>" class="locale-selector-button-wrapper" data-locale="<%= localeName %>">
                     <a href="<%= rootDir %>/<%= localeName %><%= urlPath.replace(locale["name"] + "/", "") %>"><%= localeName %></a>
                 </li>
             <% }); %>

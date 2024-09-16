@@ -163,7 +163,7 @@ export function init(): void {
 			localStorage.setItem(localStorageIdentifier, givenTextArea.value);
 
 			spinning = false;
-			textSavingState.innerHTML = `<p class="gray-text">Saved!</p>`;
+			textSavingState.innerHTML = `<p class="gray-text">${window.locale["values"]["playground"]["save-state"]["saved"]}</p>`;
 		}, 1000);
 
 		if (!spinning) {
@@ -182,7 +182,7 @@ export function init(): void {
         <div></div>
         <div></div>
       </div>
-      <p class="gray-text">Saving...</p>
+      <p class="gray-text">${window.locale["values"]["playground"]["save-state"]["saving"]}</p>
     `;
 			spinning = true;
 		}
@@ -200,6 +200,6 @@ export function init(): void {
 
   // If the input is not empty, signalize that code was restored
   if (codeTextArea.value.trim() !== "") {
-    textSavingState.innerHTML = `<p class="gray-text">Loaded :)</p>`;
+    textSavingState.innerHTML = `<p class="gray-text">${window.locale["values"]["playground"]["save-state"]["loaded"]} :)</p>`;
   }
 }

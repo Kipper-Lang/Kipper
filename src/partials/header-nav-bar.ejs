@@ -1,12 +1,11 @@
 <%
 const pages = {
-    "download.html": "Downloads",
-    "docs/index.html": "Docs",
-    "playground.html": "Playground",
-    "changelog.html": "Changelog"
+    "downloads.html": locale["values"]["nav-bar"]["downloads"],
+    "docs/index.html": locale["values"]["nav-bar"]["docs"],
+    "playground.html": locale["values"]["nav-bar"]["playground"],
+    "changelog.html": locale["values"]["nav-bar"]["changelog"],
 };
 %>
-
 <header
     id="primary-page-header"
     class="page-header <%= typeof isHomepage !== undefined && isHomepage ? 'homepage' : '' %>"
@@ -19,7 +18,7 @@ const pages = {
             <!-- Main navigation links -->
             <% for (const page in pages) { %>
             <%  const pageName = pages[page]; %>
-            <%  const isDocs = pageName === "Docs"; %>
+            <%  const isDocs = page === "docs/index.html"; %>
             <%  const pagePath = `${isDocs ? rootDir : rlc}/${page}` %>
                 <li>
                     <a href="<%= pagePath %>"
@@ -31,6 +30,20 @@ const pages = {
                     </a>
                 </li>
             <% } %>
+
+            <script defer>
+              (() => {
+                const links = document.querySelectorAll("#std-header-primary-content li .top-nav-menu-item");
+                const localeName = localStorage.getItem(window.localeKey);
+                for (const link of links) {
+                  // Insert locale name into the URL
+                  const href = link.getAttribute("href");
+                  if (!href.includes(localeName) && !href.includes("docs")) {
+                    link.setAttribute("href", `/${localeName}${href}`);
+                  }
+                }
+              })();
+            </script>
         </ul>
         <%- include('./search-bar', { searchBarId: "std-search-bar" }) %>
         <%- include('./locales-dropdown', { locale: locale, isDocsFile: isDocsFile }) %>
@@ -40,6 +53,6 @@ const pages = {
     <%- include('./phone-header-nav-bar', { pages: pages, header: false }) %>
 
     <div id="header-description-content" class="text-page-content-container">
-        <%- typeof header !== undefined && header ? include('./header') : "" %>
+        <%- typeof header !== undefined && header ? include('./header-title-bar') : "" %>
     </div>
 </header>
