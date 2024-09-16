@@ -156,7 +156,7 @@ export class LambdaPrimaryExpression
 		const funcType = new BuiltInTypeFunc(paramTypes, returnType);
 		this.typeSemantics = {
 			evaluatedType: funcType,
-			type: funcType,
+			valueType: funcType,
 		};
 
 		// Ensure that all code paths return a value

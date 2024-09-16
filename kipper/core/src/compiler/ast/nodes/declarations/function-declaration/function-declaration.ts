@@ -208,7 +208,7 @@ export class FunctionDeclaration
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 
 		this.typeSemantics = {
-			type: new BuiltInTypeFunc(paramTypes, returnType),
+			valueType: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 
 		// Ensure that all code paths return a value
