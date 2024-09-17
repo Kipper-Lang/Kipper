@@ -11,8 +11,14 @@ nav#phone-header-nav-bar {
   clip-path: polygon(0% 0%, 100% 0%, 100% 120%, 0% 120%);
 }
 
-#header-description-content #page-header-wrapper h1 {
-  margin-top: 1rem;
+#header-description-content #page-header-wrapper {
+  h1 {
+    margin-top: 1rem;
+  }
+
+  #page-description > p {
+    text-align: center;
+  }
 }
 
 #header-nav-bar {
