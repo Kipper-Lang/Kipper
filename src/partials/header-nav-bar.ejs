@@ -35,8 +35,12 @@ const pages = {
               function changeHrefLocaleIfNecessary(links) {
                 const localeName = localStorage.getItem(window.localeKey);
                 for (const link of links) {
-                  // Insert locale name into the URL
-                  const href = link.getAttribute("href");
+                  // Insert locale name into the URL and replace the domain if it's included in the URL
+                  const href = link
+                    .getAttribute("href")
+                    .replace(window.location.origin, "")
+                    .replace(`${window.location.protocol}//`, "");
+
                   if (!href.includes(localeName) && !href.includes("docs")) {
                     link.setAttribute("href", `/${localeName}${href}`);
                   }
