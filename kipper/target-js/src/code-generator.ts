@@ -123,6 +123,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 				"var __createKipper = () => {" +
 					" if (__globalScope.__kipper || __kipper) { return undefined; }" +
 					" class KipperError extends Error { constructor(msg) { super(msg); this.name='KipError'; }};" +
+					" class KipperNotImplementedError extends KipperError { " +
+					"		constructor(msg) { super(msg); this.name = 'KipNotImplementedError'; } " +
+					"	}" +
 					" class KipperType {" +
 					"  constructor(name, fields, methods, baseType = null) " +
 					"  { this.name = name; this.fields = fields; this.methods = methods; this.baseType = baseType; }" +
@@ -147,6 +150,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"  KipperError: KipperError," +
 					"  TypeError: (class KipperTypeError extends KipperError { constructor(msg) { super(msg); this.name = 'KipTypeError'; } })," +
 					"  IndexError: (class KipperIndexError extends KipperError { constructor(msg) { super(msg); this.name = 'KipIndexError'; } })," +
+					"  NotImplementedError: KipperNotImplementedError," +
 					"  Property: class KipperProperty { constructor(name, type) { this.name = name; this.type = type; } }," +
 					"  MethodParameter: class MethodParameter { constructor(name, type) { this.name = name; this.type = type; } }," +
 					"  Method: class KipperMethod { constructor(name, returnType, parameters) { this.name = name; this.returnType = returnType; this.parameters = parameters; } }," +
@@ -189,7 +193,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"  	}" +
 					"  }," +
 					"  matches: (value, pattern) => {" +
-					"    const registeredRuntimeTypes = [ 'str', 'num', 'bool', 'null', 'undefined' ];" +
+					"    const primTypes = [ 'str', 'num', 'bool', 'null', 'undefined' ];" +
+					"    const genTypes = [ 'Array', 'Func' ];" +
 					"    if (pattern.fields && Array.isArray(pattern.fields)) {" +
 					"      for (const field of pattern.fields) {" +
 					"        const fieldName = field.name;" +
@@ -200,10 +205,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"        }" +
 					"        const fieldValue = value[fieldName];" +
 					"        const isSameType = __kipper.typeOf(fieldValue) === field.type;" +
-					"        if (registeredRuntimeTypes.includes(field.type.name) && !isSameType) {" +
+					"        if (primTypes.includes(field.type.name) && !isSameType) {" +
 					"          return false;" +
 					"        }" +
-					"        if (!registeredRuntimeTypes.includes(fieldType.name)) {" +
+					"        if (genTypes.includes(fieldType.name)) {" +
+					"          throw new KipperNotImplementedError(\"Matches does not yet support the 'Array' and 'Func' types\");" +
+					"        }" +
+					"        if (!primTypes.includes(fieldType.name)) {" +
 					"          if (!__kipper.matches(fieldValue, fieldType)) {" +
 					"            return false;" +
 					"          }" +
