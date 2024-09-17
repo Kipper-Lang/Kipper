@@ -5263,6 +5263,6 @@
 	} else {
 		root.showdown = showdown;
 	}
-}.call(this));
+}).call(this);
 
 //# sourceMappingURL=showdown.js.map

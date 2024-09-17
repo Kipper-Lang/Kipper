@@ -19,15 +19,15 @@ var NAME: TYPE;
 
 - Dynamic:
 
-	```kipper
-	var NAME: TYPE = VALUE;
-	```
+  ```kipper
+  var NAME: TYPE = VALUE;
+  ```
 
 - Constant (One-time definitions which can never be changed):
 
-	```kipper
-	const NAME: TYPE = VALUE;
-	```
+  ```kipper
+  const NAME: TYPE = VALUE;
+  ```
 
 ## Difference - Declarations & Definitions
 

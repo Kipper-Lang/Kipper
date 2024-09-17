@@ -7,10 +7,13 @@ and informing the reader of important info.
 ## Syntax
 
 - Single Line Comment:
+
 ```kipper
 // CONTENT
 ```
+
 - Block Comment:
+
 ```kipper
 /* CONTENT */
 ```
@@ -22,6 +25,7 @@ They are used to describe the functionality of a function and its parameters, an
 used whenever a function is not self-explanatory.
 
 Function comments are written in the following format:
+
 ```kipper
 /**
  * DESCRIPTION

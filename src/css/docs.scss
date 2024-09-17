@@ -467,42 +467,42 @@ nav.phone-docs-nav {
 			}
 
 			li > ul.phone-docs-nav-path {
-        column-gap: 0.25rem;
+				column-gap: 0.25rem;
 
-        li {
-          display: flex;
-          flex-direction: row;
-          justify-content: center;
-          align-content: center;
+				li {
+					display: flex;
+					flex-direction: row;
+					justify-content: center;
+					align-content: center;
 
-          a.docs-page-header-path-item,
-          a.docs-page-header-kipper-version {
-            @include li-item;
+					a.docs-page-header-path-item,
+					a.docs-page-header-kipper-version {
+						@include li-item;
 
-            height: 100%;
-            align-content: center;
-            display: flex;
-          }
+						height: 100%;
+						align-content: center;
+						display: flex;
+					}
 
-          span {
-            font-size: 1.2rem;
-            margin-left: 0.25rem;
-          }
-        }
+					span {
+						font-size: 1.2rem;
+						margin-left: 0.25rem;
+					}
+				}
 
-        :first-child:is(li) > a.docs-page-header-kipper-version {
-          @include li-item;
+				:first-child:is(li) > a.docs-page-header-kipper-version {
+					@include li-item;
 
-          &,
-          &:active,
-          &:visited {
-            color: $scheme-dark-gray;
-          }
+					&,
+					&:active,
+					&:visited {
+						color: $scheme-dark-gray;
+					}
 
-          &:hover {
-            color: $scheme-primary;
-          }
-        }
+					&:hover {
+						color: $scheme-primary;
+					}
+				}
 			}
 
 			li.phone-docs-nav-bar-menu-toggle {

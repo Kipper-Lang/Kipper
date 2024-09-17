@@ -212,14 +212,19 @@ Parameters for the Kipper Compiler CLI in the console.
 ### Example CLI Command
 
 - Simple compilation of a single file (will generate `./build/sample.js`):
+
 ```bash
 kipper compile sample.kip
 ```
+
 - Simple compilation from a string (will generate `./build/anonymous-script.js`):
+
 ```bash
 kipper compile -s "print('Hello world!');"
 ```
+
 - Generating a UTF16-encoded program, where both internals and built-in are optimised (will generate `./build/anonymous-script.js`):
+
 ```bash
 kipper compile -s "print('Hello world!');" -e utf16le -i -b
 ```

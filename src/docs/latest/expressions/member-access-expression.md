@@ -4,7 +4,7 @@ Member access expressions are used to access a member or multiple members of an 
 
 ## Syntax
 
-### Dot	Notation
+### Dot Notation
 
 <p class="important">
 Scheduled for release in Kipper v0.11.0 - View issue <a href="https://github.com/Kipper-Lang/Kipper/issues/67">#67</a>

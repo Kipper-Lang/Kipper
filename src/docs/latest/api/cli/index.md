@@ -22,6 +22,7 @@ the `@kipper/cli` package is installed.
 ## Usage
 
 <!-- usage -->
+
 ```sh-session
 $ npm install -g @kipper/cli
 $ kipper COMMAND
@@ -33,6 +34,7 @@ USAGE
   $ kipper COMMAND
 ...
 ```
+
 <!-- usagestop -->
 
 ## Available Commands

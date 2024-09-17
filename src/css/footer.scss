@@ -10,28 +10,28 @@
 		padding: 0.5rem 1.5rem 1.5rem;
 		flex-shrink: 1;
 
-    li#development-and-support-notice {
-      color: white;
-      font-size: 0.8rem;
-      margin: 0.5rem 0 0 0;
-    }
+		li#development-and-support-notice {
+			color: white;
+			font-size: 0.8rem;
+			margin: 0.5rem 0 0 0;
+		}
 
-    li#footer-logos {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-wrap: wrap;
-      margin: 0 0 1rem;
+		li#footer-logos {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			flex-wrap: wrap;
+			margin: 0 0 1rem;
 
-      #htlleonding-logo {
-        margin: 1rem;
-        height: 2.5rem;
-      }
+			#htlleonding-logo {
+				margin: 1rem;
+				height: 2.5rem;
+			}
 
-      #jku-logo {
-        height: 1.6rem;
-        margin: 1.45rem;
-      }
+			#jku-logo {
+				height: 1.6rem;
+				margin: 1.45rem;
+			}
 		}
 
 		ul#footer-bar-list li {
@@ -45,9 +45,9 @@
 			margin-top: 1em;
 			padding-top: 1rem;
 
-      small {
-        display: flex;
-      }
+			small {
+				display: flex;
+			}
 		}
 	}
 }
@@ -61,14 +61,14 @@
 			padding: 0.5rem 1rem 1rem;
 			width: calc($phone-content-width - 2rem);
 
-      li#footer-logos {
-        & > #htlleonding-logo,
-        & > #jku-logo {
-          height: unset;
-          width: 12rem;
-          margin: 1.5rem;
-        }
-      }
+			li#footer-logos {
+				& > #htlleonding-logo,
+				& > #jku-logo {
+					height: unset;
+					width: 12rem;
+					margin: 1.5rem;
+				}
+			}
 
 			ul#footer-bar-list {
 				flex-direction: column;

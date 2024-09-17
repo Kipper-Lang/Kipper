@@ -98,8 +98,7 @@ You can also define functions:
     return a + b;
   }
   print(add(3, 4) as str);
-`
-    .split("\n");
+`.split("\n");
 
 	// Write to the console
 	for (const msg of welcomeMessage) {
@@ -186,8 +185,8 @@ export function clearCompilerOutput(): void {
  */
 export function init(): void {
 	// Print default message to the console output
-  switchToConsoleOutput();
-  writeConsoleOutputDefaultMessage();
+	switchToConsoleOutput();
+	writeConsoleOutputDefaultMessage();
 
 	// Sidebar button handling
 	consoleOutputButton.addEventListener("click", switchToConsoleOutput);

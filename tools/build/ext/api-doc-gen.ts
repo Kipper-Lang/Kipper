@@ -4,11 +4,11 @@ import { finished } from "stream/promises";
 import { Readable } from "stream";
 import { spawn } from "child_process";
 import {
-  determineMarkdownFileMetadata,
-  ensureURLSlashes,
-  removeHTMLHeadAndBodyTag,
-  shouldCopyToRoot,
-  wrapAllTables
+	determineMarkdownFileMetadata,
+	ensureURLSlashes,
+	removeHTMLHeadAndBodyTag,
+	shouldCopyToRoot,
+	wrapAllTables,
 } from "./tools";
 import { typedoc } from "./overwrite/typedoc";
 import { DocsSidebar } from "./docs-sidebar";
@@ -46,10 +46,10 @@ export interface APIDocsBuilderOptions {
 	 * The build data for the Markdown-to-HTML build.
 	 */
 	buildData: Record<string, any>;
-  /**
-   * The path to the project directory.
-   */
-  packageProjectPath: string;
+	/**
+	 * The path to the project directory.
+	 */
+	packageProjectPath: string;
 }
 
 /**
@@ -64,10 +64,10 @@ interface APIDocsInternalOptions extends APIDocsBuilderOptions {
 	 * The git version of the docs.
 	 */
 	gitVersion: string;
-  /**
-   * The name of the package that should be documented.
-   */
-  packageName: string;
+	/**
+	 * The name of the package that should be documented.
+	 */
+	packageName: string;
 	/**
 	 * Whether the docs should be copied to the root directory.
 	 */
@@ -113,43 +113,42 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		this.destRootDir = destRootDir;
 	}
 
-  /**
-   * Renders a Markdown file according to the requirements of this class.
-   *
-   * This means the output may slightly differ to the base function
-   * {@link MarkdownDocsBuilder.renderMarkdownFile}.
-   * @param filePath The path to the Markdown path.
-   */
-  public override async renderMarkdownFile(filePath: string): Promise<string> {
-    const output = super.renderMarkdownFile(filePath);
+	/**
+	 * Renders a Markdown file according to the requirements of this class.
+	 *
+	 * This means the output may slightly differ to the base function
+	 * {@link MarkdownDocsBuilder.renderMarkdownFile}.
+	 * @param filePath The path to the Markdown path.
+	 */
+	public override async renderMarkdownFile(filePath: string): Promise<string> {
+		const output = super.renderMarkdownFile(filePath);
 
-    // Replace the ID of any 'constructor' header with 'constructor' (due to showdown bug it's 'constructor-NaN')
-    const $ = cheerio.load(await output);
-    for (const header of ["h1", "h2", "h3", "h4", "h5", "h6"]) {
-      $(`${header}#constructor-NaN`).attr("id", "constructor");
-    }
+		// Replace the ID of any 'constructor' header with 'constructor' (due to showdown bug it's 'constructor-NaN')
+		const $ = cheerio.load(await output);
+		for (const header of ["h1", "h2", "h3", "h4", "h5", "h6"]) {
+			$(`${header}#constructor-NaN`).attr("id", "constructor");
+		}
 
-    // Wrap all HTML tables with the 'table-wrapper' class
-    let html = await wrapAllTables($.html());
+		// Wrap all HTML tables with the 'table-wrapper' class
+		let html = await wrapAllTables($.html());
 
-    // Due to a minor bug in the typedoc markdown generation, we need to add the id for the local variables in the file
-    // 'compiler.html' manually
-    if (filePath.endsWith("compiler.md")) {
-      html = html.replace(
-        /(<td style=".+">.*)<code>(RULE_[A-z]*)<\/code>(.*<\/td>)/g,
-        (substring: string, pre: string, ruleName: string, after: string) => {
-          return `${pre}<code id="${ruleName.toLowerCase()}">${ruleName}</code>${after}`;
-        }
-      );
-    }
+		// Due to a minor bug in the typedoc markdown generation, we need to add the id for the local variables in the file
+		// 'compiler.html' manually
+		if (filePath.endsWith("compiler.md")) {
+			html = html.replace(
+				/(<td style=".+">.*)<code>(RULE_[A-z]*)<\/code>(.*<\/td>)/g,
+				(substring: string, pre: string, ruleName: string, after: string) => {
+					return `${pre}<code id="${ruleName.toLowerCase()}">${ruleName}</code>${after}`;
+				},
+			);
+		}
 
-    // Remove the <html>, <head> and <body> tag, as the markdown should be put inside a <body> tag
-    html = removeHTMLHeadAndBodyTag(html);
+		// Remove the <html>, <head> and <body> tag, as the markdown should be put inside a <body> tag
+		html = removeHTMLHeadAndBodyTag(html);
 
-    // Returning the slightly modified HTML
-    return html;
-  }
-
+		// Returning the slightly modified HTML
+		return html;
+	}
 
 	/**
 	 * Downloads a specific version of the Kipper git repository, where the environment matches the specified version.
@@ -211,13 +210,13 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	protected async installNodeModules(projectPath: AbsolutePath): Promise<void> {
 		log.debug(`Installing node modules for Kipper source code - '${projectPath}'`);
 
-    try {
-      const nodePath = `${projectPath}/node_modules`;
-      await fs.access(nodePath);
-      return;
-    } catch (e) {
-      // Ignore - We need to install the node modules
-    }
+		try {
+			const nodePath = `${projectPath}/node_modules`;
+			await fs.access(nodePath);
+			return;
+		} catch (e) {
+			// Ignore - We need to install the node modules
+		}
 
 		const process = spawn(
 			// Start the process with working directory equal to the project path
@@ -265,14 +264,14 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		}
 	}
 
-  /**
-   * Reads in the given JSON file and returns the parsed JSON object.
-   * @param jsonPath The path to the JSON file.
-   * @protected
-   */
-  protected async readInJSON(jsonPath: AbsolutePath): Promise<Record<string, any>> {
-    return JSON.parse(await fs.readFile(jsonPath, "utf-8"));
-  }
+	/**
+	 * Reads in the given JSON file and returns the parsed JSON object.
+	 * @param jsonPath The path to the JSON file.
+	 * @protected
+	 */
+	protected async readInJSON(jsonPath: AbsolutePath): Promise<Record<string, any>> {
+		return JSON.parse(await fs.readFile(jsonPath, "utf-8"));
+	}
 
 	/**
 	 * Generates the API documentation for the specified version of the Kipper git repository using TypeDoc.
@@ -293,9 +292,9 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 
 		const entryFile = `${rootProjectPath}/${options.packageProjectPath}/${options.packageName}/src/index.ts`;
 		const tsconfig = `${rootProjectPath}/${options.packageProjectPath}/${options.packageName}/tsconfig.json`;
-    const typedocJSON = await this.readInJSON(`${rootDir}/typedoc.json`);
+		const typedocJSON = await this.readInJSON(`${rootDir}/typedoc.json`);
 		const typedocOptions: Partial<typedoc.TypeDocOptions> = {
-      ...typedocJSON,
+			...typedocJSON,
 			entryPoints: [entryFile],
 			plugin: ["typedoc-plugin-markdown"],
 			tsconfig: tsconfig,
@@ -303,7 +302,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 			githubPages: false,
 			basePath: rootProjectPath,
 			exclude: ["**/node_modules/**"],
-      titleLink: `${NPM_KIPPER_SCOPE_URL}/${options.packageName}`,
+			titleLink: `${NPM_KIPPER_SCOPE_URL}/${options.packageName}`,
 		};
 		await app.bootstrapWithPlugins(typedocOptions);
 
@@ -375,13 +374,13 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		}
 
 		// Remove the '/modules' folder - if it exists
-    const modulesFolder = path.resolve(`${apiOutputDir}/modules`);
-    try {
-      await fs.access(modulesFolder);
-      await fs.rm(modulesFolder, { recursive: true });
-    } catch (e) {
-      return; // Ignore the error - the folder does not exist
-    }
+		const modulesFolder = path.resolve(`${apiOutputDir}/modules`);
+		try {
+			await fs.access(modulesFolder);
+			await fs.rm(modulesFolder, { recursive: true });
+		} catch (e) {
+			return; // Ignore the error - the folder does not exist
+		}
 	}
 
 	/**
@@ -433,8 +432,8 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		$("meta[property='og:title']").attr("content", title);
 		$("meta[property='og:description']").attr("content", markdownMetadata.description);
 
-    // Remove the <html>, <head> and <body> tag, as the markdown should be put inside a <body> tag
-    html = removeHTMLHeadAndBodyTag(html);
+		// Remove the <html>, <head> and <body> tag, as the markdown should be put inside a <body> tag
+		html = removeHTMLHeadAndBodyTag(html);
 
 		return html;
 	}
@@ -469,9 +468,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		buildData: Record<string, any>,
 		options: APIDocsInternalOptions,
 	) {
-		const templateHTML = await this.getModuleTemplateFile(
-      path.basename(fileOrDirURLPath), moduleTemplateFiles
-    );
+		const templateHTML = await this.getModuleTemplateFile(path.basename(fileOrDirURLPath), moduleTemplateFiles);
 
 		// Build the markdown file and modify it based on the metadata of it
 		const mdFilePath = path.resolve(`${srcDir}/${fileOrDirURLPath}`);
@@ -480,13 +477,14 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 
 		// Insert the metadata into the template HTML
 		const writeToContent = await this.modifyHTMLUsingMarkdownMetadata(
-			templateHTML.replace(REPLACE_TEMPLATE, mdContent), markdownMetadata, buildData, options,
+			templateHTML.replace(REPLACE_TEMPLATE, mdContent),
+			markdownMetadata,
+			buildData,
+			options,
 		);
 
 		// Write the file as an HTML and remove the markdown file
-		const writeToPath = path.resolve(
-			`${destDir}/${fileOrDirURLPath.replace(".md", ".html")}`
-		);
+		const writeToPath = path.resolve(`${destDir}/${fileOrDirURLPath.replace(".md", ".html")}`);
 		await fs.writeFile(writeToPath, writeToContent);
 	}
 
@@ -594,7 +592,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		const parts = filename.split(".");
 		if (parts.length >= 3) {
 			const moduleName = parts[0];
-      const module: string | undefined = moduleTemplateFiles[moduleName];
+			const module: string | undefined = moduleTemplateFiles[moduleName];
 			if (module) {
 				return moduleTemplateFiles[moduleName];
 			}
@@ -635,13 +633,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 			await this.createAPIDocsEntryFiles(options.apiRootDestPath, options);
 
 			// Build the markdown files in the root folder
-			await this.buildMarkdownDirectory(
-				options.apiRootDestPath,
-				options.apiPath,
-				moduleTemplateFiles,
-				true,
-				options,
-			);
+			await this.buildMarkdownDirectory(options.apiRootDestPath, options.apiPath, moduleTemplateFiles, true, options);
 		}
 	}
 
@@ -664,7 +656,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 * Builds the API docs for the specified versions using the package 'typedoc', which generates for '@kipper/core',
 	 * '@kipper/target-js' and '@kipper/target-js' the API docs in the specified destination folder.
 	 * @param versions The array of versions that should be built.
-   * @param packages The array of packages that should be built.
+	 * @param packages The array of packages that should be built.
 	 * @param versionSidebars List of all sidebars generated for the static documentation. The {@link APIDocsBuilder}
 	 * will use the information stored for every version to generate the sidebar for the API docs.
 	 * @param options The object storing the options for the API docs builder.
@@ -675,39 +667,39 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 */
 	public async buildAPIDocs(
 		versions: Array<string>,
-    packages: Array<string>,
+		packages: Array<string>,
 		versionSidebars: { [v: string]: DocsSidebar },
 		options: APIDocsBuilderOptions,
 	): Promise<void> {
-    for (const packageToBuild of packages) {
-      for (const version of versions) {
-        const apiPath = path.join(`${options.apiPath}/${packageToBuild}`);
+		for (const packageToBuild of packages) {
+			for (const version of versions) {
+				const apiPath = path.join(`${options.apiPath}/${packageToBuild}`);
 
-        // Absolute paths
-        const destVersionDocs: AbsolutePath = path.resolve(options.destRootDocs, version);
-        const apiVersionDestPath: AbsolutePath = path.resolve(`${destVersionDocs}/${apiPath}`);
-        const apiRootDestPath: AbsolutePath = path.resolve(`${options.destRootDocs}/${apiPath}`);
+				// Absolute paths
+				const destVersionDocs: AbsolutePath = path.resolve(options.destRootDocs, version);
+				const apiVersionDestPath: AbsolutePath = path.resolve(`${destVersionDocs}/${apiPath}`);
+				const apiRootDestPath: AbsolutePath = path.resolve(`${options.destRootDocs}/${apiPath}`);
 
-        // Ensure that tre the 'latest' and 'next' version is replaced with a real version number (required for git)
-        let gitVersion = version;
-        if (gitVersion === "latest") {
-          gitVersion = options.buildData.versions["latest"];
-        } else if (gitVersion === "next") {
-          gitVersion = options.buildData.versions["next"];
-        }
+				// Ensure that tre the 'latest' and 'next' version is replaced with a real version number (required for git)
+				let gitVersion = version;
+				if (gitVersion === "latest") {
+					gitVersion = options.buildData.versions["latest"];
+				} else if (gitVersion === "next") {
+					gitVersion = options.buildData.versions["next"];
+				}
 
-        await this.buildSpecificAPIVersion({
-          ...options,
-          apiPath, // '$API_PATH/$PACKAGE'
-          version,
-          destVersionDocs,
-          apiVersionDestPath,
-          apiRootDestPath,
-          gitVersion,
-          shouldCopyToRoot: shouldCopyToRoot(version),
-          packageName: packageToBuild,
-        });
-      }
-    }
+				await this.buildSpecificAPIVersion({
+					...options,
+					apiPath, // '$API_PATH/$PACKAGE'
+					version,
+					destVersionDocs,
+					apiVersionDestPath,
+					apiRootDestPath,
+					gitVersion,
+					shouldCopyToRoot: shouldCopyToRoot(version),
+					packageName: packageToBuild,
+				});
+			}
+		}
 	}
 }

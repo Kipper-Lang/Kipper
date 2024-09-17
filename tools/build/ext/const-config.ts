@@ -12,7 +12,8 @@ export const configPath = path.resolve(`${srcRootDir}/config.json`);
 export const ejsOptions: Options = { beautify: true, root: path.resolve(`${srcRootDir}/partials/`) };
 export const noAPIDocsFlag = process.argv.includes("--no-api-docs");
 export const prodFlag = process.argv.includes("--prod");
-export const debuggerMessage = [ // Debugger messages that should be ignored in a child process
+export const debuggerMessage = [
+	// Debugger messages that should be ignored in a child process
 	"Debugger listening on ws://",
 	"For help, see: https://nodejs.org/en/docs/inspector",
 	"Debugger attached.",

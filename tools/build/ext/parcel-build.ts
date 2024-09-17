@@ -9,7 +9,7 @@ const parcelDevBuildCommand: string = "pnpm run parcel-dev-build";
 const parcelProdBuildCommand: string = "pnpm run gh-pages-build";
 const prettierCommand: string = "pnpm run prettier-build";
 
-function getSpawnArgs(inputCmd: string): { command: string, args: string[] } {
+function getSpawnArgs(inputCmd: string): { command: string; args: string[] } {
 	const cmdParts = inputCmd.split(" ");
 	const command = cmdParts.shift();
 	const args = cmdParts;
@@ -25,12 +25,7 @@ function getSpawnArgs(inputCmd: string): { command: string, args: string[] } {
  * @returns True if the process successfully executed the given command.
  * @throws {Error} If the process failed to execute the given command.
  */
-async function callProcess(
-	command: string,
-	args: string[],
-	cwd: string,
-	noStdOut: boolean = false,
-): Promise<boolean> {
+async function callProcess(command: string, args: string[], cwd: string, noStdOut: boolean = false): Promise<boolean> {
 	const process = spawn(
 		// Start the process with working directory equal to the project path
 		command,
@@ -41,13 +36,15 @@ async function callProcess(
 	let hasFailed = false;
 	process.stdout.on("data", noStdOut ? () => void 0 : (data) => log.debug(`Subprocess 'stdout': ${data}`));
 	process.stderr.on("data", (data) => {
-		const checkForDebuggerMessage = (msg: string)  => {
+		const checkForDebuggerMessage = (msg: string) => {
 			// Checking if the data contains the debugger message or the other way around - due to weird split behavior
 			data = data.toString();
-			return data.includes(msg) ||
+			return (
+				data.includes(msg) ||
 				msg.includes(data) ||
 				data.replace(/[\n\r]+/g, "").includes(msg) ||
-				msg.includes(data.replace(/[\n\r]+/g, ""));
+				msg.includes(data.replace(/[\n\r]+/g, ""))
+			);
 		};
 		if (debuggerMessage.some(checkForDebuggerMessage) || data.replace(/[\n\r]+/g, "") === "") {
 			return; // Ignore debugger messages - this is not an error
@@ -62,7 +59,7 @@ async function callProcess(
 		process.on("close", resolve);
 	});
 
-	if (hasFailed)  {
+	if (hasFailed) {
 		throw new Error(`Subprocess '${command} ${args.join(" ")}' failed.`);
 	}
 	return true;
@@ -75,7 +72,6 @@ async function buildForDev(): Promise<void> {
 	const { command, args } = getSpawnArgs(parcelDevBuildCommand);
 	await callProcess(command, args, rootDir);
 }
-
 
 /**
  * Will build all files into the {@link rootDir} (In the root folder where package.json is located) using Parcel for a

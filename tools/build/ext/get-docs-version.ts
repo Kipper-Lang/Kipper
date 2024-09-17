@@ -4,14 +4,14 @@ import { statSync } from "fs";
 import { srcRootDocs } from "./const-config";
 
 export async function getDocsVersions() {
-  // Get all directories in the docs folder that are not current, next, or latest,
-  let entries = await fs.readdir(srcRootDocs);
+	// Get all directories in the docs folder that are not current, next, or latest,
+	let entries = await fs.readdir(srcRootDocs);
 
-  // Filter out non-directories
-  entries = entries.filter((entry) => {
-    const entryPath = path.join(srcRootDocs, entry);
-    return statSync(entryPath).isDirectory();
-  });
+	// Filter out non-directories
+	entries = entries.filter((entry) => {
+		const entryPath = path.join(srcRootDocs, entry);
+		return statSync(entryPath).isDirectory();
+	});
 
-  return entries;
+	return entries;
 }

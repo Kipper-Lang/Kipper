@@ -59,17 +59,26 @@
 			width: 45vw;
 			padding: 0;
 			border-radius: $default-border-radius;
-			box-shadow: rgba($scheme-primary-rgb, 0.6) -5px 5px, rgba($scheme-primary-rgb, 0.4) -10px 10px,
-				rgba($scheme-primary-rgb, 0.3) -15px 15px, rgba($scheme-primary-rgb, 0.2) -20px 20px,
+			box-shadow:
+				rgba($scheme-primary-rgb, 0.6) -5px 5px,
+				rgba($scheme-primary-rgb, 0.4) -10px 10px,
+				rgba($scheme-primary-rgb, 0.3) -15px 15px,
+				rgba($scheme-primary-rgb, 0.2) -20px 20px,
 				rgba($scheme-primary-rgb, 0.1) -25px 25px;
-			transition: width 1s ease-in-out, box-shadow 1s ease-in-out;
+			transition:
+				width 1s ease-in-out,
+				box-shadow 1s ease-in-out;
 		}
 
 		#welcome-image:hover {
 			width: 48vw;
-			box-shadow: rgba($scheme-primary-rgb, 0.8) -5px 5px, rgba($scheme-primary-rgb, 0.6) -10px 10px,
-				rgba($scheme-primary-rgb, 0.5) -15px 15px, rgba($scheme-primary-rgb, 0.4) -20px 20px,
-				rgba($scheme-primary-rgb, 0.3) -25px 25px, rgba($scheme-primary-rgb, 0.2) -30px 30px,
+			box-shadow:
+				rgba($scheme-primary-rgb, 0.8) -5px 5px,
+				rgba($scheme-primary-rgb, 0.6) -10px 10px,
+				rgba($scheme-primary-rgb, 0.5) -15px 15px,
+				rgba($scheme-primary-rgb, 0.4) -20px 20px,
+				rgba($scheme-primary-rgb, 0.3) -25px 25px,
+				rgba($scheme-primary-rgb, 0.2) -30px 30px,
 				rgba($scheme-primary-rgb, 0.1) -30px 30px;
 		}
 	}
@@ -85,7 +94,7 @@ $phone-homepage-margin: 2rem;
 @media screen and (max-width: $large-screen-size) {
 	/* Fancy background */
 	.text-page-content-container {
-    @include rigged-background();
+		@include rigged-background();
 		display: flex;
 		align-items: center;
 	}

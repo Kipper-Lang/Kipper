@@ -40,42 +40,41 @@ var var6: num = (var18 as num) + 2; // -> 3
 
 - External boolean variable:
 
-	```kipper
-	var var7: bool = externalNumber % 10 == 0;
-	if (var7) {
-		// This code will be executed
-	} else {
-		// This code will not be executed
-	}
-	```
+  ```kipper
+  var var7: bool = externalNumber % 10 == 0;
+  if (var7) {
+  	// This code will be executed
+  } else {
+  	// This code will not be executed
+  }
+  ```
 
 - Direct boolean expression ([relational expressions](../expressions/relational-expression.html) or [logical expressions](../expressions/logical-expression.html)):
 
-	```kipper
-	if (externalNumber % 10 == 0) {
-		// This code will be executed
-	} else {
-		// This code will not be executed
-	}
-	```
+  ```kipper
+  if (externalNumber % 10 == 0) {
+  	// This code will be executed
+  } else {
+  	// This code will not be executed
+  }
+  ```
 
 ### Using a boolean inside a while loop
 
 - External boolean variable:
 
-	```kipper
-	var var8: bool = validNumber(1);
-	while (var8) {
-		// This code will be executed
-		var8 = false;
-	}
-	```
+  ```kipper
+  var var8: bool = validNumber(1);
+  while (var8) {
+  	// This code will be executed
+  	var8 = false;
+  }
+  ```
 
 - Direct boolean expression ([relational expressions](../expressions/relational-expression.html) or [logical expressions](../expressions/logical-expression.html)):
 
-	```kipper
-	while (validNumber(1)) {
-		// This code will be executed
-	}
-	```
-
+  ```kipper
+  while (validNumber(1)) {
+  	// This code will be executed
+  }
+  ```

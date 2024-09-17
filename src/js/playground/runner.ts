@@ -243,20 +243,20 @@ export function resetRunnerState(): void {
  */
 export function init(): void {
 	// Warmup the compiler to speed up future compilations
-  // Add loading message (Don't switch the compiler output window though)
-  writeLineToCompilerOutput("--- Loading compiler... ---");
+	// Add loading message (Don't switch the compiler output window though)
+	writeLineToCompilerOutput("--- Loading compiler... ---");
 
-  // Ensure we switch to the stored version, when the page is loaded
-  const storedVersion = getKipperVersionUnsafe();
-  if (storedVersion !== null) {
-    // Switch to the stored version if there has been a previous session
-    setKipperVersion(storedVersion);
-  }
+	// Ensure we switch to the stored version, when the page is loaded
+	const storedVersion = getKipperVersionUnsafe();
+	if (storedVersion !== null) {
+		// Switch to the stored version if there has been a previous session
+		setKipperVersion(storedVersion);
+	}
 
-  // Warm up the compiler
-  warmUp = warmUpCompiler();
+	// Warm up the compiler
+	warmUp = warmUpCompiler();
 
-  // Afterwards display the ready message
-  clearCompilerOutput();
-  writeLineToCompilerOutput("--- Kipper Compiler ready for compilation --- ");
+	// Afterwards display the ready message
+	clearCompilerOutput();
+	writeLineToCompilerOutput("--- Kipper Compiler ready for compilation --- ");
 }

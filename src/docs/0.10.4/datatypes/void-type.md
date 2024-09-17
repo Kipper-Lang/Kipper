@@ -69,4 +69,3 @@ var var23: void = func2();
 // X May not set a 'void' variable to anything except 'void'
 var var2: void = 4;
 ```
-

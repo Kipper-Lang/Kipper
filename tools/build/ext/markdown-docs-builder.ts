@@ -99,7 +99,7 @@ export class MarkdownDocsBuilder {
 		existingData: Record<string, any>,
 		navTreeItem: SidebarFile,
 	): Record<string, any> {
-    const rootDir = ensureURLSlashes(getRelativePathToSrc(destRootDir, pathDest));
+		const rootDir = ensureURLSlashes(getRelativePathToSrc(destRootDir, pathDest));
 
 		return {
 			...existingData,
@@ -114,9 +114,9 @@ export class MarkdownDocsBuilder {
 			isHiddenFile: navTreeItem === undefined,
 			isIndexFile: navTreeItem && navTreeItem.filename === "index.html",
 			dropdownTitle: navTreeItem?.dropdownTitle,
-      locale: existingData["locales"]["default"],
-      lc: "",
-      rlc: rootDir,
+			locale: existingData["locales"]["default"],
+			lc: "",
+			rlc: rootDir,
 		};
 	}
 

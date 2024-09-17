@@ -2,11 +2,11 @@
 title: Overview
 dropdownTitle: Module
 nav:
-- index.md
-- core/
-- config/
-- 'target-js/'
-- 'target-ts/'
+  - index.md
+  - core/
+  - config/
+  - "target-js/"
+  - "target-ts/"
 ---
 
 # Kipper Module API

@@ -10,9 +10,9 @@
 		flex-grow: 1;
 		flex-direction: column;
 
-    .page-header {
-      @include rigged-background();
-    }
+		.page-header {
+			@include rigged-background();
+		}
 
 		.page-header,
 		#page-header-wrapper {

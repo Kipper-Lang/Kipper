@@ -57,7 +57,7 @@ def printWelcome(name: str, age: num) -> void {
     var youngerKeyword: str = "child";
     print(f"Hello {name}! {age > 18 ? f"You are an {olderKeyword}." : f"You are a {youngerKeyword}."}");
 }
- 
+
 var name: str = "Luna";
 var age: num = 20;
 printWelcome(name, age);

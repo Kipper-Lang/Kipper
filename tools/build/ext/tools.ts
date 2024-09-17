@@ -136,8 +136,6 @@ export async function ensureValidSrcAndDest(src: AbsolutePath, dest: AbsolutePat
 	}
 }
 
-
-
 /**
  * Copies all non-ejs files to the destination folder.
  * @param src The source directory of a copy operation.
@@ -177,10 +175,10 @@ export async function copyNonEJSFiles(src: AbsolutePath, dest: AbsolutePath): Pr
  * @param showdownConverter The showdown converter to convert markdown to HTML.
  */
 export async function buildEjsFiles(
-  src: AbsolutePath,
-  dest: AbsolutePath,
-  data: Record<string, any>,
-  showdownConverter: showdownModule.Converter,
+	src: AbsolutePath,
+	dest: AbsolutePath,
+	data: Record<string, any>,
+	showdownConverter: showdownModule.Converter,
 ): Promise<void> {
 	// Generate the dest folder if it does not exist
 	await ensureValidSrcAndDest(src, dest);
@@ -196,65 +194,65 @@ export async function buildEjsFiles(
 		}
 	}
 
-  // Download the changelog and store it in a variable (will be used later for changelog.ejs)
-  // (This is important to always get the latest changelog)
-  const changelogMd: string = await downloadLatestChangelog();
-  mdFiles.push("changelog.md");
+	// Download the changelog and store it in a variable (will be used later for changelog.ejs)
+	// (This is important to always get the latest changelog)
+	const changelogMd: string = await downloadLatestChangelog();
+	mdFiles.push("changelog.md");
 
 	// Secondly process the EJS files and insert the Markdown content (if it exists for the specific file)
-  for (const localeKey in data["locales"]) {
-    const locale = data["locales"][localeKey];
-    const isDef = localeKey === "default";
+	for (const localeKey in data["locales"]) {
+		const locale = data["locales"][localeKey];
+		const isDef = localeKey === "default";
 
-    // Ensure the locale directory exists in the destination folder
-    const localeDest = path.resolve(dest, isDef ? "" : localeKey);
-    if (!existsSync(localeDest)) {
-      await fs.mkdir(localeDest, { recursive: true });
-    }
-    const rootDir = getRelativePathToSrc(destRootDir, `${localeDest}/sample`);
-    const lc = isDef ? "" : localeKey;
-    const rlc = isDef ? rootDir : `${rootDir}/${lc}`;
+		// Ensure the locale directory exists in the destination folder
+		const localeDest = path.resolve(dest, isDef ? "" : localeKey);
+		if (!existsSync(localeDest)) {
+			await fs.mkdir(localeDest, { recursive: true });
+		}
+		const rootDir = getRelativePathToSrc(destRootDir, `${localeDest}/sample`);
+		const lc = isDef ? "" : localeKey;
+		const rlc = isDef ? rootDir : `${rootDir}/${lc}`;
 
-    for (let file of result) {
-      // If the file is an ejs file compile it to HTML
-      if (file.endsWith(".ejs")) {
-        const htmlFile: FileOrDirName = file.replace(".ejs", ".html");
-        const pathSrc: AbsolutePath = path.resolve(src, file);
-        const pathDest: AbsolutePath = path.resolve(localeDest, htmlFile);
-        const itemData = {
-          ...data,
-          filename: htmlFile, // This should only contain the filename without any directory
-          urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
-          urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
-          editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
-          isDocsFile: false,
-          rootDir: rootDir, // Relative path to the root directory
-          htmlMarkdownContent: undefined,
-          locale: locale,
-          lc: lc,
-          rlc: rlc,
-        };
+		for (let file of result) {
+			// If the file is an ejs file compile it to HTML
+			if (file.endsWith(".ejs")) {
+				const htmlFile: FileOrDirName = file.replace(".ejs", ".html");
+				const pathSrc: AbsolutePath = path.resolve(src, file);
+				const pathDest: AbsolutePath = path.resolve(localeDest, htmlFile);
+				const itemData = {
+					...data,
+					filename: htmlFile, // This should only contain the filename without any directory
+					urlPath: getURLPath(pathDest), // URL Path: Relative path from the dest root
+					urlParentDir: getURLParentPath(pathDest), // URL Path: Relative path from the dest root
+					editPath: getEditURL(data["docsEditURL"], pathSrc), // Edit path: Relative path from the source root
+					isDocsFile: false,
+					rootDir: rootDir, // Relative path to the root directory
+					htmlMarkdownContent: undefined,
+					locale: locale,
+					lc: lc,
+					rlc: rlc,
+				};
 
-        // If there is a markdown file with the same name as the ejs file, then get the markdown file, build it
-        // and insert it into the ejs file
-        let mdFile = mdFiles.find((mdFile) => mdFile === file.replace(".ejs", ".md"));
-        if (mdFile !== undefined) {
-          let md: string;
-          if (mdFile === "changelog.md") {
-            md = changelogMd;
-          } else {
-            md = (await fs.readFile(path.resolve(src, mdFile))).toString();
-          }
-          const html = showdownConverter.makeHtml(md);
-          itemData.htmlMarkdownContent = await ejs.render(html, itemData, ejsOptions);
-        }
+				// If there is a markdown file with the same name as the ejs file, then get the markdown file, build it
+				// and insert it into the ejs file
+				let mdFile = mdFiles.find((mdFile) => mdFile === file.replace(".ejs", ".md"));
+				if (mdFile !== undefined) {
+					let md: string;
+					if (mdFile === "changelog.md") {
+						md = changelogMd;
+					} else {
+						md = (await fs.readFile(path.resolve(src, mdFile))).toString();
+					}
+					const html = showdownConverter.makeHtml(md);
+					itemData.htmlMarkdownContent = await ejs.render(html, itemData, ejsOptions);
+				}
 
-        // Build ejs file
-        const result: string = await ejs.renderFile(pathSrc, itemData, ejsOptions);
-        await fs.writeFile(pathDest, result);
-      }
-    }
-  }
+				// Build ejs file
+				const result: string = await ejs.renderFile(pathSrc, itemData, ejsOptions);
+				await fs.writeFile(pathDest, result);
+			}
+		}
+	}
 }
 
 /**
@@ -264,10 +262,7 @@ export async function buildEjsFiles(
  * skipped to ensure the correct description is found.
  * @returns The metadata for the file.
  */
-export function determineMarkdownFileMetadata(
-	markdownHtml: string,
-	apiFile: boolean = false,
-): DocumentMetaData {
+export function determineMarkdownFileMetadata(markdownHtml: string, apiFile: boolean = false): DocumentMetaData {
 	// Ensure consistent line endings
 	const htmlContent = markdownHtml.replace(/\r\n/g, "\n").split("\n");
 
@@ -289,10 +284,7 @@ export function determineMarkdownFileMetadata(
 			if (line.endsWith("</h1>")) {
 				isTitle = false;
 			}
-		} else if (
-			(line.startsWith(`<p`) && !metaData.description && metaData.title) ||
-			isDescription
-		) {
+		} else if ((line.startsWith(`<p`) && !metaData.description && metaData.title) || isDescription) {
 			// If there is a p tag, no description has been found yet and a title has been already created, make this the
 			// new description
 			isDescription = true;
@@ -356,12 +348,12 @@ export async function processDirContents(
  * @param html The HTML to wrap the tables in.
  */
 export async function wrapAllTables(html: string): Promise<string> {
-  const $ = cheerio.load(html);
+	const $ = cheerio.load(html);
 
-  // Wrap all tables in a div with the class 'table-wrapper'
-  $("table").wrap("<div class='table-wrapper'></div>");
+	// Wrap all tables in a div with the class 'table-wrapper'
+	$("table").wrap("<div class='table-wrapper'></div>");
 
-  return $.html();
+	return $.html();
 }
 
 /**
@@ -369,5 +361,5 @@ export async function wrapAllTables(html: string): Promise<string> {
  * @param html The HTML to sanitize.
  */
 export function removeHTMLHeadAndBodyTag(html: string): string {
-  return html.replace(/<\/?((head)|(html)|(body))>/g, "");
+	return html.replace(/<\/?((head)|(html)|(body))>/g, "");
 }

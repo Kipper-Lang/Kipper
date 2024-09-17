@@ -36,8 +36,8 @@ async function createVersionFolder(version: string) {
 	const latestDir = path.join(docsDir, "latest");
 	console.log(` - Moving 'latest' folder content to version folder '${version}'`);
 	await fs.cp(latestDir, versionDir, { recursive: true });
-  await fs.rm(latestDir, { recursive: true });
-  await fs.mkdir(latestDir);
+	await fs.rm(latestDir, { recursive: true });
+	await fs.mkdir(latestDir);
 }
 
 /**
@@ -47,7 +47,9 @@ async function replaceLatestWithNext() {
 	const nextDir = path.join(docsDir, "next");
 	const latestDir = path.join(docsDir, "latest");
 
-	console.log(` - Copying 'next' folder content to 'latest' folder (Preserving current state to allow for further updates)`);
+	console.log(
+		` - Copying 'next' folder content to 'latest' folder (Preserving current state to allow for further updates)`,
+	);
 	await fs.cp(nextDir, latestDir, { recursive: true });
 }
 

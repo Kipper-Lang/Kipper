@@ -21,8 +21,8 @@ function togglePhoneHeaderMenu() {
 		phoneHeaderMenu.classList.remove("invisible");
 	}
 
-  // Make sure to close the locale menu when any other menu is opened
-  phoneLocaleSelectorDropdown.classList.add("invisible");
-  phoneLocaleSelectorDropdown.classList.remove("visible");
+	// Make sure to close the locale menu when any other menu is opened
+	phoneLocaleSelectorDropdown.classList.add("invisible");
+	phoneLocaleSelectorDropdown.classList.remove("visible");
 }
 phoneHeaderMenuToggle.addEventListener("click", togglePhoneHeaderMenu);

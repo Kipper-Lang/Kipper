@@ -19,23 +19,18 @@ import type {
 } from "./ext/base-types";
 import type { RelativeDocsURLPath } from "./ext/base-types";
 import { DocsSidebar } from "./ext/docs-sidebar";
+import { buildEjsFiles, copyNonEJSFiles, ensureValidSrcAndDest, processDirContents } from "./ext/tools";
 import {
-	buildEjsFiles,
-	copyNonEJSFiles,
-	ensureValidSrcAndDest,
-	processDirContents,
-} from "./ext/tools";
-import {
-  configPath,
-  destRootDir,
-  destRootDocs,
-  distRootDir,
-  distRootDocs,
-  noAPIDocsFlag,
-  prodFlag,
-  rootDir,
-  srcRootDir,
-  srcRootDocs
+	configPath,
+	destRootDir,
+	destRootDocs,
+	distRootDir,
+	distRootDocs,
+	noAPIDocsFlag,
+	prodFlag,
+	rootDir,
+	srcRootDir,
+	srcRootDocs,
 } from "./ext/const-config";
 import { APIDocsBuilder } from "./ext/api-doc-gen";
 import { MarkdownDocsBuilder } from "./ext/markdown-docs-builder";
@@ -50,7 +45,6 @@ import { getDocsVersions } from "./ext/get-docs-version";
 ejs.cache = new lru({
 	max: 500,
 });
-
 
 // Add new extension to showdown
 showdown.extension("line-numbers", () => {
@@ -88,11 +82,11 @@ showdown.setOption("emoji", true);
 
 // Global showdown converter
 const showdownConverter = new showdown.Converter({
-  metadata: true,
-  extensions: [
-    /* line-numbers, */
-    "fix-details-summary"
-  ]
+	metadata: true,
+	extensions: [
+		/* line-numbers, */
+		"fix-details-summary",
+	],
 });
 
 /**
@@ -317,54 +311,48 @@ export class DocsBuilder extends MarkdownDocsBuilder {
  * @param exclude An array of files that should not be deleted.
  */
 async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePath> = []) {
-  const docsPath = path.resolve(dir);
+	const docsPath = path.resolve(dir);
 
-  // Make exclude contain only absolute paths
-  exclude = exclude.map((item) => path.resolve(`${docsPath}/${item}`));
-  try {
-    await fs.access(docsPath, constants.R_OK | constants.W_OK);
+	// Make exclude contain only absolute paths
+	exclude = exclude.map((item) => path.resolve(`${docsPath}/${item}`));
+	try {
+		await fs.access(docsPath, constants.R_OK | constants.W_OK);
 
-    // Delete every item in the directory except the excluded ones
-    const dirContents = await fs.readdir(docsPath);
-    for (let item of dirContents) {
-      const absolutePath = path.resolve(`${docsPath}/${item}`);
-      if (!exclude.includes(absolutePath)) {
-        await fs.rm(
-          path.resolve(`${docsPath}/${item}`),
-          { recursive: true, force: true }
-        );
-      }
-    }
-  } catch (e) {
-    return; // Directory does not exist
-  }
+		// Delete every item in the directory except the excluded ones
+		const dirContents = await fs.readdir(docsPath);
+		for (let item of dirContents) {
+			const absolutePath = path.resolve(`${docsPath}/${item}`);
+			if (!exclude.includes(absolutePath)) {
+				await fs.rm(path.resolve(`${docsPath}/${item}`), { recursive: true, force: true });
+			}
+		}
+	} catch (e) {
+		return; // Directory does not exist
+	}
 }
 
 (async () => {
-  await ensureCleanDirectory( // Clean the docs folder (will keep the temp project dir in-tact though)
-    destRootDir,
-    ["temp"]
-  );
-  await ensureCleanDirectory(distRootDir); // Clean the dist folder
+	await ensureCleanDirectory(
+		// Clean the docs folder (will keep the temp project dir in-tact though)
+		destRootDir,
+		["temp"],
+	);
+	await ensureCleanDirectory(distRootDir); // Clean the dist folder
 
 	const data = await getBuildData(configPath);
 
 	// Build all ejs files (Convert from EJS to HTML)
-  // This also includes all root Markdown files (e.g. download.mds) which is then loaded into those ejs files as well
+	// This also includes all root Markdown files (e.g. download.mds) which is then loaded into those ejs files as well
 	log.info("Building static EJS files");
 	await buildEjsFiles(srcRootDir, destRootDir, data, showdownConverter);
 
 	// Build all docs files (Convert from Markdown to HTML by inserting it into an EJS template)
 	const ejsDocsTemplate = path.resolve(`${srcRootDir}/partials/docs/page-template.ejs`);
 	const docsBuilder = new DocsBuilder(ejsDocsTemplate, showdownConverter);
-	const versionSidebars = await docsBuilder.build(
-    srcRootDocs,
-    destRootDocs,
-    {
-      ...data,
-      locale: data["locales"]["en-US"] // Docs are for now only in English
-    }
-  );
+	const versionSidebars = await docsBuilder.build(srcRootDocs, destRootDocs, {
+		...data,
+		locale: data["locales"]["en-US"], // Docs are for now only in English
+	});
 
 	log.info("Built docs for versions: " + Object.keys(versionSidebars).join(", "));
 
@@ -382,8 +370,8 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 
 	// Only if '--no-api-docs' is not specified then we build the API docs
 	if (!noAPIDocsFlag) {
-    const packagesToDocument = ["core", "target-ts", "target-js", "config"];
-    const packageProjectPath: RelativePath = "/kipper/";
+		const packagesToDocument = ["core", "target-ts", "target-js", "config"];
+		const packageProjectPath: RelativePath = "/kipper/";
 
 		// Build the API docs - Injecting the API docs into the already compiled build folder
 		log.info("Preparing to inject API docs for versions: " + versions.join(", "));
@@ -392,14 +380,14 @@ async function ensureCleanDirectory(dir: AbsolutePath, exclude: Array<RelativePa
 			apiPath,
 			docsPath: "/docs/",
 			buildData: data,
-      packageProjectPath,
+			packageProjectPath,
 			destRootDocs: distRootDocs,
 		});
 	}
 
-  // If '--prod' is specified then we copy everything to the root of the docs folder
-  if (prodFlag) {
-    log.info("Copying to root folder - '--prod' flag specified");
-    await fs.cp(distRootDir, rootDir, { recursive: true, force: true });
-  }
+	// If '--prod' is specified then we copy everything to the root of the docs folder
+	if (prodFlag) {
+		log.info("Copying to root folder - '--prod' flag specified");
+		await fs.cp(distRootDir, rootDir, { recursive: true, force: true });
+	}
 })();
