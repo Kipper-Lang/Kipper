@@ -2,8 +2,8 @@
 export {};
 
 declare global {
-  interface Window {
-    locale: Record<string, any>;
-    localeKey: string;
-  }
+	interface Window {
+		locale: Record<string, any>;
+		localeKey: string;
+	}
 }

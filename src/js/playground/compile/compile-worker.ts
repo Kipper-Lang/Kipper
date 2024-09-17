@@ -11,7 +11,13 @@ let compiler: never | any;
  * Evaluates the passed Kipper code using specific handlers.
  * @param code The translated code to evaluate. (Must be in JavaScript)
  */
+// prettier-ignore
 async function evalKipperCode(code: string) {
+  // Clean up any global scope entries
+  // eslint-disable-next-line no-undef
+  var __globalScope = typeof __globalScope !== "undefined" ? __globalScope : typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
+  var __kipper = __globalScope.__kipper = undefined;
+
 	// Overwrite 'console.log'
 	const prevLog = console.log;
 	console.log = (msg: string) => {
@@ -85,7 +91,7 @@ async function initCompiler(versionToUse: string): Promise<void> {
 }
 
 // Define the handler for worker messages
-onmessage = async function(event) {
+onmessage = async function (event) {
 	if (initFailed) {
 		// If the initialisation already was tried once and we failed, then we can't do anything
 		throw new Error("Web Worker thread for the Kipper Compiler encountered fatal error during initialisation");
@@ -132,7 +138,7 @@ onmessage = async function(event) {
 				presets: ["env", "typescript"],
 			}).code;
 		}
-    console.log("[compile-worker.ts] Generated code:\n", execCode);
+		console.log("[compile-worker.ts] Generated code:\n", execCode);
 
 		// Switch to console output
 		postMessage(0);
