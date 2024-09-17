@@ -21,6 +21,7 @@ const runCodeListItem: HTMLLIElement = document.querySelector("#run-code-list-it
 const copyCodeButton: HTMLButtonElement = document.querySelector("#copy-code-list-item button");
 const clearContentButton: HTMLButtonElement = document.querySelector("#clear-content-list-item button");
 
+let disappear: ReturnType<typeof setTimeout>;
 /**
  * Writes the given text to the text saving state.
  * @param text The text to write.
@@ -29,12 +30,9 @@ export function writeTextSavingState(text: string): void {
   phoneTextSavingState.classList.remove("fade-out");
   textSavingState.innerHTML = text;
   phoneTextSavingState.innerHTML = text;
-  setTimeout(
-    () => {
-      phoneTextSavingState.classList.add("fade-out");
-    },
-    10000
-  );
+
+  if (disappear) clearTimeout(disappear);
+  disappear = setTimeout(() => phoneTextSavingState.classList.add("fade-out"), 10000);
 }
 
 /**
