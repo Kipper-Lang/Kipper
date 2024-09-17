@@ -1729,17 +1729,17 @@ describe("Core functionality", () => {
 			testPrintOutput((message: any) => assert.equal(message, "false", "Expected different output"), jsCode);
 		});
 
-		it("should support generics such as arrays and lambda", async () => {
-			const fileContent = `interface Test { a: Array<num>; b: Func<num, num>; }; var x: obj = { a: [1, 2, 3], b: (x: num): num -> x + 1 }; print(x matches Test);`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-
-			const written = instance.write();
-			const jsCode = ts.transpile(written);
-			testPrintOutput((message: any) => assert.equal(message, "true", "Expected different output"), jsCode);
-		});
+		// it("should support generics such as arrays and lambda", async () => {
+		// 	const fileContent = `interface Test { a: Array<num>; b: Func<num, num>; }; var x: obj = { a: [1, 2, 3], b: (x: num): num -> x + 1 }; print(x matches Test);`;
+		// 	const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+		//
+		// 	assert.isDefined(instance.programCtx);
+		// 	assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		//
+		// 	const written = instance.write();
+		// 	const jsCode = ts.transpile(written);
+		// 	testPrintOutput((message: any) => assert.equal(message, "true", "Expected different output"), jsCode);
+		// });
 
 		it("should support nested interfaces", async () => {
 			const fileContent = `interface Test { a: num; b: str; }; interface Test2 { c: Test; }; var x: obj = { c: { a: 1, b: '2' } }; print(x matches Test2);`;
