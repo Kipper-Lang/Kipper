@@ -26,7 +26,7 @@ let disappear: ReturnType<typeof setTimeout>;
  * Writes the given text to the text saving state.
  * @param text The text to write.
  */
-export function writeTextSavingState(text: string): void {
+export async function writeTextSavingState(text: string): Promise<void> {
   phoneTextSavingState.classList.remove("fade-out");
   textSavingState.innerHTML = text;
   phoneTextSavingState.innerHTML = text;
@@ -52,7 +52,7 @@ export function clearEditorContent(): void {
   codeTextArea.value = "";
   codeTextAreaResult.innerHTML = "";
   localStorage.setItem(localStorageIdentifier, "");
-  writeTextSavingState(`<p class="gray-text">${window.locale["values"]["playground"]["actions"]["cleared"]}</p>`);
+  void writeTextSavingState(`<p class="gray-text">${window.locale["values"]["playground"]["actions"]["cleared"]}</p>`);
 }
 
 /**
@@ -61,7 +61,7 @@ export function clearEditorContent(): void {
 export function copyEditorContent(): void {
   console.log("Code Copied!");
   navigator.clipboard.writeText(codeTextArea.value).then(() => {
-    writeTextSavingState(`<p class="gray-text">${window.locale["values"]["playground"]["actions"]["copied"]}</p>`);
+    void writeTextSavingState(`<p class="gray-text">${window.locale["values"]["playground"]["actions"]["copied"]}</p>`);
   });
 }
 
@@ -166,23 +166,23 @@ export function init(): void {
   // Spinner animation & saving text
   let cancel;
   let spinning: boolean;
-  codeTextArea.addEventListener("keyup", (event) => {
+  codeTextArea.addEventListener("keydown", async (event) => {
     // if cancel exists / is active -> clear timeout
     if (cancel) clearTimeout(cancel);
 
     // creating the new timeout and assigning it, if the user types more
     // the timeout will be cancelled and restarted, so that the caching is
     // only done when the user finished typing!
-    cancel = setTimeout(() => {
+    cancel = setTimeout(async () => {
       const givenTextArea: HTMLTextAreaElement = event.target as HTMLTextAreaElement;
       localStorage.setItem(localStorageIdentifier, givenTextArea.value);
 
       spinning = false;
-      writeTextSavingState(`<p class="gray-text">${window.locale["values"]["playground"]["save-state"]["saved"]}</p>`);
+      await writeTextSavingState(`<p class="gray-text">${window.locale["values"]["playground"]["save-state"]["saved"]}</p>`);
     }, 1000);
 
     if (!spinning) {
-      writeTextSavingState(`<div id="text-save-spinner" class="spinner">
+      await writeTextSavingState(`<div id="text-save-spinner" class="spinner">
         <!-- This may look stupid, but don't delete it -->
         <div></div>
         <div></div>
@@ -201,7 +201,7 @@ export function init(): void {
       `);
       spinning = true;
     }
-  });
+  }, {once: false});
 
   // Initialize the code input of the editor of the page
   // Restore the code if there has been a previous session
@@ -215,6 +215,6 @@ export function init(): void {
 
   // If the input is not empty, signalize that code was restored
   if (codeTextArea.value.trim() !== "") {
-    writeTextSavingState(`<p class="gray-text">${window.locale["values"]["playground"]["save-state"]["loaded"]}</p>`);
+    void writeTextSavingState(`<p class="gray-text">${window.locale["values"]["playground"]["save-state"]["loaded"]}</p>`);
   }
 }

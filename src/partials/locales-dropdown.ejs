@@ -9,8 +9,7 @@
             <% Object.keys(locales).filter(locale => locale !== "default").forEach((localeName) => { %>
                 <% const href = `${rootDir}/${localeName}${urlPath.replace(`${locale["name"]}/`, "")}` %>
                 <li
-                    id="locale-selector-<%= localeName %>"
-                    class="locale-selector-button-wrapper"
+                    class="locale-selector-<%= localeName %> locale-selector-button-wrapper"
                     data-locale="<%= localeName %>"
                     data-href="<%= href %>"
                 >
