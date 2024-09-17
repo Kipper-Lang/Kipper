@@ -38,7 +38,7 @@ const pages = {
                   // Insert locale name into the URL
                   const href = link.getAttribute("href");
                   if (!href.includes(localeName) && !href.includes("docs")) {
-                    link.setAttribute("href", `/${localeName}${window.location.pathname}`);
+                    link.setAttribute("href", `/${localeName}${href}`);
                   }
                 }
               }

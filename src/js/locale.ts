@@ -1,6 +1,6 @@
-const localeSelectorDropdown: HTMLUListElement = document.querySelector("#header-nav-bar #locales-dropdown");
+const localeSelectorDropdown: HTMLUListElement = document.querySelector("#header-nav-bar .locales-dropdown");
 const localeSelectorButton: HTMLButtonElement = document.querySelector("#header-nav-bar #locales-menu");
-const phoneSelectorDropdown: HTMLUListElement = document.querySelector("#phone-header-nav-bar #locales-dropdown");
+const phoneSelectorDropdown: HTMLUListElement = document.querySelector("#phone-header-nav-bar .locales-dropdown");
 const phoneSelectorButton: HTMLButtonElement = document.querySelector("#phone-header-nav-bar #locales-menu");
 
 /**
@@ -28,7 +28,7 @@ localeSelectorButton.addEventListener("click", () => toggleLocaleMenuVisibility(
 phoneSelectorButton.addEventListener("click",  () => toggleLocaleMenuVisibility(phoneSelectorDropdown));
 
 
-const localeSelectorItems = document.querySelectorAll("#header-nav-bar #locales-dropdown li.locale-selector-button-wrapper");
+const localeSelectorItems = document.querySelectorAll("#header-nav-bar .locales-dropdown li.locale-selector-button-wrapper");
 localeSelectorItems.forEach((item) => {
   item.addEventListener("click", () => {
     const locale = item.getAttribute("data-locale");

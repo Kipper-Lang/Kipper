@@ -4,7 +4,7 @@
 
 const phoneHeaderMenu = <HTMLOListElement>document.querySelector("ul#phone-header-nav-bar-menu");
 const phoneHeaderMenuToggle = <HTMLLIElement>document.querySelector(".phone-header-nav-bar-menu-toggle");
-const phoneLocaleSelectorDropdown: HTMLUListElement = document.querySelector("#phone-header-nav-bar #locales-dropdown");
+const phoneLocaleSelectorDropdown: HTMLUListElement = document.querySelector("#phone-header-nav-bar .locales-dropdown");
 
 /**
  * Enables the visibility of the dropdown menu.

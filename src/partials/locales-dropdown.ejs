@@ -5,7 +5,7 @@
             <img src="<%= rootDir %>/img/icons/globe.svg" alt="Locale globe" />
             <button id="locale-menu-root-button"><%= locale.name %></button>
         </div>
-        <ul id="locales-dropdown" class="no-style-list flex-column">
+        <ul class="locales-dropdown no-style-list flex-column">
             <% Object.keys(locales).filter(locale => locale !== "default").forEach((localeName) => { %>
                 <% const href = `${rootDir}/${localeName}${urlPath.replace(`${locale["name"]}/`, "")}` %>
                 <li
