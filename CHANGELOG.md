@@ -34,7 +34,7 @@ To use development versions of Kipper download the
 - Implemented `instanceof` operator expression, which checks if an object is an instance of a class.
   ([#686](https://github.com/Kipper-Lang/Kipper/issues/686))
 - Implemented `matches` operator expression, which checks if an object matches an interface.
-	([#672](https://github.com/Kipper-Lang/Kipper/issues/672))
+  ([#672](https://github.com/Kipper-Lang/Kipper/issues/672))
 - Implemented the generic `Array<T>` type and single-type array initializers.
   ([#499](https://github.com/Kipper-Lang/Kipper/issues/499))
 - Support for index-based array assignments. ([#669](https://github.com/Kipper-Lang/Kipper/issues/669))
