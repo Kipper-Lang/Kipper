@@ -98,6 +98,12 @@
       min-width: 0;
       min-height: 0;
 
+      & > #phone-text-saving-state {
+        /* Phone only saving state div */
+        display: none;
+        visibility: hidden;
+      }
+
       .line-numbers .line-numbers-rows {
         /* Disable the border for the line-numbers sidebar */
         border-right: none;
