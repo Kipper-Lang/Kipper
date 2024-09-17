@@ -32,8 +32,7 @@ const pages = {
             <% } %>
 
             <script defer>
-              (() => {
-                const links = document.querySelectorAll("#std-header-primary-content li .top-nav-menu-item");
+              function changeHrefLocaleIfNecessary(links) {
                 const localeName = localStorage.getItem(window.localeKey);
                 for (const link of links) {
                   // Insert locale name into the URL
@@ -42,6 +41,13 @@ const pages = {
                     link.setAttribute("href", `/${localeName}${window.location.pathname}`);
                   }
                 }
+              }
+
+              (() => {
+                const deskLinks = document.querySelectorAll("#phone-header-nav-bar-menu li .top-nav-menu-item");
+                const phoneLinks = document.querySelectorAll("#std-header-primary-content li .top-nav-menu-item");
+                changeHrefLocaleIfNecessary(deskLinks);
+                changeHrefLocaleIfNecessary(phoneLinks);
               })();
             </script>
         </ul>

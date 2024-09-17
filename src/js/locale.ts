@@ -33,5 +33,8 @@ localeSelectorItems.forEach((item) => {
   item.addEventListener("click", () => {
     const locale = item.getAttribute("data-locale");
     localStorage.setItem(window.localeKey, locale);
+
+    const href = item.getAttribute("data-href");
+    window.location.pathname = href;
   });
 });

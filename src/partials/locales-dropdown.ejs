@@ -7,8 +7,15 @@
         </div>
         <ul id="locales-dropdown" class="no-style-list flex-column">
             <% Object.keys(locales).filter(locale => locale !== "default").forEach((localeName) => { %>
-                <li id="locale-selector-<%= localeName %>" class="locale-selector-button-wrapper" data-locale="<%= localeName %>">
-                    <a href="<%= rootDir %>/<%= localeName %><%= urlPath.replace(locale["name"] + "/", "") %>"><%= localeName %></a>
+                <% const href = `${rootDir}/${localeName}${urlPath.replace(`${locale["name"]}/`, "")}` %>
+                <li
+                    id="locale-selector-<%= localeName %>"
+                    class="locale-selector-button-wrapper"
+                    data-locale="<%= localeName %>"
+                    data-href="<%= href %>"
+                >
+                    <button><%= localeName %></button>
+                    <a ignore href="<%= href %>"></a>
                 </li>
             <% }); %>
         </ul>

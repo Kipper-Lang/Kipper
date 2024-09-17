@@ -182,8 +182,9 @@ nav#phone-header-nav-bar {
         justify-content: center;
         border-bottom: 2px solid $scheme-gray;
 
-        a {
+        button {
           /* Similar styles like in the playground button */
+          color: $scheme-primary;
           padding: 0.8rem 0.8rem;
           background-color: white;
           border: none;
@@ -192,8 +193,18 @@ nav#phone-header-nav-bar {
           flex-grow: 1;
 
           &:hover {
-            color: $scheme-primary;
             background-color: $scheme-gray;
+            text-decoration: underline $scheme-primary;
+            cursor: pointer;
+          }
+        }
+
+        a {
+          display: none;
+          visibility: hidden;
+
+          &:hover {
+            cursor: none;
           }
         }
       }
@@ -382,7 +393,7 @@ nav#phone-header-nav-bar {
         display: none;
         visibility: hidden;
 
-        #phone-header-dropdown-urls {
+        & > li > #phone-header-dropdown-urls {
           :first-child:is(li) {
             border-top: 1px solid rgba(255, 255, 255, 0.8);
           }
@@ -396,10 +407,11 @@ nav#phone-header-nav-bar {
           }
         }
 
-        .top-nav-button.underline-button {
+        & > li .top-nav-button.underline-button {
+          color: rgba(255, 255, 255, 0.8);
+
           &:hover {
-            /* !important as the buttons have a higher level of precedence - needs to be overwritten */
-            color: rgba(255, 255, 255, 0.8) !important;
+            color: white !important;
           }
 
           &::before {

@@ -31,20 +31,6 @@
                         </a>
                     </li>
                 <% } %>
-
-                <script defer>
-                  (() => {
-                    const links = document.querySelectorAll("#phone-header-nav-bar-menu li .top-nav-menu-item");
-                    const localeName = localStorage.getItem(window.localeKey);
-                    for (const link of links) {
-                      // Insert locale name into the URL
-                      const href = link.getAttribute("href");
-                      if (!href.includes(localeName) && !href.includes("docs")) {
-                        link.setAttribute("href", `/${localeName}${window.location.pathname}`);
-                      }
-                    }
-                  })();
-                </script>
             </ul>
         </li>
         <li>
