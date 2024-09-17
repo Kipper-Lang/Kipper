@@ -126,8 +126,9 @@ import {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	MatchesExpression,
+	InstanceOfExpression,
 } from "../nodes";
-import { InstanceOfExpression } from "../nodes/expressions/instanceof-expression/instanceof-expression";
 
 /**
  * Mapper class which maps kind ids or rule names to their corresponding AST classes.
@@ -195,6 +196,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpression,
 		[ParseRuleKindMapping.RULE_typeofExpression]: TypeofExpression,
 		[ParseRuleKindMapping.RULE_instanceofExpression]: InstanceOfExpression,
+		[ParseRuleKindMapping.RULE_matchesExpression]: MatchesExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any, any>>;
 
 	/**
@@ -272,6 +274,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_typeofExpression]: TypeofExpressionContext,
 		[ParseRuleKindMapping.RULE_newInstantiationExpression]: NewInstantiationExpressionContext,
 		[ParseRuleKindMapping.RULE_instanceofExpression]: InstanceOfExpressionContext,
+		[ParseRuleKindMapping.RULE_matchesExpression]: MatchesExpression,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,
@@ -355,6 +358,7 @@ export class ASTNodeMapper {
 		RULE_lambdaPrimaryExpression: LambdaPrimaryExpression,
 		RULE_typeofExpression: TypeofExpression,
 		RULE_newInstantiationExpression: NewInstantiationExpression,
+		RULE_matchesExpression: MatchesExpression,
 		RULE_instanceofExpression: InstanceOfExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any, any>>;
 

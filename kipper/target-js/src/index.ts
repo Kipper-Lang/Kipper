@@ -8,6 +8,7 @@ export * from "./target";
 export * from "./semantic-analyser";
 export * from "./code-generator";
 export * from "./built-in-generator";
+export * from "./runtime-types";
 export * from "./tools";
 
 // eslint-disable-next-line no-unused-vars

@@ -41,6 +41,7 @@ import type {
 	KindParseRuleMapping,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
+	MatchesExpressionContext,
 	MultiplicativeExpressionContext,
 	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
@@ -94,6 +95,7 @@ export type ParserExpressionContext =
 	| BitwiseXorExpressionContext
 	| NewInstantiationExpressionContext
 	| BitwiseShiftExpressionContext
+	| MatchesExpressionContext
 	| InstanceOfExpressionContext;
 
 /**
@@ -211,6 +213,7 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_memberAccessExpression
 	| typeof ParseRuleKindMapping.RULE_typeofExpression
 	| typeof ParseRuleKindMapping.RULE_newInstantiationExpression
+	| typeof ParseRuleKindMapping.RULE_matchesExpression
 	| typeof ParseRuleKindMapping.RULE_instanceofExpression;
 
 /**
@@ -295,6 +298,7 @@ export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_typeofExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_newInstantiationExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_matchesExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_instanceofExpression];
 
 /**

@@ -17,11 +17,6 @@ export interface FunctionDeclarationSemantics extends DeclarationSemantics {
 	 */
 	identifier: string;
 	/**
-	 * The {@link KipperType return type} of the function.
-	 * @since 0.5.0
-	 */
-	returnType: RawType;
-	/**
 	 * The type specifier expression for the return type.
 	 * @since 0.10.0
 	 */

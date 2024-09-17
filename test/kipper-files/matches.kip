@@ -1,0 +1,21 @@
+interface Y {
+	v: bool;
+	t(gr: str): num;
+}
+
+interface X {
+	y: Y;
+	z: num;
+}
+
+var x: X = {
+	y: {
+		v: true,
+		t: (gr: str): num -> {
+			return 0;
+		}
+	},
+	z: 5
+};
+var res: bool = x matches X;
+print(res);

@@ -9,6 +9,7 @@ import type {
 	ArrayPrimaryExpression,
 	AssignmentExpression,
 	FunctionDeclaration,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementPostfixExpressionSemantics,
 	LambdaPrimaryExpression,
@@ -46,6 +47,7 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
+import { InvalidMatchesTypeError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -830,8 +832,21 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.12.0
 	 */
 	public validInstanceofClassType(type: ProcessedType) {
+		// Ensure that the type is a class type
 		if (!(type instanceof CustomType) || type.kind !== "class") {
 			throw this.notImplementedError(new InvalidInstanceOfTypeError(type.toString()));
+		}
+	}
+
+	/**
+	 * Checks whether the passed expression can be checked against the given interface pattern.
+	 * @param patternType The pattern to check against.
+	 * @since 0.12.0
+	 */
+	public validMatchesInterfaceType(patternType: ProcessedType) {
+		// Ensure that the pattern is an interface type
+		if (!(patternType instanceof CustomType) || patternType.kind !== "interface") {
+			throw this.notImplementedError(new InvalidMatchesTypeError(patternType.toString()));
 		}
 	}
 }
