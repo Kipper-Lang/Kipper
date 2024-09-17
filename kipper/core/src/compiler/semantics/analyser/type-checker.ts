@@ -47,6 +47,7 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
+import { InvalidMatchesTypeError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -831,18 +832,21 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @since 0.12.0
 	 */
 	public validInstanceofClassType(type: ProcessedType) {
+		// Ensure that the type is a class type
 		if (!(type instanceof CustomType) || type.kind !== "class") {
 			throw this.notImplementedError(new InvalidInstanceOfTypeError(type.toString()));
 		}
 	}
 
 	/**
-	 * Checks whetehr the
-	 * @param expression
-	 * @param pattern
+	 * Checks whether the passed expression can be checked against the given interface pattern.
+	 * @param patternType The pattern to check against.
+	 * @since 0.12.0
 	 */
-	public validMatchesExpression(expression: Expression, pattern: IdentifierTypeSpecifierExpression) {
-		const expressionType = expression.getTypeSemanticData().evaluatedType;
-		const patternType = pattern.getSemanticData().rawType;
+	public validMatchesInterfaceType(patternType: ProcessedType) {
+		// Ensure that the pattern is an interface type
+		if (!(patternType instanceof CustomType) || patternType.kind !== "interface") {
+			throw this.notImplementedError(new InvalidMatchesTypeError(patternType.toString()));
+		}
 	}
 }

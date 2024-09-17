@@ -13,7 +13,6 @@ export interface MatchesExpressionSemantics extends ExpressionSemantics {
 	 * @since 0.12.0
 	 */
 	pattern: IdentifierTypeSpecifierExpression;
-
 	/**
 	 * The expression to match against the interface.
 	 * @since 0.12.0

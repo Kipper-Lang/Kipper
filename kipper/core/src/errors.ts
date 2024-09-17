@@ -872,6 +872,16 @@ export class InvalidInstanceOfTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a type is used for a matches expression that is not an interface.
+ * @since 0.12.0
+ */
+export class InvalidMatchesTypeError extends TypeError {
+	constructor(type: string) {
+		super(`Type '${type}' can not be used with 'matches' operator. Expects an interface.`);
+	}
+}
+
+/**
  * Error that is thrown whenever a constant declaration is not defined.
  * @since 0.8.3
  */

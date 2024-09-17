@@ -1110,18 +1110,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	matchesExpression = async (node: MatchesExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-
-		// Get the patterns name
-		const pattern = semanticData.pattern.getSemanticData();
-
-		const expression = semanticData.expression.getSemanticData();
+		const pattern = semanticData.pattern.getTypeSemanticData();
+		const translatedExpression = await semanticData.expression.translateCtxAndChildren();
 
 		return [
 			TargetJS.getBuiltInIdentifier("matches"),
 			"(",
-			...expression.identifier,
+			...translatedExpression,
 			", ",
-			`__intf_${pattern.identifier}`,
+			// Always only accepts a Kipper interface
+			`${TargetJS.internalInterfacePrefix}_${pattern.storedType.identifier}`,
 			")",
 		];
 	};

@@ -119,8 +119,8 @@ export class MatchesExpression extends Expression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-
-		this.programCtx.typeCheck(this).validMatchesExpression(semanticData.expression, semanticData.pattern);
+		const patternType = semanticData.pattern.getTypeSemanticData().storedType;
+		this.programCtx.typeCheck(this).validMatchesInterfaceType(patternType);
 		this.typeSemantics = {
 			evaluatedType: BuiltInTypes.bool,
 		};
