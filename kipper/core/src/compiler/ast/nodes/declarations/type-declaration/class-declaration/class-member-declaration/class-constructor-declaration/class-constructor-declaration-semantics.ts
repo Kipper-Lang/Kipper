@@ -19,7 +19,7 @@ export interface ClassConstructorDeclarationSemantics extends ClassMemberDeclara
 	 * The return type of this method.
 	 * @since 0.12.0
 	 */
-	parameters: Array<ParameterDeclaration>;
+	params: Array<ParameterDeclaration>;
 	/**
 	 * The body of the function.
 	 * @since 0.10.0

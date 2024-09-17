@@ -1,6 +1,4 @@
-import { BuiltInFunctions, BuiltInVariables } from "@kipper/core";
-import { BuiltInTypes } from "@kipper/core";
-import { KipperCompiler } from "@kipper/core";
+import { BuiltInFunctions, BuiltInTypes, BuiltInVariables, KipperCompiler } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { assert } from "chai";
 

@@ -1,18 +1,18 @@
 {
 	"name": "@kipper/config",
 	"description": "The config file support package adding support for kip-config.json/kipper-config.json 🦊",
-	"version": "0.12.0-alpha.5",
+	"version": "0.12.0-alpha.6",
 	"author": "Luna-Klatzer @Luna-Klatzer",
 	"dependencies": {
 		"is-plain-object": "5.0.0",
 		"deepmerge": "4.3.1",
-		"semver": "7.6.0",
+		"semver": "7.6.3",
 		"tslib": "~2.6.2",
 		"@kipper/target-ts": "workspace:~",
 		"@kipper/target-js": "workspace:~"
 	},
 	"devDependencies": {
-		"@types/semver": "7.5.7",
+		"@types/semver": "7.5.8",
 		"@kipper/core": "workspace:~",
 		"typescript": "5.1.3"
 	},

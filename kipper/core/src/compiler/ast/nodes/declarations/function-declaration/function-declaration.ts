@@ -187,7 +187,6 @@ export class FunctionDeclaration
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
 			returnTypeSpecifier: retTypeSpecifier,
-			returnType: returnType,
 			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
 		};

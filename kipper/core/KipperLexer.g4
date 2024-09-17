@@ -36,6 +36,8 @@ Pragma
 		-> channel(PRAGMA)
 	;
 
+InstanceOf : 'instanceof';
+
 // const / var
 Const : 'const';
 Var : 'var';
@@ -86,6 +88,9 @@ New : 'new';
 // boolean constants
 True : 'true';
 False : 'false';
+
+// matches operator
+Matches : 'matches';
 
 // typeof operator
 Typeof : 'typeof';

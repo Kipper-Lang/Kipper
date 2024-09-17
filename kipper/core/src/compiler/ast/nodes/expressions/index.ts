@@ -21,3 +21,5 @@ export * from "./function-call-expression/";
 export * from "./member-access-expression/";
 export * from "./bitwise-expression/";
 export * from "./new-instantiation-expression/";
+export * from "./matches-expression/";
+export * from "./instanceof-expression/";

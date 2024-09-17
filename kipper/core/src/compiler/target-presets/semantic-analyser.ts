@@ -30,6 +30,7 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -56,6 +57,7 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	MatchesExpression,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
 import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
@@ -342,4 +344,14 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link TypeofExpression} instances.
 	 */
 	public abstract typeofExpression?: TargetASTNodeSemanticAnalyser<TypeofExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link MatchesExpression} instances.
+	 */
+	public abstract matchesExpression?: TargetASTNodeSemanticAnalyser<MatchesExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InstanceOfExpression} instances.
+	 */
+	public abstract instanceOfExpression?: TargetASTNodeSemanticAnalyser<InstanceOfExpression>;
 }

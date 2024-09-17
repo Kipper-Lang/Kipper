@@ -12,6 +12,7 @@ import { Declaration } from "../declaration";
 import type { ParameterDeclarationContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { getParseTreeSource } from "../../../../../tools";
+import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 /**
  * Function declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
@@ -124,12 +125,15 @@ export class ParameterDeclaration extends Declaration<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
+		if (!parseTreeChildren || !this.children || this.children.length < 1) {
+			throw new UnableToDetermineSemanticDataError();
+		}
 
-		// The type specifier of the parameter
+		const identifier = getParseTreeSource(this.tokenStream, parseTreeChildren[0]);
 		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[0];
 
 		this.semanticData = {
-			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
+			identifier: identifier,
 			valueTypeSpecifier: typeSpecifier,
 			valueType: typeSpecifier.getSemanticData().rawType,
 			func: <FunctionDeclaration | LambdaPrimaryExpression>this.parent,
