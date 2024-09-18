@@ -3,6 +3,7 @@
  * @since 0.12.0
  */
 import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
+import { BuiltInTypeFunc } from "../../../../../../../semantics";
 import { BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
 import type { ClassMethodDeclarationContext } from "../../../../../../../lexer-parser";
 import { DeclaratorContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
@@ -163,31 +164,30 @@ export class ClassMethodDeclaration
 
 		this.semanticData = {
 			identifier: identifier,
-			returnType: retTypeSpecifier,
-			parameters: params,
+			returnTypeSpecifier: retTypeSpecifier,
+			returnType: retTypeSpecifier.getSemanticData().rawType,
+			params: params,
 			functionBody: <CompoundStatement>functionBody,
 		};
 		this.scopeDeclaration = this.scope.addFunction(this);
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
 	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
+		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
+		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 
-		// Get the type that will be returned using the return type specifier
-		const returnType = semanticData.returnType.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			returnType: returnType,
-			valueType: BuiltInTypes.Func,
+			valueType: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 	}
+	public readonly primarySemanticTypeChecking: undefined;
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

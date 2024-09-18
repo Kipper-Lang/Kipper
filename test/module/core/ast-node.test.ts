@@ -1,14 +1,14 @@
 import { assert } from "chai";
 import { promises as fs } from "fs";
 import * as path from "path";
-import type { KipperParserRuleContext } from "@kipper/core";
 import type {
+	CompilableNodeParent,
+	KipperParserRuleContext,
 	KipperProgramContext,
 	LexerParserData,
-	TargetASTNodeSemanticAnalyser,
 	TargetASTNodeCodeGenerator,
+	TargetASTNodeSemanticAnalyser,
 	TranslatedCodeLine,
-	CompilableNodeParent,
 } from "@kipper/core";
 import { CompilableASTNode, KipperCompiler, KipperFileStream, RootASTNode } from "@kipper/core";
 import { KipperTypeScriptTarget } from "@kipper/target-ts";

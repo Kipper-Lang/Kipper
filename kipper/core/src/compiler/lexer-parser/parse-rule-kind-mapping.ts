@@ -2,9 +2,9 @@
  * Mappings for KipperParser rules to AST nodes. This is used to map the parse tree to the AST.
  * @since 0.10.0
  */
-import type { InverseMap } from "../../tools/types";
-import { inverseMap } from "../../tools";
-import { KipperParser } from "./antlr";
+import type {InverseMap} from "../../tools/types";
+import {inverseMap} from "../../tools";
+import {KipperParser} from "./antlr";
 
 /**
  * A mapping object which maps the KipperParser rules to an AST syntax kind number and in extension with the
@@ -108,6 +108,8 @@ export const ParseRuleKindMapping = {
 	RULE_genericTypeSpecifierExpression: KipperParser.RULE_genericTypeSpecifierExpression,
 	RULE_typeofTypeSpecifierExpression: KipperParser.RULE_typeofTypeSpecifierExpression,
 	RULE_typeSpecifierIdentifier: KipperParser.RULE_typeSpecifierIdentifier,
+	RULE_instanceofExpression: KipperParser.RULE_instanceOfExpression,
+	RULE_matchesExpression: KipperParser.RULE_matchesExpression,
 	// Labelled rules, which don't have a corresponding identifier number in KipperParser.
 	RULE_memberAccessExpression: 1001, // -> See 'computedPrimaryExpression'
 	RULE_functionCallExpression: 1002, // -> See 'computedPrimaryExpression'

@@ -34,6 +34,7 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -41,6 +42,7 @@ import type {
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
@@ -54,16 +56,15 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
-	TypeofExpression,
 	TryCastExpression,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	CastOrConvertExpression,
 } from "../../ast";
-import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
-import type { KipperProgramContext } from "../../program-ctx";
+import type {TranslatedCodeLine, TranslatedExpression} from "../../const";
+import type {KipperProgramContext} from "../../program-ctx";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -455,4 +456,14 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link TypeofExpression} into a specific language.
 	 */
 	public abstract typeofExpression: TargetASTNodeCodeGenerator<TypeofExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link MatchesExpression} into a specific language.
+	 */
+	public abstract matchesExpression: TargetASTNodeCodeGenerator<MatchesExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@Link InstanceOfExpression} into a specific language.
+	 */
+	public abstract instanceOfExpression: TargetASTNodeCodeGenerator<InstanceOfExpression, TranslatedExpression>;
 }

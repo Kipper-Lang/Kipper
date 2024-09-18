@@ -1,9 +1,9 @@
-import type { Config } from "./abstract/config-interpreter";
-import { ConfigInterpreter, type ConfigInterpreterScheme } from "./abstract/config-interpreter";
-import { KipperConfigFile } from "./kipper-config-file";
-import type { RawEvaluatedKipperConfigFile } from "./evaluated-kipper-config-file";
-import { EvaluatedKipperConfigFile } from "./evaluated-kipper-config-file";
-import type { ConfigErrorMetaData } from "./errors";
+import type {Config} from "./abstract/config-interpreter";
+import {ConfigInterpreter, type ConfigInterpreterScheme} from "./abstract/config-interpreter";
+import {KipperConfigFile} from "./kipper-config-file";
+import type {RawEvaluatedKipperConfigFile} from "./evaluated-kipper-config-file";
+import {EvaluatedKipperConfigFile} from "./evaluated-kipper-config-file";
+import type {ConfigErrorMetaData} from "./errors";
 import {
 	IncompatibleVersionError,
 	InvalidMappingSyntaxError,
@@ -11,15 +11,15 @@ import {
 	RefInvalidPathError,
 	UnknownTargetError,
 } from "./errors";
-import { ensureExistsHasPermAndIsOfType } from "./tools";
-import { version as kipperConfigVersion } from "./index";
+import {ensureExistsHasPermAndIsOfType} from "./tools";
+import {version as kipperConfigVersion} from "./index";
 import * as semver from "semver";
 import * as path from "node:path";
 import * as deepmerge from "deepmerge";
-import { isPlainObject } from "is-plain-object";
-import { KipperJavaScriptTarget } from "@kipper/target-js";
-import { KipperTypeScriptTarget } from "@kipper/target-ts";
-import type { KipperCompileTarget } from "@kipper/core";
+import {isPlainObject} from "is-plain-object";
+import {KipperJavaScriptTarget} from "@kipper/target-js";
+import {KipperTypeScriptTarget} from "@kipper/target-ts";
+import type {KipperCompileTarget} from "@kipper/core";
 
 /**
  * A type that represents a Kipper config file.

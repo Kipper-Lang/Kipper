@@ -1,5 +1,5 @@
 import { KipperCompiler } from "@kipper/core";
-import { defaultConfig, ensureWarningWasReported, ensureTracebackDataExists } from ".";
+import { defaultConfig, ensureTracebackDataExists, ensureWarningWasReported } from ".";
 import { assert } from "chai";
 
 describe("UselessExpressionStatementWarning", () => {

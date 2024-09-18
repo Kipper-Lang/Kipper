@@ -2,10 +2,10 @@
  * Semantics for AST Node {@link ForLoopIterationStatement}.
  * @since 0.10.0
  */
-import type { IterationStatementSemantics } from "../iteration-statement-semantics";
-import type { VariableDeclaration } from "../../../declarations";
-import type { Expression } from "../../../expressions";
-import type { Statement } from "../../statement";
+import type {IterationStatementSemantics} from "../iteration-statement-semantics";
+import type {VariableDeclaration} from "../../../declarations";
+import type {Expression} from "../../../expressions";
+import type {Statement} from "../../statement";
 
 /**
  * Semantics for AST Node {@link ForLoopIterationStatement}.

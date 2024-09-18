@@ -3,9 +3,9 @@
  * a specified operator.
  * @since 0.9.0
  */
-import type { KipperUnaryOperator } from "../../../../const";
-import type { Expression } from "../expression";
-import type { ExpressionSemantics } from "../expression-semantics";
+import type {KipperUnaryOperator} from "../../../../const";
+import type {Expression} from "../expression";
+import type {ExpressionSemantics} from "../expression-semantics";
 
 /**
  * Semantics for unary expressions, which can be used to modify an expression with

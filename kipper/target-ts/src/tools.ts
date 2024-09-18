@@ -10,7 +10,7 @@ import type {
 	InternalFunctionArgument,
 	ProcessedType,
 } from "@kipper/core";
-import { TargetTS } from "./target";
+import {TargetTS} from "./target";
 
 /**
  * Generates the signature for the function based on the {@link funcSpec}, which can be used in an TypeScript env.
@@ -34,7 +34,7 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 					type: param.getTypeSemanticData().valueType,
 				};
 			}),
-			returnType: typeData.type.returnType,
+			returnType: typeData.valueType.returnType,
 		};
 	} else {
 		return {

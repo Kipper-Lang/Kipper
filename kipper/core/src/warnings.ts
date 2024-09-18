@@ -3,7 +3,7 @@
  * does not necessarily create an error for the runtime.
  * @since 0.10.0
  */
-import { KipperError } from "./errors";
+import {KipperError} from "./errors";
 
 /**
  * Kipper Warning, which is thrown whenever the compiler encounters an item that could potentially be problematic, but

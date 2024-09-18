@@ -32,6 +32,7 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -39,6 +40,7 @@ import type {
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
@@ -60,9 +62,11 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../ast";
-import { KipperSemanticErrorHandler } from "../semantics";
-import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
-import type { NewInstantiationExpression } from "../ast/nodes/expressions/new-instantiation-expression";
+import {KipperSemanticErrorHandler} from "../semantics";
+import type {
+	ClassConstructorDeclaration
+} from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
+import type {NewInstantiationExpression} from "../ast/nodes/expressions/new-instantiation-expression";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -360,4 +364,14 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link TypeofExpression} instances.
 	 */
 	public abstract typeofExpression?: TargetASTNodeSemanticAnalyser<TypeofExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link MatchesExpression} instances.
+	 */
+	public abstract matchesExpression?: TargetASTNodeSemanticAnalyser<MatchesExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InstanceOfExpression} instances.
+	 */
+	public abstract instanceOfExpression?: TargetASTNodeSemanticAnalyser<InstanceOfExpression>;
 }

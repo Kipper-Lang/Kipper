@@ -12,16 +12,14 @@ export interface InterfaceMethodDeclarationSemantics extends TypeDeclarationSema
 	 * @since 0.12.0
 	 */
 	identifier: string;
-
 	/**
 	 * The return type of this method.
 	 * @since 0.12.0
 	 */
-	parameters: Array<ParameterDeclaration>;
-
+	params: Array<ParameterDeclaration>;
 	/**
 	 * The return type of this method.
 	 * @since 0.12.0
 	 */
-	returnType: IdentifierTypeSpecifierExpression;
+	returnTypeSpecifier: IdentifierTypeSpecifierExpression;
 }

@@ -2,8 +2,8 @@
  * Semantics for AST Node {@link TypeofExpression}.
  * @since 0.12.0
  */
-import type { Expression } from "../../expression";
-import type { PostfixExpressionSemantics } from "../postfix-expression-semantics";
+import type {Expression} from "../../expression";
+import type {PostfixExpressionSemantics} from "../postfix-expression-semantics";
 
 /**
  * Semantics for AST Node {@link TypeofExpression}.

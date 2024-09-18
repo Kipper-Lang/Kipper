@@ -2,17 +2,17 @@
  * For loop statement class, which represents a for loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-import type { ScopeNode } from "../../../../scope-node";
-import type { Statement } from "../../statement";
-import type { VariableDeclaration } from "../../../declarations";
-import type { ForLoopStatementSemantics } from "./for-loop-iteration-statement-semantics";
-import type { ForLoopStatementTypeSemantics } from "./for-loop-iteration-statement-type-semantics";
-import type { CompilableNodeChild, CompilableNodeParent } from "../../../../compilable-ast-node";
-import { IterationStatement } from "../iteration-statement";
-import type { ForLoopIterationStatementContext } from "../../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import type { Expression } from "../../../expressions";
-import { LocalScope } from "../../../../../semantics";
+import type {ScopeNode} from "../../../../scope-node";
+import type {Statement} from "../../statement";
+import type {VariableDeclaration} from "../../../declarations";
+import type {ForLoopStatementSemantics} from "./for-loop-iteration-statement-semantics";
+import type {ForLoopStatementTypeSemantics} from "./for-loop-iteration-statement-type-semantics";
+import type {CompilableNodeChild, CompilableNodeParent} from "../../../../compilable-ast-node";
+import {IterationStatement} from "../iteration-statement";
+import type {ForLoopIterationStatementContext} from "../../../../../lexer-parser";
+import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
+import type {Expression} from "../../../expressions";
+import {LocalScope} from "../../../../../semantics";
 
 /**
  * For loop statement class, which represents a for loop statement in the Kipper language and is compilable

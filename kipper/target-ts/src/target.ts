@@ -2,12 +2,12 @@
  * The TypeScript translation target for the Kipper language.
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable, ProcessedType } from "@kipper/core";
-import { BuiltInTypes, CustomType, KipperCompileTarget, KipperNotImplementedError, UnionType } from "@kipper/core";
-import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
-import { TypeScriptTargetCodeGenerator } from "./code-generator";
-import { TypeScriptTargetBuiltInGenerator } from "./built-in-generator";
-import { TargetJS } from "@kipper/target-js";
+import type {BuiltInFunction, BuiltInVariable, ProcessedType} from "@kipper/core";
+import {BuiltInTypes, CustomType, KipperCompileTarget, KipperNotImplementedError, UnionType} from "@kipper/core";
+import {TypeScriptTargetSemanticAnalyser} from "./semantic-analyser";
+import {TypeScriptTargetCodeGenerator} from "./code-generator";
+import {TypeScriptTargetBuiltInGenerator} from "./built-in-generator";
+import {TargetJS} from "@kipper/target-js";
 
 /**
  * The TypeScript translation target for the Kipper language.
@@ -86,6 +86,9 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 					(<typeof BuiltInTypes.Array>kipperType).genericTypeArguments[0].type,
 				);
 				return `Array<${memberType}>`;
+			}
+			case BuiltInTypes.obj.identifier: {
+				return "object";
 			}
 			case BuiltInTypes.any.identifier: {
 				return "any";

@@ -9,6 +9,7 @@ import type {
 	ArrayPrimaryExpression,
 	AssignmentExpression,
 	FunctionDeclaration,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementPostfixExpressionSemantics,
 	LambdaPrimaryExpression,
@@ -46,7 +47,6 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
-import { InvalidCastTypeError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -56,6 +56,7 @@ import {
 	InvalidAmountOfArgumentsError,
 	InvalidAmountOfGenericArgumentsError,
 	InvalidConversionTypeError,
+	InvalidInstanceOfTypeError,
 	InvalidKeyTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidUnaryExpressionOperandError,
@@ -68,9 +69,11 @@ import {
 	UnknownTypeError,
 	ValueNotIndexableTypeError,
 	ValueTypeNotIndexableWithGivenAccessor,
+	InvalidMatchesTypeError,
+	InvalidCastTypeError,
 } from "../../../errors";
-import type { BuiltInTypeArray, CustomType, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
-import { BuiltInTypeFunc, BuiltInTypeObj, UndefinedType } from "../types";
+import type { BuiltInTypeArray, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
+import { BuiltInTypeFunc, BuiltInTypeObj, CustomType, UndefinedType } from "../types";
 
 /**
  * Kipper Type Checker, which asserts that type logic and cohesion is valid and throws errors in case that an
@@ -144,10 +147,9 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		}
 
 		// Assuming obj.fields is a Map or an iterable collection of [key, value] pairs
-		for (const [fieldIdentifier, type] of obj.fields) {
-			if (fieldIdentifier === identifier) {
-				return type;
-			}
+		const fieldType = obj.getProperty(identifier);
+		if (fieldType) {
+			return fieldType;
 		}
 
 		// If no matching field was found, throw an error
@@ -566,12 +568,8 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		// If the return statement has no return value, then the value is automatically 'void'
 		const statementValueType = semanticData.returnValue?.getTypeSemanticData().evaluatedType ?? BuiltInTypes.void;
 
-		// TODO! DON'T DO THIS. THIS IS PUTTING TYPE CHECKING OF A PARENT INTO A CHILD
-		// TODO! REALLY WE NEED TO REMOVE THIS SOON
-		const functionReturnType = this.getCheckedType(
-			semanticData.function.getSemanticData().returnType,
-			semanticData.function.scope,
-		);
+		// As the function type is evaluated preliminary, we can safely assume that the type is valid and use it
+		const functionReturnType = semanticData.function.getTypeSemanticData().valueType.returnType;
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
 		if (statementValueType === undefined || functionReturnType === undefined) {
@@ -598,7 +596,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public validReturnCodePathsInFunctionBody(func: FunctionDeclaration | LambdaPrimaryExpression): void {
 		const semanticData = func.getSemanticData();
 		const typeData = func.getTypeSemanticData();
-		const returnType = typeData.type.returnType;
+		const returnType = typeData.valueType.returnType;
 
 		// If the return type is undefined, skip type checking (the type is invalid anyway)
 		if (returnType === undefined) {
@@ -675,6 +673,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	/**
 	 * Checks whether the members of the passed {@link objLike} can be accessed. (As well if there are members)
 	 * @param objLike The object-like expression to check.
+	 * @param accessType The type of accessor that is used to access the members.
 	 * @throws {TypeError} If the object expression is not an object.
 	 * @since 0.10.0
 	 */
@@ -809,7 +808,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @throws {KipperNotImplementedError} When the branch types are mismatching, as union types are not implemented yet.
 	 * @since 0.11.0
 	 */
-	validConditionalExpression(trueBranch: Expression, falseBranch: Expression) {
+	public validConditionalExpression(trueBranch: Expression, falseBranch: Expression) {
 		const trueBranchType = trueBranch.getTypeSemanticData().evaluatedType;
 		const falseBranchType = falseBranch.getTypeSemanticData().evaluatedType;
 
@@ -834,7 +833,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 * @param param The array primary expression to check.
 	 * @since 0.12.0
 	 */
-	validArrayExpression(param: ArrayPrimaryExpression) {
+	public validArrayExpression(param: ArrayPrimaryExpression) {
 		const children = param.getSemanticData().value;
 		if (children.length > 0) {
 			const expectedType = children[0].getTypeSemanticData().evaluatedType;
@@ -847,6 +846,30 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 					);
 				}
 			}
+		}
+	}
+
+	/**
+	 * Checks whether the passed object expression is valid.
+	 * @param type The object primary expression to check.
+	 * @since 0.12.0
+	 */
+	public validInstanceofClassType(type: ProcessedType) {
+		// Ensure that the type is a class type
+		if (!(type instanceof CustomType) || type.kind !== "class") {
+			throw this.notImplementedError(new InvalidInstanceOfTypeError(type.toString()));
+		}
+	}
+
+	/**
+	 * Checks whether the passed expression can be checked against the given interface pattern.
+	 * @param patternType The pattern to check against.
+	 * @since 0.12.0
+	 */
+	public validMatchesInterfaceType(patternType: ProcessedType) {
+		// Ensure that the pattern is an interface type
+		if (!(patternType instanceof CustomType) || patternType.kind !== "interface") {
+			throw this.notImplementedError(new InvalidMatchesTypeError(patternType.toString()));
 		}
 	}
 }

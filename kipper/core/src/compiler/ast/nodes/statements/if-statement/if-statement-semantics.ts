@@ -2,10 +2,10 @@
  * Semantics for AST Node {@link IfStatement}.
  * @since 0.9.0
  */
-import type { SemanticData } from "../../../ast-node";
-import type { Expression } from "../../expressions";
-import type { Statement } from "../statement";
-import type { IfStatement } from "./if-statement";
+import type {SemanticData} from "../../../ast-node";
+import type {Expression} from "../../expressions";
+import type {Statement} from "../statement";
+import type {IfStatement} from "./if-statement";
 
 /**
  * Semantics for AST Node {@link IfStatement}.

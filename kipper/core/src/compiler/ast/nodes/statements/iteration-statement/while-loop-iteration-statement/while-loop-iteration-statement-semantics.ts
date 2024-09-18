@@ -2,9 +2,9 @@
  * Semantics for AST Node {@link WhileLoopIterationStatement}.
  * @since 0.10.0
  */
-import type { IterationStatementSemantics } from "../iteration-statement-semantics";
-import type { Statement } from "../../statement";
-import type { Expression } from "../../../expressions";
+import type {IterationStatementSemantics} from "../iteration-statement-semantics";
+import type {Statement} from "../../statement";
+import type {Expression} from "../../../expressions";
 
 /**
  * Semantics for AST Node {@link WhileLoopIterationStatement}.

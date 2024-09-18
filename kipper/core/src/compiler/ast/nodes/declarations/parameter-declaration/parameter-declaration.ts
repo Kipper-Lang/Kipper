@@ -12,6 +12,7 @@ import { Declaration } from "../declaration";
 import type { ParameterDeclarationContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { getParseTreeSource } from "../../../../../tools";
+import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 /**
  * Function declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
@@ -124,12 +125,15 @@ export class ParameterDeclaration extends Declaration<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
+		if (!parseTreeChildren || !this.children || this.children.length < 1) {
+			throw new UnableToDetermineSemanticDataError();
+		}
 
-		// The type specifier of the parameter
+		const identifier = getParseTreeSource(this.tokenStream, parseTreeChildren[0]);
 		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[0];
 
 		this.semanticData = {
-			identifier: getParseTreeSource(this.tokenStream, parseTreeChildren[0]),
+			identifier: identifier,
 			valueTypeSpecifier: typeSpecifier,
 			valueType: typeSpecifier.getSemanticData().rawType,
 			func: <FunctionDeclaration | LambdaPrimaryExpression>this.parent,
@@ -145,14 +149,12 @@ export class ParameterDeclaration extends Declaration<
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.7.0
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
+	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Get the type that will be returned using the value type specifier
@@ -161,6 +163,7 @@ export class ParameterDeclaration extends Declaration<
 			valueType: valueType,
 		};
 	}
+	public readonly primarySemanticTypeChecking: undefined;
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

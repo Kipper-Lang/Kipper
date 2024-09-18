@@ -2,10 +2,10 @@
  * Configuration for a Kipper program that can be passed to {@link KipperCompiler.compile}.
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable } from "./semantics/runtime-built-ins";
-import type { KipperCompileTarget } from "./target-presets";
-import type { OptimisationOptions } from "./optimiser";
-import { defaultOptimisationOptions } from "./optimiser";
+import type {BuiltInFunction, BuiltInVariable} from "./semantics/runtime-built-ins";
+import type {KipperCompileTarget} from "./target-presets";
+import type {OptimisationOptions} from "./optimiser";
+import {defaultOptimisationOptions} from "./optimiser";
 
 /**
  * Compilation Configuration for a Kipper program. This interface will be wrapped using {@link EvaluatedCompileConfig}

@@ -14,8 +14,8 @@ import type {
 	TargetASTNodeSemanticAnalyser,
 	VariableDeclaration,
 } from "@kipper/core";
-import { KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError } from "@kipper/core";
-import { TargetJS } from "./target";
+import {KipperTargetSemanticAnalyser, ReservedIdentifierOverwriteError} from "@kipper/core";
+import {TargetJS} from "./target";
 
 /**
  * The TypeScript target-specific semantic analyser.
@@ -337,4 +337,14 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	 * Performs typescript-specific semantic analysis for {@link TypeofExpression} instances.
 	 */
 	typeofExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link MatchesExpression} instances.
+	 */
+	matchesExpression = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link InstanceOfExpression} instances.
+	 */
+	instanceOfExpression = undefined;
 }

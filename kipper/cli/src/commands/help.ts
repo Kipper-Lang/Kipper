@@ -3,7 +3,7 @@
  * @since 0.5.0
  */
 import HelpCommand from "@oclif/plugin-help/lib/commands/help";
-import type { flags } from "@oclif/command";
+import type {flags} from "@oclif/command";
 
 /**
  * This class is only there so oclif auto-generates docs for the help command, which should be visible in the README.md.

@@ -8,15 +8,15 @@
  * false && true // false
  * true && true // true
  */
-import type { LogicalAndExpressionSemantics } from "./logical-and-expression-semantics";
-import type { LogicalAndExpressionTypeSemantics } from "./logical-and-expression-type-semantics";
-import type { Expression } from "../../expression";
-import { LogicalExpression } from "../logical-expression";
-import type { LogicalAndExpressionContext } from "../../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { BuiltInTypes } from "../../../../../semantics";
+import type {LogicalAndExpressionSemantics} from "./logical-and-expression-semantics";
+import type {LogicalAndExpressionTypeSemantics} from "./logical-and-expression-type-semantics";
+import type {Expression} from "../../expression";
+import {LogicalExpression} from "../logical-expression";
+import type {LogicalAndExpressionContext} from "../../../../../lexer-parser";
+import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
+import type {CompilableASTNode} from "../../../../compilable-ast-node";
+import {UnableToDetermineSemanticDataError} from "../../../../../../errors";
+import {BuiltInTypes} from "../../../../../semantics";
 
 /**
  * Logical-and expression, representing an expression which can be used to combine multiple conditions. It will

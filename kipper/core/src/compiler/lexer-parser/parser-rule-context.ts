@@ -1,5 +1,5 @@
-import { ParserRuleContext } from "antlr4ts";
-import type { ASTKind } from "./parse-rule-kind-mapping";
+import {ParserRuleContext} from "antlr4ts";
+import type {ASTKind} from "./parse-rule-kind-mapping";
 
 /**
  * A custom implementation of the Antlr4 {@link ParserRuleContext} class, representing a node in the parse tree.

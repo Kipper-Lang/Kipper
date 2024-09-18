@@ -33,6 +33,7 @@ import type {
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
+	InstanceOfExpressionContext,
 	InterfaceDeclarationContext,
 	InterfaceMethodDeclarationContext,
 	InterfacePropertyDeclarationContext,
@@ -40,6 +41,7 @@ import type {
 	KindParseRuleMapping,
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
+	MatchesExpressionContext,
 	MultiplicativeExpressionContext,
 	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
@@ -92,7 +94,9 @@ export type ParserExpressionContext =
 	| BitwiseAndExpressionContext
 	| BitwiseXorExpressionContext
 	| NewInstantiationExpressionContext
-	| BitwiseShiftExpressionContext;
+	| BitwiseShiftExpressionContext
+	| MatchesExpressionContext
+	| InstanceOfExpressionContext;
 
 /**
  * Union type of all usable statement rule context classes implemented by the {@link ParseRuleKindMapping} for a
@@ -211,7 +215,9 @@ export type ASTExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression
 	| typeof ParseRuleKindMapping.RULE_memberAccessExpression
 	| typeof ParseRuleKindMapping.RULE_typeofExpression
-	| typeof ParseRuleKindMapping.RULE_newInstantiationExpression;
+	| typeof ParseRuleKindMapping.RULE_newInstantiationExpression
+	| typeof ParseRuleKindMapping.RULE_matchesExpression
+	| typeof ParseRuleKindMapping.RULE_instanceofExpression;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values that have a constructable {@link CompilableASTNode}.
@@ -297,7 +303,9 @@ export type ASTExpressionRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_lambdaPrimaryExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_memberAccessExpression]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_typeofExpression]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_newInstantiationExpression];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_newInstantiationExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_matchesExpression]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_instanceofExpression];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link CompilableASTNode}.

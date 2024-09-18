@@ -55,6 +55,7 @@ import type {
 	IncrementOrDecrementUnaryExpressionContext,
 	InitDeclaratorContext,
 	InitializerContext,
+	InstanceOfExpressionContext,
 	InterfaceDeclarationContext,
 	InterfaceMethodDeclarationContext,
 	InterfacePropertyDeclarationContext,
@@ -63,6 +64,7 @@ import type {
 	KipperParserRuleContext,
 	LambdaPrimaryExpressionContext,
 	LogicalAndExpressionContext,
+	MatchesExpressionContext,
 	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
@@ -665,6 +667,16 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 */
 	public exitActualAdditiveExpression: (ctx: ActualAdditiveExpressionContext) => void = this.handleExitingTreeNode;
 
+	/**
+	 * Enter a parse tree produced by `KipperParser.instanceOfExpression`.
+	 */
+	public enterActualInstanceOfExpression: (ctx: InstanceOfExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.instanceOfExpression`.
+	 */
+	public exitActualInstanceOfExpression: (ctx: InstanceOfExpressionContext) => void = this.handleExitingTreeNode;
+
 	// NOTE:
 	// We are ignoring the 'relationalExpression' rule, and only going to handle the rule
 	// 'actualRelationalExpression', which implements a more precise 'relationalExpression' rule.
@@ -834,6 +846,16 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * Exit a parse tree produced by the KipperParser.typeofExpression
 	 */
 	public exitTypeofExpression: (ctx: TypeofExpressionContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by the KipperParser.matchesExpression
+	 */
+	public enterActualMatchesExpression: (ctx: MatchesExpressionContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by the KipperParser.matchesExpression
+	 */
+	public exitActualMatchesExpression: (ctx: MatchesExpressionContext) => void = this.handleExitingTreeNode;
 
 	// NOTE:
 	// We are ignoring the 'conditionalExpression' rule, and only going to handle the rule

@@ -4,11 +4,11 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { BuiltInFunction, ProcessedType } from "@kipper/core";
-import { BuiltInType, BuiltInVariable, KipperCompileTarget } from "@kipper/core";
-import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
-import { JavaScriptTargetCodeGenerator } from "./code-generator";
-import { JavaScriptTargetBuiltInGenerator } from "./built-in-generator";
+import type {BuiltInFunction, ProcessedType} from "@kipper/core";
+import {BuiltInType, BuiltInVariable, KipperCompileTarget} from "@kipper/core";
+import {JavaScriptTargetSemanticAnalyser} from "./semantic-analyser";
+import {JavaScriptTargetCodeGenerator} from "./code-generator";
+import {JavaScriptTargetBuiltInGenerator} from "./built-in-generator";
 
 /**
  * The JavaScript translation target for the Kipper language.
@@ -20,6 +20,12 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 	 * @since 0.10.0
 	 */
 	static readonly internalObjectIdentifier = "__kipper";
+
+	/**
+	 * The internal prefix for interfaces in the JavaScript target.
+	 * @since 0.12.0
+	 */
+	static readonly internalInterfacePrefix = "__intf";
 
 	/**
 	 * All reserved identifiers in JavaScript (and TypeScript for good measure) that may not be overwritten.

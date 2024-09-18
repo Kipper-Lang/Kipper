@@ -1,8 +1,8 @@
-import { ConfigFile } from "./abstract";
+import {ConfigFile} from "./abstract";
 import * as path from "node:path";
 import * as fs from "node:fs/promises";
-import { ensureExistsHasPermAndIsOfType } from "./tools";
-import type { ConfigErrorMetaData } from "./errors";
+import {ensureExistsHasPermAndIsOfType} from "./tools";
+import type {ConfigErrorMetaData} from "./errors";
 
 /**
  * A class that represents a Kipper config file.

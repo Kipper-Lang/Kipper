@@ -1,7 +1,5 @@
 import type { CompileConfig, KipperError } from "@kipper/core";
-import { BuiltInFunction } from "@kipper/core";
-import { BuiltInTypes } from "@kipper/core";
-import { KipperCompiler } from "@kipper/core";
+import { BuiltInFunction, BuiltInTypes, KipperCompiler } from "@kipper/core";
 import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 

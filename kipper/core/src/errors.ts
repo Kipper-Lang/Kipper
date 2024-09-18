@@ -3,12 +3,12 @@
  * {@link KipperError}
  * @since 0.0.2
  */
-import type { InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
-import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import type { RecognitionException } from "antlr4ts/RecognitionException";
-import type { Recognizer } from "antlr4ts/Recognizer";
-import type { CompilableASTNode, KipperFileStream, KipperProgramContext } from "./compiler";
-import { addLeftIndent, getParseRuleSource } from "./tools";
+import type {InputMismatchException, LexerNoViableAltException, NoViableAltException} from "antlr4ts";
+import type {FailedPredicateException} from "antlr4ts/FailedPredicateException";
+import type {RecognitionException} from "antlr4ts/RecognitionException";
+import type {Recognizer} from "antlr4ts/Recognizer";
+import type {CompilableASTNode, KipperFileStream, KipperProgramContext} from "./compiler";
+import {addLeftIndent, getParseRuleSource} from "./tools";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.
@@ -330,6 +330,17 @@ export class GenericCanOnlyHaveOneSpreadError extends KipperInternalError {
 }
 
 /**
+ * Error that is thrown whenever a variable, type or function is registered in the universe scope where the identifier
+ * is already in use.
+ * @since 0.12.0
+ */
+export class DuplicateUniverseKeyError extends KipperInternalError {
+	constructor(key: string) {
+		super(`Duplicate key '${key}' in universe scope.`);
+	}
+}
+
+/**
  * An error that is raised whenever a feature is used that has not been implemented yet.
  * @since 0.6.0
  */
@@ -538,6 +549,16 @@ export class IdentifierAlreadyUsedByVariableError extends IdentifierError {
 export class IdentifierAlreadyUsedByFunctionError extends IdentifierError {
 	constructor(identifier: string) {
 		super(`Redeclaration of function '${identifier}'.`);
+	}
+}
+
+/**
+ * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
+ * another member.
+ */
+export class IdentifierAlreadyUsedByMemberError extends IdentifierError {
+	constructor(identifier: string, kind: "interface" | "class") {
+		super(`Redeclaration of ${kind} member '${identifier}'.`);
 	}
 }
 
@@ -847,6 +868,26 @@ export class InvalidKeyTypeError extends TypeError {
 export class PropertyDoesNotExistError extends TypeError {
 	constructor(objType: string, identifier: string) {
 		super(`Property '${identifier}' does not exist on type '${objType}'`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used for an instanceof expression that is not a class.
+ * @since 0.12.0
+ */
+export class InvalidInstanceOfTypeError extends TypeError {
+	constructor(type: string) {
+		super(`Type '${type}' can not be used with 'instanceof' operator. Expects a class.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used for a matches expression that is not an interface.
+ * @since 0.12.0
+ */
+export class InvalidMatchesTypeError extends TypeError {
+	constructor(type: string) {
+		super(`Type '${type}' can not be used with 'matches' operator. Expects an interface.`);
 	}
 }
 
