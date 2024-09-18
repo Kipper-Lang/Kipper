@@ -1498,7 +1498,7 @@ describe("Core functionality", () => {
 					stringResult,
 				);
 			});
-		})
+		});
 	});
 
 	describe("Functions", () => {
