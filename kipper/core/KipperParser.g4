@@ -136,7 +136,8 @@ statement
     ;
 
 compoundStatement
-    :   {this.notInsideExpressionStatement()}? '{' blockItemList? '}'
+    :	{this.notInsideExpressionStatement()}? '{' blockItemList? '}'
+    |	{this.insideLambda()}? '{' {this.exitLambda()} blockItemList? {this.enterLambda()} '}'
     ;
 
 expressionStatement
@@ -207,7 +208,7 @@ primaryExpression // Primary expressions, which build up the rest of the more co
     ;
 
 lambdaPrimaryExpression
-   :   '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement)
+   :   {this.enterLambda()} '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement) {this.exitLambda()}
    ;
 
 tangledPrimaryExpression

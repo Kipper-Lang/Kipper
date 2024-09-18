@@ -197,6 +197,7 @@ To use development versions of Kipper download the
   self-referential types and type checking of recursive types i.e. the return statement now knows the type of its
   function even though it is not yet fully processed.
 - Duplicate universe entry registration in the `KipperProgramContext` for built-in types, functions and variables.
+- Bug where lambda compound bodies would cause a syntax error, despite being a valid lambda body.
 
 ### Deprecated
 
