@@ -1,5 +1,1 @@
-var x: num = 4;
-try { x = 5; }
-catch () { x = 6; }
-finally { x = 7; }
-print(x);
+var x: num = 4; try { x = 5; } finally { x = 7; } print(x);

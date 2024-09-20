@@ -4,6 +4,7 @@
  */
 
 import type { TryCatchStatementContext } from "../../../../lexer-parser";
+import { CatchClauseContext, FinallyClauseContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Statement } from "../statement";
 import type { Expression } from "../../expressions";
@@ -36,7 +37,7 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 */
 	protected override readonly _antlrRuleCtx: TryCatchStatementContext;
 
-	protected readonly _children: Array<Expression | Statement>;
+	protected readonly _children: Array<Expression | Statement | ParameterDeclaration>;
 
 	constructor(antlrRuleCtx: TryCatchStatementContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -75,7 +76,7 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 * May contain both {@link Expression expressions} and {@link Statement statements}, as it will always contain
 	 * an expression at index 03 to represent the condition.
 	 */
-	public get children(): Array<Expression | Statement> {
+	public get children(): Array<Expression | Statement | ParameterDeclaration> {
 		return this._children;
 	}
 
@@ -94,23 +95,26 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const tryBlock: Statement = <Statement>this._children[0];
-		const catchClausesWithFinally: Array<Statement | ParameterDeclaration> = <Array<Statement | ParameterDeclaration>>(
-			this._children.slice(1)
-		);
+		const tryBlock: Statement = <Statement>this._children.shift();
 		let catchClauses: CatchBlock[] = [];
 		let finallyBlock: Statement | undefined = undefined;
 
-		// In the catchClausesWithFinally array, there are always a pair of parameterdeclarations and compoundstatements because of the grammar.
-		// When the length is odd, it means that there is a finally block.
-		if (catchClausesWithFinally.length % 2 == 1) {
-			finallyBlock = <Statement>catchClausesWithFinally.pop();
+		let finallyClauseExists = this.getAntlrRuleChildren().some((node) => node instanceof FinallyClauseContext);
+		if (finallyClauseExists) {
+			finallyBlock = <Statement>this._children.pop();
 		}
 
-		for (let i = 0; i < catchClausesWithFinally.length; i += 2) {
+		if (this._children.length === 1) {
+			catchClauses.push({
+				parameter: undefined,
+				body: <Statement>this._children.pop(),
+			});
+		}
+
+		for (let i = 0; i < this._children.length; i += 2) {
 			const catchClause: CatchBlock = {
-				parameter: <ParameterDeclaration>catchClausesWithFinally[i],
-				body: <Statement>catchClausesWithFinally[i + 1],
+				parameter: <ParameterDeclaration>this._children[i],
+				body: <Statement>this._children[i + 1],
 			};
 			catchClauses.push(catchClause);
 		}

@@ -193,10 +193,20 @@ returnStatement
 	;
 
 tryCatchStatement
-	:	'try' compoundStatement
-		('catch' '(' parameterDeclaration? ')' compoundStatement)*
-		('finally' compoundStatement)?
+	:	tryClause catchClause* finallyClause?
  	;
+
+tryClause
+	:	'try' compoundStatement
+	;
+
+catchClause
+	:	'catch' '(' parameterDeclaration? ')' compoundStatement
+	;
+
+finallyClause
+	:	'finally' compoundStatement
+	;
 
 // -- Expressions
 

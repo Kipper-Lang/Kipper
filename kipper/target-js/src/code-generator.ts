@@ -478,6 +478,24 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [["return", ...(returnValue ? [" ", ...returnValue] : []), ";"]];
 	};
 
+	generateCatch = async (catchBlocks: CatchBlock[]): Promise<Array<TranslatedCodeLine>> => {
+		if (catchBlocks.length === 0) {
+			return [];
+		}
+
+		if (catchBlocks.length === 1 && catchBlocks[0].parameter === undefined) {
+			let catchBlock = await catchBlocks[0].body.translateCtxAndChildren();
+			return [["catch", " ", "(__e_1: unknown)"], ...catchBlock];
+		}
+
+		let catchBlocksCode = [];
+		for (let catchBlock of catchBlocks) {
+			const blockBody = await this.generateCatchIfCondition(catchBlock);
+			catchBlocksCode.push(...blockBody);
+		}
+		return [["catch", " ", "(__e_1: unknown) {"], ...indentLines(catchBlocksCode), ["}"]];
+	};
+
 	generateCatchIfCondition = async (catchBlock: CatchBlock): Promise<Array<TranslatedCodeLine>> => {
 		const blockBody = await catchBlock.body.translateCtxAndChildren();
 
@@ -497,25 +515,10 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	tryCatchStatement = async (node: TryCatchStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const tryBlock = await semanticData.tryBlock.translateCtxAndChildren();
-		const catchBlocks = await Promise.all(
-			semanticData.catchBlock.map(async (block: CatchBlock) => {
-				return await this.generateCatchIfCondition(block);
-			}),
-		);
+		const catchBlocks = await this.generateCatch(semanticData.catchBlock);
 		const finallyBlock = semanticData.finallyBlock ? await semanticData.finallyBlock.translateCtxAndChildren() : [];
 
-		if (catchBlocks.length === 0) {
-			return [["try"], ...tryBlock, ...(finallyBlock.length > 0 ? [["finally"], ...finallyBlock] : [])];
-		}
-
-		return [
-			["try"],
-			...tryBlock,
-			["catch", " ", "(", "__e_1", ": unknown", ")", " ", "{"],
-			...indentLines(catchBlocks.flat()),
-			["}"],
-			...(finallyBlock.length > 0 ? [["finally"], ...finallyBlock] : []),
-		];
+		return [["try"], ...tryBlock, ...catchBlocks, ...(finallyBlock.length > 0 ? [["finally"], ...finallyBlock] : [])];
 	};
 
 	/**

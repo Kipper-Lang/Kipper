@@ -78,6 +78,9 @@ import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { TryCatchStatementContext } from "./KipperParser";
+import { TryClauseContext } from "./KipperParser";
+import { CatchClauseContext } from "./KipperParser";
+import { FinallyClauseContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { LambdaPrimaryExpressionContext } from "./KipperParser";
 import { TangledPrimaryExpressionContext } from "./KipperParser";
@@ -980,6 +983,39 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTryCatchStatement?: (ctx: TryCatchStatementContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.tryClause`.
+	 * @param ctx the parse tree
+	 */
+	enterTryClause?: (ctx: TryClauseContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.tryClause`.
+	 * @param ctx the parse tree
+	 */
+	exitTryClause?: (ctx: TryClauseContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.catchClause`.
+	 * @param ctx the parse tree
+	 */
+	enterCatchClause?: (ctx: CatchClauseContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.catchClause`.
+	 * @param ctx the parse tree
+	 */
+	exitCatchClause?: (ctx: CatchClauseContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.finallyClause`.
+	 * @param ctx the parse tree
+	 */
+	enterFinallyClause?: (ctx: FinallyClauseContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.finallyClause`.
+	 * @param ctx the parse tree
+	 */
+	exitFinallyClause?: (ctx: FinallyClauseContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.primaryExpression`.

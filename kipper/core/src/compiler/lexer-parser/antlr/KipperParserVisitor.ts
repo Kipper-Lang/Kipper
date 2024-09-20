@@ -78,6 +78,9 @@ import { DoWhileLoopIterationStatementContext } from "./KipperParser";
 import { JumpStatementContext } from "./KipperParser";
 import { ReturnStatementContext } from "./KipperParser";
 import { TryCatchStatementContext } from "./KipperParser";
+import { TryClauseContext } from "./KipperParser";
+import { CatchClauseContext } from "./KipperParser";
+import { FinallyClauseContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { LambdaPrimaryExpressionContext } from "./KipperParser";
 import { TangledPrimaryExpressionContext } from "./KipperParser";
@@ -666,6 +669,27 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitTryCatchStatement?: (ctx: TryCatchStatementContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.tryClause`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTryClause?: (ctx: TryClauseContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.catchClause`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitCatchClause?: (ctx: CatchClauseContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.finallyClause`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitFinallyClause?: (ctx: FinallyClauseContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.primaryExpression`.
