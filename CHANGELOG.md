@@ -18,6 +18,20 @@ To use development versions of Kipper download the
 
 ### Added
 
+### Changed
+
+### Fixed
+
+### Deprecated
+
+### Removed
+
+</details>
+
+## [0.12.0] - 2024-09-25
+
+### Added
+
 - Support for dot notation for accessing properties of objects. ([#67](https://github.com/Kipper-Lang/Kipper/issues/67))
 - Support for classes, class methods, class properties and class constructors.
   ([#665](https://github.com/Kipper-Lang/Kipper/issues/665))
@@ -199,16 +213,12 @@ To use development versions of Kipper download the
 - Duplicate universe entry registration in the `KipperProgramContext` for built-in types, functions and variables.
 - Bug where lambda compound bodies would cause a syntax error, despite being a valid lambda body.
 
-### Deprecated
-
 ### Removed
 
 - Type `Reference` as it is no longer needed and has been replaced by `KipperReferenceable`.
 - Function `FunctionCallExpressionTypeSemantics.func`, which is now has been replaced by `funcOrExp`.
 - Function `KipperProgramContext.setUpBuiltInsInGlobalScope()`, which is no longer needed as the universe scope now
   handles all built-in types, functions and variables.
-
-</details>
 
 ## [0.11.0] - 2024-07-10
 
@@ -1596,7 +1606,8 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.11.0...HEAD
+[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.4...v0.11.0
 [0.10.4]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.3...v0.10.4
 [0.10.3]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.2...v0.10.3
