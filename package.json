@@ -124,7 +124,9 @@
     "svgo": "3.0.2",
     "node-gyp-build-optional-packages": "5.1.1",
     "node-gyp-build": "4.1.1",
-    "node-gyp": "10.0.1"
+    "node-gyp": "10.0.1",
+    "semver": "7.6.3",
+    "@types/semver": "7.5.8"
   },
   "parcelIgnore": [
     "interfaces/.+",
