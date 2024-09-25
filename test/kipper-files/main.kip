@@ -2,7 +2,7 @@ var y: num = 4;
 var x: num = 4;
 const z: num = 3333 + x + y;
 
-def func() -> num {
+def fun() -> num {
 		// Basic definitions of variables
     var localX: str = "string";
     var localY: str = localX + localX;
@@ -14,4 +14,4 @@ def func() -> num {
     return 1;
 }
 
-call func();
+call fun();

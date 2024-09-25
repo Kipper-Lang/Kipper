@@ -2,24 +2,12 @@
  * The TypeScript translation target for the Kipper language.
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable, KipperCompilableType } from "@kipper/core";
-import {
-	kipperBoolType,
-	KipperCompileTarget,
-	kipperFuncType,
-	kipperListType,
-	kipperMetaType,
-	KipperNotImplementedError,
-	kipperNullType,
-	kipperNumType,
-	kipperStrType,
-	kipperUndefinedType,
-	kipperVoidType,
-} from "@kipper/core";
+import type { BuiltInFunction, BuiltInVariable, ProcessedType } from "@kipper/core";
+import { BuiltInTypes, CustomType, KipperCompileTarget, KipperNotImplementedError, UnionType } from "@kipper/core";
 import { TypeScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { TypeScriptTargetCodeGenerator } from "./code-generator";
 import { TypeScriptTargetBuiltInGenerator } from "./built-in-generator";
-import { TargetJS } from "@kipper/target-js/lib/target";
+import { TargetJS } from "@kipper/target-js";
 
 /**
  * The TypeScript translation target for the Kipper language.
@@ -59,35 +47,52 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 	}
 
 	/**
-	 * Fetches the typescript equivalent for a {@link KipperCompilableType}.
+	 * Fetches the typescript equivalent for a {@link KipperBuiltInTypeLiteral}.
 	 * @param kipperType The type to get the equivalent for.
 	 * @since 0.8.0
 	 */
-	public static getTypeScriptType(kipperType: KipperCompilableType | Array<KipperCompilableType>): string {
-		if (Array.isArray(kipperType)) {
+	public static getTypeScriptType(kipperType: ProcessedType): string {
+		if (kipperType instanceof UnionType) {
 			// Recursively call this function for each type in the array
-			return `${kipperType.map(this.getTypeScriptType).join(" | ")}`;
+			return `${(<UnionType>kipperType).unionTypes.map(KipperTypeScriptTarget.getTypeScriptType).join(" | ")}`;
+		} else if (kipperType instanceof CustomType) {
+			return kipperType.identifier;
 		}
 
-		switch (kipperType) {
-			case kipperBoolType:
+		switch (kipperType.identifier) {
+			case BuiltInTypes.bool.identifier:
 				return "boolean";
-			case kipperFuncType:
-				return "Function";
-			case kipperListType:
-				return "Array";
-			case kipperMetaType:
-				return "object";
-			case kipperNullType:
+			case BuiltInTypes.type.identifier:
+				return "InstanceType<typeof __kipper.Type>";
+			case BuiltInTypes.null.identifier:
 				return "null";
-			case kipperNumType:
+			case BuiltInTypes.num.identifier:
 				return "number";
-			case kipperStrType:
+			case BuiltInTypes.str.identifier:
 				return "string";
-			case kipperUndefinedType:
+			case BuiltInTypes.undefined.identifier:
 				return "undefined";
-			case kipperVoidType:
+			case BuiltInTypes.void.identifier:
 				return "void";
+			case BuiltInTypes.Func.identifier: {
+				const returnType = KipperTypeScriptTarget.getTypeScriptType((<typeof BuiltInTypes.Func>kipperType).returnType);
+				const paramTypes = (<typeof BuiltInTypes.Func>kipperType).paramTypes
+					.map((param, index) => `arg${index}: ${KipperTypeScriptTarget.getTypeScriptType(param)}`)
+					.join(", ");
+				return `(${paramTypes}) => ${returnType}`;
+			}
+			case BuiltInTypes.Array.identifier: {
+				const memberType = KipperTypeScriptTarget.getTypeScriptType(
+					(<typeof BuiltInTypes.Array>kipperType).genericTypeArguments[0].type,
+				);
+				return `Array<${memberType}>`;
+			}
+			case BuiltInTypes.obj.identifier: {
+				return "object";
+			}
+			case BuiltInTypes.any.identifier: {
+				return "any";
+			}
 			default:
 				throw new KipperNotImplementedError(`TypeScript type for ${kipperType} not implemented.`);
 		}

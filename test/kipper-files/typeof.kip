@@ -1,0 +1,1 @@
+interface Test { x: num; y: str;}

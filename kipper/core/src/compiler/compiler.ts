@@ -2,13 +2,11 @@
  * Main Compiler file for interacting with the entire Kipper Compiler
  * @since 0.0.1
  */
-import type { InternalFunction } from "./runtime-built-ins";
-import { kipperInternalBuiltInFunctions } from "./runtime-built-ins";
 import type { CodePointCharStream, Token } from "antlr4ts";
 import { CommonTokenStream } from "antlr4ts";
 import { KipperAntlrErrorListener } from "../antlr-error-listener";
 import type { LexerParserData } from "./lexer-parser";
-import { KipperLexer, KipperParser, KipperFileStream } from "./lexer-parser";
+import { KipperFileStream, KipperLexer, KipperParser } from "./lexer-parser";
 import { KipperLogger } from "../logger";
 import { KipperProgramContext } from "./program-ctx";
 import type { KipperSyntaxError } from "../errors";
@@ -18,6 +16,8 @@ import { EvaluatedCompileConfig } from "./compile-config";
 import { KipperCompileResult } from "./compile-result";
 import * as Channel from "./lexer-parser/lexer-channels";
 import { PragmaProcessor } from "./pragma-processor";
+import type { InternalFunction } from "./semantics";
+import { kipperInternalBuiltInFunctions } from "./semantics";
 
 /**
  * The main Compiler class that contains the functions for parsing and compiling a file.

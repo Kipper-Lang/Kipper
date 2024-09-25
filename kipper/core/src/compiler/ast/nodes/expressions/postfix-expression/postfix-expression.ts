@@ -14,7 +14,9 @@ import type { ASTNodeMapper } from "../../../mapping";
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link PostfixExpression} AST node.
  * @since 0.10.0
  */
-export type ASTPostfixExpressionKind = typeof ParseRuleKindMapping.RULE_incrementOrDecrementPostfixExpression;
+export type ASTPostfixExpressionKind =
+	| typeof ParseRuleKindMapping.RULE_incrementOrDecrementPostfixExpression
+	| typeof ParseRuleKindMapping.RULE_typeofExpression;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} context classes for a constructable
@@ -43,6 +45,8 @@ export abstract class PostfixExpression<
 	TypeSemantics extends PostfixExpressionTypeSemantics = PostfixExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserPostfixExpressionContext;
+
 	public abstract get kind(): ASTPostfixExpressionKind;
+
 	public abstract get ruleName(): ParserPostfixExpressionRuleName;
 }

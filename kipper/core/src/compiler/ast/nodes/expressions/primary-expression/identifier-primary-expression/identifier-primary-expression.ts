@@ -9,7 +9,7 @@ import type { IdentifierPrimaryExpressionTypeSemantics } from "./identifier-prim
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { IdentifierPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { CheckedType, ScopeDeclaration } from "../../../../../analysis";
+import { ScopeFunctionDeclaration, ScopeVariableDeclaration } from "../../../../../semantics";
 import { AssignmentExpression } from "../../assignment-expression/assignment-expression";
 import { PrimaryExpression } from "../primary-expression";
 
@@ -24,17 +24,28 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 	IdentifierPrimaryExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_identifierPrimaryExpression;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IdentifierPrimaryExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_identifierPrimaryExpression;
+	constructor(antlrRuleCtx: IdentifierPrimaryExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -49,12 +60,6 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -66,9 +71,11 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 		return IdentifierPrimaryExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: IdentifierPrimaryExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): IdentifierPrimaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -82,20 +89,15 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 		const identifier = this.sourceCode;
 
 		// Make sure the referenced variable even exists!
-		const ref = this.programCtx
-			.semanticCheck(this)
-			.getExistingReference(identifier, "innerScope" in this.scopeCtx ? this.scopeCtx : undefined);
+		const ref = this.programCtx.semanticCheck(this).getExistingReference(identifier, this.scope);
 
 		// Once we have the identifier and ensured a reference exists, we are done with the primary semantic analysis.
 		this.semanticData = {
 			identifier: identifier,
-			ref: {
-				refTarget: ref,
-				srcExpr: this,
-			},
+			ref: ref,
 		};
 
-		if (!(ref instanceof ScopeDeclaration)) {
+		if (ref.isBuiltIn && (ref instanceof ScopeVariableDeclaration || ref instanceof ScopeFunctionDeclaration)) {
 			this.programCtx.addBuiltInReference(this, ref);
 		} else {
 			// If the reference is not used inside an assignment expression, ensure that the reference is defined
@@ -117,35 +119,14 @@ export class IdentifierPrimaryExpression extends PrimaryExpression<
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-		const refTarget = semanticData.ref.refTarget;
-
-		let type: CheckedType;
-		if (refTarget instanceof ScopeDeclaration) {
-			type = refTarget.type;
-		} else {
-			// Built-in function -> type is 'func'
-			type = CheckedType.fromCompilableType("valueType" in refTarget ? refTarget.valueType : "func");
-		}
+		const refTargetType = semanticData.ref.type;
 
 		this.typeSemantics = {
-			evaluatedType: type,
+			evaluatedType: refTargetType,
 		};
 	}
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): IdentifierPrimaryExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.identifierPrimaryExpression;
 	readonly targetCodeGenerator = this.codeGenerator.identifierPrimaryExpression;

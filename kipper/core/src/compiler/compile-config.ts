@@ -2,8 +2,7 @@
  * Configuration for a Kipper program that can be passed to {@link KipperCompiler.compile}.
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable } from "./runtime-built-ins";
-import { kipperRuntimeBuiltInFunctions, kipperRuntimeBuiltInVariables } from "./runtime-built-ins";
+import type { BuiltInFunction, BuiltInVariable } from "./semantics/runtime-built-ins";
 import type { KipperCompileTarget } from "./target-presets";
 import type { OptimisationOptions } from "./optimiser";
 import { defaultOptimisationOptions } from "./optimiser";
@@ -118,8 +117,6 @@ export class EvaluatedCompileConfig implements CompileConfig {
 	 * @since 0.2.0
 	 */
 	public static readonly defaults = {
-		builtInFunctions: Object.values(kipperRuntimeBuiltInFunctions), // Default built-in global functions
-		builtInVariables: Object.values(kipperRuntimeBuiltInVariables), // Default built-in global variables
 		extendBuiltInFunctions: <Array<BuiltInFunction>>[], // Use no custom built-in functions per default
 		extendBuiltInVariables: <Array<BuiltInVariable>>[], // Use no custom built-in variables per default
 		fileName: "anonymous-script", // Default name if no name is specified
@@ -134,23 +131,6 @@ export class EvaluatedCompileConfig implements CompileConfig {
 	 * @since 0.5.0
 	 */
 	public readonly target: KipperCompileTarget;
-
-	/**
-	 * The built-in functions that will be available in a Kipper program.
-	 *
-	 * This will be extended by {@link extendBuiltInFunctions}. All built-in functions defined here must be implemented by the
-	 * {@link target.builtInGenerator}.
-	 */
-	public readonly builtInFunctions: Array<BuiltInFunction>;
-
-	/**
-	 * The built-in variables that will be available in a Kipper program. This option overwrites the default built-ins,
-	 * if you wish to only add new built-in variables write to {@link extendBuiltInVariables}.
-	 *
-	 * All built-in variables defined here must be implemented by the {@link target.builtInGenerator}.
-	 * @since 0.10.0
-	 */
-	public readonly builtInVariables: Array<BuiltInVariable>;
 
 	/**
 	 * Extensions to the global built-in functions that should not replace the primary {@link builtInFunctions}.
@@ -226,8 +206,6 @@ export class EvaluatedCompileConfig implements CompileConfig {
 
 		// Evaluate all config options
 		this.target = rawConfig.target;
-		this.builtInFunctions = this.getConfigOption("builtInFunctions", rawConfig);
-		this.builtInVariables = this.getConfigOption("builtInVariables", rawConfig);
 		this.extendBuiltInFunctions = this.getConfigOption("extendBuiltInFunctions", rawConfig);
 		this.extendBuiltInVariables = this.getConfigOption("extendBuiltInVariables", rawConfig);
 		this.fileName = this.getConfigOption("fileName", rawConfig);

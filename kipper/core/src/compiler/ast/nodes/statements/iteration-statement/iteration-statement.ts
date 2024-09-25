@@ -45,6 +45,8 @@ export abstract class IterationStatement<
 	TypeSemantics extends IterationStatementTypeSemantics = IterationStatementTypeSemantics,
 > extends Statement<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserIterationStatementContext;
+
 	public abstract get kind(): ParserIterationStatementKind;
+
 	public abstract get ruleName(): ParserIterationStatementRuleName;
 }

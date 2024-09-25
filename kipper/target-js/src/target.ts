@@ -4,8 +4,8 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type { BuiltInFunction, BuiltInVariable } from "@kipper/core";
-import { KipperCompileTarget } from "@kipper/core";
+import type { BuiltInFunction, ProcessedType } from "@kipper/core";
+import { BuiltInType, BuiltInVariable, KipperCompileTarget } from "@kipper/core";
 import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { JavaScriptTargetCodeGenerator } from "./code-generator";
 import { JavaScriptTargetBuiltInGenerator } from "./built-in-generator";
@@ -20,6 +20,12 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 	 * @since 0.10.0
 	 */
 	static readonly internalObjectIdentifier = "__kipper";
+
+	/**
+	 * The internal prefix for interfaces in the JavaScript target.
+	 * @since 0.12.0
+	 */
+	static readonly internalInterfacePrefix = "__intf";
 
 	/**
 	 * All reserved identifiers in JavaScript (and TypeScript for good measure) that may not be overwritten.
@@ -99,18 +105,29 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 	/**
 	 * Fetches the reserved identifier for the translated code.
 	 *
-	 * This will also ensure that {@link BuiltInVariable.local local variables} are not registered onto the global object.
+	 * This will also ensure that {@link BuiltInVariable local variables} are not registered onto the global object.
 	 * Those will simply stay as local variables with the same identifier.
 	 * @param signature The identifier or signature object to translate to its JavaScript form.
 	 * @since 0.10.0
 	 */
-	public static getBuiltInIdentifier(signature: string | BuiltInVariable | BuiltInFunction): string {
+	public static getBuiltInIdentifier(signature: string | BuiltInVariable | BuiltInFunction | BuiltInType): string {
 		if (typeof signature === "string") {
 			return `${this.internalObjectIdentifier}.${signature}`;
 		}
-		return "local" in signature && signature.local
+		return signature instanceof BuiltInVariable && signature.local
 			? signature.identifier
 			: this.getBuiltInIdentifier(signature.identifier);
+	}
+
+	/**
+	 * Gets the builtin type for a Kipper type.
+	 * @since 0.12.0
+	 */
+	public static getRuntimeType(type: ProcessedType): string {
+		if (type instanceof BuiltInType) {
+			return this.getBuiltInIdentifier(`builtIn.${type.identifier}`);
+		}
+		return type.identifier;
 	}
 }
 

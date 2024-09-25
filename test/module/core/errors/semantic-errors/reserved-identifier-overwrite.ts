@@ -8,8 +8,8 @@ describe("ReservedIdentifierOverwriteError", () => {
 		try {
 			await new KipperCompiler().compile("var instanceof: str;", defaultConfig);
 		} catch (e) {
-			assert.equal((<KipperError>e).constructor.name, "ReservedIdentifierOverwriteError", "Expected different error");
-			assert((<KipperError>e).name === "IdentifierError", "Expected different error");
+			assert.equal((<KipperError>e).constructor.name, "LexerOrParserSyntaxError", "Expected different error");
+			assert((<KipperError>e).name === "SyntaxError", "Expected different error");
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}
@@ -24,7 +24,7 @@ describe("ReservedIdentifierOverwriteError", () => {
 			assert.fail(`Expected no '${(<KipperError>e).name}'`);
 		}
 		assert.isDefined(result, "Expected defined compilation result");
-		assert.isDefined(result!!.programCtx, "Expected programCtx to be defined");
-		assert.isFalse(result!!.programCtx!!.hasFailed, "Expected no errors");
+		assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+		assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 	});
 });

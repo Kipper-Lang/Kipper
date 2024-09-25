@@ -14,17 +14,33 @@ import type { Expression } from "../../expressions";
  */
 export class ExpressionStatement extends Statement<ExpressionStatementSemantics, ExpressionStatementTypeSemantics> {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_expressionStatement;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: ExpressionStatementContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_expressionStatement;
+	protected readonly _children: Array<Expression>;
+
+	constructor(antlrRuleCtx: ExpressionStatementContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+		this._semanticData = {};
+		this._typeSemantics = {};
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -39,12 +55,6 @@ export class ExpressionStatement extends Statement<ExpressionStatementSemantics,
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -54,16 +64,6 @@ export class ExpressionStatement extends Statement<ExpressionStatementSemantics,
 	 */
 	public override get ruleName() {
 		return ExpressionStatement.ruleName;
-	}
-
-	protected readonly _children: Array<Expression>;
-
-	constructor(antlrRuleCtx: ExpressionStatementContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
-		this._semanticData = {};
-		this._typeSemantics = {};
 	}
 
 	/**
@@ -78,6 +78,16 @@ export class ExpressionStatement extends Statement<ExpressionStatementSemantics,
 	 */
 	public override get antlrRuleCtx(): ExpressionStatementContext {
 		return this._antlrRuleCtx;
+	}
+
+	/**
+	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
+	 *
+	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
+	 * @since 0.9.0
+	 */
+	public async checkForWarnings(): Promise<void> {
+		this.programCtx.warningCheck(this).uselessStatement(this);
 	}
 
 	/**
@@ -98,16 +108,6 @@ export class ExpressionStatement extends Statement<ExpressionStatementSemantics,
 	 * @since 0.7.0
 	 */
 	public primarySemanticTypeChecking = undefined; // Expression statements will never have type checking
-
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
-	public async checkForWarnings(): Promise<void> {
-		this.programCtx.warningCheck(this).uselessStatement(this);
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.expressionStatement;
 	readonly targetCodeGenerator = this.codeGenerator.expressionStatement;

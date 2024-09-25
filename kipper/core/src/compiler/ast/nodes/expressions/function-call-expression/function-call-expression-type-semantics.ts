@@ -2,8 +2,13 @@
  * Type semantics for AST Node {@link FunctionCallExpression}.
  * @since 0.5.0
  */
-import type { KipperFunction } from "../../../../const";
 import type { ExpressionTypeSemantics } from "../expression-type-semantics";
+import type {
+	ScopeFunctionDeclaration,
+	ScopeParameterDeclaration,
+	ScopeVariableDeclaration,
+} from "../../../../semantics";
+import type { Expression } from "../expression";
 
 /**
  * Type semantics for AST Node {@link FunctionCallExpression}.
@@ -11,9 +16,11 @@ import type { ExpressionTypeSemantics } from "../expression-type-semantics";
  */
 export interface FunctionCallExpressionTypeSemantics extends ExpressionTypeSemantics {
 	/**
-	 * The function that this expression calls. Can be either a {@link ScopeFunctionDeclaration function declaration} or
-	 * a {@link ScopeVariableDeclaration function in a variable}.
-	 * @since 0.10.0
+	 * The function that this expression calls.
+	 *
+	 * This can be a function declaration, a parameter declaration, a variable declaration or a referenceable i.e. a
+	 * function stored inside a variable of some sort.
+	 * @since 0.12.0
 	 */
-	func: KipperFunction;
+	funcOrExp: ScopeFunctionDeclaration | ScopeParameterDeclaration | ScopeVariableDeclaration | Expression;
 }

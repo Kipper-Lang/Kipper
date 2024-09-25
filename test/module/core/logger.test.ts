@@ -78,7 +78,7 @@ describe("KipperLogger", () => {
 				target: defaultTarget,
 			});
 			assert.isDefined(result, "Expected defined compilation result");
-			assert.isUndefined(result!!.programCtx, "Expected programCtx to be undefined (syntax error)");
+			assert.isUndefined(result?.programCtx, "Expected programCtx to be undefined (syntax error)");
 			assert.equal(result!!.errors.length, 1, "Expected one stored error");
 			assert.equal(result.errors[0].constructor.name, "LexerOrParserSyntaxError", "Expected different error");
 

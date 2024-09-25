@@ -7,9 +7,8 @@ import type { InputMismatchException, LexerNoViableAltException, NoViableAltExce
 import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
 import type { RecognitionException } from "antlr4ts/RecognitionException";
 import type { Recognizer } from "antlr4ts/Recognizer";
-import type { KipperFileStream } from "./compiler";
-import type { CompilableASTNode, KipperProgramContext } from "./compiler";
-import { getParseRuleSource } from "./tools";
+import type { CompilableASTNode, KipperFileStream, KipperProgramContext } from "./compiler";
+import { addLeftIndent, getParseRuleSource } from "./tools";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.
@@ -55,7 +54,13 @@ export class KipperError extends Error {
 	 */
 	public tracebackData: TracebackMetadata;
 
-	constructor(msg: string) {
+	/**
+	 * The cause of this error. This is used to chain errors together.
+	 * @since 0.12.0
+	 */
+	public cause?: KipperError;
+
+	constructor(msg: string, cause?: KipperError) {
 		super(msg);
 		this.name = this.constructor.name === "KipperError" ? "Error" : this.constructor.name;
 		this.tracebackData = {
@@ -65,6 +70,7 @@ export class KipperError extends Error {
 			streamSrc: undefined,
 			errorNode: undefined,
 		};
+		this.cause = cause;
 	}
 
 	/**
@@ -128,7 +134,7 @@ export class KipperError extends Error {
 			`line ${this.tracebackData.location ? this.tracebackData.location.line : "'Unknown'"}, ` +
 			`col ${this.tracebackData.location ? this.tracebackData.location.col : "'Unknown'"}:\n` +
 			`${tokenSrc ? `  ${tokenSrc}\n` : ""}` +
-			`${this.name}: ${this.message}`
+			`${this.name}: ${this.message}`.replace(/\\n/g, `\n`)
 		);
 	}
 
@@ -274,7 +280,7 @@ export class UnableToGetInnerScopeError extends KipperInternalError {
 /**
  * Error that is thrown whenever {@link CheckedType.getCompilableType} is called, despite the type not being compilable.
  *
- * This is thrown to avoid the compiler from using {@link UndefinedCustomType} for a compilation, as that would cause
+ * This is thrown to avoid the compiler from using {@link UndefinedType} for a compilation, as that would cause
  * undefined behavior.
  * @since 0.10.0
  */
@@ -284,6 +290,16 @@ export class TypeNotCompilableError extends KipperInternalError {
 			"Failed to determine the compilation type for a type. Most likely the type checking failed or the" +
 				" compilation was run despite type checking errors.",
 		);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used for type checking that can not be used for type checking.
+ * @since 0.11.0
+ */
+export class TypeCanNotBeUsedForTypeCheckingError extends KipperInternalError {
+	constructor() {
+		super("This Type can not be used for type checking. This is a bug in the compiler.");
 	}
 }
 
@@ -300,6 +316,27 @@ export class TypeNotCompilableError extends KipperInternalError {
 export class MissingRequiredSemanticDataError extends KipperInternalError {
 	constructor(msg: string = "") {
 		super(msg || "Can not analyse AST node due to missing semantic data in children.");
+	}
+}
+
+/**
+ * Error that is thrown whenever a generic type is initialised that contains more than one spread argument.
+ * @since 0.12.0
+ */
+export class GenericCanOnlyHaveOneSpreadError extends KipperInternalError {
+	constructor() {
+		super("Only one generic argument can be a spread argument.");
+	}
+}
+
+/**
+ * Error that is thrown whenever a variable, type or function is registered in the universe scope where the identifier
+ * is already in use.
+ * @since 0.12.0
+ */
+export class DuplicateUniverseKeyError extends KipperInternalError {
+	constructor(key: string) {
+		super(`Duplicate key '${key}' in universe scope.`);
 	}
 }
 
@@ -517,6 +554,16 @@ export class IdentifierAlreadyUsedByFunctionError extends IdentifierError {
 
 /**
  * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
+ * another member.
+ */
+export class IdentifierAlreadyUsedByMemberError extends IdentifierError {
+	constructor(identifier: string, kind: "interface" | "class") {
+		super(`Redeclaration of ${kind} member '${identifier}'.`);
+	}
+}
+
+/**
+ * Error that is thrown when a new identifier is registered, but the used identifier is already in use by
  * a parameter declaration.
  * @since 0.10.0
  */
@@ -550,8 +597,8 @@ export class ReservedIdentifierOverwriteError extends IdentifierError {
  * @since 0.7.0
  */
 export class TypeError extends KipperError {
-	constructor(msg: string) {
-		super(msg);
+	constructor(msg: string, cause?: TypeError) {
+		super(`${msg}${cause?.message ? `\n${addLeftIndent(cause.message, "~> ")}` : ""}`, cause);
 		this.name = "TypeError";
 	}
 }
@@ -578,22 +625,20 @@ export class ArithmeticOperationTypeError extends TypeError {
  * @since 0.6.0
  */
 export class BitwiseOperationTypeError extends TypeError {
-	constructor(firstType?: string, secondType?: string) {
-		if (firstType && secondType) {
-			// If the types caused the error, specify them in the error message
-			super(`Invalid bitwise operation between operands of type '${firstType}' and '${secondType}'.`);
-		} else {
-			super(`Invalid bitwise operation.`);
-		}
+	constructor(firstType: string, secondType: string) {
+		super(`Bitwise expressions are only allowed for type 'num'. Received '${firstType}' and '${secondType}'.`);
 	}
 }
 
 /**
  * Error that is thrown whenever an argument is not assignable to the parameter's type.
  */
-export class ArgumentTypeError extends TypeError {
-	constructor(paramIdentifier: string, expectedType: string, receivedType: string) {
-		super(`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`);
+export class ArgumentAssignmentTypeError extends TypeError {
+	constructor(paramIdentifier: string, expectedType: string, receivedType: string, cause?: TypeError) {
+		super(
+			`Type '${receivedType}' is not assignable to parameter '${paramIdentifier}' of type '${expectedType}'.`,
+			cause,
+		);
 	}
 }
 
@@ -604,8 +649,86 @@ export class ArgumentTypeError extends TypeError {
  * @since 0.8.3
  */
 export class AssignmentTypeError extends TypeError {
-	constructor(leftExpType: string, rightExpType: string) {
-		super(`Type '${rightExpType}' is not assignable to type '${leftExpType}'.`);
+	constructor(expectedType: string, receivedType: string, cause?: TypeError) {
+		super(`Type '${receivedType}' is not assignable to type '${expectedType}'.`, cause);
+	}
+
+	static formatGenericTypes(identifier: string, genericTypes?: Array<string>): string {
+		const params = genericTypes?.join(", ");
+		return `${identifier}${params ? `<${params}>` : ""}`;
+	}
+}
+
+/**
+ * Error that is thrown whenever a property is assigned to that is not defined in the object.
+ * @since 0.11.0
+ */
+export class PropertyAssignmentTypeError extends TypeError {
+	constructor(identifier: string, propertyType: string, valueType: string, cause?: TypeError) {
+		super(`Type '${valueType}' is not assignable to property '${identifier}' of type '${propertyType}'.`, cause);
+	}
+}
+
+/**
+ * Error that is thrown whenever a property can not be found in the object.
+ * @since 0.11.0
+ */
+export class PropertyNotFoundError extends TypeError {
+	constructor(objType: string, identifier: string) {
+		super(`Property '${identifier}' not found in object of type '${objType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a generic argument is used that is not assignable to the expected type.
+ * @since 0.12.0
+ */
+export class GenericArgumentTypeError extends TypeError {
+	constructor(identifier: string, expectedType: string, receivedType: string, cause?: TypeError) {
+		super(`Type '${receivedType}' is not assignable to generic argument '${identifier}' of type '${expectedType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a function type is casted to a function with a different amount of arguments.
+ * @since 0.12.0
+ */
+export class MismatchingArgCountBetweenFuncTypesError extends TypeError {
+	constructor(expected: number, received: number) {
+		super(`Function type expects ${expected} arguments, received ${received}.`);
+	}
+}
+
+/**
+ * Error that is thrown when an invalid amount of generic arguments is passed to a type.
+ * @since 0.12.0
+ */
+export class InvalidAmountOfGenericArgumentsError extends TypeError {
+	constructor(typeIdentifier: string, expected: number, received: number, spreadPresent: boolean) {
+		super(
+			`Type '${typeIdentifier}' ${spreadPresent ? "expects at least" : "only accepts"} ${expected} generic` +
+				`argument${expected === 1 ? "" : "s"}, received ${received}.`,
+		);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used that is not a generic type.
+ * @since 0.12.0
+ */
+export class CanNotUseNonGenericAsGenericTypeError extends TypeError {
+	constructor(identifier: string) {
+		super(`Type '${identifier}' does not accept generic arguments.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used that is not a function type.
+ * @since 0.12.0
+ */
+export class TypeNotAssignableToUnionError extends TypeError {
+	constructor(type: string, unionType: Array<string>, cause?: TypeError) {
+		super(`Type '${type}' is not assignable to union type '${unionType.join(" | ")}'.`, cause);
 	}
 }
 
@@ -639,12 +762,32 @@ export class UnknownTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a type is used that is not a type.
+ * @since 0.11.0
+ */
+export class ReferenceCanNotBeUsedAsTypeError extends TypeError {
+	constructor(identifier: string) {
+		super(`Reference '${identifier}' can not be used as a type.`);
+	}
+}
+
+/**
  * Error that is thrown whenever a relational comparison is used with types that are not comparable.
  * @since 0.9.0
  */
 export class InvalidRelationalComparisonTypeError extends TypeError {
 	constructor(type1: string, type2: string) {
 		super(`Type '${type1}' is not comparable to type '${type2}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used with the 'typeof' operator that is not valid.
+ * @since 0.9.0
+ */
+export class InvalidTypeofOperandError extends TypeError {
+	constructor(type: string) {
+		super(`Typeof operand '${type}' is not valid.`);
 	}
 }
 
@@ -689,12 +832,52 @@ export class ValueNotIndexableTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever the given value can not be accessed using the given access method.
+ * @since 0.12.0
+ */
+export class ValueTypeNotIndexableWithGivenAccessor extends TypeError {
+	constructor(type: string, accessType: string) {
+		super(`Value of type '${type}' can not be accessed using '${accessType}' style indexing`);
+	}
+}
+
+/**
  * Error that is thrown when a key is used that has a different type than the key type of the object.
  * @since 0.10.0
  */
 export class InvalidKeyTypeError extends TypeError {
 	constructor(objType: string, keyType: string) {
 		super(`Key of type '${keyType}' can not be used to access object-like of type '${objType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever the given identifier does not exist on an object.
+ * @since 0.12.0
+ */
+export class PropertyDoesNotExistError extends TypeError {
+	constructor(objType: string, identifier: string) {
+		super(`Property '${identifier}' does not exist on type '${objType}'`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used for an instanceof expression that is not a class.
+ * @since 0.12.0
+ */
+export class InvalidInstanceOfTypeError extends TypeError {
+	constructor(type: string) {
+		super(`Type '${type}' can not be used with 'instanceof' operator. Expects a class.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a type is used for a matches expression that is not an interface.
+ * @since 0.12.0
+ */
+export class InvalidMatchesTypeError extends TypeError {
+	constructor(type: string) {
+		super(`Type '${type}' can not be used with 'matches' operator. Expects an interface.`);
 	}
 }
 

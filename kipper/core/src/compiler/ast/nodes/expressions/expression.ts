@@ -25,14 +25,20 @@ export abstract class Expression<
 	TypeSemantics extends ExpressionTypeSemantics = ExpressionTypeSemantics,
 	Children extends CompilableASTNode = CompilableASTNode,
 > extends CompilableASTNode<Semantics, TypeSemantics> {
-	/**
-	 * The private field '_antlrRuleCtx' that actually stores the variable data,
-	 * which is returned inside the {@link this.antlrRuleCtx}.
-	 * @private
-	 */
-	protected override readonly _antlrRuleCtx: ParserExpressionContext;
+	protected constructor(antlrRuleCtx: ParserExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._children = [];
+
+		// Manually add the child to the parent
+		parent.addNewChild(this);
+	}
 
 	protected override _children: Array<Children>;
+
+	public get children(): Array<Children> {
+		return this._children;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -54,17 +60,11 @@ export abstract class Expression<
 	 */
 	public abstract get ruleName(): ASTExpressionRuleName;
 
-	protected constructor(antlrRuleCtx: ParserExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._children = [];
-
-		// Manually add the child to the parent
-		parent.addNewChild(this);
-	}
-
-	public get children(): Array<Children> {
-		return this._children;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): ParserExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	public addNewChild(newChild: Children) {
@@ -78,13 +78,6 @@ export abstract class Expression<
 	 * @since 0.9.0
 	 */
 	public abstract checkForWarnings?(): Promise<void>;
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): ParserExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	/**
 	 * Semantically analyses the code inside this AST node and all {@link this.children children nodes}.
@@ -173,6 +166,13 @@ export abstract class Expression<
 	public override async translateCtxAndChildren(): Promise<TranslatedExpression> {
 		return await this.targetCodeGenerator(this);
 	}
+
+	/**
+	 * The private field '_antlrRuleCtx' that actually stores the variable data,
+	 * which is returned inside the {@link this.antlrRuleCtx}.
+	 * @private
+	 */
+	protected override readonly _antlrRuleCtx: ParserExpressionContext;
 
 	public abstract targetCodeGenerator: TargetASTNodeCodeGenerator<any, TranslatedExpression>;
 }

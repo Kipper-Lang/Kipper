@@ -3,12 +3,12 @@
  * @since 0.8.0
  */
 import type {
-	FunctionDeclaration,
 	BuiltInFunction,
 	BuiltInFunctionArgument,
-	KipperCompilableType,
+	FunctionDeclaration,
 	InternalFunction,
 	InternalFunctionArgument,
+	ProcessedType,
 } from "@kipper/core";
 import { TargetTS } from "./target";
 
@@ -19,8 +19,8 @@ import { TargetTS } from "./target";
  */
 export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunction | FunctionDeclaration): {
 	identifier: string;
-	params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
-	returnType: KipperCompilableType | Array<KipperCompilableType>;
+	params: Array<{ identifier: string; type: ProcessedType }>;
+	returnType: ProcessedType;
 } {
 	if ("antlrRuleCtx" in funcSpec) {
 		const semanticData = funcSpec.getSemanticData();
@@ -31,16 +31,19 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 			params: semanticData.params.map((param) => {
 				return {
 					identifier: param.getSemanticData().identifier,
-					type: param.getTypeSemanticData().valueType.getCompilableType(),
+					type: param.getTypeSemanticData().valueType,
 				};
 			}),
-			returnType: typeData.returnType.getCompilableType(),
+			returnType: typeData.valueType.returnType,
 		};
 	} else {
 		return {
 			identifier: funcSpec.identifier,
 			params: funcSpec.params.map((arg: BuiltInFunctionArgument | InternalFunctionArgument) => {
-				return { identifier: arg.identifier, type: arg.valueType };
+				return {
+					identifier: arg.identifier,
+					type: Array.isArray(arg.valueType) ? arg.valueType : arg.valueType,
+				};
 			}),
 			returnType: funcSpec.returnType,
 		};
@@ -56,8 +59,8 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 export function createTSFunctionSignature(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
-		returnType: KipperCompilableType | Array<KipperCompilableType>;
+		params: Array<{ identifier: string; type: ProcessedType }>;
+		returnType: ProcessedType;
 	},
 	ignoreParams: boolean = false,
 ): string {
@@ -67,4 +70,20 @@ export function createTSFunctionSignature(
 		: `${params.map((p) => `${p.identifier}: ${TargetTS.getTypeScriptType(p.type)}`).join(", ")}`;
 
 	return `function ${identifier}(${argsSignature}): ${TargetTS.getTypeScriptType(signature.returnType)}`;
+}
+
+export function createTSGenericFunctionSignature(
+	signature: {
+		identifier: string;
+		params: Array<{ identifier: string; type: ProcessedType | "T" }>;
+		returnType: ProcessedType | "T";
+	},
+	ignoreParams: boolean = false,
+): string {
+	const { identifier, params } = signature;
+	const argsSignature = ignoreParams
+		? ""
+		: `${params.map((p) => `${p.identifier}: ${p.type === "T" ? "T" : TargetTS.getTypeScriptType(p.type)}`).join(", ")}`;
+
+	return `function ${identifier}<T>(${argsSignature}): ${signature.returnType === "T" ? "T" : TargetTS.getTypeScriptType(signature.returnType)}`;
 }

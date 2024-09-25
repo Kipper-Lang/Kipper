@@ -13,7 +13,7 @@ import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { IdentifierTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { CheckedType, UncheckedType } from "../../../../../analysis";
+import { BuiltInTypes, RawType } from "../../../../../semantics";
 
 /**
  * Type specifier expression, which represents a simple identifier type specifier.
@@ -29,17 +29,28 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	IdentifierTypeSpecifierExpressionTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IdentifierTypeSpecifierExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression;
+	constructor(antlrRuleCtx: IdentifierTypeSpecifierExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -54,12 +65,6 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -71,9 +76,11 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 		return IdentifierTypeSpecifierExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: IdentifierTypeSpecifierExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): IdentifierTypeSpecifierExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	/**
@@ -85,41 +92,30 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
-			typeIdentifier: new UncheckedType(this.sourceCode),
+			rawType: new RawType(this.sourceCode),
 		};
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
-	 * @since 0.8.0
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
+	 *
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
+	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Create a checked type instance (this function handles error recovery and invalid types)
-		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.typeIdentifier);
+		const valueType = this.programCtx.typeCheck(this).getCheckedType(semanticData.rawType, this.scope);
 		this.typeSemantics = {
 			// A type specifier will always evaluate to be of type 'type'
-			evaluatedType: CheckedType.fromCompilableType("type"),
+			evaluatedType: BuiltInTypes.type,
 			storedType: valueType,
 		};
 	}
+	public readonly primarySemanticTypeChecking: undefined;
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): IdentifierTypeSpecifierExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.identifierTypeSpecifierExpression;
 	readonly targetCodeGenerator = this.codeGenerator.identifierTypeSpecifierExpression;

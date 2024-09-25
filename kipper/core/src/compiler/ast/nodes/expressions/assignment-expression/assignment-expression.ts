@@ -18,12 +18,13 @@ import type { AssignmentExpressionTypeSemantics } from "./assignment-expression-
 import type { AssignmentExpressionContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, KipperParserRuleContext, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Expression } from "../expression";
-import type { IdentifierPrimaryExpression } from "../primary-expression";
+import { IdentifierPrimaryExpression } from "../primary-expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import type { KipperAssignOperator } from "../../../../const";
+import type { KipperAssignOperator, KipperReferenceable } from "../../../../const";
 import { kipperArithmeticAssignOperators } from "../../../../const";
 import { getParseRuleSource } from "../../../../../tools";
-import { ScopeVariableDeclaration } from "../../../../analysis";
+import { ScopeVariableDeclaration } from "../../../../semantics";
+import type { MemberAccessExpression } from "../member-access-expression";
 
 /**
  * Assignment expression, which assigns an expression to a variable. This class only represents assigning a value to
@@ -45,17 +46,28 @@ export class AssignmentExpression extends Expression<
 	Expression
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_assignmentExpression;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: AssignmentExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_assignmentExpression;
+	constructor(antlrRuleCtx: AssignmentExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -70,12 +82,6 @@ export class AssignmentExpression extends Expression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -87,9 +93,11 @@ export class AssignmentExpression extends Expression<
 		return AssignmentExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: AssignmentExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): AssignmentExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	public hasSideEffects(): boolean {
@@ -105,16 +113,15 @@ export class AssignmentExpression extends Expression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const antlrRuleChildren = this.getAntlrRuleChildren();
+		const toAssign = this.children[0];
 
-		// There will always be only two children, which are the identifier and expression assigned.
-		const identifier: IdentifierPrimaryExpression = (() => {
-			const exp = this.children[0];
+		// Ensure that the left-hand side of the expression is an identifier
+		this.programCtx.semanticCheck(this).validAssignment(toAssign);
 
-			// Ensure that the left-hand side of the expression is an identifier
-			this.programCtx.semanticCheck(this).validAssignment(exp);
-
-			return <IdentifierPrimaryExpression>exp;
-		})();
+		let ref: KipperReferenceable | undefined = undefined;
+		if (toAssign instanceof IdentifierPrimaryExpression) {
+			ref = toAssign.getSemanticData().ref;
+		}
 		const assignValue: Expression = this.children[1];
 
 		// Throw an error if the children are incomplete or the operator can not be determined (antlrRuleChildren[1])
@@ -123,25 +130,23 @@ export class AssignmentExpression extends Expression<
 		}
 
 		const operator = <KipperAssignOperator>getParseRuleSource(<KipperParserRuleContext>antlrRuleChildren[1]);
-		const identifierSemantics = identifier.getSemanticData();
 
 		// Semantics of the assignment
 		this.semanticData = {
 			value: assignValue,
-			identifierCtx: identifier,
-			identifier: identifierSemantics.identifier,
-			assignTarget: identifierSemantics.ref,
+			toAssign: <IdentifierPrimaryExpression | MemberAccessExpression>toAssign,
 			operator: operator,
 		};
 
 		// Ensure that the reference is defined and has a usable value if it's used with an arithmetic operator
-		if (kipperArithmeticAssignOperators.find((o) => o === operator)) {
-			this.programCtx.semanticCheck(identifier).refTargetDefined(identifierSemantics.ref.refTarget);
+		if (ref && kipperArithmeticAssignOperators.find((o) => o === operator)) {
+			this.programCtx.semanticCheck(toAssign).refTargetDefined(ref);
 		}
 
-		// If the reference was a variable, indicate that the value was updated, since it's being assigned to
-		if (identifierSemantics.ref.refTarget instanceof ScopeVariableDeclaration) {
-			identifierSemantics.ref.refTarget.valueWasUpdated = true;
+		// If the reference was a variable, indicate that the value was updated, so that we know it has a value (ensuring
+		// updated variables, which were previously undefined, can be used)
+		if (ref instanceof ScopeVariableDeclaration) {
+			ref.notifyOfUpdate();
 		}
 	}
 
@@ -172,13 +177,6 @@ export class AssignmentExpression extends Expression<
 	 * @since 0.9.0
 	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): AssignmentExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.assignmentExpression;
 	readonly targetCodeGenerator = this.codeGenerator.assignmentExpression;

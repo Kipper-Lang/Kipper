@@ -6,8 +6,7 @@
  */
 import type { UnaryExpressionSemantics } from "./unary-expression-semantics";
 import type { UnaryExpressionTypeSemantics } from "./unary-expression-type-semantics";
-import type { ParseRuleKindMapping } from "../../../../lexer-parser";
-import type { KindParseRuleMapping } from "../../../../lexer-parser";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Expression } from "../expression";
 import type { ASTNodeMapper } from "../../../mapping";
 
@@ -45,6 +44,8 @@ export abstract class UnaryExpression<
 	TypeSemantics extends UnaryExpressionTypeSemantics = UnaryExpressionTypeSemantics,
 > extends Expression<Semantics, TypeSemantics, Expression> {
 	protected abstract readonly _antlrRuleCtx: ParserUnaryExpressionContext;
+
 	public abstract get kind(): ASTUnaryExpressionKind;
+
 	public abstract get ruleName(): ParserUnaryExpressionRuleName;
 }

@@ -9,12 +9,12 @@ import type { IncrementOrDecrementUnaryExpressionSemantics } from "./increment-o
 import type { IncrementOrDecrementUnaryTypeSemantics } from "./increment-or-decrement-unary-expression-type-semantics";
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { Expression } from "../../expression";
-import type { KipperIncrementOrDecrementOperator } from "../../../../../const";
+import type { KipperPostfixOperator } from "../../../../../const";
 import { UnaryExpression } from "../unary-expression";
 import type { IncrementOrDecrementUnaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { CheckedType } from "../../../../../analysis";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Increment or decrement expression class, which represents a left-side -- or ++ expression modifying a numeric value.
@@ -28,17 +28,28 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	IncrementOrDecrementUnaryTypeSemantics
 > {
 	/**
+	 * The static kind for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly kind = ParseRuleKindMapping.RULE_incrementOrDecrementUnaryExpression;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
+	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
 	protected override readonly _antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext;
 
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_incrementOrDecrementUnaryExpression;
+	constructor(antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableASTNode) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -53,12 +64,6 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	}
 
 	/**
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
-	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
 	 *
@@ -70,9 +75,11 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 		return IncrementOrDecrementUnaryExpression.ruleName;
 	}
 
-	constructor(antlrRuleCtx: IncrementOrDecrementUnaryExpressionContext, parent: CompilableASTNode) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
+	/**
+	 * The antlr context containing the antlr4 metadata for this expression.
+	 */
+	public override get antlrRuleCtx(): IncrementOrDecrementUnaryExpressionContext {
+		return this._antlrRuleCtx;
 	}
 
 	public hasSideEffects(): boolean {
@@ -88,7 +95,7 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const exp: Expression = this.children[0];
-		const operator = <KipperIncrementOrDecrementOperator>this.sourceCode.slice(0, 2); // Before the expression
+		const operator = <KipperPostfixOperator>this.sourceCode.slice(0, 2); // Before the expression
 
 		// Ensure that the child expression is present
 		if (!exp) {
@@ -112,27 +119,14 @@ export class IncrementOrDecrementUnaryExpression extends UnaryExpression<
 	public async primarySemanticTypeChecking(): Promise<void> {
 		this.typeSemantics = {
 			// This will always be a number
-			evaluatedType: CheckedType.fromKipperType("num"),
+			evaluatedType: BuiltInTypes.num,
 		};
 
 		// Ensure that this expression is valid (e.g. the operand is a number)
 		this.programCtx.typeCheck(this).validUnaryExpression(this);
 	}
 
-	/**
-	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
-	 *
-	 * This will log all warnings using {@link programCtx.logger} and store them in {@link KipperProgramContext.warnings}.
-	 * @since 0.9.0
-	 */
 	public checkForWarnings = undefined; // TODO!
-
-	/**
-	 * The antlr context containing the antlr4 metadata for this expression.
-	 */
-	public override get antlrRuleCtx(): IncrementOrDecrementUnaryExpressionContext {
-		return this._antlrRuleCtx;
-	}
 
 	readonly targetSemanticAnalysis = this.semanticAnalyser.incrementOrDecrementUnaryExpression;
 	readonly targetCodeGenerator = this.codeGenerator.incrementOrDecrementUnaryExpression;

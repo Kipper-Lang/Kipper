@@ -2,15 +2,8 @@
  * Constant declarations and types for the compiler implementation.
  * @since 0.3.0
  */
-import type {
-	ScopeDeclaration,
-	ScopeFunctionDeclaration,
-	ScopeParameterDeclaration,
-	ScopeVariableDeclaration,
-	UndefinedCustomType,
-} from "./analysis";
-import type { BuiltInFunction, BuiltInVariable } from "./runtime-built-ins";
-import type { InternalFunction } from "./runtime-built-ins";
+import type { ScopeDeclaration } from "./semantics";
+import type { ClassMethodDeclaration, FunctionDeclaration, LambdaPrimaryExpression } from "./ast";
 
 /**
  * If this variable is true, then this environment is assumed to be inside a browser and special browser support should
@@ -26,50 +19,74 @@ export const isBrowser = typeof window !== "undefined" && {}.toString.call(windo
  * type.
  * @since 0.8.0
  */
-export type KipperMetaType = "type";
+export type KipperMetaTypeLiteral = "type";
 
 /**
  * Represents the meta type in Kipper, which itself is used represents a type e.g. this is the type of a
  * type.
  * @since 0.8.0
  */
-export const kipperMetaType: KipperMetaType = "type";
+export const kipperMetaTypeLiteral: KipperMetaTypeLiteral = "type";
+
+/**
+ * Any type in Kipper, which can be used to represent any type.
+ * @since 0.12.0
+ */
+export type KipperAnyTypeLiteral = "any";
+
+/**
+ * Any type in Kipper, which can be used to represent any type.
+ * @since 0.12.0
+ */
+export const kipperAnyTypeLiteral: KipperAnyTypeLiteral = "any";
+
+/**
+ * Obj type in Kipper.
+ * @since 0.12.0
+ */
+export type KipperObjTypeLiteral = "obj";
+
+/**
+ * Obj type in Kipper.
+ * @since 0.12.0
+ */
+export const kipperObjTypeLiteral: KipperObjTypeLiteral = "obj";
 
 /**
  * Null type in Kipper.
  * @since 0.10.0
  */
-export type KipperNullType = "null";
+export type KipperNullTypeLiteral = "null";
 
 /**
  * Null type in Kipper.
  * @since 0.10.0
  */
-export const kipperNullType: KipperNullType = "null";
+export const kipperNullTypeLiteral: KipperNullTypeLiteral = "null";
 
 /**
  * Undefined type in Kipper.
  * @since 0.10.0
  */
-export type KipperUndefinedType = "undefined";
+export type KipperUndefinedTypeLiteral = "undefined";
 
 /**
  * Undefined type in Kipper.
  * @since 0.10.0
  */
-export const kipperUndefinedType: KipperUndefinedType = "undefined";
+export const kipperUndefinedTypeLiteral: KipperUndefinedTypeLiteral = "undefined";
 
 /**
  * Function type in Kipper.
  * @since 0.6.0
  */
-export type KipperFuncType = "func";
+export type KipperFuncTypeLiteral = "Func";
 
 /**
  * Function type in Kipper.
  * @since 0.6.0
  */
-export const kipperFuncType: KipperFuncType = "func";
+export const kipperFuncTypeLiteral: KipperFuncTypeLiteral = "Func";
 
 /**
  * Void type in Kipper.
@@ -77,7 +94,7 @@ export const kipperFuncType: KipperFuncType = "func";
  * @example
  * void
  */
-export type KipperVoidType = "void";
+export type KipperVoidTypeLiteral = "void";
 
 /**
  * Void type in Kipper.
@@ -85,7 +102,7 @@ export type KipperVoidType = "void";
  * @example
  * void
  */
-export const kipperVoidType: KipperVoidType = "void";
+export const kipperVoidTypeLiteral: KipperVoidTypeLiteral = "void";
 
 /**
  * Numeric type in Kipper.
@@ -93,7 +110,7 @@ export const kipperVoidType: KipperVoidType = "void";
  * @example
  * num
  */
-export type KipperNumType = "num";
+export type KipperNumTypeLiteral = "num";
 
 /**
  * Numeric type in Kipper.
@@ -101,7 +118,7 @@ export type KipperNumType = "num";
  * @example
  * num
  */
-export const kipperNumType: KipperNumType = "num";
+export const kipperNumTypeLiteral: KipperNumTypeLiteral = "num";
 
 /**
  * String type in Kipper.
@@ -109,7 +126,7 @@ export const kipperNumType: KipperNumType = "num";
  * @example
  * str
  */
-export type KipperStrType = "str";
+export type KipperStrTypeLiteral = "str";
 
 /**
  * String type in Kipper.
@@ -117,7 +134,7 @@ export type KipperStrType = "str";
  * @example
  * str
  */
-export const kipperStrType: KipperStrType = "str";
+export const kipperStrTypeLiteral: KipperStrTypeLiteral = "str";
 
 /**
  * Boolean type in Kipper.
@@ -125,15 +142,15 @@ export const kipperStrType: KipperStrType = "str";
  * @example
  * bool
  */
-export type KipperBoolType = "bool";
+export type KipperBoolTypeLiteral = "bool";
 
 /**
- * Literal names for a Kipper boolean.
+ * Constant names for a Kipper boolean.
  * @since 0.8.0
  * @example
  * var x: bool = true;
  */
-export type KipperBoolTypeLiterals = "true" | "false";
+export type KipperBoolTypeConstants = "true" | "false";
 
 /**
  * Boolean type in Kipper.
@@ -141,17 +158,14 @@ export type KipperBoolTypeLiterals = "true" | "false";
  * @example
  * bool
  */
-export const kipperBoolType: KipperBoolType = "bool";
+export const kipperBoolTypeLiteral: KipperBoolTypeLiteral = "bool";
 
 /**
  * List type in Kipper. {@link KipperType T} represents the type of the list content and only serves as a
  * type checking generic type, it will not change the type itself.
  * @since 0.5.0
- * @example
- * list<T>
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type KipperListType<T extends KipperType> = "list";
+export type KipperListTypeLiteral = "Array";
 
 /**
  * List type in Kipper. {@link KipperType ValueType} represents the type of the list content and only serves as a
@@ -160,31 +174,31 @@ export type KipperListType<T extends KipperType> = "list";
  * @example
  * list<T>
  */
-export const kipperListType: KipperListType<any> = "list";
+export const kipperListTypeLiteral: KipperListTypeLiteral = "Array";
 
 /**
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export type KipperPrimitiveType =
-	| KipperVoidType
-	| KipperNullType
-	| KipperUndefinedType
-	| KipperNumType
-	| KipperStrType
-	| KipperBoolType;
+export type KipperPrimitiveTypeLiteral =
+	| KipperVoidTypeLiteral
+	| KipperNullTypeLiteral
+	| KipperUndefinedTypeLiteral
+	| KipperNumTypeLiteral
+	| KipperStrTypeLiteral
+	| KipperBoolTypeLiteral;
 
 /**
  * All primitive types inside Kipper.
  * @since 0.6.0
  */
-export const kipperPrimitiveTypes: Array<KipperPrimitiveType> = [
-	kipperVoidType,
-	kipperNullType,
-	kipperUndefinedType,
-	kipperNumType,
-	kipperStrType,
-	kipperBoolType,
+export const kipperPrimitiveTypeLiterals: Array<KipperPrimitiveTypeLiteral> = [
+	kipperVoidTypeLiteral,
+	kipperNullTypeLiteral,
+	kipperUndefinedTypeLiteral,
+	kipperNumTypeLiteral,
+	kipperStrTypeLiteral,
+	kipperBoolTypeLiteral,
 ];
 
 /**
@@ -194,28 +208,26 @@ export const kipperPrimitiveTypes: Array<KipperPrimitiveType> = [
  * only used for error handling/recovery and skips type checking altogether.
  * @since 0.10.0
  */
-export type KipperCompilableType = KipperMetaType | KipperPrimitiveType | KipperFuncType | KipperListType<any>;
+export type KipperBuiltInTypeLiteral =
+	| KipperAnyTypeLiteral
+	| KipperMetaTypeLiteral
+	| KipperPrimitiveTypeLiteral
+	| KipperObjTypeLiteral
+	| KipperFuncTypeLiteral
+	| KipperListTypeLiteral;
 
 /**
  * All compilable and valid base types inside Kipper.
  * @since 0.10.0
  */
-export const kipperCompilableTypes: Array<KipperCompilableType> = [
-	kipperFuncType,
-	...kipperPrimitiveTypes,
-	kipperListType,
+export const kipperBuiltInTypeLiterals: Array<KipperBuiltInTypeLiteral> = [
+	kipperAnyTypeLiteral,
+	kipperMetaTypeLiteral,
+	kipperFuncTypeLiteral,
+	kipperObjTypeLiteral,
+	...kipperPrimitiveTypeLiterals,
+	kipperListTypeLiteral,
 ];
-
-/**
- * All error types inside Kipper, which indicate an invalid type that can not be used for type checking.
- * @since 0.10.0
- */
-export type KipperErrorType = UndefinedCustomType;
-
-/**
- * All available variable types inside Kipper.
- */
-export type KipperType = KipperCompilableType | KipperErrorType;
 
 /**
  * List of all supported variable type conversions that can be performed in a Kipper program.
@@ -224,7 +236,7 @@ export type KipperType = KipperCompilableType | KipperErrorType;
  * which generates for each conversion the translator function in the specific target.
  * @since 0.8.0
  */
-export const kipperSupportedConversions: Array<[KipperType, KipperType]> = [
+export const kipperSupportedConversions: Array<[KipperBuiltInTypeLiteral, KipperBuiltInTypeLiteral]> = [
 	["num", "str"],
 	["bool", "str"],
 	["void", "str"],
@@ -237,7 +249,7 @@ export const kipperSupportedConversions: Array<[KipperType, KipperType]> = [
 /**
  * All available storage types inside Kipper, which define how a variable is stored/can be accessed.
  */
-export type KipperStorageType = "var" | "const";
+export type KipperStorageType = "var" | "const" | "built-in";
 
 /**
  * All available storage types inside Kipper, which define how a variable is stored/can be accessed.
@@ -486,13 +498,13 @@ export const kipperNegateOperator: KipperNegateOperator = "!";
  * All available increment and decrement operators, which can be used to modify the value of an expression.
  * @since 0.9.0
  */
-export type KipperIncrementOrDecrementOperator = "++" | "--";
+export type KipperPostfixOperator = "++" | "--" | "typeof";
 
 /**
  * Increment and decrement operators, which can be used to modify the value of an expression.
  * @since 0.9.0
  */
-export const kipperIncrementOrDecrementOperators: Array<KipperIncrementOrDecrementOperator> = ["++", "--"];
+export const kipperIncrementOrDecrementOperators: Array<KipperPostfixOperator> = ["++", "--", "typeof"];
 
 /**
  * Modifier Unary operators, which can be used to modify the value of an expression.
@@ -518,10 +530,7 @@ export const kipperUnaryModifierOperators: Array<KipperUnaryModifierOperator> = 
  * All available unary operators in Kipper, which can be used to modify the value of an expression.
  * @since 0.9.0
  */
-export type KipperUnaryOperator =
-	| KipperUnaryModifierOperator
-	| KipperIncrementOrDecrementOperator
-	| KipperBitwiseNotOperator;
+export type KipperUnaryOperator = KipperUnaryModifierOperator | KipperPostfixOperator | KipperBitwiseNotOperator;
 
 /**
  * All available unary operators in Kipper, which can be used to modify the value of an expression.
@@ -628,45 +637,31 @@ export type TranslatedExpression = Array<TranslatedCodeToken>;
 export type TranslatedCodeLine = Array<TranslatedCodeToken>;
 
 /**
- * Represents all referencable functions that a user can use inside Kipper. This does not include internal functions.
- * @since 0.10.0
- */
-export type KipperReferenceableFunction = BuiltInFunction | ScopeFunctionDeclaration;
-
-/**
- * Represents a Kipper function that can be either declared or defined.
- * @since 0.6.0
- */
-export type KipperFunction = InternalFunction | KipperReferenceableFunction;
-
-/**
- * Represents a Kipper variable that can be either declared or defined.
- * @since 0.6.0
- */
-export type KipperVariable = BuiltInVariable | ScopeVariableDeclaration;
-
-/**
- * Represents a Kipper parameter inside a custom user-defined {@link FunctionDeclaration ScopeFunctionDeclaration}.
- * @since 0.10.0
- */
-export type KipperParam = ScopeParameterDeclaration;
-
-/**
- * Represents a Kipper argument inside a custom user-defined {@link FunctionDeclaration ScopeFunctionDeclaration}.
- *
- * @alias KipperParam
- * @since 0.10.0
- */
-export type KipperArg = KipperParam;
-
-/**
  * Represents a runtime variable or function that can be referenced.
  * @since 0.6.0
  */
-export type KipperReferenceable = KipperReferenceableFunction | KipperVariable | KipperParam | ScopeDeclaration;
+export type KipperReferenceable = ScopeDeclaration;
 
 /**
  * Represents all possible jump statements inside Kipper.
  * @since 0.10.0
  */
 export type JmpStatementType = "continue" | "break";
+
+/**
+ * Represents all possible callable ast nodes inside Kipper.
+ * @since 0.12.0
+ */
+export type KipperCallable = FunctionDeclaration | LambdaPrimaryExpression | ClassMethodDeclaration;
+
+/**
+ * Represents the internal identifier for a Kipper constructor.
+ * @since 0.12.0
+ */
+export const KipperConstructorInternalIdentifierLiteral = "@constructor";
+
+/**
+ * Represents the internal identifier for a Kipper constructor.
+ * @since 0.12.0
+ */
+export type KipperConstructorInternalIdentifier = typeof KipperConstructorInternalIdentifierLiteral;

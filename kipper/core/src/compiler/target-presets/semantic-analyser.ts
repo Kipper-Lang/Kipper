@@ -7,8 +7,14 @@ import type {
 	AnalysableASTNode,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
+	BitwiseAndExpression,
+	BitwiseOrExpression,
+	BitwiseShiftExpression,
+	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassDeclaration,
+	ClassMethodDeclaration,
 	CompoundStatement,
 	ConditionalExpression,
 	DoWhileLoopIterationStatement,
@@ -24,14 +30,19 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
+	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	JumpStatement,
-	LambdaExpression,
+	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -41,14 +52,16 @@ import type {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TypeData,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	MatchesExpression,
 } from "../ast";
-import type { BitwiseAndExpression, BitwiseOrExpression, BitwiseShiftExpression, BitwiseXorExpression } from "../ast";
-import { KipperSemanticErrorHandler } from "../analysis";
-import type { ObjectProperty } from "../ast";
+import { KipperSemanticErrorHandler } from "../semantics";
+import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
+import type { NewInstantiationExpression } from "../ast/nodes/expressions/new-instantiation-expression";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -130,6 +143,41 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link VariableDeclaration} instances.
 	 */
 	public abstract variableDeclaration?: TargetASTNodeSemanticAnalyser<VariableDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ClassDeclaration} instances.
+	 */
+	public abstract classDeclaration?: TargetASTNodeSemanticAnalyser<ClassDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link NewInstantiationExpression} instances.
+	 */
+	public abstract newInstantiationExpression?: TargetASTNodeSemanticAnalyser<NewInstantiationExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ClassMethodDeclaration} instances.
+	 */
+	public abstract classMethodDeclaration?: TargetASTNodeSemanticAnalyser<ClassMethodDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ClassConstructorDeclaration} instances.
+	 */
+	public abstract classConstructorDeclaration?: TargetASTNodeSemanticAnalyser<ClassConstructorDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfaceDeclaration} instances.
+	 */
+	public abstract interfaceDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfacePropertyDeclaration} instances.
+	 */
+	public abstract interfacePropertyDeclaration?: TargetASTNodeSemanticAnalyser<InterfacePropertyDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InterfaceMethodDeclaration} instances.
+	 */
+	public abstract interfaceMethodDeclaration?: TargetASTNodeSemanticAnalyser<InterfaceMethodDeclaration>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link NumberPrimaryExpression} instances.
@@ -288,7 +336,22 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract assignmentExpression?: TargetASTNodeSemanticAnalyser<AssignmentExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link LambdaExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link LambdaPrimaryExpression} instances.
 	 */
-	public abstract lambdaExpression?: TargetASTNodeSemanticAnalyser<LambdaExpression>;
+	public abstract lambdaPrimaryExpression?: TargetASTNodeSemanticAnalyser<LambdaPrimaryExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link TypeofExpression} instances.
+	 */
+	public abstract typeofExpression?: TargetASTNodeSemanticAnalyser<TypeofExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link MatchesExpression} instances.
+	 */
+	public abstract matchesExpression?: TargetASTNodeSemanticAnalyser<MatchesExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InstanceOfExpression} instances.
+	 */
+	public abstract instanceOfExpression?: TargetASTNodeSemanticAnalyser<InstanceOfExpression>;
 }

@@ -12,6 +12,10 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassConstructorDeclaration,
+	ClassDeclaration,
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 	CompilableASTNode,
 	CompoundStatement,
 	ConditionalExpression,
@@ -28,14 +32,19 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	JumpStatement,
-	LambdaExpression,
+	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
+	ObjectProperty,
 	OperatorModifiedUnaryExpression,
 	ParameterDeclaration,
 	RelationalExpression,
@@ -43,14 +52,16 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	MatchesExpression,
+	InstanceOfExpression,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
-import type { ObjectProperty } from "../../ast/nodes/expressions/primary-expression/object-primary-expression/object-property/object-property";
 
 /**
  * Represents a function that translates a Kipper {@link CompilableASTNode token} code into a
@@ -72,7 +83,10 @@ export type TargetASTNodeCodeGenerator<
  * This is not intended as a replacement to {@link KipperTargetBuiltInGenerator}.
  * @since 0.10.0
  */
-export type TargetSetUpCodeGenerator = (programCtx: KipperProgramContext) => Promise<Array<TranslatedCodeLine>>;
+export type TargetSetUpCodeGenerator = (
+	programCtx: KipperProgramContext,
+	requirements: Array<TranslatedCodeLine>,
+) => Promise<Array<TranslatedCodeLine>>;
 
 /**
  * Represents a function that generates wrap up code for a Kipper file.
@@ -180,6 +194,59 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link VariableDeclaration} into a specific language.
 	 */
 	public abstract variableDeclaration: TargetASTNodeCodeGenerator<VariableDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link VariableDeclaration} into a specific language.
+	 */
+	public abstract classDeclaration: TargetASTNodeCodeGenerator<ClassDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translated a {@link ClassPropertyDeclaration} into a specific language.
+	 */
+
+	public abstract classPropertyDeclaration: TargetASTNodeCodeGenerator<ClassPropertyDeclaration, TranslatedCodeLine>;
+
+	/**
+	 * Translated a {@link ClassMethodDeclaration} into a specific language.
+	 */
+	public abstract classMethodDeclaration: TargetASTNodeCodeGenerator<ClassMethodDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link ClassConstructorDeclaration} into a specific language.
+	 */
+	public abstract classConstructorDeclaration: TargetASTNodeCodeGenerator<
+		ClassConstructorDeclaration,
+		Array<TranslatedCodeLine>
+	>;
+
+	/**
+	 * Translates a {@link NewInstantiationExpression} into a specific language.
+	 */
+	public abstract newInstantiationExpression: TargetASTNodeCodeGenerator<
+		NewInstantiationExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link VariableDeclaration} into a specific language.
+	 */
+	public abstract interfaceDeclaration: TargetASTNodeCodeGenerator<InterfaceDeclaration, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link InterfacePropertyDeclaration} into a specific language.
+	 */
+	public abstract interfacePropertyDeclaration: TargetASTNodeCodeGenerator<
+		InterfacePropertyDeclaration,
+		TranslatedCodeLine[]
+	>;
+
+	/**
+	 * Translates a {@link InterfaceMethodDeclaration} into a specific language.
+	 */
+	public abstract interfaceMethodDeclaration: TargetASTNodeCodeGenerator<
+		InterfaceMethodDeclaration,
+		TranslatedCodeLine[]
+	>;
 
 	/**
 	 * Translates a {@link NumberPrimaryExpression} into a specific language.
@@ -363,7 +430,22 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract assignmentExpression: TargetASTNodeCodeGenerator<AssignmentExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@link LambdaExpression} into a specific language.
+	 * Translates a {@link LambdaPrimaryExpression} into a specific language.
 	 */
-	public abstract lambdaExpression: TargetASTNodeCodeGenerator<LambdaExpression, TranslatedExpression>;
+	public abstract lambdaPrimaryExpression: TargetASTNodeCodeGenerator<LambdaPrimaryExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link TypeofExpression} into a specific language.
+	 */
+	public abstract typeofExpression: TargetASTNodeCodeGenerator<TypeofExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link MatchesExpression} into a specific language.
+	 */
+	public abstract matchesExpression: TargetASTNodeCodeGenerator<MatchesExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@Link InstanceOfExpression} into a specific language.
+	 */
+	public abstract instanceOfExpression: TargetASTNodeCodeGenerator<InstanceOfExpression, TranslatedExpression>;
 }

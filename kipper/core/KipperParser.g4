@@ -42,12 +42,10 @@ blockItem
 
 declaration
     :   variableDeclaration SemiColon
-    | 	functionDeclaration SemiColon?
+    | 	functionDeclaration
+    |	interfaceDeclaration
+    |	classDeclaration
     ;
-
-functionDeclaration
-	:	'def' declarator '(' parameterList? ')' '->' typeSpecifierExpression compoundStatement?
-	;
 
 variableDeclaration
 	:	storageTypeSpecifier initDeclarator
@@ -58,6 +56,14 @@ storageTypeSpecifier
     |   'const'
     ;
 
+initDeclarator
+    :   declarator ':' typeSpecifierExpression ('=' initializer)?
+    ;
+
+initializer
+    :   assignmentExpression
+    ;
+
 declarator
     :   directDeclarator
     ;
@@ -66,21 +72,56 @@ directDeclarator
     :   Identifier
     ;
 
-initDeclarator
-    :   declarator ':' typeSpecifierExpression ('=' initializer)?
-    ;
+functionDeclaration
+	:	'def' declarator '(' parameterList? ')' '->' typeSpecifierExpression compoundStatement?
+	;
 
 parameterList
     :   parameterDeclaration (',' parameterDeclaration)*
-    // Note: Args and Kwargs, like in Python will be added later
     ;
 
 parameterDeclaration
     :   declarator ':' typeSpecifierExpression
     ;
 
-initializer
-    :   assignmentExpression
+interfaceDeclaration
+    :   'interface' declarator '{' interfaceMemberDeclaration* '}'
+    ;
+
+interfaceMemberDeclaration
+    :   interfacePropertyDeclaration
+    |   interfaceMethodDeclaration
+    ;
+
+interfacePropertyDeclaration
+    :   declarator ':' typeSpecifierExpression SemiColon
+    ;
+
+interfaceMethodDeclaration
+    :   declarator '(' parameterList? ')' ':' typeSpecifierExpression SemiColon
+    ;
+
+
+classDeclaration
+	:	'class' declarator '{' (classMemberDeclaration | SemiColon)* '}'
+	;
+
+classMemberDeclaration
+	:	classPropertyDeclaration
+	|	classMethodDeclaration
+	|	classConstructorDeclaration
+	;
+
+classPropertyDeclaration
+    :   declarator ':' typeSpecifierExpression
+    ;
+
+classMethodDeclaration
+    :   declarator '(' parameterList? ')' ':' typeSpecifierExpression compoundStatement?
+    ;
+
+classConstructorDeclaration
+    :  	'constructor' '(' parameterList? ')' compoundStatement
     ;
 
 // -- Statements
@@ -95,7 +136,8 @@ statement
     ;
 
 compoundStatement
-    :   {this.notInsideExpressionStatement()}? '{' blockItemList? '}'
+    :	{this.notInsideExpressionStatement()}? '{' blockItemList? '}'
+    |	{this.insideLambda()}? '{' {this.exitLambda()} blockItemList? {this.enterLambda()} '}'
     ;
 
 expressionStatement
@@ -154,6 +196,7 @@ returnStatement
 
 primaryExpression // Primary expressions, which build up the rest of the more complex expressions
     :   tangledPrimaryExpression
+    |   lambdaPrimaryExpression
     |   arrayPrimaryExpression
     |   objectPrimaryExpression
     |   boolPrimaryExpression
@@ -162,11 +205,10 @@ primaryExpression // Primary expressions, which build up the rest of the more co
     |   fStringPrimaryExpression
     |   numberPrimaryExpression
     |	voidOrNullOrUndefinedPrimaryExpression
-    |   lambdaExpression
     ;
 
-lambdaExpression
-   :   '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement)
+lambdaPrimaryExpression
+   :   {this.enterLambda()} '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement) {this.exitLambda()}
    ;
 
 tangledPrimaryExpression
@@ -242,11 +284,12 @@ voidOrNullOrUndefinedPrimaryExpression
 computedPrimaryExpression
 	locals[_labelASTKind: ASTKind | undefined]
 	: 	primaryExpression # passOncomputedPrimaryExpression
-	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
-	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
 	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # dotNotationMemberAccessExpression
 	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # bracketNotationMemberAccessExpression
 	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
+	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
+	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
+	|   'new' typeSpecifierExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_newInstantiationExpression } # newInstantiationExpression
 	;
 
 argumentExpressionList
@@ -269,11 +312,16 @@ sliceNotation
 postfixExpression
     :   computedPrimaryExpression // Pass-on (Not matching rule)
     |   incrementOrDecrementPostfixExpression // Strictly speaking also an unary expression
+ 	| 	typeofExpression
     ;
 
 incrementOrDecrementPostfixExpression
 	:	computedPrimaryExpression incrementOrDecrementOperator
 	;
+
+typeofExpression
+	:	'typeof' assignmentExpression
+ 	;
 
 unaryExpression
     :   postfixExpression // Pass-on (Not matching rule)
@@ -321,9 +369,19 @@ bitwiseShiftOperators
 	:   '<<' | '>>' | '>>>'
 	;
 
+instanceOfExpression
+    : 	bitwiseShiftExpression #passOnInstanceOfExpression
+    | 	instanceOfExpression 'instanceof' typeSpecifierExpression #actualInstanceOfExpression
+    ;
+
+matchesExpression
+	:	instanceOfExpression # passOnMatchesExpression
+	|	matchesExpression 'matches' typeSpecifierExpression # actualMatchesExpression
+	;
+
 relationalExpression
-    :   bitwiseShiftExpression # passOnRelationalExpression
-    |   relationalExpression ('<'|'>'|'<='|'>=') bitwiseShiftExpression # actualRelationalExpression
+    :   matchesExpression # passOnRelationalExpression
+    |   relationalExpression ('<'|'>'|'<='|'>=') relationalExpression # actualRelationalExpression
     ;
 
 equalityExpression
@@ -375,7 +433,9 @@ expression
     ;
 
 typeSpecifierExpression
-    :   identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression
+    :   identifierTypeSpecifierExpression
+    |	genericTypeSpecifierExpression
+    |	typeofTypeSpecifierExpression
     ;
 
 identifierTypeSpecifierExpression
@@ -383,7 +443,7 @@ identifierTypeSpecifierExpression
 	;
 
 genericTypeSpecifierExpression
-	:	typeSpecifierIdentifier '<' typeSpecifierIdentifier '>'
+	:	typeSpecifierIdentifier '<' (typeSpecifierExpression (',' typeSpecifierExpression)*)? '>'
 	;
 
 typeofTypeSpecifierExpression

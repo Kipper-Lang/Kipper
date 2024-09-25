@@ -25,15 +25,22 @@ export const ParseRuleKindMapping = {
 	RULE_blockItemList: KipperParser.RULE_blockItemList,
 	RULE_blockItem: KipperParser.RULE_blockItem,
 	RULE_declaration: KipperParser.RULE_declaration,
-	RULE_functionDeclaration: KipperParser.RULE_functionDeclaration,
 	RULE_variableDeclaration: KipperParser.RULE_variableDeclaration,
 	RULE_storageTypeSpecifier: KipperParser.RULE_storageTypeSpecifier,
+	RULE_initDeclarator: KipperParser.RULE_initDeclarator,
+	RULE_initializer: KipperParser.RULE_initializer,
 	RULE_declarator: KipperParser.RULE_declarator,
 	RULE_directDeclarator: KipperParser.RULE_directDeclarator,
-	RULE_initDeclarator: KipperParser.RULE_initDeclarator,
+	RULE_functionDeclaration: KipperParser.RULE_functionDeclaration,
 	RULE_parameterList: KipperParser.RULE_parameterList,
 	RULE_parameterDeclaration: KipperParser.RULE_parameterDeclaration,
-	RULE_initializer: KipperParser.RULE_initializer,
+	RULE_interfaceDeclaration: KipperParser.RULE_interfaceDeclaration,
+	RULE_interfacePropertyDeclaration: KipperParser.RULE_interfacePropertyDeclaration,
+	RULE_interfaceMethodDeclaration: KipperParser.RULE_interfaceMethodDeclaration,
+	RULE_classDeclaration: KipperParser.RULE_classDeclaration,
+	RULE_classPropertyDeclaration: KipperParser.RULE_classPropertyDeclaration,
+	RULE_classMethodDeclaration: KipperParser.RULE_classMethodDeclaration,
+	RULE_classConstructorDeclaration: KipperParser.RULE_classConstructorDeclaration,
 	RULE_statement: KipperParser.RULE_statement,
 	RULE_compoundStatement: KipperParser.RULE_compoundStatement,
 	RULE_expressionStatement: KipperParser.RULE_expressionStatement,
@@ -48,7 +55,7 @@ export const ParseRuleKindMapping = {
 	RULE_jumpStatement: KipperParser.RULE_jumpStatement,
 	RULE_returnStatement: KipperParser.RULE_returnStatement,
 	RULE_primaryExpression: KipperParser.RULE_primaryExpression,
-	RULE_lambdaExpression: KipperParser.RULE_lambdaExpression,
+	RULE_lambdaPrimaryExpression: KipperParser.RULE_lambdaPrimaryExpression,
 	RULE_tangledPrimaryExpression: KipperParser.RULE_tangledPrimaryExpression,
 	RULE_boolPrimaryExpression: KipperParser.RULE_boolPrimaryExpression,
 	RULE_identifierPrimaryExpression: KipperParser.RULE_identifierPrimaryExpression,
@@ -89,6 +96,7 @@ export const ParseRuleKindMapping = {
 	RULE_logicalOrExpression: KipperParser.RULE_logicalOrExpression,
 	RULE_conditionalExpression: KipperParser.RULE_conditionalExpression,
 	RULE_assignmentExpression: KipperParser.RULE_assignmentExpression,
+	RULE_typeofExpression: KipperParser.RULE_typeofExpression,
 	RULE_assignmentOperator: KipperParser.RULE_assignmentOperator,
 	RULE_expression: KipperParser.RULE_expression,
 	RULE_typeSpecifierExpression: KipperParser.RULE_typeSpecifierExpression,
@@ -96,9 +104,12 @@ export const ParseRuleKindMapping = {
 	RULE_genericTypeSpecifierExpression: KipperParser.RULE_genericTypeSpecifierExpression,
 	RULE_typeofTypeSpecifierExpression: KipperParser.RULE_typeofTypeSpecifierExpression,
 	RULE_typeSpecifierIdentifier: KipperParser.RULE_typeSpecifierIdentifier,
+	RULE_instanceofExpression: KipperParser.RULE_instanceOfExpression,
+	RULE_matchesExpression: KipperParser.RULE_matchesExpression,
 	// Labelled rules, which don't have a corresponding identifier number in KipperParser.
 	RULE_memberAccessExpression: 1001, // -> See 'computedPrimaryExpression'
 	RULE_functionCallExpression: 1002, // -> See 'computedPrimaryExpression'
+	RULE_newInstantiationExpression: 1003, // -> See 'computedPrimaryExpression'
 } as const;
 
 /**

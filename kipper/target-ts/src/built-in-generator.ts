@@ -3,10 +3,16 @@
  * functions.
  * @since 0.8.0
  */
-import type { BuiltInFunction, InternalFunction, TranslatedCodeLine } from "@kipper/core";
+import type {
+	BuiltInFunction,
+	BuiltInVariable,
+	InternalFunction,
+	KipperProgramContext,
+	ProcessedType,
+	TranslatedCodeLine,
+} from "@kipper/core";
 import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
-import { getTSFunctionSignature, createTSFunctionSignature } from "./tools";
-import type { BuiltInVariable, KipperCompilableType, KipperProgramContext } from "@kipper/core";
+import { createTSFunctionSignature, createTSGenericFunctionSignature, getTSFunctionSignature } from "./tools";
 import { TargetTS } from "./target";
 
 /**
@@ -19,24 +25,36 @@ import { TargetTS } from "./target";
 export function genTSFunction(
 	signature: {
 		identifier: string;
-		params: Array<{ identifier: string; type: KipperCompilableType | Array<KipperCompilableType> }>;
-		returnType: KipperCompilableType | Array<KipperCompilableType>;
+		params: Array<{ identifier: string; type: ProcessedType }>;
+		returnType: ProcessedType;
 	},
 	body: string,
 	ignoreParams: boolean = false,
 ): Array<TranslatedCodeLine> {
-	return [
-		[
-			TargetTS.getBuiltInIdentifier(signature.identifier),
-			" ",
-			"=",
-			" ",
-			createTSFunctionSignature(signature, ignoreParams),
-			" ",
-			body,
-			";",
-		],
-	];
+	return [[signature.identifier, ":", " ", createTSFunctionSignature(signature, ignoreParams), " ", body]];
+}
+
+/**
+ * Generates a TypeScript generic function from the given signature and body.
+ *
+ * This allows for the use of 'T' as a generic type in the function. This is just a very primitive function which is
+ * used to avoid TS errors when using type unions or similar. Will probably be improved in the future as the type system
+ * gets more complex.
+ * @param signature The signature of the function.
+ * @param body The body of the function.
+ * @param ignoreParams Whether or not to ignore the parameters of the function.\
+ * @since 0.12.0
+ */
+export function genTSGenericFunction(
+	signature: {
+		identifier: string;
+		params: Array<{ identifier: string; type: ProcessedType | "T" }>;
+		returnType: ProcessedType | "T";
+	},
+	body: string,
+	ignoreParams: boolean = false,
+): Array<TranslatedCodeLine> {
+	return [[signature.identifier, ":", " ", createTSGenericFunctionSignature(signature, ignoreParams), " ", body]];
 }
 
 /**
@@ -45,18 +63,22 @@ export function genTSFunction(
  * @param value The value of the variable.
  */
 export function genTSVariable(varSpec: BuiltInVariable, value: string): TranslatedCodeLine {
-	return [
-		...(varSpec.local ? ["const", " "] : []),
-		TargetTS.getBuiltInIdentifier(varSpec),
-		":",
-		" ",
-		TargetTS.getTypeScriptType(varSpec.valueType),
-		" ",
-		"=",
-		" ",
-		value,
-		";",
-	];
+	if (varSpec.local) {
+		return [
+			"const",
+			" ",
+			TargetTS.getBuiltInIdentifier(varSpec),
+			":",
+			" ",
+			TargetTS.getTypeScriptType(varSpec.valueType),
+			" ",
+			"=",
+			" ",
+			value,
+			";",
+		];
+	}
+	return [varSpec.identifier, ":", " ", value];
 }
 
 /**
@@ -115,8 +137,17 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		const startIdentifier = signature.params[1].identifier;
 		const endIdentifier = signature.params[2].identifier;
 
-		return genTSFunction(
-			signature,
+		return genTSGenericFunction(
+			{
+				...signature,
+				params: signature.params.map((param) => {
+					if (param.identifier === "objLike") {
+						return { identifier: "objLike", type: "T" };
+					}
+					return param;
+				}),
+				returnType: "T",
+			},
 			`{ return ${objLikeIdentifier} ? ${objLikeIdentifier}.slice(${startIdentifier}, ${endIdentifier}) : ${objLikeIdentifier}; }`,
 		);
 	}
@@ -159,5 +190,9 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 
 	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
 		return [genTSVariable(varSpec, `"${programCtx.fileName}"`)];
+	}
+
+	async NaN(varSpec: BuiltInVariable): Promise<Array<TranslatedCodeLine>> {
+		return [genTSVariable(varSpec, "NaN")];
 	}
 }

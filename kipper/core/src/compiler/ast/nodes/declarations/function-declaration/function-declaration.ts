@@ -9,8 +9,8 @@ import type { FunctionDeclarationTypeSemantics } from "./function-declaration-ty
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatement, Statement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
-import type { ScopeFunctionDeclaration, UncheckedType } from "../../../../analysis";
-import { FunctionScope } from "../../../../analysis";
+import type { GlobalScope, RawType, ScopeFunctionDeclaration } from "../../../../semantics";
+import { BuiltInTypeFunc, FunctionScope } from "../../../../semantics";
 import type { FunctionDeclarationContext } from "../../../../lexer-parser";
 import {
 	CompoundStatementContext,
@@ -32,11 +32,17 @@ export class FunctionDeclaration
 	implements ScopeNode<FunctionScope>
 {
 	/**
-	 * The private field '_innerScope' that actually stores the variable data,
-	 * which is returned inside the {@link this.innerScope}.
-	 * @private
+	/**
+	* The static kind for this AST Node.
+	 * @since 0.11.0
 	 */
-	private readonly _innerScope: FunctionScope;
+	public static readonly kind = ParseRuleKindMapping.RULE_functionDeclaration;
+
+	/**
+	 * The static rule name for this AST Node.
+	 * @since 0.11.0
+	 */
+	public static readonly ruleName = KindParseRuleMapping[this.kind];
 
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
@@ -46,6 +52,19 @@ export class FunctionDeclaration
 	protected override readonly _antlrRuleCtx: FunctionDeclarationContext;
 
 	/**
+	 * The private field '_innerScope' that actually stores the variable data,
+	 * which is returned inside the {@link this.innerScope}.
+	 * @private
+	 */
+	private readonly _innerScope: FunctionScope;
+
+	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: CompilableNodeParent) {
+		super(antlrRuleCtx, parent);
+		this._antlrRuleCtx = antlrRuleCtx;
+		this._innerScope = new FunctionScope(this);
+	}
+
+	/**
 	 * The private field '_scopeDeclaration' that actually stores the variable data,
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
@@ -53,11 +72,17 @@ export class FunctionDeclaration
 	protected override _scopeDeclaration: ScopeFunctionDeclaration | undefined;
 
 	/**
-	/**
-	 * The static kind for this AST Node.
-	 * @since 0.11.0
+	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
+	 * in the {@link scope parent scope}.
+	 * @since 0.10.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_functionDeclaration;
+	public get scopeDeclaration(): ScopeFunctionDeclaration | undefined {
+		return this._scopeDeclaration;
+	}
+
+	protected set scopeDeclaration(declaration: ScopeFunctionDeclaration | undefined) {
+		this._scopeDeclaration = declaration;
+	}
 
 	/**
 	 * Returns the kind of this AST node. This represents the specific type of the {@link antlrRuleCtx} that this AST
@@ -71,13 +96,6 @@ export class FunctionDeclaration
 		return FunctionDeclaration.kind;
 	}
 
-	/*	/**
-	 *
-	 * The static rule name for this AST Node.
-	 * @since 0.11.0
-	 */
-	public static readonly ruleName = KindParseRuleMapping[this.kind];
-
 	/**
 	 * Returns the rule name of this AST Node. This represents the specific type of the {@link antlrRuleCtx} that this
 	 * AST node wraps.
@@ -88,12 +106,6 @@ export class FunctionDeclaration
 	 */
 	public override get ruleName() {
 		return FunctionDeclaration.ruleName;
-	}
-
-	constructor(antlrRuleCtx: FunctionDeclarationContext, parent: CompilableNodeParent) {
-		super(antlrRuleCtx, parent);
-		this._antlrRuleCtx = antlrRuleCtx;
-		this._innerScope = new FunctionScope(this);
 	}
 
 	/**
@@ -112,16 +124,10 @@ export class FunctionDeclaration
 	}
 
 	/**
-	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
-	 * in the {@link scope parent scope}.
-	 * @since 0.10.0
+	 * The {@link scope} of this AST node.
 	 */
-	public get scopeDeclaration(): ScopeFunctionDeclaration | undefined {
-		return this._scopeDeclaration;
-	}
-
-	protected set scopeDeclaration(declaration: ScopeFunctionDeclaration | undefined) {
-		this._scopeDeclaration = declaration;
+	public get scope(): GlobalScope {
+		return <GlobalScope>this.scopeCtx.innerScope;
 	}
 
 	public getScopeDeclaration(): ScopeFunctionDeclaration {
@@ -175,13 +181,12 @@ export class FunctionDeclaration
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const type: UncheckedType = retTypeSpecifier.getSemanticData().typeIdentifier;
+		const returnType: RawType = retTypeSpecifier.getSemanticData().rawType;
 
 		this.semanticData = {
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
 			returnTypeSpecifier: retTypeSpecifier,
-			returnType: type,
 			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
 		};
@@ -191,25 +196,24 @@ export class FunctionDeclaration
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.7.0
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
+	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-
-		// Get the type that will be returned using the return type specifier
+		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
+
 		this.typeSemantics = {
-			returnType: returnType,
+			valueType: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 
 		// Ensure that all code paths return a value
 		this.programCtx.typeCheck(this).validReturnCodePathsInFunctionBody(this);
 	}
+	public readonly primarySemanticTypeChecking: undefined;
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
