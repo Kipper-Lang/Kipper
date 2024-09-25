@@ -1,4 +1,4 @@
-# Convert Or Cast Expression
+# Convert Expression
 
 Conversion expressions convert the value of an expression to a target type using pre-defined built-in conversion
 functions. Such conversions are essential for using values of different types in the same expression and avoiding type
@@ -6,7 +6,7 @@ errors.
 
 An important example of this are [`print`](../built-in-functions.html#print) function call expressions, as the
 [`print`](../built-in-functions.html#print) function is a built-in function that only allows a string as a parameter.
-Therefore, to print out a number you first have to convert it to a string.
+Therefore, to print out a number you first have to convert it to a `str`.
 
 ## Syntax
 

@@ -4,16 +4,19 @@ title: Array Type
 
 # Array Type - `Array<T>`
 
+<p class="important">
+Scheduled for release in Kipper v0.12.0
+</p>
+
 The `Array<T>` data type is a unique data type, as it does not represent itself a value, but rather a sequence of
 multiple values. As a result of that an array has also a length and an index for each item, which you may use to access
-them using an [bracket notation member access expression](../expressions/member-access-expression.html#bracket-notation).
+them using the following syntax:
 
-## Generic Arguments
+## Array Indexing Syntax
 
-### `T`
-
-The generic argument `T` represents the type of the items that are stored in the array. Any other type not matching `T`
-will result in a type error.
+```kipper
+VAR[INDEX];
+```
 
 ## Examples
 
