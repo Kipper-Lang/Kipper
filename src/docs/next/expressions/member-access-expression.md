@@ -6,10 +6,6 @@ Member access expressions are used to access a member or multiple members of an 
 
 ### Dot Notation
 
-<p class="important">
-Scheduled for release in Kipper v0.11.0 - View issue <a href="https://github.com/Kipper-Lang/Kipper/issues/67">#67</a>
-</p>
-
 Syntax for accessing a member of an object:
 
 ```kipper
@@ -37,12 +33,16 @@ EXP [ EXP : EXP ]
 ### Accessing a member of an object
 
 ```kipper
-var obj: obj = { key: "value" };
+interface SomeInterface {
+	key: str;
+}
+
+var obj: SomeInterface = { key: "value" };
 var value: str = obj.key;
 print(value); // -> "value"
 ```
 
-### Accessing an element of a list
+### Accessing an element of an array
 
 ```kipper
 var list: Array<num> = [1, 2, 3];
@@ -50,7 +50,7 @@ var item: num = list[1];
 print(item); // -> 2
 ```
 
-### Accessing a slice of a list
+### Accessing a slice of an array
 
 ```kipper
 var list: Array<num> = [1, 2, 3, 4, 5];

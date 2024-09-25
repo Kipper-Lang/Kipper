@@ -3,6 +3,7 @@ title: Overview
 dropdownTitle: Expressions
 nav:
   - ./index.md
+  - ./tangled-expression.md
   - ./arithmetic-expression.md
   - ./assignment-expression.md
   - ./conditional-expression.md
@@ -13,6 +14,8 @@ nav:
   - ./f-string-expression.md
   - ./member-access-expression.md
   - ./function-call-expression.md
+  - ./lambda-expression.md
+  - ./matches-expression.md
 ---
 
 # Overview - Expressions

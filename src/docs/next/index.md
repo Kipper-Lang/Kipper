@@ -12,6 +12,8 @@ nav:
   - ./expressions/
   - ./statements/
   - ./functions.md
+  - ./interfaces.md
+  - ./classes.md
   - ./comments.md
   - ./built-in-functions.md
 ---
