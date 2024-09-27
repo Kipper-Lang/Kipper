@@ -4,7 +4,6 @@
  */
 import type { ScopeTypeDeclaration } from "../../../../../../../semantics";
 import { BuiltInTypeFunc } from "../../../../../../../semantics";
-import { BuiltInTypes } from "../../../../../../../semantics";
 import type { InterfaceMethodDeclarationContext } from "../../../../../../../lexer-parser";
 import { DeclaratorContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
 import { InterfaceMemberDeclaration } from "../interface-member-declaration";
@@ -85,6 +84,7 @@ export class InterfaceMethodDeclaration extends InterfaceMemberDeclaration<
 	public override get antlrRuleCtx(): InterfaceMethodDeclarationContext {
 		return this._antlrRuleCtx;
 	}
+
 	/**
 	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
 	 * in the {@link scope parent scope}.
@@ -164,6 +164,7 @@ export class InterfaceMethodDeclaration extends InterfaceMemberDeclaration<
 			valueType: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

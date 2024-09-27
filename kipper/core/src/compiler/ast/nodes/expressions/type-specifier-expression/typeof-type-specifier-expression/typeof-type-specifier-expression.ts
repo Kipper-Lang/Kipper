@@ -96,6 +96,7 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 			},
 		};
 	}
+
 	/**
 	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
@@ -111,6 +112,7 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 			storedType: valueReference.refTarget.type,
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	public checkForWarnings = undefined; // TODO!

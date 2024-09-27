@@ -53,6 +53,7 @@ import type {
 	StringPrimaryExpressionContext,
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
+	TryCatchStatementContext,
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
@@ -111,6 +112,7 @@ export type ParserStatementContext =
 	| WhileLoopIterationStatementContext
 	| ForLoopIterationStatementContext
 	| JumpStatementContext
+	| TryCatchStatementContext
 	| ReturnStatementContext;
 
 /**
@@ -168,6 +170,7 @@ export type ASTStatementKind =
 	| typeof ParseRuleKindMapping.RULE_whileLoopIterationStatement
 	| typeof ParseRuleKindMapping.RULE_forLoopIterationStatement
 	| typeof ParseRuleKindMapping.RULE_jumpStatement
+	| typeof ParseRuleKindMapping.RULE_tryCatchStatement
 	| typeof ParseRuleKindMapping.RULE_returnStatement;
 
 /**
@@ -256,6 +259,7 @@ export type ASTStatementRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_whileLoopIterationStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_forLoopIterationStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_jumpStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_tryCatchStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_returnStatement];
 
 /**

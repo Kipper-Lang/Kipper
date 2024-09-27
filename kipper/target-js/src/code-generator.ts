@@ -13,6 +13,7 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	CatchBlock,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
@@ -58,6 +59,7 @@ import type {
 	TranslatedCodeLine,
 	TranslatedCodeToken,
 	TranslatedExpression,
+	TryCatchStatement,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
@@ -146,6 +148,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					" const __type_obj = new KipperType('obj', [], []);" +
 					" const __type_Array = new KipperGenericType('Array', undefined, undefined, {T: __type_any});" +
 					" const __type_Func = new KipperGenericType('Func', undefined, undefined, {T: [], R: __type_any});" +
+					" const __type_Error = new KipperType('error', undefined, undefined);" +
 					" return {" +
 					"  KipperError: KipperError," +
 					"  TypeError: (class KipperTypeError extends KipperError { constructor(msg) { super(msg); this.name = 'KipTypeError'; } })," +
@@ -165,6 +168,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					"   obj: __type_obj," +
 					"   Array: __type_Array," +
 					"   Func: __type_Func," +
+					"   Error: __type_Error," +
 					"  }," +
 					"  assignTypeMeta: (value, typeMeta) => Object.assign(value, { __kipType: typeMeta })," +
 					"  typeOf: (value) => {" +
@@ -487,6 +491,49 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const returnValue = await semanticData.returnValue?.translateCtxAndChildren();
 
 		return [["return", ...(returnValue ? [" ", ...returnValue] : []), ";"]];
+	};
+
+	generateCatch = async (catchBlocks: CatchBlock[]): Promise<Array<TranslatedCodeLine>> => {
+		if (catchBlocks.length === 0) {
+			return [];
+		}
+
+		if (catchBlocks.length === 1 && catchBlocks[0].parameter === undefined) {
+			let catchBlock = await catchBlocks[0].body.translateCtxAndChildren();
+			return [["catch", " ", "(__e_1: unknown)"], ...catchBlock];
+		}
+
+		let catchBlocksCode = [];
+		for (let catchBlock of catchBlocks) {
+			const blockBody = await this.generateCatchIfCondition(catchBlock);
+			catchBlocksCode.push(...blockBody);
+		}
+		return [["catch", " ", "(__e_1: unknown) {"], ...indentLines(catchBlocksCode), ["}"]];
+	};
+
+	generateCatchIfCondition = async (catchBlock: CatchBlock): Promise<Array<TranslatedCodeLine>> => {
+		const blockBody = await catchBlock.body.translateCtxAndChildren();
+
+		if (catchBlock.parameter === undefined) {
+			return [...blockBody];
+		}
+
+		const parameterType = catchBlock.parameter.getTypeSemanticData();
+
+		return [["if", " ", "(", "__e_1", " ", "instanceof", " ", parameterType.valueType.identifier, ")"], ...blockBody];
+	};
+
+	/**
+	 * Translates a {@link TryCatchStatement} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	tryCatchStatement = async (node: TryCatchStatement): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		const tryBlock = await semanticData.tryBlock.translateCtxAndChildren();
+		const catchBlocks = await this.generateCatch(semanticData.catchBlock);
+		const finallyBlock = semanticData.finallyBlock ? await semanticData.finallyBlock.translateCtxAndChildren() : [];
+
+		return [["try"], ...tryBlock, ...catchBlocks, ...(finallyBlock.length > 0 ? [["finally"], ...finallyBlock] : [])];
 	};
 
 	/**

@@ -3,8 +3,7 @@
  * @since 0.12.0
  */
 import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
-import { BuiltInTypeFunc } from "../../../../../../../semantics";
-import { BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
+import { BuiltInTypeFunc, FunctionScope } from "../../../../../../../semantics";
 import type { ClassMethodDeclarationContext } from "../../../../../../../lexer-parser";
 import { DeclaratorContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
 import type { CompilableNodeParent } from "../../../../../../compilable-ast-node";
@@ -95,6 +94,7 @@ export class ClassMethodDeclaration
 	public override get antlrRuleCtx(): ClassMethodDeclarationContext {
 		return this._antlrRuleCtx;
 	}
+
 	/**
 	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
 	 * in the {@link scope parent scope}.
@@ -187,6 +187,7 @@ export class ClassMethodDeclaration
 			valueType: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

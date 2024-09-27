@@ -163,6 +163,7 @@ export class ParameterDeclaration extends Declaration<
 			valueType: valueType,
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

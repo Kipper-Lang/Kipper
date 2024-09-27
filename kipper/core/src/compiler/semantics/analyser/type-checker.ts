@@ -9,7 +9,6 @@ import type {
 	ArrayPrimaryExpression,
 	AssignmentExpression,
 	FunctionDeclaration,
-	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementPostfixExpressionSemantics,
 	LambdaPrimaryExpression,
@@ -47,7 +46,6 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
-import { InvalidMatchesTypeError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -59,6 +57,7 @@ import {
 	InvalidConversionTypeError,
 	InvalidInstanceOfTypeError,
 	InvalidKeyTypeError,
+	InvalidMatchesTypeError,
 	InvalidRelationalComparisonTypeError,
 	InvalidUnaryExpressionOperandError,
 	InvalidUnaryExpressionTypeError,

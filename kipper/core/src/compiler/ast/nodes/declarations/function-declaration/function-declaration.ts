@@ -213,6 +213,7 @@ export class FunctionDeclaration
 		// Ensure that all code paths return a value
 		this.programCtx.typeCheck(this).validReturnCodePathsInFunctionBody(this);
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

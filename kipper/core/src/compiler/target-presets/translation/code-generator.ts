@@ -32,6 +32,7 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -39,6 +40,7 @@ import type {
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
@@ -52,13 +54,12 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TryCatchStatement,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	MatchesExpression,
-	InstanceOfExpression,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -448,4 +449,9 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@Link InstanceOfExpression} into a specific language.
 	 */
 	public abstract instanceOfExpression: TargetASTNodeCodeGenerator<InstanceOfExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link TryCatchStatement} into a specific language.
+	 */
+	public abstract tryCatchStatement: TargetASTNodeCodeGenerator<TryCatchStatement, Array<TranslatedCodeLine>>;
 }

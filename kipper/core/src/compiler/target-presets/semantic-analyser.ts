@@ -13,6 +13,7 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
 	CompoundStatement,
@@ -38,8 +39,10 @@ import type {
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -51,17 +54,15 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TryCatchStatement,
 	TypeData,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	MatchesExpression,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
-import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
-import type { NewInstantiationExpression } from "../ast/nodes/expressions/new-instantiation-expression";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -354,4 +355,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link InstanceOfExpression} instances.
 	 */
 	public abstract instanceOfExpression?: TargetASTNodeSemanticAnalyser<InstanceOfExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link TryCatchStatement} instances.
+	 */
+	public abstract tryCatchStatement?: TargetASTNodeSemanticAnalyser<TryCatchStatement>;
 }

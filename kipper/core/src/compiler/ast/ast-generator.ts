@@ -81,6 +81,7 @@ import type {
 	SwitchLabeledStatementContext,
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
+	TryCatchStatementContext,
 	TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	TypeSpecifierExpressionContext,
@@ -1023,6 +1024,18 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitJumpStatement: (ctx: JumpStatementContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.tryCatchStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterTryCatchStatement: (ctx: TryCatchStatementContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.tryCatchStatement`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitTryCatchStatement: (ctx: TryCatchStatementContext) => void = this.handleExitingTreeNode;
 
 	// -------------------------------------------------------------------------------------------------------------------
 	//  Declaration section

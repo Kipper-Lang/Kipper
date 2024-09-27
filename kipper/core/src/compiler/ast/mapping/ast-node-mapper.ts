@@ -57,6 +57,7 @@ import {
 	StringPrimaryExpressionContext,
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
+	TryCatchStatementContext,
 	TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
@@ -101,6 +102,7 @@ import {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -108,6 +110,7 @@ import {
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
@@ -121,13 +124,12 @@ import {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TryCatchStatement,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	MatchesExpression,
-	InstanceOfExpression,
 } from "../nodes";
 
 /**
@@ -214,6 +216,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_forLoopIterationStatement]: ForLoopIterationStatement,
 		[ParseRuleKindMapping.RULE_returnStatement]: ReturnStatement,
 		[ParseRuleKindMapping.RULE_jumpStatement]: JumpStatement,
+		[ParseRuleKindMapping.RULE_tryCatchStatement]: TryCatchStatement,
 	} satisfies Record<ASTStatementKind, typeof Statement<any, any>>;
 
 	/**
@@ -298,6 +301,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_forLoopIterationStatement]: ForLoopIterationStatementContext,
 		[ParseRuleKindMapping.RULE_returnStatement]: ReturnStatementContext,
 		[ParseRuleKindMapping.RULE_jumpStatement]: JumpStatementContext,
+		[ParseRuleKindMapping.RULE_tryCatchStatement]: TryCatchStatementContext,
 	} satisfies Record<ASTStatementKind, any>;
 
 	/**
@@ -377,6 +381,7 @@ export class ASTNodeMapper {
 		RULE_forLoopIterationStatement: ForLoopIterationStatement,
 		RULE_returnStatement: ReturnStatement,
 		RULE_jumpStatement: JumpStatement,
+		RULE_tryCatchStatement: TryCatchStatement,
 	} satisfies Record<ASTStatementRuleName, typeof Statement<any, any>>;
 
 	/**

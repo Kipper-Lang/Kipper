@@ -180,6 +180,7 @@ export class GenericTypeSpecifierExpression extends TypeSpecifierExpression<
 			storedType: (<GenericType<GenericTypeArguments>>valueType).changeGenericTypeArguments(newGenericArguments),
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	public checkForWarnings = undefined; // TODO!
