@@ -1,14 +1,7 @@
-import type { TypeDeclarationTypeSemantics } from "../../../type-declaration-type-semantics";
-import type { ProcessedType } from "../../../../../../../semantics";
+import type { TypeDeclarationPropertyTypeSemantics } from "../../../type-declaration-property-type-semantics";
 
 /**
  * Type semantics for AST Node {@link InterfacePropertyDeclaration}.
  * @since 0.12.0
  */
-export interface InterfacePropertyDeclarationTypeSemantics extends TypeDeclarationTypeSemantics {
-	/**
-	 * The processed type of this member property.
-	 * @since 0.12.0
-	 */
-	type: ProcessedType;
-}
+export interface InterfacePropertyDeclarationTypeSemantics extends TypeDeclarationPropertyTypeSemantics {}

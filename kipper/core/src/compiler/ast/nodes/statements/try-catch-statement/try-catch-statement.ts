@@ -4,8 +4,7 @@
  */
 
 import type { TryCatchStatementContext } from "../../../../lexer-parser";
-import { CatchClauseContext, FinallyClauseContext } from "../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
+import { FinallyClauseContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { Statement } from "../statement";
 import type { Expression } from "../../expressions";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";

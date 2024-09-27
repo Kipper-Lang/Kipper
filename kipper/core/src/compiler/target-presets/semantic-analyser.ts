@@ -13,6 +13,7 @@ import type {
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
 	CastOrConvertExpression,
+	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
 	CompoundStatement,
@@ -30,6 +31,7 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -37,8 +39,10 @@ import type {
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -50,16 +54,15 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TryCatchStatement,
 	TypeData,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	TypeofExpression,
-	TryCatchStatement,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
-import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.
@@ -146,6 +149,11 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link ClassDeclaration} instances.
 	 */
 	public abstract classDeclaration?: TargetASTNodeSemanticAnalyser<ClassDeclaration>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link NewInstantiationExpression} instances.
+	 */
+	public abstract newInstantiationExpression?: TargetASTNodeSemanticAnalyser<NewInstantiationExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link ClassMethodDeclaration} instances.
@@ -337,6 +345,16 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link TypeofExpression} instances.
 	 */
 	public abstract typeofExpression?: TargetASTNodeSemanticAnalyser<TypeofExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link MatchesExpression} instances.
+	 */
+	public abstract matchesExpression?: TargetASTNodeSemanticAnalyser<MatchesExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link InstanceOfExpression} instances.
+	 */
+	public abstract instanceOfExpression?: TargetASTNodeSemanticAnalyser<InstanceOfExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link TryCatchStatement} instances.

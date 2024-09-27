@@ -105,9 +105,12 @@ export const ParseRuleKindMapping = {
 	RULE_genericTypeSpecifierExpression: KipperParser.RULE_genericTypeSpecifierExpression,
 	RULE_typeofTypeSpecifierExpression: KipperParser.RULE_typeofTypeSpecifierExpression,
 	RULE_typeSpecifierIdentifier: KipperParser.RULE_typeSpecifierIdentifier,
+	RULE_instanceofExpression: KipperParser.RULE_instanceOfExpression,
+	RULE_matchesExpression: KipperParser.RULE_matchesExpression,
 	// Labelled rules, which don't have a corresponding identifier number in KipperParser.
 	RULE_memberAccessExpression: 1001, // -> See 'computedPrimaryExpression'
 	RULE_functionCallExpression: 1002, // -> See 'computedPrimaryExpression'
+	RULE_newInstantiationExpression: 1003, // -> See 'computedPrimaryExpression'
 } as const;
 
 /**

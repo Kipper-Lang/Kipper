@@ -13,10 +13,10 @@ import { BuiltInTypes } from "../universe-scope";
  * @since 0.11.0
  */
 export class ScopeTypeDeclaration extends ScopeDeclaration {
-	private constructor(
-		private readonly _declaration?: TypeDeclaration,
-		private readonly _builtInType?: BuiltInType,
-		private readonly _universeScope?: UniverseScope,
+	protected constructor(
+		protected readonly _declaration?: TypeDeclaration,
+		protected readonly _builtInType?: BuiltInType,
+		protected readonly _universeScope?: UniverseScope,
 	) {
 		super();
 	}
@@ -32,12 +32,12 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 
 	/**
 	 * Creates a new scope type declaration from a built-in type.
-	 * @param identifier The identifier of the built-in type.
+	 * @param builtInType The built-in type.
 	 * @param universeScope The universe scope this type is associated with.
 	 * @since 0.11.0
 	 */
-	public static fromBuiltInType(type: BuiltInType, universeScope: UniverseScope): ScopeTypeDeclaration {
-		return new ScopeTypeDeclaration(undefined, type, universeScope);
+	public static fromBuiltInType(builtInType: BuiltInType, universeScope: UniverseScope): ScopeTypeDeclaration {
+		return new ScopeTypeDeclaration(undefined, builtInType, universeScope);
 	}
 
 	/**
@@ -93,17 +93,17 @@ export class ScopeTypeDeclaration extends ScopeDeclaration {
 	 * @since 0.11.0
 	 */
 	public get typeValue(): CustomType | ProcessedType {
-		return this.node?.getTypeSemanticData()?.type || this._builtInType!!;
+		return this.node?.getTypeSemanticData()?.valueType || this._builtInType!!;
 	}
 
 	/**
-	 * Returns whether the declaration has a value.
+	 * Returns whether the declaration is defined.
 	 *
-	 * As this is a type, it will always be false.
+	 * As this is a type, it will always be true;
 	 * @since 0.11.0
 	 */
-	public get isDefined(): false {
-		return false;
+	public get isDefined(): true {
+		return true;
 	}
 
 	/**

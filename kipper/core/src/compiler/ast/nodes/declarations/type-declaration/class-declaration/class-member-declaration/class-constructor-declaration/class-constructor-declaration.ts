@@ -2,8 +2,8 @@
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
  * @since 0.12.0
  */
-import type { ScopeTypeDeclaration } from "../../../../../../../semantics";
-import { BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
+import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
+import { BuiltInTypeFunc, BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
 import type { ClassConstructorDeclarationContext } from "../../../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
 import type { CompilableNodeParent } from "../../../../../../compilable-ast-node";
@@ -36,7 +36,7 @@ export class ClassConstructorDeclaration
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
 	 */
-	protected override _scopeDeclaration: ScopeTypeDeclaration | undefined;
+	protected override _scopeDeclaration: ScopeFunctionDeclaration | undefined;
 
 	/**
 	/**
@@ -94,22 +94,23 @@ export class ClassConstructorDeclaration
 	public override get antlrRuleCtx(): ClassConstructorDeclarationContext {
 		return this._antlrRuleCtx;
 	}
+
 	/**
 	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
 	 * in the {@link scope parent scope}.
 	 * @since 0.12.0
 	 */
-	public get scopeDeclaration(): ScopeTypeDeclaration | undefined {
+	public get scopeDeclaration(): ScopeFunctionDeclaration | undefined {
 		return this._scopeDeclaration;
 	}
 
-	protected set scopeDeclaration(declaration: ScopeTypeDeclaration | undefined) {
+	protected set scopeDeclaration(declaration: ScopeFunctionDeclaration | undefined) {
 		this._scopeDeclaration = declaration;
 	}
 
-	public getScopeDeclaration(): ScopeTypeDeclaration {
+	public getScopeDeclaration(): ScopeFunctionDeclaration {
 		/* istanbul ignore next: super function already being run/tested */
-		return <ScopeTypeDeclaration>super.getScopeDeclaration();
+		return <ScopeFunctionDeclaration>super.getScopeDeclaration();
 	}
 
 	/**
@@ -147,24 +148,28 @@ export class ClassConstructorDeclaration
 
 		this.semanticData = {
 			identifier: KipperConstructorInternalIdentifierLiteral,
-			parameters: params,
+			params: params,
 			functionBody: <CompoundStatement>functionBody,
 		};
+		this.scopeDeclaration = this.scope.addConstructor(this);
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
 	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
+
 		this.typeSemantics = {
-			type: BuiltInTypes.Func,
+			valueType: new BuiltInTypeFunc(paramTypes, BuiltInTypes.void),
 		};
 	}
+
+	public readonly primarySemanticTypeChecking: undefined;
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

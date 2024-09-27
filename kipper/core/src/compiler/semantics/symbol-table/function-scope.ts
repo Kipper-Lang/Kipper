@@ -3,11 +3,15 @@
  * the global namespace.
  * @since 0.8.0
  */
-import type { FunctionDeclaration, LambdaPrimaryExpression, ParameterDeclaration } from "../../ast";
+import type {
+	ClassMethodDeclaration,
+	FunctionDeclaration,
+	LambdaPrimaryExpression,
+	ParameterDeclaration,
+} from "../../ast";
 import type { ScopeDeclaration } from "./entry";
 import { ScopeParameterDeclaration } from "./entry";
 import { LocalScope } from "./local-scope";
-import type { ClassMethodDeclaration } from "../../ast";
 import type { ClassConstructorDeclaration } from "../../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
 
 /**
@@ -42,9 +46,7 @@ export class FunctionScope extends LocalScope {
 	 */
 	public addArgument(declaration: ParameterDeclaration): ScopeParameterDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-
-		// Ensuring that the declaration does not overwrite other declarations
-		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(identifier, this);
+		this.ensureNotUsed(identifier, declaration);
 
 		const scopeDeclaration = ScopeParameterDeclaration.fromParameterDeclaration(declaration);
 		this.arguments.set(scopeDeclaration.identifier, scopeDeclaration);

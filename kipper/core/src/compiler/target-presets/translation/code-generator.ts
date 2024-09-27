@@ -32,6 +32,7 @@ import type {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -39,8 +40,10 @@ import type {
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -215,6 +218,14 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract classConstructorDeclaration: TargetASTNodeCodeGenerator<
 		ClassConstructorDeclaration,
 		Array<TranslatedCodeLine>
+	>;
+
+	/**
+	 * Translates a {@link NewInstantiationExpression} into a specific language.
+	 */
+	public abstract newInstantiationExpression: TargetASTNodeCodeGenerator<
+		NewInstantiationExpression,
+		TranslatedExpression
 	>;
 
 	/**
@@ -428,6 +439,16 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link TypeofExpression} into a specific language.
 	 */
 	public abstract typeofExpression: TargetASTNodeCodeGenerator<TypeofExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link MatchesExpression} into a specific language.
+	 */
+	public abstract matchesExpression: TargetASTNodeCodeGenerator<MatchesExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@Link InstanceOfExpression} into a specific language.
+	 */
+	public abstract instanceOfExpression: TargetASTNodeCodeGenerator<InstanceOfExpression, TranslatedExpression>;
 
 	/**
 	 * Translates a {@link TryCatchStatement} into a specific language.

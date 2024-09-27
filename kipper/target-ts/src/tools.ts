@@ -34,7 +34,7 @@ export function getTSFunctionSignature(funcSpec: InternalFunction | BuiltInFunct
 					type: param.getTypeSemanticData().valueType,
 				};
 			}),
-			returnType: typeData.type.returnType,
+			returnType: typeData.valueType.returnType,
 		};
 	} else {
 		return {

@@ -9,7 +9,7 @@ import type { FunctionDeclarationTypeSemantics } from "./function-declaration-ty
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatement, Statement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
-import type { RawType, ScopeFunctionDeclaration } from "../../../../semantics";
+import type { GlobalScope, RawType, ScopeFunctionDeclaration } from "../../../../semantics";
 import { BuiltInTypeFunc, FunctionScope } from "../../../../semantics";
 import type { FunctionDeclarationContext } from "../../../../lexer-parser";
 import {
@@ -123,6 +123,13 @@ export class FunctionDeclaration
 		return this._innerScope;
 	}
 
+	/**
+	 * The {@link scope} of this AST node.
+	 */
+	public get scope(): GlobalScope {
+		return <GlobalScope>this.scopeCtx.innerScope;
+	}
+
 	public getScopeDeclaration(): ScopeFunctionDeclaration {
 		/* istanbul ignore next: super function already being run/tested */
 		return <ScopeFunctionDeclaration>super.getScopeDeclaration();
@@ -180,7 +187,6 @@ export class FunctionDeclaration
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,
 			returnTypeSpecifier: retTypeSpecifier,
-			returnType: returnType,
 			params: params,
 			functionBody: <CompoundStatement>body, // Will always syntactically be a compound statement
 		};
@@ -190,25 +196,25 @@ export class FunctionDeclaration
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
-	 * @since 0.7.0
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
+	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 		const paramTypes = semanticData.params.map((param) => param.getTypeSemanticData().valueType);
 		const returnType = semanticData.returnTypeSpecifier.getTypeSemanticData().storedType;
 
 		this.typeSemantics = {
-			type: new BuiltInTypeFunc(paramTypes, returnType),
+			valueType: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 
 		// Ensure that all code paths return a value
 		this.programCtx.typeCheck(this).validReturnCodePathsInFunctionBody(this);
 	}
+
+	public readonly primarySemanticTypeChecking: undefined;
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

@@ -1,11 +1,8 @@
 import type { ScopeDeclaration } from "./entry";
-import type { BuiltInType } from "../types";
-import type { KipperBuiltInTypeLiteral } from "../../const";
-import type { KipperProgramContext } from "../../program-ctx";
 import { ScopeFunctionDeclaration, ScopeTypeDeclaration, ScopeVariableDeclaration } from "./entry";
-import { BuiltInFunction, BuiltInFunctionArgument, BuiltInVariable } from "../runtime-built-ins";
-import { UnionType } from "../types";
+import type { BuiltInType } from "../types";
 import {
+	BuiltInTypeAny,
 	BuiltInTypeArray,
 	BuiltInTypeBool,
 	BuiltInTypeFunc,
@@ -16,8 +13,12 @@ import {
 	BuiltInTypeType,
 	BuiltInTypeUndefined,
 	BuiltInTypeVoid,
-	BuiltInTypeAny,
+	UnionType,
 } from "../types";
+import type { KipperBuiltInTypeLiteral } from "../../const";
+import type { KipperProgramContext } from "../../program-ctx";
+import { BuiltInFunction, BuiltInFunctionArgument, BuiltInVariable } from "../runtime-built-ins";
+import { DuplicateUniverseKeyError } from "../../../errors";
 import { Scope } from "./base";
 
 const any = new BuiltInTypeAny();
@@ -94,12 +95,25 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	}
 
 	/**
+	 * Ensures that the given declaration is not already used in the current scope.
+	 * @param identifier The identifier to check.
+	 * @private
+	 * @since 0.12.0
+	 */
+	protected ensureNotUsed(identifier: string): void {
+		if (this.entries.has(identifier)) {
+			throw new DuplicateUniverseKeyError(identifier);
+		}
+	}
+
+	/**
 	 * Adds a built-in variable to the universal scope.
 	 * @param declaration The built-in variable to add.
 	 * @returns The scope declaration of the added variable.
 	 * @since 0.11.0
 	 */
 	public addVariable(declaration: BuiltInVariable): ScopeVariableDeclaration {
+		this.ensureNotUsed(declaration.identifier);
 		const scopeDeclaration = ScopeVariableDeclaration.fromBuiltInVariable(declaration, this);
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
@@ -112,6 +126,7 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 	 * @since 0.11.0
 	 */
 	public addFunction(declaration: BuiltInFunction): ScopeFunctionDeclaration {
+		this.ensureNotUsed(declaration.identifier);
 		const scopeDeclaration = ScopeFunctionDeclaration.fromBuiltInFunction(declaration, this);
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
@@ -119,12 +134,13 @@ export class UniverseScope extends Scope<never, never, BuiltInType> {
 
 	/**
 	 * Adds a built-in type to the universal scope.
-	 * @param declarationOrIdentifier The built-in type to add.
+	 * @param declaration The built-in type to add.
 	 * @returns The scope declaration of the added type.
 	 * @since 0.11.0
 	 */
-	public addType(declarationOrIdentifier: BuiltInType): ScopeTypeDeclaration {
-		const scopeDeclaration = ScopeTypeDeclaration.fromBuiltInType(declarationOrIdentifier, this);
+	public addType(declaration: BuiltInType): ScopeTypeDeclaration {
+		this.ensureNotUsed(declaration.identifier);
+		const scopeDeclaration = ScopeTypeDeclaration.fromBuiltInType(declaration, this);
 		this.entries.set(scopeDeclaration.identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}

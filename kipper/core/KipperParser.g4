@@ -137,7 +137,8 @@ statement
     ;
 
 compoundStatement
-    :   {this.notInsideExpressionStatement()}? '{' blockItemList? '}'
+    :	{this.notInsideExpressionStatement()}? '{' blockItemList? '}'
+    |	{this.insideLambda()}? '{' {this.exitLambda()} blockItemList? {this.enterLambda()} '}'
     ;
 
 expressionStatement
@@ -224,7 +225,7 @@ primaryExpression // Primary expressions, which build up the rest of the more co
     ;
 
 lambdaPrimaryExpression
-   :   '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement)
+   :   {this.enterLambda()} '(' parameterList? ')' ':' typeSpecifierExpression '->' (expression | compoundStatement) {this.exitLambda()}
    ;
 
 tangledPrimaryExpression
@@ -300,11 +301,12 @@ voidOrNullOrUndefinedPrimaryExpression
 computedPrimaryExpression
 	locals[_labelASTKind: ASTKind | undefined]
 	: 	primaryExpression # passOncomputedPrimaryExpression
-	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
-	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
 	|	computedPrimaryExpression dotNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # dotNotationMemberAccessExpression
 	|	computedPrimaryExpression bracketNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # bracketNotationMemberAccessExpression
 	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
+	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
+	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
+	|   'new' typeSpecifierExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_newInstantiationExpression } # newInstantiationExpression
 	;
 
 argumentExpressionList
@@ -335,7 +337,7 @@ incrementOrDecrementPostfixExpression
 	;
 
 typeofExpression
-	:	'typeof' ( '(' assignmentExpression ')' | assignmentExpression )
+	:	'typeof' assignmentExpression
  	;
 
 unaryExpression
@@ -384,9 +386,19 @@ bitwiseShiftOperators
 	:   '<<' | '>>' | '>>>'
 	;
 
+instanceOfExpression
+    : 	bitwiseShiftExpression #passOnInstanceOfExpression
+    | 	instanceOfExpression 'instanceof' typeSpecifierExpression #actualInstanceOfExpression
+    ;
+
+matchesExpression
+	:	instanceOfExpression # passOnMatchesExpression
+	|	matchesExpression 'matches' typeSpecifierExpression # actualMatchesExpression
+	;
+
 relationalExpression
-    :   bitwiseShiftExpression # passOnRelationalExpression
-    |   relationalExpression ('<'|'>'|'<='|'>=') bitwiseShiftExpression # actualRelationalExpression
+    :   matchesExpression # passOnRelationalExpression
+    |   relationalExpression ('<'|'>'|'<='|'>=') relationalExpression # actualRelationalExpression
     ;
 
 equalityExpression
@@ -438,7 +450,9 @@ expression
     ;
 
 typeSpecifierExpression
-    :   identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression
+    :   identifierTypeSpecifierExpression
+    |	genericTypeSpecifierExpression
+    |	typeofTypeSpecifierExpression
     ;
 
 identifierTypeSpecifierExpression

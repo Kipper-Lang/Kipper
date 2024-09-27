@@ -3,6 +3,12 @@
  * @since 0.10.0
  */
 import type {
+	ClassConstructorDeclaration,
+	ClassConstructorDeclarationSemantics,
+	ClassConstructorDeclarationTypeSemantics,
+	ClassMethodDeclaration,
+	ClassMethodDeclarationSemantics,
+	ClassMethodDeclarationTypeSemantics,
 	FunctionDeclaration,
 	FunctionDeclarationSemantics,
 	FunctionDeclarationTypeSemantics,
@@ -19,7 +25,7 @@ import type { UniverseScope } from "../universe-scope";
  */
 export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	private constructor(
-		private readonly _declaration?: FunctionDeclaration,
+		private readonly _declaration?: FunctionDeclaration | ClassMethodDeclaration | ClassConstructorDeclaration,
 		private readonly _builtInFunction?: BuiltInFunction,
 		private readonly _universeScope?: UniverseScope,
 	) {
@@ -35,8 +41,25 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	}
 
 	/**
+	 * Creates a new scope function declaration from a given class method declaration.
+	 * @param declaration The method declaration node.
+	 */
+	public static fromClassMethodDeclaration(declaration: ClassMethodDeclaration): ScopeFunctionDeclaration {
+		return new ScopeFunctionDeclaration(declaration);
+	}
+
+	/**
+	 * Creates a new scope function declaration from a given class constructor declaration.
+	 * @param declaration The constructor declaration node.
+	 */
+	public static fromClassConstructorDeclaration(declaration: ClassConstructorDeclaration): ScopeFunctionDeclaration {
+		return new ScopeFunctionDeclaration(declaration);
+	}
+
+	/**
 	 * Creates a new scope function declaration from a function declaration.
 	 * @param declaration The function declaration node.
+	 * @param universeScope The universe scope i.e. the scope for all the built-ins.
 	 */
 	static fromBuiltInFunction(declaration: BuiltInFunction, universeScope: UniverseScope): ScopeFunctionDeclaration {
 		return new ScopeFunctionDeclaration(undefined, declaration, universeScope);
@@ -63,7 +86,11 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
 	 * @private
 	 */
-	private get semanticData(): FunctionDeclarationSemantics | undefined {
+	private get semanticData():
+		| FunctionDeclarationSemantics
+		| ClassMethodDeclarationSemantics
+		| ClassConstructorDeclarationSemantics
+		| undefined {
 		return this._declaration?.getSemanticData();
 	}
 
@@ -72,14 +99,18 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * @throws UndefinedSemanticsError If this is accessed, before type checking was performed.
 	 * @private
 	 */
-	private get typeData(): FunctionDeclarationTypeSemantics | undefined {
+	private get typeData():
+		| FunctionDeclarationTypeSemantics
+		| ClassMethodDeclarationTypeSemantics
+		| ClassConstructorDeclarationTypeSemantics
+		| undefined {
 		return this._declaration?.getTypeSemanticData();
 	}
 
 	/**
 	 * Returns the {@link FunctionDeclaration AST node} this scope function declaration bases on.
 	 */
-	public get node(): FunctionDeclaration | undefined {
+	public get node(): FunctionDeclaration | ClassMethodDeclaration | ClassConstructorDeclaration | undefined {
 		return this._declaration;
 	}
 
@@ -95,7 +126,7 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get type(): BuiltInTypeFunc {
-		return this.typeData?.type ?? this._builtInFunction!!.funcType;
+		return this.typeData?.valueType ?? this._builtInFunction!!.funcType;
 	}
 
 	/**

@@ -3,22 +3,21 @@
  * @since 0.8.0
  */
 import type {
+	ClassMethodDeclaration,
+	ClassPropertyDeclaration,
 	FunctionDeclaration,
 	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	ObjectPrimaryExpression,
 	ParameterDeclaration,
 	TranslatedCodeLine,
 	TranslatedExpression,
 	VariableDeclaration,
-	ClassMethodDeclaration,
-	ClassPropertyDeclaration,
-	InterfaceMethodDeclaration,
-	InterfacePropertyDeclaration,
 } from "@kipper/core";
-import { CompoundStatement } from "@kipper/core";
-import { Expression, type LambdaPrimaryExpression } from "@kipper/core";
+import { CompoundStatement, Expression, type LambdaPrimaryExpression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
-import { indentLines, JavaScriptTargetCodeGenerator, TargetJS } from "@kipper/target-js";
+import { indentLines, JavaScriptTargetCodeGenerator, RuntimeTypesGenerator, TargetJS } from "@kipper/target-js";
 import { TargetTS } from "./target";
 
 /**
@@ -76,7 +75,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			}),
 		);
 
-		const runtimeInterfaceType = await this.generateInterfaceRuntimeTypeChecks(node);
+		const runtimeInterfaceType = await RuntimeTypesGenerator.generateInterfaceRuntimeType(node);
 		return [
 			["interface", " ", interfaceName, " ", "{"],
 			...memberDeclarations.flat().map((line) => ["  ", ...line]),
@@ -89,8 +88,10 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		node: InterfaceMethodDeclaration,
 	): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-		const params = semanticData.parameters;
-		const returnTypeIdentifier = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().storedType);
+		const params = semanticData.params;
+		const returnTypeIdentifier = TargetTS.getTypeScriptType(
+			semanticData.returnTypeSpecifier.getTypeSemanticData().storedType,
+		);
 
 		const paramsCode: TranslatedCodeLine[] = await Promise.all(
 			params.map(async (param) => {
@@ -119,7 +120,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const semanticData = node.getSemanticData();
 		const typeSemantics = node.getTypeSemanticData();
 		const identifier = semanticData.identifier;
-		const valueType = TargetTS.getTypeScriptType(typeSemantics.type);
+		const valueType = TargetTS.getTypeScriptType(typeSemantics.valueType);
 
 		// Return the property declaration
 		return [[identifier, ":", " ", valueType, ";"]];
@@ -130,7 +131,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeData = node.getTypeSemanticData();
 		const params = semanticData.params;
 		const body = semanticData.functionBody;
-		const returnTypeSpecifier = TargetTS.getTypeScriptType(typeData.type.returnType);
+		const returnTypeSpecifier = TargetTS.getTypeScriptType(typeData.valueType.returnType);
 		const funcType = node.getTypeSemanticData().evaluatedType;
 
 		// Generate the function signature
@@ -198,11 +199,14 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 
 	override classMethodDeclaration = async (node: ClassMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
 		const identifier = semanticData.identifier;
-		const params = semanticData.parameters;
+		const params = semanticData.params;
 		const body = semanticData.functionBody;
-		const evaluatedType = TargetTS.getTypeScriptType(semanticData.returnType.getTypeSemanticData().storedType);
-		const returnType = evaluatedType;
+
+		// Get the required function signature
+		const type = typeData.valueType;
+		const returnType = TargetTS.getTypeScriptType(type.returnType);
 
 		const translatedParams = (
 			await Promise.all(

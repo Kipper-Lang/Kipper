@@ -20,4 +20,6 @@ export * from "./conditional-expression/";
 export * from "./function-call-expression/";
 export * from "./member-access-expression/";
 export * from "./bitwise-expression/";
-export * from "./primary-expression/lambda-primary-expression/";
+export * from "./new-instantiation-expression/";
+export * from "./matches-expression/";
+export * from "./instanceof-expression/";

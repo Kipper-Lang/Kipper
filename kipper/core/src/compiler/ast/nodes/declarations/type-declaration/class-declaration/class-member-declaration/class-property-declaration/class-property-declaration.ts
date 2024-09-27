@@ -2,7 +2,7 @@
  * Represents a class declaration in the Kipper language, which may contain methods and fields.
  * @since 0.12.0
  */
-import type { ScopeTypeDeclaration } from "../../../../../../../semantics";
+import type { ScopeVariableDeclaration } from "../../../../../../../semantics";
 import type {
 	ClassPropertyDeclarationContext,
 	InterfacePropertyDeclarationContext,
@@ -35,7 +35,7 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
 	 */
-	protected override _scopeDeclaration: ScopeTypeDeclaration | undefined;
+	protected override _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
 	/**
 	/**
@@ -85,22 +85,23 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 	public override get antlrRuleCtx(): ClassPropertyDeclarationContext {
 		return this._antlrRuleCtx;
 	}
+
 	/**
 	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
 	 * in the {@link scope parent scope}.
 	 * @since 0.12.0
 	 */
-	public get scopeDeclaration(): ScopeTypeDeclaration | undefined {
+	public get scopeDeclaration(): ScopeVariableDeclaration | undefined {
 		return this._scopeDeclaration;
 	}
 
-	protected set scopeDeclaration(declaration: ScopeTypeDeclaration | undefined) {
+	protected set scopeDeclaration(declaration: ScopeVariableDeclaration | undefined) {
 		this._scopeDeclaration = declaration;
 	}
 
-	public getScopeDeclaration(): ScopeTypeDeclaration {
+	public getScopeDeclaration(): ScopeVariableDeclaration {
 		/* istanbul ignore next: super function already being run/tested */
-		return <ScopeTypeDeclaration>super.getScopeDeclaration();
+		return <ScopeVariableDeclaration>super.getScopeDeclaration();
 	}
 
 	/**
@@ -122,28 +123,29 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 		this.semanticData = {
 			identifier: identifier,
 			typeSpecifier: typeSpecifier,
-			type: typeSpecifier.getSemanticData().rawType,
+			valueType: typeSpecifier.getSemanticData().rawType,
 		};
+		this.scopeDeclaration = this.scope.addVariable(this);
 	}
 
 	/**
-	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
-	 * and throw errors if encountered.
+	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
-	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
-	 * the children has already failed and as such no parent node should run type checking.
+	 * This is part of the "Ahead of time" type evaluation, which is done before the main type checking.
 	 * @since 0.12.0
 	 */
-	public async primarySemanticTypeChecking(): Promise<void> {
+	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
 		// Get the type that will be returned using the value type specifier
 		semanticData.typeSpecifier.ensureTypeSemanticallyValid(); // Ensure the type specifier didn't fail
 		const valueType = semanticData.typeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			type: valueType,
+			valueType: valueType,
 		};
 	}
+
+	public readonly primarySemanticTypeChecking: undefined;
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.

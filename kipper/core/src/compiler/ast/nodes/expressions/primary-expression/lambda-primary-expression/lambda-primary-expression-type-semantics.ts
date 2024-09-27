@@ -19,5 +19,5 @@ export interface LambdaPrimaryExpressionTypeSemantics extends ExpressionTypeSema
 	 * The type of the declaration. This is always some variation of {@link BuiltInTypeFunc i.e. `Func<P..., T>`}.
 	 * @since 0.12.0
 	 */
-	type: BuiltInTypeFunc;
+	valueType: BuiltInTypeFunc;
 }

@@ -35,6 +35,7 @@ import {
 	IfStatementContext,
 	IncrementOrDecrementPostfixExpressionContext,
 	IncrementOrDecrementUnaryExpressionContext,
+	InstanceOfExpressionContext,
 	InterfaceDeclarationContext,
 	InterfaceMethodDeclarationContext,
 	InterfacePropertyDeclarationContext,
@@ -43,6 +44,7 @@ import {
 	LogicalAndExpressionContext,
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
+	NewInstantiationExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
 	ObjectPropertyContext,
@@ -71,8 +73,6 @@ import type {
 	ASTStatementRuleName,
 } from "../common";
 import type { Declaration, Expression, Statement } from "../nodes";
-import { TryCatchStatement } from "../nodes";
-import { TypeofExpression } from "../nodes";
 import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
@@ -102,6 +102,7 @@ import {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -109,8 +110,10 @@ import {
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NewInstantiationExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -121,6 +124,8 @@ import {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TryCatchStatement,
+	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
@@ -185,12 +190,15 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_genericTypeSpecifierExpression]: GenericTypeSpecifierExpression,
 		[ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression]: TypeofTypeSpecifierExpression,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: MemberAccessExpression,
+		[ParseRuleKindMapping.RULE_newInstantiationExpression]: NewInstantiationExpression,
 		[ParseRuleKindMapping.RULE_bitwiseOrExpression]: BitwiseOrExpression,
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpression,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpression,
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpression,
 		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpression,
 		[ParseRuleKindMapping.RULE_typeofExpression]: TypeofExpression,
+		[ParseRuleKindMapping.RULE_instanceofExpression]: InstanceOfExpression,
+		[ParseRuleKindMapping.RULE_matchesExpression]: MatchesExpression,
 	} satisfies Record<ASTExpressionKind, typeof Expression<any, any, any>>;
 
 	/**
@@ -267,6 +275,9 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_bitwiseShiftExpression]: BitwiseShiftExpressionContext,
 		[ParseRuleKindMapping.RULE_lambdaPrimaryExpression]: LambdaPrimaryExpressionContext,
 		[ParseRuleKindMapping.RULE_typeofExpression]: TypeofExpressionContext,
+		[ParseRuleKindMapping.RULE_newInstantiationExpression]: NewInstantiationExpressionContext,
+		[ParseRuleKindMapping.RULE_instanceofExpression]: InstanceOfExpressionContext,
+		[ParseRuleKindMapping.RULE_matchesExpression]: MatchesExpression,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: [
 			// Due to the nature of the parser not handling the notations as one rule, it's an array
 			DotNotationMemberAccessExpressionContext,
@@ -350,6 +361,9 @@ export class ASTNodeMapper {
 		RULE_bitwiseShiftExpression: BitwiseShiftExpression,
 		RULE_lambdaPrimaryExpression: LambdaPrimaryExpression,
 		RULE_typeofExpression: TypeofExpression,
+		RULE_newInstantiationExpression: NewInstantiationExpression,
+		RULE_matchesExpression: MatchesExpression,
+		RULE_instanceofExpression: InstanceOfExpression,
 	} satisfies Record<ASTExpressionRuleName, typeof Expression<any, any, any>>;
 
 	/**

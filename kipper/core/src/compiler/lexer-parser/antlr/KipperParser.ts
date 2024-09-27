@@ -2,20 +2,15 @@
 
 // Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
 // kind values.
-import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+import { ASTKind, KipperParserRuleContext, ParseRuleKindMapping } from "..";
 import KipperParserBase from "./base/KipperParserBase";
 
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
 import { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import { NotNull } from "antlr4ts/Decorators";
 import { NoViableAltException } from "antlr4ts/NoViableAltException";
-import { Override } from "antlr4ts/Decorators";
-import { Parser } from "antlr4ts/Parser";
 import { ParserRuleContext } from "antlr4ts/ParserRuleContext";
 import { ParserATNSimulator } from "antlr4ts/atn/ParserATNSimulator";
-import { ParseTreeListener } from "antlr4ts/tree/ParseTreeListener";
-import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 import { RecognitionException } from "antlr4ts/RecognitionException";
 import { RuleContext } from "antlr4ts/RuleContext";
 //import { RuleVersion } from "antlr4ts/RuleVersion";
@@ -35,92 +30,95 @@ export class KipperParser extends KipperParserBase {
 	public static readonly BlockComment = 2;
 	public static readonly LineComment = 3;
 	public static readonly Pragma = 4;
-	public static readonly Const = 5;
-	public static readonly Var = 6;
-	public static readonly As = 7;
-	public static readonly Spread = 8;
-	public static readonly Switch = 9;
-	public static readonly Case = 10;
-	public static readonly Default = 11;
-	public static readonly Break = 12;
-	public static readonly Continue = 13;
-	public static readonly Do = 14;
-	public static readonly While = 15;
-	public static readonly If = 16;
-	public static readonly Else = 17;
-	public static readonly For = 18;
-	public static readonly Enum = 19;
-	public static readonly DefFunc = 20;
-	public static readonly Return = 21;
-	public static readonly CallFunc = 22;
-	public static readonly RetIndicator = 23;
-	public static readonly Class = 24;
-	public static readonly Interface = 25;
-	public static readonly Constructor = 26;
-	public static readonly True = 27;
-	public static readonly False = 28;
-	public static readonly Typeof = 29;
-	public static readonly Try = 30;
-	public static readonly Catch = 31;
-	public static readonly Finally = 32;
-	public static readonly Void = 33;
-	public static readonly Null = 34;
-	public static readonly Undefined = 35;
-	public static readonly Comma = 36;
-	public static readonly SemiColon = 37;
-	public static readonly QuestionMark = 38;
-	public static readonly Colon = 39;
-	public static readonly LeftParen = 40;
-	public static readonly RightParen = 41;
-	public static readonly LeftBracket = 42;
-	public static readonly RightBracket = 43;
-	public static readonly FStringExpEnd = 44;
-	public static readonly LeftBrace = 45;
-	public static readonly RightBrace = 46;
-	public static readonly Plus = 47;
-	public static readonly PlusPlus = 48;
-	public static readonly Minus = 49;
-	public static readonly MinusMinus = 50;
-	public static readonly Star = 51;
-	public static readonly Div = 52;
-	public static readonly Mod = 53;
-	public static readonly PowerTo = 54;
-	public static readonly AndAnd = 55;
-	public static readonly OrOr = 56;
-	public static readonly Not = 57;
-	public static readonly Assign = 58;
-	public static readonly PlusAssign = 59;
-	public static readonly MinusAssign = 60;
-	public static readonly StarAssign = 61;
-	public static readonly DivAssign = 62;
-	public static readonly ModAssign = 63;
-	public static readonly Equal = 64;
-	public static readonly NotEqual = 65;
-	public static readonly Less = 66;
-	public static readonly LessEqual = 67;
-	public static readonly Greater = 68;
-	public static readonly GreaterEqual = 69;
-	public static readonly BitwiseAnd = 70;
-	public static readonly BitwiseOr = 71;
-	public static readonly BitwiseXor = 72;
-	public static readonly BitwiseNot = 73;
-	public static readonly BitwiseZeroFillLeftShift = 74;
-	public static readonly BitwiseSignedRightShift = 75;
-	public static readonly BitwiseZeroFillRightShift = 76;
-	public static readonly Dot = 77;
-	public static readonly Identifier = 78;
-	public static readonly IntegerConstant = 79;
-	public static readonly SingleQuoteStringLiteral = 80;
-	public static readonly DoubleQuoteStringLiteral = 81;
-	public static readonly FloatingConstant = 82;
-	public static readonly Whitespace = 83;
-	public static readonly Newline = 84;
-	public static readonly FStringSingleQuoteStart = 85;
-	public static readonly FStringDoubleQuoteStart = 86;
-	public static readonly FStringSingleQuoteEnd = 87;
-	public static readonly FStringSingleQuoteAtom = 88;
-	public static readonly FStringDoubleQuoteEnd = 89;
-	public static readonly FStringDoubleQuoteAtom = 90;
+	public static readonly InstanceOf = 5;
+	public static readonly Const = 6;
+	public static readonly Var = 7;
+	public static readonly As = 8;
+	public static readonly Spread = 9;
+	public static readonly Switch = 10;
+	public static readonly Case = 11;
+	public static readonly Default = 12;
+	public static readonly Break = 13;
+	public static readonly Continue = 14;
+	public static readonly Do = 15;
+	public static readonly While = 16;
+	public static readonly If = 17;
+	public static readonly Else = 18;
+	public static readonly For = 19;
+	public static readonly Enum = 20;
+	public static readonly DefFunc = 21;
+	public static readonly Return = 22;
+	public static readonly CallFunc = 23;
+	public static readonly RetIndicator = 24;
+	public static readonly Class = 25;
+	public static readonly Interface = 26;
+	public static readonly Constructor = 27;
+	public static readonly New = 28;
+	public static readonly True = 29;
+	public static readonly False = 30;
+	public static readonly Matches = 31;
+	public static readonly Typeof = 32;
+	public static readonly Try = 33;
+	public static readonly Catch = 34;
+	public static readonly Finally = 35;
+	public static readonly Void = 36;
+	public static readonly Null = 37;
+	public static readonly Undefined = 38;
+	public static readonly Comma = 39;
+	public static readonly SemiColon = 40;
+	public static readonly QuestionMark = 41;
+	public static readonly Colon = 42;
+	public static readonly LeftParen = 43;
+	public static readonly RightParen = 44;
+	public static readonly LeftBracket = 45;
+	public static readonly RightBracket = 46;
+	public static readonly FStringExpEnd = 47;
+	public static readonly LeftBrace = 48;
+	public static readonly RightBrace = 49;
+	public static readonly Plus = 50;
+	public static readonly PlusPlus = 51;
+	public static readonly Minus = 52;
+	public static readonly MinusMinus = 53;
+	public static readonly Star = 54;
+	public static readonly Div = 55;
+	public static readonly Mod = 56;
+	public static readonly PowerTo = 57;
+	public static readonly AndAnd = 58;
+	public static readonly OrOr = 59;
+	public static readonly Not = 60;
+	public static readonly Assign = 61;
+	public static readonly PlusAssign = 62;
+	public static readonly MinusAssign = 63;
+	public static readonly StarAssign = 64;
+	public static readonly DivAssign = 65;
+	public static readonly ModAssign = 66;
+	public static readonly Equal = 67;
+	public static readonly NotEqual = 68;
+	public static readonly Less = 69;
+	public static readonly LessEqual = 70;
+	public static readonly Greater = 71;
+	public static readonly GreaterEqual = 72;
+	public static readonly BitwiseAnd = 73;
+	public static readonly BitwiseOr = 74;
+	public static readonly BitwiseXor = 75;
+	public static readonly BitwiseNot = 76;
+	public static readonly BitwiseZeroFillLeftShift = 77;
+	public static readonly BitwiseSignedRightShift = 78;
+	public static readonly BitwiseZeroFillRightShift = 79;
+	public static readonly Dot = 80;
+	public static readonly Identifier = 81;
+	public static readonly IntegerConstant = 82;
+	public static readonly SingleQuoteStringLiteral = 83;
+	public static readonly DoubleQuoteStringLiteral = 84;
+	public static readonly FloatingConstant = 85;
+	public static readonly Whitespace = 86;
+	public static readonly Newline = 87;
+	public static readonly FStringSingleQuoteStart = 88;
+	public static readonly FStringDoubleQuoteStart = 89;
+	public static readonly FStringSingleQuoteEnd = 90;
+	public static readonly FStringSingleQuoteAtom = 91;
+	public static readonly FStringDoubleQuoteEnd = 92;
+	public static readonly FStringDoubleQuoteAtom = 93;
 	public static readonly RULE_compilationUnit = 0;
 	public static readonly RULE_translationUnit = 1;
 	public static readonly RULE_externalItem = 2;
@@ -196,22 +194,24 @@ export class KipperParser extends KipperParserBase {
 	public static readonly RULE_additiveExpression = 72;
 	public static readonly RULE_bitwiseShiftExpression = 73;
 	public static readonly RULE_bitwiseShiftOperators = 74;
-	public static readonly RULE_relationalExpression = 75;
-	public static readonly RULE_equalityExpression = 76;
-	public static readonly RULE_bitwiseAndExpression = 77;
-	public static readonly RULE_bitwiseXorExpression = 78;
-	public static readonly RULE_bitwiseOrExpression = 79;
-	public static readonly RULE_logicalAndExpression = 80;
-	public static readonly RULE_logicalOrExpression = 81;
-	public static readonly RULE_conditionalExpression = 82;
-	public static readonly RULE_assignmentExpression = 83;
-	public static readonly RULE_assignmentOperator = 84;
-	public static readonly RULE_expression = 85;
-	public static readonly RULE_typeSpecifierExpression = 86;
-	public static readonly RULE_identifierTypeSpecifierExpression = 87;
-	public static readonly RULE_genericTypeSpecifierExpression = 88;
-	public static readonly RULE_typeofTypeSpecifierExpression = 89;
-	public static readonly RULE_typeSpecifierIdentifier = 90;
+	public static readonly RULE_instanceOfExpression = 75;
+	public static readonly RULE_matchesExpression = 76;
+	public static readonly RULE_relationalExpression = 77;
+	public static readonly RULE_equalityExpression = 78;
+	public static readonly RULE_bitwiseAndExpression = 79;
+	public static readonly RULE_bitwiseXorExpression = 80;
+	public static readonly RULE_bitwiseOrExpression = 81;
+	public static readonly RULE_logicalAndExpression = 82;
+	public static readonly RULE_logicalOrExpression = 83;
+	public static readonly RULE_conditionalExpression = 84;
+	public static readonly RULE_assignmentExpression = 85;
+	public static readonly RULE_assignmentOperator = 86;
+	public static readonly RULE_expression = 87;
+	public static readonly RULE_typeSpecifierExpression = 88;
+	public static readonly RULE_identifierTypeSpecifierExpression = 89;
+	public static readonly RULE_genericTypeSpecifierExpression = 90;
+	public static readonly RULE_typeofTypeSpecifierExpression = 91;
+	public static readonly RULE_typeSpecifierIdentifier = 92;
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
 		"compilationUnit",
@@ -289,6 +289,8 @@ export class KipperParser extends KipperParserBase {
 		"additiveExpression",
 		"bitwiseShiftExpression",
 		"bitwiseShiftOperators",
+		"instanceOfExpression",
+		"matchesExpression",
 		"relationalExpression",
 		"equalityExpression",
 		"bitwiseAndExpression",
@@ -313,6 +315,7 @@ export class KipperParser extends KipperParserBase {
 		undefined,
 		undefined,
 		undefined,
+		"'instanceof'",
 		"'const'",
 		"'var'",
 		"'as'",
@@ -335,8 +338,10 @@ export class KipperParser extends KipperParserBase {
 		"'class'",
 		"'interface'",
 		"'constructor'",
+		"'new'",
 		"'true'",
 		"'false'",
+		"'matches'",
 		"'typeof'",
 		"'try'",
 		"'catch'",
@@ -393,6 +398,7 @@ export class KipperParser extends KipperParserBase {
 		"BlockComment",
 		"LineComment",
 		"Pragma",
+		"InstanceOf",
 		"Const",
 		"Var",
 		"As",
@@ -415,8 +421,10 @@ export class KipperParser extends KipperParserBase {
 		"Class",
 		"Interface",
 		"Constructor",
+		"New",
 		"True",
 		"False",
+		"Matches",
 		"Typeof",
 		"Try",
 		"Catch",
@@ -523,17 +531,17 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 183;
+				this.state = 187;
 				this._errHandler.sync(this);
 				switch (this.interpreter.adaptivePredict(this._input, 0, this._ctx)) {
 					case 1:
 						{
-							this.state = 182;
+							this.state = 186;
 							this.translationUnit();
 						}
 						break;
 				}
-				this.state = 185;
+				this.state = 189;
 				this.match(KipperParser.EOF);
 			}
 		} catch (re) {
@@ -557,7 +565,7 @@ export class KipperParser extends KipperParserBase {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 188;
+				this.state = 192;
 				this._errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -565,7 +573,7 @@ export class KipperParser extends KipperParserBase {
 						case 1:
 							{
 								{
-									this.state = 187;
+									this.state = 191;
 									this.externalItem();
 								}
 							}
@@ -573,7 +581,7 @@ export class KipperParser extends KipperParserBase {
 						default:
 							throw new NoViableAltException(this);
 					}
-					this.state = 190;
+					this.state = 194;
 					this._errHandler.sync(this);
 					_alt = this.interpreter.adaptivePredict(this._input, 1, this._ctx);
 				} while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER);
@@ -599,7 +607,7 @@ export class KipperParser extends KipperParserBase {
 			_localctx = new ExternalBlockItemContext(_localctx);
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 192;
+				this.state = 196;
 				this.blockItemList();
 			}
 		} catch (re) {
@@ -623,7 +631,7 @@ export class KipperParser extends KipperParserBase {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 195;
+				this.state = 199;
 				this._errHandler.sync(this);
 				_alt = 1;
 				do {
@@ -631,7 +639,7 @@ export class KipperParser extends KipperParserBase {
 						case 1:
 							{
 								{
-									this.state = 194;
+									this.state = 198;
 									this.blockItem();
 								}
 							}
@@ -639,7 +647,7 @@ export class KipperParser extends KipperParserBase {
 						default:
 							throw new NoViableAltException(this);
 					}
-					this.state = 197;
+					this.state = 201;
 					this._errHandler.sync(this);
 					_alt = this.interpreter.adaptivePredict(this._input, 2, this._ctx);
 				} while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER);
@@ -664,26 +672,26 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 202;
+				this.state = 206;
 				this._errHandler.sync(this);
 				switch (this.interpreter.adaptivePredict(this._input, 3, this._ctx)) {
 					case 1:
 						{
-							this.state = 199;
+							this.state = 203;
 							this.statement();
 						}
 						break;
 
 					case 2:
 						{
-							this.state = 200;
+							this.state = 204;
 							this.declaration();
 						}
 						break;
 
 					case 3:
 						{
-							this.state = 201;
+							this.state = 205;
 							this.match(KipperParser.SemiColon);
 						}
 						break;
@@ -707,37 +715,37 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: DeclarationContext = new DeclarationContext(this._ctx, this.state);
 		this.enterRule(_localctx, 10, KipperParser.RULE_declaration);
 		try {
-			this.state = 210;
+			this.state = 214;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.Const:
 				case KipperParser.Var:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 204;
+						this.state = 208;
 						this.variableDeclaration();
-						this.state = 205;
+						this.state = 209;
 						this.match(KipperParser.SemiColon);
 					}
 					break;
 				case KipperParser.DefFunc:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 207;
+						this.state = 211;
 						this.functionDeclaration();
 					}
 					break;
 				case KipperParser.Interface:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 208;
+						this.state = 212;
 						this.interfaceDeclaration();
 					}
 					break;
 				case KipperParser.Class:
 					this.enterOuterAlt(_localctx, 4);
 					{
-						this.state = 209;
+						this.state = 213;
 						this.classDeclaration();
 					}
 					break;
@@ -764,9 +772,9 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 212;
+				this.state = 216;
 				this.storageTypeSpecifier();
-				this.state = 213;
+				this.state = 217;
 				this.initDeclarator();
 			}
 		} catch (re) {
@@ -790,7 +798,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 215;
+				this.state = 219;
 				_la = this._input.LA(1);
 				if (!(_la === KipperParser.Const || _la === KipperParser.Var)) {
 					this._errHandler.recoverInline(this);
@@ -824,20 +832,20 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 217;
+				this.state = 221;
 				this.declarator();
-				this.state = 218;
-				this.match(KipperParser.Colon);
-				this.state = 219;
-				this.typeSpecifierExpression();
 				this.state = 222;
+				this.match(KipperParser.Colon);
+				this.state = 223;
+				this.typeSpecifierExpression();
+				this.state = 226;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === KipperParser.Assign) {
 					{
-						this.state = 220;
+						this.state = 224;
 						this.match(KipperParser.Assign);
-						this.state = 221;
+						this.state = 225;
 						this.initializer();
 					}
 				}
@@ -862,7 +870,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 224;
+				this.state = 228;
 				this.assignmentExpression();
 			}
 		} catch (re) {
@@ -885,7 +893,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 226;
+				this.state = 230;
 				this.directDeclarator();
 			}
 		} catch (re) {
@@ -908,7 +916,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 228;
+				this.state = 232;
 				this.match(KipperParser.Identifier);
 			}
 		} catch (re) {
@@ -932,34 +940,34 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 230;
-				this.match(KipperParser.DefFunc);
-				this.state = 231;
-				this.declarator();
-				this.state = 232;
-				this.match(KipperParser.LeftParen);
 				this.state = 234;
+				this.match(KipperParser.DefFunc);
+				this.state = 235;
+				this.declarator();
+				this.state = 236;
+				this.match(KipperParser.LeftParen);
+				this.state = 238;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === KipperParser.Identifier) {
 					{
-						this.state = 233;
+						this.state = 237;
 						this.parameterList();
 					}
 				}
 
-				this.state = 236;
-				this.match(KipperParser.RightParen);
-				this.state = 237;
-				this.match(KipperParser.RetIndicator);
-				this.state = 238;
-				this.typeSpecifierExpression();
 				this.state = 240;
+				this.match(KipperParser.RightParen);
+				this.state = 241;
+				this.match(KipperParser.RetIndicator);
+				this.state = 242;
+				this.typeSpecifierExpression();
+				this.state = 244;
 				this._errHandler.sync(this);
 				switch (this.interpreter.adaptivePredict(this._input, 7, this._ctx)) {
 					case 1:
 						{
-							this.state = 239;
+							this.state = 243;
 							this.compoundStatement();
 						}
 						break;
@@ -986,21 +994,21 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 242;
+				this.state = 246;
 				this.parameterDeclaration();
-				this.state = 247;
+				this.state = 251;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === KipperParser.Comma) {
 					{
 						{
-							this.state = 243;
+							this.state = 247;
 							this.match(KipperParser.Comma);
-							this.state = 244;
+							this.state = 248;
 							this.parameterDeclaration();
 						}
 					}
-					this.state = 249;
+					this.state = 253;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
@@ -1025,11 +1033,11 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 250;
+				this.state = 254;
 				this.declarator();
-				this.state = 251;
+				this.state = 255;
 				this.match(KipperParser.Colon);
-				this.state = 252;
+				this.state = 256;
 				this.typeSpecifierExpression();
 			}
 		} catch (re) {
@@ -1053,27 +1061,27 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 254;
+				this.state = 258;
 				this.match(KipperParser.Interface);
-				this.state = 255;
+				this.state = 259;
 				this.declarator();
-				this.state = 256;
-				this.match(KipperParser.LeftBrace);
 				this.state = 260;
+				this.match(KipperParser.LeftBrace);
+				this.state = 264;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === KipperParser.Identifier) {
 					{
 						{
-							this.state = 257;
+							this.state = 261;
 							this.interfaceMemberDeclaration();
 						}
 					}
-					this.state = 262;
+					this.state = 266;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
-				this.state = 263;
+				this.state = 267;
 				this.match(KipperParser.RightBrace);
 			}
 		} catch (re) {
@@ -1094,13 +1102,13 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: InterfaceMemberDeclarationContext = new InterfaceMemberDeclarationContext(this._ctx, this.state);
 		this.enterRule(_localctx, 32, KipperParser.RULE_interfaceMemberDeclaration);
 		try {
-			this.state = 267;
+			this.state = 271;
 			this._errHandler.sync(this);
 			switch (this.interpreter.adaptivePredict(this._input, 10, this._ctx)) {
 				case 1:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 265;
+						this.state = 269;
 						this.interfacePropertyDeclaration();
 					}
 					break;
@@ -1108,7 +1116,7 @@ export class KipperParser extends KipperParserBase {
 				case 2:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 266;
+						this.state = 270;
 						this.interfaceMethodDeclaration();
 					}
 					break;
@@ -1133,13 +1141,13 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 269;
+				this.state = 273;
 				this.declarator();
-				this.state = 270;
+				this.state = 274;
 				this.match(KipperParser.Colon);
-				this.state = 271;
+				this.state = 275;
 				this.typeSpecifierExpression();
-				this.state = 272;
+				this.state = 276;
 				this.match(KipperParser.SemiColon);
 			}
 		} catch (re) {
@@ -1163,27 +1171,27 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 274;
+				this.state = 278;
 				this.declarator();
-				this.state = 275;
+				this.state = 279;
 				this.match(KipperParser.LeftParen);
-				this.state = 277;
+				this.state = 281;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === KipperParser.Identifier) {
 					{
-						this.state = 276;
+						this.state = 280;
 						this.parameterList();
 					}
 				}
 
-				this.state = 279;
+				this.state = 283;
 				this.match(KipperParser.RightParen);
-				this.state = 280;
+				this.state = 284;
 				this.match(KipperParser.Colon);
-				this.state = 281;
+				this.state = 285;
 				this.typeSpecifierExpression();
-				this.state = 282;
+				this.state = 286;
 				this.match(KipperParser.SemiColon);
 			}
 		} catch (re) {
@@ -1207,30 +1215,30 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 284;
+				this.state = 288;
 				this.match(KipperParser.Class);
-				this.state = 285;
+				this.state = 289;
 				this.declarator();
-				this.state = 286;
+				this.state = 290;
 				this.match(KipperParser.LeftBrace);
-				this.state = 291;
+				this.state = 295;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === KipperParser.Constructor || _la === KipperParser.SemiColon || _la === KipperParser.Identifier) {
 					{
-						this.state = 289;
+						this.state = 293;
 						this._errHandler.sync(this);
 						switch (this._input.LA(1)) {
 							case KipperParser.Constructor:
 							case KipperParser.Identifier:
 								{
-									this.state = 287;
+									this.state = 291;
 									this.classMemberDeclaration();
 								}
 								break;
 							case KipperParser.SemiColon:
 								{
-									this.state = 288;
+									this.state = 292;
 									this.match(KipperParser.SemiColon);
 								}
 								break;
@@ -1238,11 +1246,11 @@ export class KipperParser extends KipperParserBase {
 								throw new NoViableAltException(this);
 						}
 					}
-					this.state = 293;
+					this.state = 297;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
-				this.state = 294;
+				this.state = 298;
 				this.match(KipperParser.RightBrace);
 			}
 		} catch (re) {
@@ -1263,13 +1271,13 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: ClassMemberDeclarationContext = new ClassMemberDeclarationContext(this._ctx, this.state);
 		this.enterRule(_localctx, 40, KipperParser.RULE_classMemberDeclaration);
 		try {
-			this.state = 299;
+			this.state = 303;
 			this._errHandler.sync(this);
 			switch (this.interpreter.adaptivePredict(this._input, 14, this._ctx)) {
 				case 1:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 296;
+						this.state = 300;
 						this.classPropertyDeclaration();
 					}
 					break;
@@ -1277,7 +1285,7 @@ export class KipperParser extends KipperParserBase {
 				case 2:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 297;
+						this.state = 301;
 						this.classMethodDeclaration();
 					}
 					break;
@@ -1285,7 +1293,7 @@ export class KipperParser extends KipperParserBase {
 				case 3:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 298;
+						this.state = 302;
 						this.classConstructorDeclaration();
 					}
 					break;
@@ -1310,11 +1318,11 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 301;
+				this.state = 305;
 				this.declarator();
-				this.state = 302;
+				this.state = 306;
 				this.match(KipperParser.Colon);
-				this.state = 303;
+				this.state = 307;
 				this.typeSpecifierExpression();
 			}
 		} catch (re) {
@@ -1338,32 +1346,32 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 305;
+				this.state = 309;
 				this.declarator();
-				this.state = 306;
+				this.state = 310;
 				this.match(KipperParser.LeftParen);
-				this.state = 308;
+				this.state = 312;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === KipperParser.Identifier) {
 					{
-						this.state = 307;
+						this.state = 311;
 						this.parameterList();
 					}
 				}
 
-				this.state = 310;
-				this.match(KipperParser.RightParen);
-				this.state = 311;
-				this.match(KipperParser.Colon);
-				this.state = 312;
-				this.typeSpecifierExpression();
 				this.state = 314;
+				this.match(KipperParser.RightParen);
+				this.state = 315;
+				this.match(KipperParser.Colon);
+				this.state = 316;
+				this.typeSpecifierExpression();
+				this.state = 318;
 				this._errHandler.sync(this);
 				switch (this.interpreter.adaptivePredict(this._input, 16, this._ctx)) {
 					case 1:
 						{
-							this.state = 313;
+							this.state = 317;
 							this.compoundStatement();
 						}
 						break;
@@ -1390,23 +1398,23 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 316;
+				this.state = 320;
 				this.match(KipperParser.Constructor);
-				this.state = 317;
+				this.state = 321;
 				this.match(KipperParser.LeftParen);
-				this.state = 319;
+				this.state = 323;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === KipperParser.Identifier) {
 					{
-						this.state = 318;
+						this.state = 322;
 						this.parameterList();
 					}
 				}
 
-				this.state = 321;
+				this.state = 325;
 				this.match(KipperParser.RightParen);
-				this.state = 322;
+				this.state = 326;
 				this.compoundStatement();
 			}
 		} catch (re) {
@@ -1427,13 +1435,13 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: StatementContext = new StatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 48, KipperParser.RULE_statement);
 		try {
-			this.state = 331;
+			this.state = 335;
 			this._errHandler.sync(this);
 			switch (this.interpreter.adaptivePredict(this._input, 18, this._ctx)) {
 				case 1:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 324;
+						this.state = 328;
 						this.expressionStatement();
 					}
 					break;
@@ -1441,7 +1449,7 @@ export class KipperParser extends KipperParserBase {
 				case 2:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 325;
+						this.state = 329;
 						this.selectionStatement();
 					}
 					break;
@@ -1449,7 +1457,7 @@ export class KipperParser extends KipperParserBase {
 				case 3:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 326;
+						this.state = 330;
 						this.iterationStatement();
 					}
 					break;
@@ -1457,7 +1465,7 @@ export class KipperParser extends KipperParserBase {
 				case 4:
 					this.enterOuterAlt(_localctx, 4);
 					{
-						this.state = 327;
+						this.state = 331;
 						this.jumpStatement();
 					}
 					break;
@@ -1465,7 +1473,7 @@ export class KipperParser extends KipperParserBase {
 				case 5:
 					this.enterOuterAlt(_localctx, 5);
 					{
-						this.state = 328;
+						this.state = 332;
 						this.returnStatement();
 					}
 					break;
@@ -1473,7 +1481,7 @@ export class KipperParser extends KipperParserBase {
 				case 6:
 					this.enterOuterAlt(_localctx, 6);
 					{
-						this.state = 329;
+						this.state = 333;
 						this.compoundStatement();
 					}
 					break;
@@ -1481,7 +1489,7 @@ export class KipperParser extends KipperParserBase {
 				case 7:
 					this.enterOuterAlt(_localctx, 7);
 					{
-						this.state = 330;
+						this.state = 334;
 						this.tryCatchStatement();
 					}
 					break;
@@ -1504,26 +1512,58 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: CompoundStatementContext = new CompoundStatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 50, KipperParser.RULE_compoundStatement);
 		try {
-			this.enterOuterAlt(_localctx, 1);
-			{
-				this.state = 333;
-				if (!this.notInsideExpressionStatement()) {
-					throw this.createFailedPredicateException("this.notInsideExpressionStatement()");
-				}
-				this.state = 334;
-				this.match(KipperParser.LeftBrace);
-				this.state = 336;
-				this._errHandler.sync(this);
-				switch (this.interpreter.adaptivePredict(this._input, 19, this._ctx)) {
-					case 1:
-						{
-							this.state = 335;
-							this.blockItemList();
+			this.state = 351;
+			this._errHandler.sync(this);
+			switch (this.interpreter.adaptivePredict(this._input, 21, this._ctx)) {
+				case 1:
+					this.enterOuterAlt(_localctx, 1);
+					{
+						this.state = 337;
+						if (!this.notInsideExpressionStatement()) {
+							throw this.createFailedPredicateException("this.notInsideExpressionStatement()");
 						}
-						break;
-				}
-				this.state = 338;
-				this.match(KipperParser.RightBrace);
+						this.state = 338;
+						this.match(KipperParser.LeftBrace);
+						this.state = 340;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 19, this._ctx)) {
+							case 1:
+								{
+									this.state = 339;
+									this.blockItemList();
+								}
+								break;
+						}
+						this.state = 342;
+						this.match(KipperParser.RightBrace);
+					}
+					break;
+
+				case 2:
+					this.enterOuterAlt(_localctx, 2);
+					{
+						this.state = 343;
+						if (!this.insideLambda()) {
+							throw this.createFailedPredicateException("this.insideLambda()");
+						}
+						this.state = 344;
+						this.match(KipperParser.LeftBrace);
+						this.exitLambda();
+						this.state = 347;
+						this._errHandler.sync(this);
+						switch (this.interpreter.adaptivePredict(this._input, 20, this._ctx)) {
+							case 1:
+								{
+									this.state = 346;
+									this.blockItemList();
+								}
+								break;
+						}
+						this.enterLambda();
+						this.state = 350;
+						this.match(KipperParser.RightBrace);
+					}
+					break;
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -1546,9 +1586,9 @@ export class KipperParser extends KipperParserBase {
 			this.enterOuterAlt(_localctx, 1);
 			{
 				this.enterExpressionStatement();
-				this.state = 341;
+				this.state = 354;
 				this.expression();
-				this.state = 342;
+				this.state = 355;
 				this.match(KipperParser.SemiColon);
 				this.exitExpressionStatement();
 			}
@@ -1570,20 +1610,20 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: SelectionStatementContext = new SelectionStatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 54, KipperParser.RULE_selectionStatement);
 		try {
-			this.state = 347;
+			this.state = 360;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.If:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 345;
+						this.state = 358;
 						this.ifStatement();
 					}
 					break;
 				case KipperParser.Switch:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 346;
+						this.state = 359;
 						this.switchStatement();
 					}
 					break;
@@ -1610,24 +1650,24 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 349;
+				this.state = 362;
 				this.match(KipperParser.If);
-				this.state = 350;
+				this.state = 363;
 				this.match(KipperParser.LeftParen);
-				this.state = 351;
+				this.state = 364;
 				this.expression();
-				this.state = 352;
+				this.state = 365;
 				this.match(KipperParser.RightParen);
-				this.state = 353;
+				this.state = 366;
 				this.statement();
-				this.state = 356;
+				this.state = 369;
 				this._errHandler.sync(this);
-				switch (this.interpreter.adaptivePredict(this._input, 21, this._ctx)) {
+				switch (this.interpreter.adaptivePredict(this._input, 23, this._ctx)) {
 					case 1:
 						{
-							this.state = 354;
+							this.state = 367;
 							this.match(KipperParser.Else);
-							this.state = 355;
+							this.state = 368;
 							this.statement();
 						}
 						break;
@@ -1654,31 +1694,31 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 358;
+				this.state = 371;
 				this.match(KipperParser.Switch);
-				this.state = 359;
+				this.state = 372;
 				this.match(KipperParser.LeftParen);
-				this.state = 360;
+				this.state = 373;
 				this.expression();
-				this.state = 361;
+				this.state = 374;
 				this.match(KipperParser.RightParen);
-				this.state = 362;
+				this.state = 375;
 				this.match(KipperParser.LeftBrace);
-				this.state = 366;
+				this.state = 379;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === KipperParser.Case || _la === KipperParser.Default) {
 					{
 						{
-							this.state = 363;
+							this.state = 376;
 							this.switchLabeledStatement();
 						}
 					}
-					this.state = 368;
+					this.state = 381;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
-				this.state = 369;
+				this.state = 382;
 				this.match(KipperParser.RightBrace);
 			}
 		} catch (re) {
@@ -1699,30 +1739,30 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: SwitchLabeledStatementContext = new SwitchLabeledStatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 60, KipperParser.RULE_switchLabeledStatement);
 		try {
-			this.state = 379;
+			this.state = 392;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.Case:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 371;
+						this.state = 384;
 						this.match(KipperParser.Case);
-						this.state = 372;
+						this.state = 385;
 						this.expression();
-						this.state = 373;
+						this.state = 386;
 						this.match(KipperParser.Colon);
-						this.state = 374;
+						this.state = 387;
 						this.statement();
 					}
 					break;
 				case KipperParser.Default:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 376;
+						this.state = 389;
 						this.match(KipperParser.Default);
-						this.state = 377;
+						this.state = 390;
 						this.match(KipperParser.Colon);
-						this.state = 378;
+						this.state = 391;
 						this.statement();
 					}
 					break;
@@ -1747,27 +1787,27 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: IterationStatementContext = new IterationStatementContext(this._ctx, this.state);
 		this.enterRule(_localctx, 62, KipperParser.RULE_iterationStatement);
 		try {
-			this.state = 384;
+			this.state = 397;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.For:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 381;
+						this.state = 394;
 						this.forLoopIterationStatement();
 					}
 					break;
 				case KipperParser.While:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 382;
+						this.state = 395;
 						this.whileLoopIterationStatement();
 					}
 					break;
 				case KipperParser.Do:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 383;
+						this.state = 396;
 						this.doWhileLoopIterationStatement();
 					}
 					break;
@@ -1795,11 +1835,11 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 386;
+				this.state = 399;
 				this.match(KipperParser.For);
-				this.state = 387;
+				this.state = 400;
 				this.match(KipperParser.LeftParen);
-				this.state = 394;
+				this.state = 407;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
@@ -1808,48 +1848,50 @@ export class KipperParser extends KipperParserBase {
 							((1 << KipperParser.Const) |
 								(1 << KipperParser.Var) |
 								(1 << KipperParser.CallFunc) |
+								(1 << KipperParser.New) |
 								(1 << KipperParser.True) |
-								(1 << KipperParser.False) |
-								(1 << KipperParser.Typeof))) !==
+								(1 << KipperParser.False))) !==
 							0) ||
-					(((_la - 33) & ~0x1f) === 0 &&
-						((1 << (_la - 33)) &
-							((1 << (KipperParser.Void - 33)) |
-								(1 << (KipperParser.Null - 33)) |
-								(1 << (KipperParser.Undefined - 33)) |
-								(1 << (KipperParser.LeftParen - 33)) |
-								(1 << (KipperParser.LeftBracket - 33)) |
-								(1 << (KipperParser.LeftBrace - 33)) |
-								(1 << (KipperParser.Plus - 33)) |
-								(1 << (KipperParser.PlusPlus - 33)) |
-								(1 << (KipperParser.Minus - 33)) |
-								(1 << (KipperParser.MinusMinus - 33)) |
-								(1 << (KipperParser.Not - 33)))) !==
+					(((_la - 32) & ~0x1f) === 0 &&
+						((1 << (_la - 32)) &
+							((1 << (KipperParser.Typeof - 32)) |
+								(1 << (KipperParser.Void - 32)) |
+								(1 << (KipperParser.Null - 32)) |
+								(1 << (KipperParser.Undefined - 32)) |
+								(1 << (KipperParser.LeftParen - 32)) |
+								(1 << (KipperParser.LeftBracket - 32)) |
+								(1 << (KipperParser.LeftBrace - 32)) |
+								(1 << (KipperParser.Plus - 32)) |
+								(1 << (KipperParser.PlusPlus - 32)) |
+								(1 << (KipperParser.Minus - 32)) |
+								(1 << (KipperParser.MinusMinus - 32)) |
+								(1 << (KipperParser.Not - 32)))) !==
 							0) ||
-					(((_la - 73) & ~0x1f) === 0 &&
-						((1 << (_la - 73)) &
-							((1 << (KipperParser.BitwiseNot - 73)) |
-								(1 << (KipperParser.Identifier - 73)) |
-								(1 << (KipperParser.IntegerConstant - 73)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 73)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 73)) |
-								(1 << (KipperParser.FloatingConstant - 73)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 73)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 73)))) !==
+					(((_la - 76) & ~0x1f) === 0 &&
+						((1 << (_la - 76)) &
+							((1 << (KipperParser.BitwiseNot - 76)) |
+								(1 << (KipperParser.Identifier - 76)) |
+								(1 << (KipperParser.IntegerConstant - 76)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 76)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 76)) |
+								(1 << (KipperParser.FloatingConstant - 76)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 76)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 76)))) !==
 							0)
 				) {
 					{
-						this.state = 390;
+						this.state = 403;
 						this._errHandler.sync(this);
 						switch (this._input.LA(1)) {
 							case KipperParser.Const:
 							case KipperParser.Var:
 								{
-									this.state = 388;
+									this.state = 401;
 									this.variableDeclaration();
 								}
 								break;
 							case KipperParser.CallFunc:
+							case KipperParser.New:
 							case KipperParser.True:
 							case KipperParser.False:
 							case KipperParser.Typeof:
@@ -1873,7 +1915,7 @@ export class KipperParser extends KipperParserBase {
 							case KipperParser.FStringSingleQuoteStart:
 							case KipperParser.FStringDoubleQuoteStart:
 								{
-									this.state = 389;
+									this.state = 402;
 									this.expression();
 								}
 								break;
@@ -1884,95 +1926,97 @@ export class KipperParser extends KipperParserBase {
 					}
 				}
 
-				this.state = 396;
+				this.state = 409;
 				this.match(KipperParser.SemiColon);
-				this.state = 400;
+				this.state = 413;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					(((_la - 22) & ~0x1f) === 0 &&
-						((1 << (_la - 22)) &
-							((1 << (KipperParser.CallFunc - 22)) |
-								(1 << (KipperParser.True - 22)) |
-								(1 << (KipperParser.False - 22)) |
-								(1 << (KipperParser.Typeof - 22)) |
-								(1 << (KipperParser.Void - 22)) |
-								(1 << (KipperParser.Null - 22)) |
-								(1 << (KipperParser.Undefined - 22)) |
-								(1 << (KipperParser.LeftParen - 22)) |
-								(1 << (KipperParser.LeftBracket - 22)) |
-								(1 << (KipperParser.LeftBrace - 22)) |
-								(1 << (KipperParser.Plus - 22)) |
-								(1 << (KipperParser.PlusPlus - 22)) |
-								(1 << (KipperParser.Minus - 22)) |
-								(1 << (KipperParser.MinusMinus - 22)))) !==
+					(((_la - 23) & ~0x1f) === 0 &&
+						((1 << (_la - 23)) &
+							((1 << (KipperParser.CallFunc - 23)) |
+								(1 << (KipperParser.New - 23)) |
+								(1 << (KipperParser.True - 23)) |
+								(1 << (KipperParser.False - 23)) |
+								(1 << (KipperParser.Typeof - 23)) |
+								(1 << (KipperParser.Void - 23)) |
+								(1 << (KipperParser.Null - 23)) |
+								(1 << (KipperParser.Undefined - 23)) |
+								(1 << (KipperParser.LeftParen - 23)) |
+								(1 << (KipperParser.LeftBracket - 23)) |
+								(1 << (KipperParser.LeftBrace - 23)) |
+								(1 << (KipperParser.Plus - 23)) |
+								(1 << (KipperParser.PlusPlus - 23)) |
+								(1 << (KipperParser.Minus - 23)) |
+								(1 << (KipperParser.MinusMinus - 23)))) !==
 							0) ||
-					(((_la - 57) & ~0x1f) === 0 &&
-						((1 << (_la - 57)) &
-							((1 << (KipperParser.Not - 57)) |
-								(1 << (KipperParser.BitwiseNot - 57)) |
-								(1 << (KipperParser.Identifier - 57)) |
-								(1 << (KipperParser.IntegerConstant - 57)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.FloatingConstant - 57)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
+					(((_la - 60) & ~0x1f) === 0 &&
+						((1 << (_la - 60)) &
+							((1 << (KipperParser.Not - 60)) |
+								(1 << (KipperParser.BitwiseNot - 60)) |
+								(1 << (KipperParser.Identifier - 60)) |
+								(1 << (KipperParser.IntegerConstant - 60)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.FloatingConstant - 60)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
 							0)
 				) {
 					{
-						this.state = 397;
+						this.state = 410;
 						this.expression();
 						_localctx._forCondition = true;
 					}
 				}
 
-				this.state = 402;
+				this.state = 415;
 				this.match(KipperParser.SemiColon);
-				this.state = 406;
+				this.state = 419;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					(((_la - 22) & ~0x1f) === 0 &&
-						((1 << (_la - 22)) &
-							((1 << (KipperParser.CallFunc - 22)) |
-								(1 << (KipperParser.True - 22)) |
-								(1 << (KipperParser.False - 22)) |
-								(1 << (KipperParser.Typeof - 22)) |
-								(1 << (KipperParser.Void - 22)) |
-								(1 << (KipperParser.Null - 22)) |
-								(1 << (KipperParser.Undefined - 22)) |
-								(1 << (KipperParser.LeftParen - 22)) |
-								(1 << (KipperParser.LeftBracket - 22)) |
-								(1 << (KipperParser.LeftBrace - 22)) |
-								(1 << (KipperParser.Plus - 22)) |
-								(1 << (KipperParser.PlusPlus - 22)) |
-								(1 << (KipperParser.Minus - 22)) |
-								(1 << (KipperParser.MinusMinus - 22)))) !==
+					(((_la - 23) & ~0x1f) === 0 &&
+						((1 << (_la - 23)) &
+							((1 << (KipperParser.CallFunc - 23)) |
+								(1 << (KipperParser.New - 23)) |
+								(1 << (KipperParser.True - 23)) |
+								(1 << (KipperParser.False - 23)) |
+								(1 << (KipperParser.Typeof - 23)) |
+								(1 << (KipperParser.Void - 23)) |
+								(1 << (KipperParser.Null - 23)) |
+								(1 << (KipperParser.Undefined - 23)) |
+								(1 << (KipperParser.LeftParen - 23)) |
+								(1 << (KipperParser.LeftBracket - 23)) |
+								(1 << (KipperParser.LeftBrace - 23)) |
+								(1 << (KipperParser.Plus - 23)) |
+								(1 << (KipperParser.PlusPlus - 23)) |
+								(1 << (KipperParser.Minus - 23)) |
+								(1 << (KipperParser.MinusMinus - 23)))) !==
 							0) ||
-					(((_la - 57) & ~0x1f) === 0 &&
-						((1 << (_la - 57)) &
-							((1 << (KipperParser.Not - 57)) |
-								(1 << (KipperParser.BitwiseNot - 57)) |
-								(1 << (KipperParser.Identifier - 57)) |
-								(1 << (KipperParser.IntegerConstant - 57)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.FloatingConstant - 57)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
+					(((_la - 60) & ~0x1f) === 0 &&
+						((1 << (_la - 60)) &
+							((1 << (KipperParser.Not - 60)) |
+								(1 << (KipperParser.BitwiseNot - 60)) |
+								(1 << (KipperParser.Identifier - 60)) |
+								(1 << (KipperParser.IntegerConstant - 60)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.FloatingConstant - 60)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
 							0)
 				) {
 					{
-						this.state = 403;
+						this.state = 416;
 						this.expression();
 						_localctx._forIterationExp = true;
 					}
 				}
 
-				this.state = 408;
+				this.state = 421;
 				this.match(KipperParser.RightParen);
-				this.state = 409;
+				this.state = 422;
 				this.statement();
 			}
 		} catch (re) {
@@ -1995,15 +2039,15 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 411;
+				this.state = 424;
 				this.match(KipperParser.While);
-				this.state = 412;
+				this.state = 425;
 				this.match(KipperParser.LeftParen);
-				this.state = 413;
+				this.state = 426;
 				this.expression();
-				this.state = 414;
+				this.state = 427;
 				this.match(KipperParser.RightParen);
-				this.state = 415;
+				this.state = 428;
 				this.statement();
 			}
 		} catch (re) {
@@ -2029,19 +2073,19 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 417;
+				this.state = 430;
 				this.match(KipperParser.Do);
-				this.state = 418;
+				this.state = 431;
 				this.statement();
-				this.state = 419;
+				this.state = 432;
 				this.match(KipperParser.While);
-				this.state = 420;
+				this.state = 433;
 				this.match(KipperParser.LeftParen);
-				this.state = 421;
+				this.state = 434;
 				this.expression();
-				this.state = 422;
+				this.state = 435;
 				this.match(KipperParser.RightParen);
-				this.state = 423;
+				this.state = 436;
 				this.match(KipperParser.SemiColon);
 			}
 		} catch (re) {
@@ -2065,7 +2109,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 425;
+				this.state = 438;
 				_la = this._input.LA(1);
 				if (!(_la === KipperParser.Break || _la === KipperParser.Continue)) {
 					this._errHandler.recoverInline(this);
@@ -2077,7 +2121,7 @@ export class KipperParser extends KipperParserBase {
 					this._errHandler.reportMatch(this);
 					this.consume();
 				}
-				this.state = 426;
+				this.state = 439;
 				this.match(KipperParser.SemiColon);
 			}
 		} catch (re) {
@@ -2101,49 +2145,50 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 428;
+				this.state = 441;
 				this.match(KipperParser.Return);
-				this.state = 430;
+				this.state = 443;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					(((_la - 22) & ~0x1f) === 0 &&
-						((1 << (_la - 22)) &
-							((1 << (KipperParser.CallFunc - 22)) |
-								(1 << (KipperParser.True - 22)) |
-								(1 << (KipperParser.False - 22)) |
-								(1 << (KipperParser.Typeof - 22)) |
-								(1 << (KipperParser.Void - 22)) |
-								(1 << (KipperParser.Null - 22)) |
-								(1 << (KipperParser.Undefined - 22)) |
-								(1 << (KipperParser.LeftParen - 22)) |
-								(1 << (KipperParser.LeftBracket - 22)) |
-								(1 << (KipperParser.LeftBrace - 22)) |
-								(1 << (KipperParser.Plus - 22)) |
-								(1 << (KipperParser.PlusPlus - 22)) |
-								(1 << (KipperParser.Minus - 22)) |
-								(1 << (KipperParser.MinusMinus - 22)))) !==
+					(((_la - 23) & ~0x1f) === 0 &&
+						((1 << (_la - 23)) &
+							((1 << (KipperParser.CallFunc - 23)) |
+								(1 << (KipperParser.New - 23)) |
+								(1 << (KipperParser.True - 23)) |
+								(1 << (KipperParser.False - 23)) |
+								(1 << (KipperParser.Typeof - 23)) |
+								(1 << (KipperParser.Void - 23)) |
+								(1 << (KipperParser.Null - 23)) |
+								(1 << (KipperParser.Undefined - 23)) |
+								(1 << (KipperParser.LeftParen - 23)) |
+								(1 << (KipperParser.LeftBracket - 23)) |
+								(1 << (KipperParser.LeftBrace - 23)) |
+								(1 << (KipperParser.Plus - 23)) |
+								(1 << (KipperParser.PlusPlus - 23)) |
+								(1 << (KipperParser.Minus - 23)) |
+								(1 << (KipperParser.MinusMinus - 23)))) !==
 							0) ||
-					(((_la - 57) & ~0x1f) === 0 &&
-						((1 << (_la - 57)) &
-							((1 << (KipperParser.Not - 57)) |
-								(1 << (KipperParser.BitwiseNot - 57)) |
-								(1 << (KipperParser.Identifier - 57)) |
-								(1 << (KipperParser.IntegerConstant - 57)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.FloatingConstant - 57)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
+					(((_la - 60) & ~0x1f) === 0 &&
+						((1 << (_la - 60)) &
+							((1 << (KipperParser.Not - 60)) |
+								(1 << (KipperParser.BitwiseNot - 60)) |
+								(1 << (KipperParser.Identifier - 60)) |
+								(1 << (KipperParser.IntegerConstant - 60)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.FloatingConstant - 60)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
 							0)
 				) {
 					{
-						this.state = 429;
+						this.state = 442;
 						this.expression();
 					}
 				}
 
-				this.state = 432;
+				this.state = 445;
 				this.match(KipperParser.SemiColon);
 			}
 		} catch (re) {
@@ -2167,30 +2212,30 @@ export class KipperParser extends KipperParserBase {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 434;
+				this.state = 447;
 				this.tryClause();
-				this.state = 438;
+				this.state = 451;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 30, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 32, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
 							{
-								this.state = 435;
+								this.state = 448;
 								this.catchClause();
 							}
 						}
 					}
-					this.state = 440;
+					this.state = 453;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 30, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 32, this._ctx);
 				}
-				this.state = 442;
+				this.state = 455;
 				this._errHandler.sync(this);
-				switch (this.interpreter.adaptivePredict(this._input, 31, this._ctx)) {
+				switch (this.interpreter.adaptivePredict(this._input, 33, this._ctx)) {
 					case 1:
 						{
-							this.state = 441;
+							this.state = 454;
 							this.finallyClause();
 						}
 						break;
@@ -2216,9 +2261,9 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 444;
+				this.state = 457;
 				this.match(KipperParser.Try);
-				this.state = 445;
+				this.state = 458;
 				this.compoundStatement();
 			}
 		} catch (re) {
@@ -2242,23 +2287,23 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 447;
+				this.state = 460;
 				this.match(KipperParser.Catch);
-				this.state = 448;
+				this.state = 461;
 				this.match(KipperParser.LeftParen);
-				this.state = 450;
+				this.state = 463;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === KipperParser.Identifier) {
 					{
-						this.state = 449;
+						this.state = 462;
 						this.parameterDeclaration();
 					}
 				}
 
-				this.state = 452;
+				this.state = 465;
 				this.match(KipperParser.RightParen);
-				this.state = 453;
+				this.state = 466;
 				this.compoundStatement();
 			}
 		} catch (re) {
@@ -2281,9 +2326,9 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 455;
+				this.state = 468;
 				this.match(KipperParser.Finally);
-				this.state = 456;
+				this.state = 469;
 				this.compoundStatement();
 			}
 		} catch (re) {
@@ -2304,13 +2349,13 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: PrimaryExpressionContext = new PrimaryExpressionContext(this._ctx, this.state);
 		this.enterRule(_localctx, 82, KipperParser.RULE_primaryExpression);
 		try {
-			this.state = 468;
+			this.state = 481;
 			this._errHandler.sync(this);
-			switch (this.interpreter.adaptivePredict(this._input, 33, this._ctx)) {
+			switch (this.interpreter.adaptivePredict(this._input, 35, this._ctx)) {
 				case 1:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 458;
+						this.state = 471;
 						this.tangledPrimaryExpression();
 					}
 					break;
@@ -2318,7 +2363,7 @@ export class KipperParser extends KipperParserBase {
 				case 2:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 459;
+						this.state = 472;
 						this.lambdaPrimaryExpression();
 					}
 					break;
@@ -2326,7 +2371,7 @@ export class KipperParser extends KipperParserBase {
 				case 3:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 460;
+						this.state = 473;
 						this.arrayPrimaryExpression();
 					}
 					break;
@@ -2334,7 +2379,7 @@ export class KipperParser extends KipperParserBase {
 				case 4:
 					this.enterOuterAlt(_localctx, 4);
 					{
-						this.state = 461;
+						this.state = 474;
 						this.objectPrimaryExpression();
 					}
 					break;
@@ -2342,7 +2387,7 @@ export class KipperParser extends KipperParserBase {
 				case 5:
 					this.enterOuterAlt(_localctx, 5);
 					{
-						this.state = 462;
+						this.state = 475;
 						this.boolPrimaryExpression();
 					}
 					break;
@@ -2350,7 +2395,7 @@ export class KipperParser extends KipperParserBase {
 				case 6:
 					this.enterOuterAlt(_localctx, 6);
 					{
-						this.state = 463;
+						this.state = 476;
 						this.identifierPrimaryExpression();
 					}
 					break;
@@ -2358,7 +2403,7 @@ export class KipperParser extends KipperParserBase {
 				case 7:
 					this.enterOuterAlt(_localctx, 7);
 					{
-						this.state = 464;
+						this.state = 477;
 						this.stringPrimaryExpression();
 					}
 					break;
@@ -2366,7 +2411,7 @@ export class KipperParser extends KipperParserBase {
 				case 8:
 					this.enterOuterAlt(_localctx, 8);
 					{
-						this.state = 465;
+						this.state = 478;
 						this.fStringPrimaryExpression();
 					}
 					break;
@@ -2374,7 +2419,7 @@ export class KipperParser extends KipperParserBase {
 				case 9:
 					this.enterOuterAlt(_localctx, 9);
 					{
-						this.state = 466;
+						this.state = 479;
 						this.numberPrimaryExpression();
 					}
 					break;
@@ -2382,7 +2427,7 @@ export class KipperParser extends KipperParserBase {
 				case 10:
 					this.enterOuterAlt(_localctx, 10);
 					{
-						this.state = 467;
+						this.state = 480;
 						this.voidOrNullOrUndefinedPrimaryExpression();
 					}
 					break;
@@ -2408,43 +2453,45 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 470;
+				this.enterLambda();
+				this.state = 484;
 				this.match(KipperParser.LeftParen);
-				this.state = 472;
+				this.state = 486;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === KipperParser.Identifier) {
 					{
-						this.state = 471;
+						this.state = 485;
 						this.parameterList();
 					}
 				}
 
-				this.state = 474;
+				this.state = 488;
 				this.match(KipperParser.RightParen);
-				this.state = 475;
+				this.state = 489;
 				this.match(KipperParser.Colon);
-				this.state = 476;
+				this.state = 490;
 				this.typeSpecifierExpression();
-				this.state = 477;
+				this.state = 491;
 				this.match(KipperParser.RetIndicator);
-				this.state = 480;
+				this.state = 494;
 				this._errHandler.sync(this);
-				switch (this.interpreter.adaptivePredict(this._input, 35, this._ctx)) {
+				switch (this.interpreter.adaptivePredict(this._input, 37, this._ctx)) {
 					case 1:
 						{
-							this.state = 478;
+							this.state = 492;
 							this.expression();
 						}
 						break;
 
 					case 2:
 						{
-							this.state = 479;
+							this.state = 493;
 							this.compoundStatement();
 						}
 						break;
 				}
+				this.exitLambda();
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -2466,11 +2513,11 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 482;
+				this.state = 498;
 				this.match(KipperParser.LeftParen);
-				this.state = 483;
+				this.state = 499;
 				this.expression();
-				this.state = 484;
+				this.state = 500;
 				this.match(KipperParser.RightParen);
 			}
 		} catch (re) {
@@ -2494,7 +2541,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 486;
+				this.state = 502;
 				_la = this._input.LA(1);
 				if (!(_la === KipperParser.True || _la === KipperParser.False)) {
 					this._errHandler.recoverInline(this);
@@ -2527,7 +2574,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 488;
+				this.state = 504;
 				this.identifier();
 			}
 		} catch (re) {
@@ -2550,7 +2597,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 490;
+				this.state = 506;
 				this.match(KipperParser.Identifier);
 			}
 		} catch (re) {
@@ -2574,13 +2621,13 @@ export class KipperParser extends KipperParserBase {
 		);
 		this.enterRule(_localctx, 94, KipperParser.RULE_identifierOrStringPrimaryExpression);
 		try {
-			this.state = 494;
+			this.state = 510;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.Identifier:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 492;
+						this.state = 508;
 						this.identifier();
 					}
 					break;
@@ -2588,7 +2635,7 @@ export class KipperParser extends KipperParserBase {
 				case KipperParser.DoubleQuoteStringLiteral:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 493;
+						this.state = 509;
 						this.stringPrimaryExpression();
 					}
 					break;
@@ -2616,7 +2663,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 496;
+				this.state = 512;
 				_la = this._input.LA(1);
 				if (!(_la === KipperParser.SingleQuoteStringLiteral || _la === KipperParser.DoubleQuoteStringLiteral)) {
 					this._errHandler.recoverInline(this);
@@ -2648,52 +2695,52 @@ export class KipperParser extends KipperParserBase {
 		this.enterRule(_localctx, 98, KipperParser.RULE_fStringPrimaryExpression);
 		let _la: number;
 		try {
-			this.state = 514;
+			this.state = 530;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.FStringSingleQuoteStart:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 498;
+						this.state = 514;
 						this.match(KipperParser.FStringSingleQuoteStart);
-						this.state = 502;
+						this.state = 518;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 						while (_la === KipperParser.FStringExpStart || _la === KipperParser.FStringSingleQuoteAtom) {
 							{
 								{
-									this.state = 499;
+									this.state = 515;
 									this.fStringSingleQuoteAtom();
 								}
 							}
-							this.state = 504;
+							this.state = 520;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 						}
-						this.state = 505;
+						this.state = 521;
 						this.match(KipperParser.FStringSingleQuoteEnd);
 					}
 					break;
 				case KipperParser.FStringDoubleQuoteStart:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 506;
+						this.state = 522;
 						this.match(KipperParser.FStringDoubleQuoteStart);
-						this.state = 510;
+						this.state = 526;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 						while (_la === KipperParser.FStringExpStart || _la === KipperParser.FStringDoubleQuoteAtom) {
 							{
 								{
-									this.state = 507;
+									this.state = 523;
 									this.fStringDoubleQuoteAtom();
 								}
 							}
-							this.state = 512;
+							this.state = 528;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 						}
-						this.state = 513;
+						this.state = 529;
 						this.match(KipperParser.FStringDoubleQuoteEnd);
 					}
 					break;
@@ -2719,62 +2766,63 @@ export class KipperParser extends KipperParserBase {
 		this.enterRule(_localctx, 100, KipperParser.RULE_fStringSingleQuoteAtom);
 		let _la: number;
 		try {
-			this.state = 522;
+			this.state = 538;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.FStringSingleQuoteAtom:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 516;
+						this.state = 532;
 						this.match(KipperParser.FStringSingleQuoteAtom);
 					}
 					break;
 				case KipperParser.FStringExpStart:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 517;
+						this.state = 533;
 						this.match(KipperParser.FStringExpStart);
-						this.state = 519;
+						this.state = 535;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 						if (
-							(((_la - 22) & ~0x1f) === 0 &&
-								((1 << (_la - 22)) &
-									((1 << (KipperParser.CallFunc - 22)) |
-										(1 << (KipperParser.True - 22)) |
-										(1 << (KipperParser.False - 22)) |
-										(1 << (KipperParser.Typeof - 22)) |
-										(1 << (KipperParser.Void - 22)) |
-										(1 << (KipperParser.Null - 22)) |
-										(1 << (KipperParser.Undefined - 22)) |
-										(1 << (KipperParser.LeftParen - 22)) |
-										(1 << (KipperParser.LeftBracket - 22)) |
-										(1 << (KipperParser.LeftBrace - 22)) |
-										(1 << (KipperParser.Plus - 22)) |
-										(1 << (KipperParser.PlusPlus - 22)) |
-										(1 << (KipperParser.Minus - 22)) |
-										(1 << (KipperParser.MinusMinus - 22)))) !==
+							(((_la - 23) & ~0x1f) === 0 &&
+								((1 << (_la - 23)) &
+									((1 << (KipperParser.CallFunc - 23)) |
+										(1 << (KipperParser.New - 23)) |
+										(1 << (KipperParser.True - 23)) |
+										(1 << (KipperParser.False - 23)) |
+										(1 << (KipperParser.Typeof - 23)) |
+										(1 << (KipperParser.Void - 23)) |
+										(1 << (KipperParser.Null - 23)) |
+										(1 << (KipperParser.Undefined - 23)) |
+										(1 << (KipperParser.LeftParen - 23)) |
+										(1 << (KipperParser.LeftBracket - 23)) |
+										(1 << (KipperParser.LeftBrace - 23)) |
+										(1 << (KipperParser.Plus - 23)) |
+										(1 << (KipperParser.PlusPlus - 23)) |
+										(1 << (KipperParser.Minus - 23)) |
+										(1 << (KipperParser.MinusMinus - 23)))) !==
 									0) ||
-							(((_la - 57) & ~0x1f) === 0 &&
-								((1 << (_la - 57)) &
-									((1 << (KipperParser.Not - 57)) |
-										(1 << (KipperParser.BitwiseNot - 57)) |
-										(1 << (KipperParser.Identifier - 57)) |
-										(1 << (KipperParser.IntegerConstant - 57)) |
-										(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-										(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-										(1 << (KipperParser.FloatingConstant - 57)) |
-										(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-										(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
+							(((_la - 60) & ~0x1f) === 0 &&
+								((1 << (_la - 60)) &
+									((1 << (KipperParser.Not - 60)) |
+										(1 << (KipperParser.BitwiseNot - 60)) |
+										(1 << (KipperParser.Identifier - 60)) |
+										(1 << (KipperParser.IntegerConstant - 60)) |
+										(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+										(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+										(1 << (KipperParser.FloatingConstant - 60)) |
+										(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+										(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
 									0)
 						) {
 							{
-								this.state = 518;
+								this.state = 534;
 								this.expression();
 							}
 						}
 
-						this.state = 521;
+						this.state = 537;
 						this.match(KipperParser.FStringExpEnd);
 					}
 					break;
@@ -2800,62 +2848,63 @@ export class KipperParser extends KipperParserBase {
 		this.enterRule(_localctx, 102, KipperParser.RULE_fStringDoubleQuoteAtom);
 		let _la: number;
 		try {
-			this.state = 530;
+			this.state = 546;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.FStringDoubleQuoteAtom:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 524;
+						this.state = 540;
 						this.match(KipperParser.FStringDoubleQuoteAtom);
 					}
 					break;
 				case KipperParser.FStringExpStart:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 525;
+						this.state = 541;
 						this.match(KipperParser.FStringExpStart);
-						this.state = 527;
+						this.state = 543;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 						if (
-							(((_la - 22) & ~0x1f) === 0 &&
-								((1 << (_la - 22)) &
-									((1 << (KipperParser.CallFunc - 22)) |
-										(1 << (KipperParser.True - 22)) |
-										(1 << (KipperParser.False - 22)) |
-										(1 << (KipperParser.Typeof - 22)) |
-										(1 << (KipperParser.Void - 22)) |
-										(1 << (KipperParser.Null - 22)) |
-										(1 << (KipperParser.Undefined - 22)) |
-										(1 << (KipperParser.LeftParen - 22)) |
-										(1 << (KipperParser.LeftBracket - 22)) |
-										(1 << (KipperParser.LeftBrace - 22)) |
-										(1 << (KipperParser.Plus - 22)) |
-										(1 << (KipperParser.PlusPlus - 22)) |
-										(1 << (KipperParser.Minus - 22)) |
-										(1 << (KipperParser.MinusMinus - 22)))) !==
+							(((_la - 23) & ~0x1f) === 0 &&
+								((1 << (_la - 23)) &
+									((1 << (KipperParser.CallFunc - 23)) |
+										(1 << (KipperParser.New - 23)) |
+										(1 << (KipperParser.True - 23)) |
+										(1 << (KipperParser.False - 23)) |
+										(1 << (KipperParser.Typeof - 23)) |
+										(1 << (KipperParser.Void - 23)) |
+										(1 << (KipperParser.Null - 23)) |
+										(1 << (KipperParser.Undefined - 23)) |
+										(1 << (KipperParser.LeftParen - 23)) |
+										(1 << (KipperParser.LeftBracket - 23)) |
+										(1 << (KipperParser.LeftBrace - 23)) |
+										(1 << (KipperParser.Plus - 23)) |
+										(1 << (KipperParser.PlusPlus - 23)) |
+										(1 << (KipperParser.Minus - 23)) |
+										(1 << (KipperParser.MinusMinus - 23)))) !==
 									0) ||
-							(((_la - 57) & ~0x1f) === 0 &&
-								((1 << (_la - 57)) &
-									((1 << (KipperParser.Not - 57)) |
-										(1 << (KipperParser.BitwiseNot - 57)) |
-										(1 << (KipperParser.Identifier - 57)) |
-										(1 << (KipperParser.IntegerConstant - 57)) |
-										(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-										(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-										(1 << (KipperParser.FloatingConstant - 57)) |
-										(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-										(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
+							(((_la - 60) & ~0x1f) === 0 &&
+								((1 << (_la - 60)) &
+									((1 << (KipperParser.Not - 60)) |
+										(1 << (KipperParser.BitwiseNot - 60)) |
+										(1 << (KipperParser.Identifier - 60)) |
+										(1 << (KipperParser.IntegerConstant - 60)) |
+										(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+										(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+										(1 << (KipperParser.FloatingConstant - 60)) |
+										(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+										(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
 									0)
 						) {
 							{
-								this.state = 526;
+								this.state = 542;
 								this.expression();
 							}
 						}
 
-						this.state = 529;
+						this.state = 545;
 						this.match(KipperParser.FStringExpEnd);
 					}
 					break;
@@ -2883,7 +2932,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 532;
+				this.state = 548;
 				_la = this._input.LA(1);
 				if (!(_la === KipperParser.IntegerConstant || _la === KipperParser.FloatingConstant)) {
 					this._errHandler.recoverInline(this);
@@ -2918,77 +2967,78 @@ export class KipperParser extends KipperParserBase {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 534;
+				this.state = 550;
 				this.match(KipperParser.LeftBracket);
-				this.state = 543;
+				this.state = 559;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					(((_la - 22) & ~0x1f) === 0 &&
-						((1 << (_la - 22)) &
-							((1 << (KipperParser.CallFunc - 22)) |
-								(1 << (KipperParser.True - 22)) |
-								(1 << (KipperParser.False - 22)) |
-								(1 << (KipperParser.Typeof - 22)) |
-								(1 << (KipperParser.Void - 22)) |
-								(1 << (KipperParser.Null - 22)) |
-								(1 << (KipperParser.Undefined - 22)) |
-								(1 << (KipperParser.LeftParen - 22)) |
-								(1 << (KipperParser.LeftBracket - 22)) |
-								(1 << (KipperParser.LeftBrace - 22)) |
-								(1 << (KipperParser.Plus - 22)) |
-								(1 << (KipperParser.PlusPlus - 22)) |
-								(1 << (KipperParser.Minus - 22)) |
-								(1 << (KipperParser.MinusMinus - 22)))) !==
+					(((_la - 23) & ~0x1f) === 0 &&
+						((1 << (_la - 23)) &
+							((1 << (KipperParser.CallFunc - 23)) |
+								(1 << (KipperParser.New - 23)) |
+								(1 << (KipperParser.True - 23)) |
+								(1 << (KipperParser.False - 23)) |
+								(1 << (KipperParser.Typeof - 23)) |
+								(1 << (KipperParser.Void - 23)) |
+								(1 << (KipperParser.Null - 23)) |
+								(1 << (KipperParser.Undefined - 23)) |
+								(1 << (KipperParser.LeftParen - 23)) |
+								(1 << (KipperParser.LeftBracket - 23)) |
+								(1 << (KipperParser.LeftBrace - 23)) |
+								(1 << (KipperParser.Plus - 23)) |
+								(1 << (KipperParser.PlusPlus - 23)) |
+								(1 << (KipperParser.Minus - 23)) |
+								(1 << (KipperParser.MinusMinus - 23)))) !==
 							0) ||
-					(((_la - 57) & ~0x1f) === 0 &&
-						((1 << (_la - 57)) &
-							((1 << (KipperParser.Not - 57)) |
-								(1 << (KipperParser.BitwiseNot - 57)) |
-								(1 << (KipperParser.Identifier - 57)) |
-								(1 << (KipperParser.IntegerConstant - 57)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.FloatingConstant - 57)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
+					(((_la - 60) & ~0x1f) === 0 &&
+						((1 << (_la - 60)) &
+							((1 << (KipperParser.Not - 60)) |
+								(1 << (KipperParser.BitwiseNot - 60)) |
+								(1 << (KipperParser.Identifier - 60)) |
+								(1 << (KipperParser.IntegerConstant - 60)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.FloatingConstant - 60)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
 							0)
 				) {
 					{
-						this.state = 535;
+						this.state = 551;
 						this.expression();
-						this.state = 540;
+						this.state = 556;
 						this._errHandler.sync(this);
-						_alt = this.interpreter.adaptivePredict(this._input, 44, this._ctx);
+						_alt = this.interpreter.adaptivePredict(this._input, 46, this._ctx);
 						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 							if (_alt === 1) {
 								{
 									{
-										this.state = 536;
+										this.state = 552;
 										this.match(KipperParser.Comma);
-										this.state = 537;
+										this.state = 553;
 										this.expression();
 									}
 								}
 							}
-							this.state = 542;
+							this.state = 558;
 							this._errHandler.sync(this);
-							_alt = this.interpreter.adaptivePredict(this._input, 44, this._ctx);
+							_alt = this.interpreter.adaptivePredict(this._input, 46, this._ctx);
 						}
 					}
 				}
 
-				this.state = 546;
+				this.state = 562;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === KipperParser.Comma) {
 					{
-						this.state = 545;
+						this.state = 561;
 						this.match(KipperParser.Comma);
 					}
 				}
 
-				this.state = 548;
+				this.state = 564;
 				this.match(KipperParser.RightBracket);
 			}
 		} catch (re) {
@@ -3013,54 +3063,54 @@ export class KipperParser extends KipperParserBase {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 550;
+				this.state = 566;
 				this.match(KipperParser.LeftBrace);
-				this.state = 559;
+				this.state = 575;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					((_la - 78) & ~0x1f) === 0 &&
-					((1 << (_la - 78)) &
-						((1 << (KipperParser.Identifier - 78)) |
-							(1 << (KipperParser.SingleQuoteStringLiteral - 78)) |
-							(1 << (KipperParser.DoubleQuoteStringLiteral - 78)))) !==
+					((_la - 81) & ~0x1f) === 0 &&
+					((1 << (_la - 81)) &
+						((1 << (KipperParser.Identifier - 81)) |
+							(1 << (KipperParser.SingleQuoteStringLiteral - 81)) |
+							(1 << (KipperParser.DoubleQuoteStringLiteral - 81)))) !==
 						0
 				) {
 					{
-						this.state = 551;
+						this.state = 567;
 						this.objectProperty();
-						this.state = 556;
+						this.state = 572;
 						this._errHandler.sync(this);
-						_alt = this.interpreter.adaptivePredict(this._input, 47, this._ctx);
+						_alt = this.interpreter.adaptivePredict(this._input, 49, this._ctx);
 						while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 							if (_alt === 1) {
 								{
 									{
-										this.state = 552;
+										this.state = 568;
 										this.match(KipperParser.Comma);
-										this.state = 553;
+										this.state = 569;
 										this.objectProperty();
 									}
 								}
 							}
-							this.state = 558;
+							this.state = 574;
 							this._errHandler.sync(this);
-							_alt = this.interpreter.adaptivePredict(this._input, 47, this._ctx);
+							_alt = this.interpreter.adaptivePredict(this._input, 49, this._ctx);
 						}
 					}
 				}
 
-				this.state = 562;
+				this.state = 578;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (_la === KipperParser.Comma) {
 					{
-						this.state = 561;
+						this.state = 577;
 						this.match(KipperParser.Comma);
 					}
 				}
 
-				this.state = 564;
+				this.state = 580;
 				this.match(KipperParser.RightBrace);
 			}
 		} catch (re) {
@@ -3083,11 +3133,11 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 566;
+				this.state = 582;
 				this.identifierOrStringPrimaryExpression();
-				this.state = 567;
+				this.state = 583;
 				this.match(KipperParser.Colon);
-				this.state = 568;
+				this.state = 584;
 				this.expression();
 			}
 		} catch (re) {
@@ -3114,15 +3164,15 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 570;
+				this.state = 586;
 				_la = this._input.LA(1);
 				if (
 					!(
-						((_la - 33) & ~0x1f) === 0 &&
-						((1 << (_la - 33)) &
-							((1 << (KipperParser.Void - 33)) |
-								(1 << (KipperParser.Null - 33)) |
-								(1 << (KipperParser.Undefined - 33)))) !==
+						((_la - 36) & ~0x1f) === 0 &&
+						((1 << (_la - 36)) &
+							((1 << (KipperParser.Void - 36)) |
+								(1 << (KipperParser.Null - 36)) |
+								(1 << (KipperParser.Undefined - 36)))) !==
 							0
 					)
 				) {
@@ -3169,7 +3219,7 @@ export class KipperParser extends KipperParserBase {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 583;
+				this.state = 608;
 				this._errHandler.sync(this);
 				switch (this._input.LA(1)) {
 					case KipperParser.True:
@@ -3192,7 +3242,7 @@ export class KipperParser extends KipperParserBase {
 							this._ctx = _localctx;
 							_prevctx = _localctx;
 
-							this.state = 573;
+							this.state = 589;
 							this.primaryExpression();
 						}
 						break;
@@ -3201,64 +3251,122 @@ export class KipperParser extends KipperParserBase {
 							_localctx = new ExplicitCallFunctionCallExpressionContext(_localctx);
 							this._ctx = _localctx;
 							_prevctx = _localctx;
-							this.state = 574;
+							this.state = 590;
 							this.match(KipperParser.CallFunc);
-							this.state = 575;
+							this.state = 591;
 							this.computedPrimaryExpression(0);
-							this.state = 576;
+							this.state = 592;
 							this.match(KipperParser.LeftParen);
-							this.state = 578;
+							this.state = 594;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 							if (
-								(((_la - 22) & ~0x1f) === 0 &&
-									((1 << (_la - 22)) &
-										((1 << (KipperParser.CallFunc - 22)) |
-											(1 << (KipperParser.True - 22)) |
-											(1 << (KipperParser.False - 22)) |
-											(1 << (KipperParser.Typeof - 22)) |
-											(1 << (KipperParser.Void - 22)) |
-											(1 << (KipperParser.Null - 22)) |
-											(1 << (KipperParser.Undefined - 22)) |
-											(1 << (KipperParser.LeftParen - 22)) |
-											(1 << (KipperParser.LeftBracket - 22)) |
-											(1 << (KipperParser.LeftBrace - 22)) |
-											(1 << (KipperParser.Plus - 22)) |
-											(1 << (KipperParser.PlusPlus - 22)) |
-											(1 << (KipperParser.Minus - 22)) |
-											(1 << (KipperParser.MinusMinus - 22)))) !==
+								(((_la - 23) & ~0x1f) === 0 &&
+									((1 << (_la - 23)) &
+										((1 << (KipperParser.CallFunc - 23)) |
+											(1 << (KipperParser.New - 23)) |
+											(1 << (KipperParser.True - 23)) |
+											(1 << (KipperParser.False - 23)) |
+											(1 << (KipperParser.Typeof - 23)) |
+											(1 << (KipperParser.Void - 23)) |
+											(1 << (KipperParser.Null - 23)) |
+											(1 << (KipperParser.Undefined - 23)) |
+											(1 << (KipperParser.LeftParen - 23)) |
+											(1 << (KipperParser.LeftBracket - 23)) |
+											(1 << (KipperParser.LeftBrace - 23)) |
+											(1 << (KipperParser.Plus - 23)) |
+											(1 << (KipperParser.PlusPlus - 23)) |
+											(1 << (KipperParser.Minus - 23)) |
+											(1 << (KipperParser.MinusMinus - 23)))) !==
 										0) ||
-								(((_la - 57) & ~0x1f) === 0 &&
-									((1 << (_la - 57)) &
-										((1 << (KipperParser.Not - 57)) |
-											(1 << (KipperParser.BitwiseNot - 57)) |
-											(1 << (KipperParser.Identifier - 57)) |
-											(1 << (KipperParser.IntegerConstant - 57)) |
-											(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-											(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-											(1 << (KipperParser.FloatingConstant - 57)) |
-											(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-											(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
+								(((_la - 60) & ~0x1f) === 0 &&
+									((1 << (_la - 60)) &
+										((1 << (KipperParser.Not - 60)) |
+											(1 << (KipperParser.BitwiseNot - 60)) |
+											(1 << (KipperParser.Identifier - 60)) |
+											(1 << (KipperParser.IntegerConstant - 60)) |
+											(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+											(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+											(1 << (KipperParser.FloatingConstant - 60)) |
+											(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+											(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
 										0)
 							) {
 								{
-									this.state = 577;
+									this.state = 593;
 									this.argumentExpressionList();
 								}
 							}
 
-							this.state = 580;
+							this.state = 596;
 							this.match(KipperParser.RightParen);
 							_localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression;
+						}
+						break;
+					case KipperParser.New:
+						{
+							_localctx = new NewInstantiationExpressionContext(_localctx);
+							this._ctx = _localctx;
+							_prevctx = _localctx;
+							this.state = 599;
+							this.match(KipperParser.New);
+							this.state = 600;
+							this.typeSpecifierExpression();
+							this.state = 601;
+							this.match(KipperParser.LeftParen);
+							this.state = 603;
+							this._errHandler.sync(this);
+							_la = this._input.LA(1);
+							if (
+								(((_la - 23) & ~0x1f) === 0 &&
+									((1 << (_la - 23)) &
+										((1 << (KipperParser.CallFunc - 23)) |
+											(1 << (KipperParser.New - 23)) |
+											(1 << (KipperParser.True - 23)) |
+											(1 << (KipperParser.False - 23)) |
+											(1 << (KipperParser.Typeof - 23)) |
+											(1 << (KipperParser.Void - 23)) |
+											(1 << (KipperParser.Null - 23)) |
+											(1 << (KipperParser.Undefined - 23)) |
+											(1 << (KipperParser.LeftParen - 23)) |
+											(1 << (KipperParser.LeftBracket - 23)) |
+											(1 << (KipperParser.LeftBrace - 23)) |
+											(1 << (KipperParser.Plus - 23)) |
+											(1 << (KipperParser.PlusPlus - 23)) |
+											(1 << (KipperParser.Minus - 23)) |
+											(1 << (KipperParser.MinusMinus - 23)))) !==
+										0) ||
+								(((_la - 60) & ~0x1f) === 0 &&
+									((1 << (_la - 60)) &
+										((1 << (KipperParser.Not - 60)) |
+											(1 << (KipperParser.BitwiseNot - 60)) |
+											(1 << (KipperParser.Identifier - 60)) |
+											(1 << (KipperParser.IntegerConstant - 60)) |
+											(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+											(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+											(1 << (KipperParser.FloatingConstant - 60)) |
+											(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+											(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
+										0)
+							) {
+								{
+									this.state = 602;
+									this.argumentExpressionList();
+								}
+							}
+
+							this.state = 605;
+							this.match(KipperParser.RightParen);
+							_localctx._labelASTKind = ParseRuleKindMapping.RULE_newInstantiationExpression;
 						}
 						break;
 					default:
 						throw new NoViableAltException(this);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 606;
+				this.state = 631;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 54, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 57, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -3266,120 +3374,121 @@ export class KipperParser extends KipperParserBase {
 						}
 						_prevctx = _localctx;
 						{
-							this.state = 604;
+							this.state = 629;
 							this._errHandler.sync(this);
-							switch (this.interpreter.adaptivePredict(this._input, 53, this._ctx)) {
+							switch (this.interpreter.adaptivePredict(this._input, 56, this._ctx)) {
 								case 1:
-									{
-										_localctx = new FunctionCallExpressionContext(
-											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
-										);
-										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
-										this.state = 585;
-										if (!this.precpred(this._ctx, 5)) {
-											throw this.createFailedPredicateException("this.precpred(this._ctx, 5)");
-										}
-										this.state = 586;
-										this.match(KipperParser.LeftParen);
-										this.state = 588;
-										this._errHandler.sync(this);
-										_la = this._input.LA(1);
-										if (
-											(((_la - 22) & ~0x1f) === 0 &&
-												((1 << (_la - 22)) &
-													((1 << (KipperParser.CallFunc - 22)) |
-														(1 << (KipperParser.True - 22)) |
-														(1 << (KipperParser.False - 22)) |
-														(1 << (KipperParser.Typeof - 22)) |
-														(1 << (KipperParser.Void - 22)) |
-														(1 << (KipperParser.Null - 22)) |
-														(1 << (KipperParser.Undefined - 22)) |
-														(1 << (KipperParser.LeftParen - 22)) |
-														(1 << (KipperParser.LeftBracket - 22)) |
-														(1 << (KipperParser.LeftBrace - 22)) |
-														(1 << (KipperParser.Plus - 22)) |
-														(1 << (KipperParser.PlusPlus - 22)) |
-														(1 << (KipperParser.Minus - 22)) |
-														(1 << (KipperParser.MinusMinus - 22)))) !==
-													0) ||
-											(((_la - 57) & ~0x1f) === 0 &&
-												((1 << (_la - 57)) &
-													((1 << (KipperParser.Not - 57)) |
-														(1 << (KipperParser.BitwiseNot - 57)) |
-														(1 << (KipperParser.Identifier - 57)) |
-														(1 << (KipperParser.IntegerConstant - 57)) |
-														(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-														(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-														(1 << (KipperParser.FloatingConstant - 57)) |
-														(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-														(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
-													0)
-										) {
-											{
-												this.state = 587;
-												this.argumentExpressionList();
-											}
-										}
-
-										this.state = 590;
-										this.match(KipperParser.RightParen);
-										_localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression;
-									}
-									break;
-
-								case 2:
 									{
 										_localctx = new DotNotationMemberAccessExpressionContext(
 											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
 										);
 										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
-										this.state = 592;
-										if (!this.precpred(this._ctx, 3)) {
-											throw this.createFailedPredicateException("this.precpred(this._ctx, 3)");
+										this.state = 610;
+										if (!this.precpred(this._ctx, 6)) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 6)");
 										}
-										this.state = 593;
+										this.state = 611;
 										this.dotNotation();
+										_localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression;
+									}
+									break;
+
+								case 2:
+									{
+										_localctx = new BracketNotationMemberAccessExpressionContext(
+											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
+										);
+										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
+										this.state = 614;
+										if (!this.precpred(this._ctx, 5)) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 5)");
+										}
+										this.state = 615;
+										this.bracketNotation();
 										_localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression;
 									}
 									break;
 
 								case 3:
 									{
-										_localctx = new BracketNotationMemberAccessExpressionContext(
+										_localctx = new SliceNotationMemberAccessExpressionContext(
 											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
 										);
 										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
-										this.state = 596;
-										if (!this.precpred(this._ctx, 2)) {
-											throw this.createFailedPredicateException("this.precpred(this._ctx, 2)");
+										this.state = 618;
+										if (!this.precpred(this._ctx, 4)) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 4)");
 										}
-										this.state = 597;
-										this.bracketNotation();
+										this.state = 619;
+										this.sliceNotation();
 										_localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression;
 									}
 									break;
 
 								case 4:
 									{
-										_localctx = new SliceNotationMemberAccessExpressionContext(
+										_localctx = new FunctionCallExpressionContext(
 											new ComputedPrimaryExpressionContext(_parentctx, _parentState),
 										);
 										this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_computedPrimaryExpression);
-										this.state = 600;
-										if (!this.precpred(this._ctx, 1)) {
-											throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
+										this.state = 622;
+										if (!this.precpred(this._ctx, 3)) {
+											throw this.createFailedPredicateException("this.precpred(this._ctx, 3)");
 										}
-										this.state = 601;
-										this.sliceNotation();
-										_localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression;
+										this.state = 623;
+										this.match(KipperParser.LeftParen);
+										this.state = 625;
+										this._errHandler.sync(this);
+										_la = this._input.LA(1);
+										if (
+											(((_la - 23) & ~0x1f) === 0 &&
+												((1 << (_la - 23)) &
+													((1 << (KipperParser.CallFunc - 23)) |
+														(1 << (KipperParser.New - 23)) |
+														(1 << (KipperParser.True - 23)) |
+														(1 << (KipperParser.False - 23)) |
+														(1 << (KipperParser.Typeof - 23)) |
+														(1 << (KipperParser.Void - 23)) |
+														(1 << (KipperParser.Null - 23)) |
+														(1 << (KipperParser.Undefined - 23)) |
+														(1 << (KipperParser.LeftParen - 23)) |
+														(1 << (KipperParser.LeftBracket - 23)) |
+														(1 << (KipperParser.LeftBrace - 23)) |
+														(1 << (KipperParser.Plus - 23)) |
+														(1 << (KipperParser.PlusPlus - 23)) |
+														(1 << (KipperParser.Minus - 23)) |
+														(1 << (KipperParser.MinusMinus - 23)))) !==
+													0) ||
+											(((_la - 60) & ~0x1f) === 0 &&
+												((1 << (_la - 60)) &
+													((1 << (KipperParser.Not - 60)) |
+														(1 << (KipperParser.BitwiseNot - 60)) |
+														(1 << (KipperParser.Identifier - 60)) |
+														(1 << (KipperParser.IntegerConstant - 60)) |
+														(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+														(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+														(1 << (KipperParser.FloatingConstant - 60)) |
+														(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+														(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
+													0)
+										) {
+											{
+												this.state = 624;
+												this.argumentExpressionList();
+											}
+										}
+
+										this.state = 627;
+										this.match(KipperParser.RightParen);
+										_localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression;
 									}
 									break;
 							}
 						}
 					}
-					this.state = 608;
+					this.state = 633;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 54, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 57, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -3403,21 +3512,21 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 609;
+				this.state = 634;
 				this.assignmentExpression();
-				this.state = 614;
+				this.state = 639;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				while (_la === KipperParser.Comma) {
 					{
 						{
-							this.state = 610;
+							this.state = 635;
 							this.match(KipperParser.Comma);
-							this.state = 611;
+							this.state = 636;
 							this.assignmentExpression();
 						}
 					}
-					this.state = 616;
+					this.state = 641;
 					this._errHandler.sync(this);
 					_la = this._input.LA(1);
 				}
@@ -3442,9 +3551,9 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 617;
+				this.state = 642;
 				this.match(KipperParser.Dot);
-				this.state = 618;
+				this.state = 643;
 				this.identifier();
 			}
 		} catch (re) {
@@ -3467,11 +3576,11 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 620;
+				this.state = 645;
 				this.match(KipperParser.LeftBracket);
-				this.state = 621;
+				this.state = 646;
 				this.expression();
-				this.state = 622;
+				this.state = 647;
 				this.match(KipperParser.RightBracket);
 			}
 		} catch (re) {
@@ -3495,93 +3604,95 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 624;
+				this.state = 649;
 				this.match(KipperParser.LeftBracket);
-				this.state = 628;
+				this.state = 653;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					(((_la - 22) & ~0x1f) === 0 &&
-						((1 << (_la - 22)) &
-							((1 << (KipperParser.CallFunc - 22)) |
-								(1 << (KipperParser.True - 22)) |
-								(1 << (KipperParser.False - 22)) |
-								(1 << (KipperParser.Typeof - 22)) |
-								(1 << (KipperParser.Void - 22)) |
-								(1 << (KipperParser.Null - 22)) |
-								(1 << (KipperParser.Undefined - 22)) |
-								(1 << (KipperParser.LeftParen - 22)) |
-								(1 << (KipperParser.LeftBracket - 22)) |
-								(1 << (KipperParser.LeftBrace - 22)) |
-								(1 << (KipperParser.Plus - 22)) |
-								(1 << (KipperParser.PlusPlus - 22)) |
-								(1 << (KipperParser.Minus - 22)) |
-								(1 << (KipperParser.MinusMinus - 22)))) !==
+					(((_la - 23) & ~0x1f) === 0 &&
+						((1 << (_la - 23)) &
+							((1 << (KipperParser.CallFunc - 23)) |
+								(1 << (KipperParser.New - 23)) |
+								(1 << (KipperParser.True - 23)) |
+								(1 << (KipperParser.False - 23)) |
+								(1 << (KipperParser.Typeof - 23)) |
+								(1 << (KipperParser.Void - 23)) |
+								(1 << (KipperParser.Null - 23)) |
+								(1 << (KipperParser.Undefined - 23)) |
+								(1 << (KipperParser.LeftParen - 23)) |
+								(1 << (KipperParser.LeftBracket - 23)) |
+								(1 << (KipperParser.LeftBrace - 23)) |
+								(1 << (KipperParser.Plus - 23)) |
+								(1 << (KipperParser.PlusPlus - 23)) |
+								(1 << (KipperParser.Minus - 23)) |
+								(1 << (KipperParser.MinusMinus - 23)))) !==
 							0) ||
-					(((_la - 57) & ~0x1f) === 0 &&
-						((1 << (_la - 57)) &
-							((1 << (KipperParser.Not - 57)) |
-								(1 << (KipperParser.BitwiseNot - 57)) |
-								(1 << (KipperParser.Identifier - 57)) |
-								(1 << (KipperParser.IntegerConstant - 57)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.FloatingConstant - 57)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
+					(((_la - 60) & ~0x1f) === 0 &&
+						((1 << (_la - 60)) &
+							((1 << (KipperParser.Not - 60)) |
+								(1 << (KipperParser.BitwiseNot - 60)) |
+								(1 << (KipperParser.Identifier - 60)) |
+								(1 << (KipperParser.IntegerConstant - 60)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.FloatingConstant - 60)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
 							0)
 				) {
 					{
-						this.state = 625;
+						this.state = 650;
 						this.expression();
 						_localctx.sliceStart = true;
 					}
 				}
 
-				this.state = 630;
+				this.state = 655;
 				this.match(KipperParser.Colon);
-				this.state = 634;
+				this.state = 659;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					(((_la - 22) & ~0x1f) === 0 &&
-						((1 << (_la - 22)) &
-							((1 << (KipperParser.CallFunc - 22)) |
-								(1 << (KipperParser.True - 22)) |
-								(1 << (KipperParser.False - 22)) |
-								(1 << (KipperParser.Typeof - 22)) |
-								(1 << (KipperParser.Void - 22)) |
-								(1 << (KipperParser.Null - 22)) |
-								(1 << (KipperParser.Undefined - 22)) |
-								(1 << (KipperParser.LeftParen - 22)) |
-								(1 << (KipperParser.LeftBracket - 22)) |
-								(1 << (KipperParser.LeftBrace - 22)) |
-								(1 << (KipperParser.Plus - 22)) |
-								(1 << (KipperParser.PlusPlus - 22)) |
-								(1 << (KipperParser.Minus - 22)) |
-								(1 << (KipperParser.MinusMinus - 22)))) !==
+					(((_la - 23) & ~0x1f) === 0 &&
+						((1 << (_la - 23)) &
+							((1 << (KipperParser.CallFunc - 23)) |
+								(1 << (KipperParser.New - 23)) |
+								(1 << (KipperParser.True - 23)) |
+								(1 << (KipperParser.False - 23)) |
+								(1 << (KipperParser.Typeof - 23)) |
+								(1 << (KipperParser.Void - 23)) |
+								(1 << (KipperParser.Null - 23)) |
+								(1 << (KipperParser.Undefined - 23)) |
+								(1 << (KipperParser.LeftParen - 23)) |
+								(1 << (KipperParser.LeftBracket - 23)) |
+								(1 << (KipperParser.LeftBrace - 23)) |
+								(1 << (KipperParser.Plus - 23)) |
+								(1 << (KipperParser.PlusPlus - 23)) |
+								(1 << (KipperParser.Minus - 23)) |
+								(1 << (KipperParser.MinusMinus - 23)))) !==
 							0) ||
-					(((_la - 57) & ~0x1f) === 0 &&
-						((1 << (_la - 57)) &
-							((1 << (KipperParser.Not - 57)) |
-								(1 << (KipperParser.BitwiseNot - 57)) |
-								(1 << (KipperParser.Identifier - 57)) |
-								(1 << (KipperParser.IntegerConstant - 57)) |
-								(1 << (KipperParser.SingleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.DoubleQuoteStringLiteral - 57)) |
-								(1 << (KipperParser.FloatingConstant - 57)) |
-								(1 << (KipperParser.FStringSingleQuoteStart - 57)) |
-								(1 << (KipperParser.FStringDoubleQuoteStart - 57)))) !==
+					(((_la - 60) & ~0x1f) === 0 &&
+						((1 << (_la - 60)) &
+							((1 << (KipperParser.Not - 60)) |
+								(1 << (KipperParser.BitwiseNot - 60)) |
+								(1 << (KipperParser.Identifier - 60)) |
+								(1 << (KipperParser.IntegerConstant - 60)) |
+								(1 << (KipperParser.SingleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.DoubleQuoteStringLiteral - 60)) |
+								(1 << (KipperParser.FloatingConstant - 60)) |
+								(1 << (KipperParser.FStringSingleQuoteStart - 60)) |
+								(1 << (KipperParser.FStringDoubleQuoteStart - 60)))) !==
 							0)
 				) {
 					{
-						this.state = 631;
+						this.state = 656;
 						this.expression();
 						_localctx.sliceEnd = true;
 					}
 				}
 
-				this.state = 636;
+				this.state = 661;
 				this.match(KipperParser.RightBracket);
 			}
 		} catch (re) {
@@ -3602,13 +3713,13 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: PostfixExpressionContext = new PostfixExpressionContext(this._ctx, this.state);
 		this.enterRule(_localctx, 124, KipperParser.RULE_postfixExpression);
 		try {
-			this.state = 641;
+			this.state = 666;
 			this._errHandler.sync(this);
-			switch (this.interpreter.adaptivePredict(this._input, 58, this._ctx)) {
+			switch (this.interpreter.adaptivePredict(this._input, 61, this._ctx)) {
 				case 1:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 638;
+						this.state = 663;
 						this.computedPrimaryExpression(0);
 					}
 					break;
@@ -3616,7 +3727,7 @@ export class KipperParser extends KipperParserBase {
 				case 2:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 639;
+						this.state = 664;
 						this.incrementOrDecrementPostfixExpression();
 					}
 					break;
@@ -3624,7 +3735,7 @@ export class KipperParser extends KipperParserBase {
 				case 3:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 640;
+						this.state = 665;
 						this.typeofExpression();
 					}
 					break;
@@ -3652,9 +3763,9 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 643;
+				this.state = 668;
 				this.computedPrimaryExpression(0);
-				this.state = 644;
+				this.state = 669;
 				this.incrementOrDecrementOperator();
 			}
 		} catch (re) {
@@ -3677,29 +3788,10 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 646;
+				this.state = 671;
 				this.match(KipperParser.Typeof);
-				this.state = 652;
-				this._errHandler.sync(this);
-				switch (this.interpreter.adaptivePredict(this._input, 59, this._ctx)) {
-					case 1:
-						{
-							this.state = 647;
-							this.match(KipperParser.LeftParen);
-							this.state = 648;
-							this.assignmentExpression();
-							this.state = 649;
-							this.match(KipperParser.RightParen);
-						}
-						break;
-
-					case 2:
-						{
-							this.state = 651;
-							this.assignmentExpression();
-						}
-						break;
-				}
+				this.state = 672;
+				this.assignmentExpression();
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -3719,10 +3811,11 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: UnaryExpressionContext = new UnaryExpressionContext(this._ctx, this.state);
 		this.enterRule(_localctx, 130, KipperParser.RULE_unaryExpression);
 		try {
-			this.state = 657;
+			this.state = 677;
 			this._errHandler.sync(this);
 			switch (this._input.LA(1)) {
 				case KipperParser.CallFunc:
+				case KipperParser.New:
 				case KipperParser.True:
 				case KipperParser.False:
 				case KipperParser.Typeof:
@@ -3741,7 +3834,7 @@ export class KipperParser extends KipperParserBase {
 				case KipperParser.FStringDoubleQuoteStart:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 654;
+						this.state = 674;
 						this.postfixExpression();
 					}
 					break;
@@ -3749,7 +3842,7 @@ export class KipperParser extends KipperParserBase {
 				case KipperParser.MinusMinus:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 655;
+						this.state = 675;
 						this.incrementOrDecrementUnaryExpression();
 					}
 					break;
@@ -3759,7 +3852,7 @@ export class KipperParser extends KipperParserBase {
 				case KipperParser.BitwiseNot:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 656;
+						this.state = 676;
 						this.operatorModifiedUnaryExpression();
 					}
 					break;
@@ -3789,9 +3882,9 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 659;
+				this.state = 679;
 				this.incrementOrDecrementOperator();
-				this.state = 660;
+				this.state = 680;
 				this.postfixExpression();
 			}
 		} catch (re) {
@@ -3817,9 +3910,9 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 662;
+				this.state = 682;
 				this.unaryOperator();
-				this.state = 663;
+				this.state = 683;
 				this.postfixExpression();
 			}
 		} catch (re) {
@@ -3843,7 +3936,7 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 665;
+				this.state = 685;
 				_la = this._input.LA(1);
 				if (!(_la === KipperParser.PlusPlus || _la === KipperParser.MinusMinus)) {
 					this._errHandler.recoverInline(this);
@@ -3877,16 +3970,16 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 667;
+				this.state = 687;
 				_la = this._input.LA(1);
 				if (
 					!(
-						((_la - 47) & ~0x1f) === 0 &&
-						((1 << (_la - 47)) &
-							((1 << (KipperParser.Plus - 47)) |
-								(1 << (KipperParser.Minus - 47)) |
-								(1 << (KipperParser.Not - 47)) |
-								(1 << (KipperParser.BitwiseNot - 47)))) !==
+						((_la - 50) & ~0x1f) === 0 &&
+						((1 << (_la - 50)) &
+							((1 << (KipperParser.Plus - 50)) |
+								(1 << (KipperParser.Minus - 50)) |
+								(1 << (KipperParser.Not - 50)) |
+								(1 << (KipperParser.BitwiseNot - 50)))) !==
 							0
 					)
 				) {
@@ -3918,14 +4011,14 @@ export class KipperParser extends KipperParserBase {
 		let _localctx: CastOrConvertExpressionContext = new CastOrConvertExpressionContext(this._ctx, this.state);
 		this.enterRule(_localctx, 140, KipperParser.RULE_castOrConvertExpression);
 		try {
-			this.state = 674;
+			this.state = 694;
 			this._errHandler.sync(this);
-			switch (this.interpreter.adaptivePredict(this._input, 61, this._ctx)) {
+			switch (this.interpreter.adaptivePredict(this._input, 63, this._ctx)) {
 				case 1:
 					_localctx = new PassOnCastOrConvertExpressionContext(_localctx);
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 669;
+						this.state = 689;
 						this.unaryExpression();
 					}
 					break;
@@ -3934,11 +4027,11 @@ export class KipperParser extends KipperParserBase {
 					_localctx = new ActualCastOrConvertExpressionContext(_localctx);
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 670;
+						this.state = 690;
 						this.unaryExpression();
-						this.state = 671;
+						this.state = 691;
 						this.match(KipperParser.As);
-						this.state = 672;
+						this.state = 692;
 						this.typeSpecifierExpression();
 					}
 					break;
@@ -3981,13 +4074,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 677;
+					this.state = 697;
 					this.castOrConvertExpression();
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 684;
+				this.state = 704;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 62, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 64, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4000,20 +4093,20 @@ export class KipperParser extends KipperParserBase {
 									new MultiplicativeExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_multiplicativeExpression);
-								this.state = 679;
+								this.state = 699;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 680;
+								this.state = 700;
 								_la = this._input.LA(1);
 								if (
 									!(
-										((_la - 51) & ~0x1f) === 0 &&
-										((1 << (_la - 51)) &
-											((1 << (KipperParser.Star - 51)) |
-												(1 << (KipperParser.Div - 51)) |
-												(1 << (KipperParser.Mod - 51)) |
-												(1 << (KipperParser.PowerTo - 51)))) !==
+										((_la - 54) & ~0x1f) === 0 &&
+										((1 << (_la - 54)) &
+											((1 << (KipperParser.Star - 54)) |
+												(1 << (KipperParser.Div - 54)) |
+												(1 << (KipperParser.Mod - 54)) |
+												(1 << (KipperParser.PowerTo - 54)))) !==
 											0
 									)
 								) {
@@ -4026,14 +4119,14 @@ export class KipperParser extends KipperParserBase {
 									this._errHandler.reportMatch(this);
 									this.consume();
 								}
-								this.state = 681;
+								this.state = 701;
 								this.castOrConvertExpression();
 							}
 						}
 					}
-					this.state = 686;
+					this.state = 706;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 62, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 64, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4074,13 +4167,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 688;
+					this.state = 708;
 					this.multiplicativeExpression(0);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 695;
+				this.state = 715;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 63, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 65, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4093,11 +4186,11 @@ export class KipperParser extends KipperParserBase {
 									new AdditiveExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_additiveExpression);
-								this.state = 690;
+								this.state = 710;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 691;
+								this.state = 711;
 								_la = this._input.LA(1);
 								if (!(_la === KipperParser.Plus || _la === KipperParser.Minus)) {
 									this._errHandler.recoverInline(this);
@@ -4109,14 +4202,14 @@ export class KipperParser extends KipperParserBase {
 									this._errHandler.reportMatch(this);
 									this.consume();
 								}
-								this.state = 692;
+								this.state = 712;
 								this.multiplicativeExpression(0);
 							}
 						}
 					}
-					this.state = 697;
+					this.state = 717;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 63, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 65, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4156,13 +4249,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 699;
+					this.state = 719;
 					this.additiveExpression(0);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 707;
+				this.state = 727;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 64, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 66, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4175,20 +4268,20 @@ export class KipperParser extends KipperParserBase {
 									new BitwiseShiftExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_bitwiseShiftExpression);
-								this.state = 701;
+								this.state = 721;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 702;
+								this.state = 722;
 								this.bitwiseShiftOperators();
-								this.state = 703;
+								this.state = 723;
 								this.bitwiseAndExpression(0);
 							}
 						}
 					}
-					this.state = 709;
+					this.state = 729;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 64, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 66, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4212,15 +4305,15 @@ export class KipperParser extends KipperParserBase {
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 710;
+				this.state = 730;
 				_la = this._input.LA(1);
 				if (
 					!(
-						((_la - 74) & ~0x1f) === 0 &&
-						((1 << (_la - 74)) &
-							((1 << (KipperParser.BitwiseZeroFillLeftShift - 74)) |
-								(1 << (KipperParser.BitwiseSignedRightShift - 74)) |
-								(1 << (KipperParser.BitwiseZeroFillRightShift - 74)))) !==
+						((_la - 77) & ~0x1f) === 0 &&
+						((1 << (_la - 77)) &
+							((1 << (KipperParser.BitwiseZeroFillLeftShift - 77)) |
+								(1 << (KipperParser.BitwiseSignedRightShift - 77)) |
+								(1 << (KipperParser.BitwiseZeroFillRightShift - 77)))) !==
 							0
 					)
 				) {
@@ -4248,6 +4341,148 @@ export class KipperParser extends KipperParserBase {
 		return _localctx;
 	}
 
+	public instanceOfExpression(): InstanceOfExpressionContext;
+	public instanceOfExpression(_p: number): InstanceOfExpressionContext;
+	// @RuleVersion(0)
+	public instanceOfExpression(_p?: number): InstanceOfExpressionContext {
+		if (_p === undefined) {
+			_p = 0;
+		}
+
+		let _parentctx: ParserRuleContext = this._ctx;
+		let _parentState: number = this.state;
+		let _localctx: InstanceOfExpressionContext = new InstanceOfExpressionContext(this._ctx, _parentState);
+		let _prevctx: InstanceOfExpressionContext = _localctx;
+		let _startState: number = 150;
+		this.enterRecursionRule(_localctx, 150, KipperParser.RULE_instanceOfExpression, _p);
+		try {
+			let _alt: number;
+			this.enterOuterAlt(_localctx, 1);
+			{
+				{
+					_localctx = new PassOnInstanceOfExpressionContext(_localctx);
+					this._ctx = _localctx;
+					_prevctx = _localctx;
+
+					this.state = 733;
+					this.bitwiseShiftExpression(0);
+				}
+				this._ctx._stop = this._input.tryLT(-1);
+				this.state = 740;
+				this._errHandler.sync(this);
+				_alt = this.interpreter.adaptivePredict(this._input, 67, this._ctx);
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						if (this._parseListeners != null) {
+							this.triggerExitRuleEvent();
+						}
+						_prevctx = _localctx;
+						{
+							{
+								_localctx = new ActualInstanceOfExpressionContext(
+									new InstanceOfExpressionContext(_parentctx, _parentState),
+								);
+								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_instanceOfExpression);
+								this.state = 735;
+								if (!this.precpred(this._ctx, 1)) {
+									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
+								}
+								this.state = 736;
+								this.match(KipperParser.InstanceOf);
+								this.state = 737;
+								this.typeSpecifierExpression();
+							}
+						}
+					}
+					this.state = 742;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 67, this._ctx);
+				}
+			}
+		} catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		} finally {
+			this.unrollRecursionContexts(_parentctx);
+		}
+		return _localctx;
+	}
+
+	public matchesExpression(): MatchesExpressionContext;
+	public matchesExpression(_p: number): MatchesExpressionContext;
+	// @RuleVersion(0)
+	public matchesExpression(_p?: number): MatchesExpressionContext {
+		if (_p === undefined) {
+			_p = 0;
+		}
+
+		let _parentctx: ParserRuleContext = this._ctx;
+		let _parentState: number = this.state;
+		let _localctx: MatchesExpressionContext = new MatchesExpressionContext(this._ctx, _parentState);
+		let _prevctx: MatchesExpressionContext = _localctx;
+		let _startState: number = 152;
+		this.enterRecursionRule(_localctx, 152, KipperParser.RULE_matchesExpression, _p);
+		try {
+			let _alt: number;
+			this.enterOuterAlt(_localctx, 1);
+			{
+				{
+					_localctx = new PassOnMatchesExpressionContext(_localctx);
+					this._ctx = _localctx;
+					_prevctx = _localctx;
+
+					this.state = 744;
+					this.instanceOfExpression(0);
+				}
+				this._ctx._stop = this._input.tryLT(-1);
+				this.state = 751;
+				this._errHandler.sync(this);
+				_alt = this.interpreter.adaptivePredict(this._input, 68, this._ctx);
+				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
+					if (_alt === 1) {
+						if (this._parseListeners != null) {
+							this.triggerExitRuleEvent();
+						}
+						_prevctx = _localctx;
+						{
+							{
+								_localctx = new ActualMatchesExpressionContext(new MatchesExpressionContext(_parentctx, _parentState));
+								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_matchesExpression);
+								this.state = 746;
+								if (!this.precpred(this._ctx, 1)) {
+									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
+								}
+								this.state = 747;
+								this.match(KipperParser.Matches);
+								this.state = 748;
+								this.typeSpecifierExpression();
+							}
+						}
+					}
+					this.state = 753;
+					this._errHandler.sync(this);
+					_alt = this.interpreter.adaptivePredict(this._input, 68, this._ctx);
+				}
+			}
+		} catch (re) {
+			if (re instanceof RecognitionException) {
+				_localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		} finally {
+			this.unrollRecursionContexts(_parentctx);
+		}
+		return _localctx;
+	}
+
 	public relationalExpression(): RelationalExpressionContext;
 	public relationalExpression(_p: number): RelationalExpressionContext;
 	// @RuleVersion(0)
@@ -4260,8 +4495,8 @@ export class KipperParser extends KipperParserBase {
 		let _parentState: number = this.state;
 		let _localctx: RelationalExpressionContext = new RelationalExpressionContext(this._ctx, _parentState);
 		let _prevctx: RelationalExpressionContext = _localctx;
-		let _startState: number = 150;
-		this.enterRecursionRule(_localctx, 150, KipperParser.RULE_relationalExpression, _p);
+		let _startState: number = 154;
+		this.enterRecursionRule(_localctx, 154, KipperParser.RULE_relationalExpression, _p);
 		let _la: number;
 		try {
 			let _alt: number;
@@ -4272,13 +4507,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 713;
-					this.bitwiseShiftExpression(0);
+					this.state = 755;
+					this.matchesExpression(0);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 720;
+				this.state = 762;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 65, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 69, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4291,20 +4526,20 @@ export class KipperParser extends KipperParserBase {
 									new RelationalExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_relationalExpression);
-								this.state = 715;
+								this.state = 757;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 716;
+								this.state = 758;
 								_la = this._input.LA(1);
 								if (
 									!(
-										((_la - 66) & ~0x1f) === 0 &&
-										((1 << (_la - 66)) &
-											((1 << (KipperParser.Less - 66)) |
-												(1 << (KipperParser.LessEqual - 66)) |
-												(1 << (KipperParser.Greater - 66)) |
-												(1 << (KipperParser.GreaterEqual - 66)))) !==
+										((_la - 69) & ~0x1f) === 0 &&
+										((1 << (_la - 69)) &
+											((1 << (KipperParser.Less - 69)) |
+												(1 << (KipperParser.LessEqual - 69)) |
+												(1 << (KipperParser.Greater - 69)) |
+												(1 << (KipperParser.GreaterEqual - 69)))) !==
 											0
 									)
 								) {
@@ -4317,14 +4552,14 @@ export class KipperParser extends KipperParserBase {
 									this._errHandler.reportMatch(this);
 									this.consume();
 								}
-								this.state = 717;
-								this.bitwiseShiftExpression(0);
+								this.state = 759;
+								this.relationalExpression(2);
 							}
 						}
 					}
-					this.state = 722;
+					this.state = 764;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 65, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 69, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4353,8 +4588,8 @@ export class KipperParser extends KipperParserBase {
 		let _parentState: number = this.state;
 		let _localctx: EqualityExpressionContext = new EqualityExpressionContext(this._ctx, _parentState);
 		let _prevctx: EqualityExpressionContext = _localctx;
-		let _startState: number = 152;
-		this.enterRecursionRule(_localctx, 152, KipperParser.RULE_equalityExpression, _p);
+		let _startState: number = 156;
+		this.enterRecursionRule(_localctx, 156, KipperParser.RULE_equalityExpression, _p);
 		let _la: number;
 		try {
 			let _alt: number;
@@ -4365,13 +4600,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 724;
+					this.state = 766;
 					this.relationalExpression(0);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 731;
+				this.state = 773;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 66, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 70, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4384,11 +4619,11 @@ export class KipperParser extends KipperParserBase {
 									new EqualityExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_equalityExpression);
-								this.state = 726;
+								this.state = 768;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 727;
+								this.state = 769;
 								_la = this._input.LA(1);
 								if (!(_la === KipperParser.Equal || _la === KipperParser.NotEqual)) {
 									this._errHandler.recoverInline(this);
@@ -4400,14 +4635,14 @@ export class KipperParser extends KipperParserBase {
 									this._errHandler.reportMatch(this);
 									this.consume();
 								}
-								this.state = 728;
+								this.state = 770;
 								this.relationalExpression(0);
 							}
 						}
 					}
-					this.state = 733;
+					this.state = 775;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 66, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 70, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4436,8 +4671,8 @@ export class KipperParser extends KipperParserBase {
 		let _parentState: number = this.state;
 		let _localctx: BitwiseAndExpressionContext = new BitwiseAndExpressionContext(this._ctx, _parentState);
 		let _prevctx: BitwiseAndExpressionContext = _localctx;
-		let _startState: number = 154;
-		this.enterRecursionRule(_localctx, 154, KipperParser.RULE_bitwiseAndExpression, _p);
+		let _startState: number = 158;
+		this.enterRecursionRule(_localctx, 158, KipperParser.RULE_bitwiseAndExpression, _p);
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
@@ -4447,13 +4682,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 735;
+					this.state = 777;
 					this.equalityExpression(0);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 742;
+				this.state = 784;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 67, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 71, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4466,20 +4701,20 @@ export class KipperParser extends KipperParserBase {
 									new BitwiseAndExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_bitwiseAndExpression);
-								this.state = 737;
+								this.state = 779;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 738;
+								this.state = 780;
 								this.match(KipperParser.BitwiseAnd);
-								this.state = 739;
+								this.state = 781;
 								this.equalityExpression(0);
 							}
 						}
 					}
-					this.state = 744;
+					this.state = 786;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 67, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 71, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4508,8 +4743,8 @@ export class KipperParser extends KipperParserBase {
 		let _parentState: number = this.state;
 		let _localctx: BitwiseXorExpressionContext = new BitwiseXorExpressionContext(this._ctx, _parentState);
 		let _prevctx: BitwiseXorExpressionContext = _localctx;
-		let _startState: number = 156;
-		this.enterRecursionRule(_localctx, 156, KipperParser.RULE_bitwiseXorExpression, _p);
+		let _startState: number = 160;
+		this.enterRecursionRule(_localctx, 160, KipperParser.RULE_bitwiseXorExpression, _p);
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
@@ -4519,13 +4754,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 746;
+					this.state = 788;
 					this.bitwiseAndExpression(0);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 753;
+				this.state = 795;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 68, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 72, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4538,20 +4773,20 @@ export class KipperParser extends KipperParserBase {
 									new BitwiseXorExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_bitwiseXorExpression);
-								this.state = 748;
+								this.state = 790;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 749;
+								this.state = 791;
 								this.match(KipperParser.BitwiseXor);
-								this.state = 750;
+								this.state = 792;
 								this.bitwiseAndExpression(0);
 							}
 						}
 					}
-					this.state = 755;
+					this.state = 797;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 68, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 72, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4580,8 +4815,8 @@ export class KipperParser extends KipperParserBase {
 		let _parentState: number = this.state;
 		let _localctx: BitwiseOrExpressionContext = new BitwiseOrExpressionContext(this._ctx, _parentState);
 		let _prevctx: BitwiseOrExpressionContext = _localctx;
-		let _startState: number = 158;
-		this.enterRecursionRule(_localctx, 158, KipperParser.RULE_bitwiseOrExpression, _p);
+		let _startState: number = 162;
+		this.enterRecursionRule(_localctx, 162, KipperParser.RULE_bitwiseOrExpression, _p);
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
@@ -4591,13 +4826,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 757;
+					this.state = 799;
 					this.bitwiseXorExpression(0);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 764;
+				this.state = 806;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 69, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 73, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4610,20 +4845,20 @@ export class KipperParser extends KipperParserBase {
 									new BitwiseOrExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_bitwiseOrExpression);
-								this.state = 759;
+								this.state = 801;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 760;
+								this.state = 802;
 								this.match(KipperParser.BitwiseOr);
-								this.state = 761;
+								this.state = 803;
 								this.bitwiseXorExpression(0);
 							}
 						}
 					}
-					this.state = 766;
+					this.state = 808;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 69, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 73, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4652,8 +4887,8 @@ export class KipperParser extends KipperParserBase {
 		let _parentState: number = this.state;
 		let _localctx: LogicalAndExpressionContext = new LogicalAndExpressionContext(this._ctx, _parentState);
 		let _prevctx: LogicalAndExpressionContext = _localctx;
-		let _startState: number = 160;
-		this.enterRecursionRule(_localctx, 160, KipperParser.RULE_logicalAndExpression, _p);
+		let _startState: number = 164;
+		this.enterRecursionRule(_localctx, 164, KipperParser.RULE_logicalAndExpression, _p);
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
@@ -4663,13 +4898,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 768;
+					this.state = 810;
 					this.bitwiseOrExpression(0);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 775;
+				this.state = 817;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 70, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 74, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4682,20 +4917,20 @@ export class KipperParser extends KipperParserBase {
 									new LogicalAndExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_logicalAndExpression);
-								this.state = 770;
+								this.state = 812;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 771;
+								this.state = 813;
 								this.match(KipperParser.AndAnd);
-								this.state = 772;
+								this.state = 814;
 								this.bitwiseOrExpression(0);
 							}
 						}
 					}
-					this.state = 777;
+					this.state = 819;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 70, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 74, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4724,8 +4959,8 @@ export class KipperParser extends KipperParserBase {
 		let _parentState: number = this.state;
 		let _localctx: LogicalOrExpressionContext = new LogicalOrExpressionContext(this._ctx, _parentState);
 		let _prevctx: LogicalOrExpressionContext = _localctx;
-		let _startState: number = 162;
-		this.enterRecursionRule(_localctx, 162, KipperParser.RULE_logicalOrExpression, _p);
+		let _startState: number = 166;
+		this.enterRecursionRule(_localctx, 166, KipperParser.RULE_logicalOrExpression, _p);
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
@@ -4735,13 +4970,13 @@ export class KipperParser extends KipperParserBase {
 					this._ctx = _localctx;
 					_prevctx = _localctx;
 
-					this.state = 779;
+					this.state = 821;
 					this.logicalAndExpression(0);
 				}
 				this._ctx._stop = this._input.tryLT(-1);
-				this.state = 786;
+				this.state = 828;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 71, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 75, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						if (this._parseListeners != null) {
@@ -4754,20 +4989,20 @@ export class KipperParser extends KipperParserBase {
 									new LogicalOrExpressionContext(_parentctx, _parentState),
 								);
 								this.pushNewRecursionContext(_localctx, _startState, KipperParser.RULE_logicalOrExpression);
-								this.state = 781;
+								this.state = 823;
 								if (!this.precpred(this._ctx, 1)) {
 									throw this.createFailedPredicateException("this.precpred(this._ctx, 1)");
 								}
-								this.state = 782;
+								this.state = 824;
 								this.match(KipperParser.OrOr);
-								this.state = 783;
+								this.state = 825;
 								this.logicalAndExpression(0);
 							}
 						}
 					}
-					this.state = 788;
+					this.state = 830;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 71, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 75, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4786,16 +5021,16 @@ export class KipperParser extends KipperParserBase {
 	// @RuleVersion(0)
 	public conditionalExpression(): ConditionalExpressionContext {
 		let _localctx: ConditionalExpressionContext = new ConditionalExpressionContext(this._ctx, this.state);
-		this.enterRule(_localctx, 164, KipperParser.RULE_conditionalExpression);
+		this.enterRule(_localctx, 168, KipperParser.RULE_conditionalExpression);
 		try {
-			this.state = 796;
+			this.state = 838;
 			this._errHandler.sync(this);
-			switch (this.interpreter.adaptivePredict(this._input, 72, this._ctx)) {
+			switch (this.interpreter.adaptivePredict(this._input, 76, this._ctx)) {
 				case 1:
 					_localctx = new PassOnConditionalExpressionContext(_localctx);
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 789;
+						this.state = 831;
 						this.logicalOrExpression(0);
 					}
 					break;
@@ -4804,15 +5039,15 @@ export class KipperParser extends KipperParserBase {
 					_localctx = new ActualConditionalExpressionContext(_localctx);
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 790;
+						this.state = 832;
 						this.logicalOrExpression(0);
-						this.state = 791;
+						this.state = 833;
 						this.match(KipperParser.QuestionMark);
-						this.state = 792;
+						this.state = 834;
 						this.conditionalExpression();
-						this.state = 793;
+						this.state = 835;
 						this.match(KipperParser.Colon);
-						this.state = 794;
+						this.state = 836;
 						this.conditionalExpression();
 					}
 					break;
@@ -4833,16 +5068,16 @@ export class KipperParser extends KipperParserBase {
 	// @RuleVersion(0)
 	public assignmentExpression(): AssignmentExpressionContext {
 		let _localctx: AssignmentExpressionContext = new AssignmentExpressionContext(this._ctx, this.state);
-		this.enterRule(_localctx, 166, KipperParser.RULE_assignmentExpression);
+		this.enterRule(_localctx, 170, KipperParser.RULE_assignmentExpression);
 		try {
-			this.state = 803;
+			this.state = 845;
 			this._errHandler.sync(this);
-			switch (this.interpreter.adaptivePredict(this._input, 73, this._ctx)) {
+			switch (this.interpreter.adaptivePredict(this._input, 77, this._ctx)) {
 				case 1:
 					_localctx = new PassOnAssignmentExpressionContext(_localctx);
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 798;
+						this.state = 840;
 						this.conditionalExpression();
 					}
 					break;
@@ -4851,11 +5086,11 @@ export class KipperParser extends KipperParserBase {
 					_localctx = new ActualAssignmentExpressionContext(_localctx);
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 799;
+						this.state = 841;
 						this.computedPrimaryExpression(0);
-						this.state = 800;
+						this.state = 842;
 						this.assignmentOperator();
-						this.state = 801;
+						this.state = 843;
 						this.assignmentExpression();
 					}
 					break;
@@ -4876,23 +5111,23 @@ export class KipperParser extends KipperParserBase {
 	// @RuleVersion(0)
 	public assignmentOperator(): AssignmentOperatorContext {
 		let _localctx: AssignmentOperatorContext = new AssignmentOperatorContext(this._ctx, this.state);
-		this.enterRule(_localctx, 168, KipperParser.RULE_assignmentOperator);
+		this.enterRule(_localctx, 172, KipperParser.RULE_assignmentOperator);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 805;
+				this.state = 847;
 				_la = this._input.LA(1);
 				if (
 					!(
-						((_la - 58) & ~0x1f) === 0 &&
-						((1 << (_la - 58)) &
-							((1 << (KipperParser.Assign - 58)) |
-								(1 << (KipperParser.PlusAssign - 58)) |
-								(1 << (KipperParser.MinusAssign - 58)) |
-								(1 << (KipperParser.StarAssign - 58)) |
-								(1 << (KipperParser.DivAssign - 58)) |
-								(1 << (KipperParser.ModAssign - 58)))) !==
+						((_la - 61) & ~0x1f) === 0 &&
+						((1 << (_la - 61)) &
+							((1 << (KipperParser.Assign - 61)) |
+								(1 << (KipperParser.PlusAssign - 61)) |
+								(1 << (KipperParser.MinusAssign - 61)) |
+								(1 << (KipperParser.StarAssign - 61)) |
+								(1 << (KipperParser.DivAssign - 61)) |
+								(1 << (KipperParser.ModAssign - 61)))) !==
 							0
 					)
 				) {
@@ -4922,30 +5157,30 @@ export class KipperParser extends KipperParserBase {
 	// @RuleVersion(0)
 	public expression(): ExpressionContext {
 		let _localctx: ExpressionContext = new ExpressionContext(this._ctx, this.state);
-		this.enterRule(_localctx, 170, KipperParser.RULE_expression);
+		this.enterRule(_localctx, 174, KipperParser.RULE_expression);
 		try {
 			let _alt: number;
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 807;
+				this.state = 849;
 				this.assignmentExpression();
-				this.state = 812;
+				this.state = 854;
 				this._errHandler.sync(this);
-				_alt = this.interpreter.adaptivePredict(this._input, 74, this._ctx);
+				_alt = this.interpreter.adaptivePredict(this._input, 78, this._ctx);
 				while (_alt !== 2 && _alt !== ATN.INVALID_ALT_NUMBER) {
 					if (_alt === 1) {
 						{
 							{
-								this.state = 808;
+								this.state = 850;
 								this.match(KipperParser.Comma);
-								this.state = 809;
+								this.state = 851;
 								this.assignmentExpression();
 							}
 						}
 					}
-					this.state = 814;
+					this.state = 856;
 					this._errHandler.sync(this);
-					_alt = this.interpreter.adaptivePredict(this._input, 74, this._ctx);
+					_alt = this.interpreter.adaptivePredict(this._input, 78, this._ctx);
 				}
 			}
 		} catch (re) {
@@ -4964,15 +5199,15 @@ export class KipperParser extends KipperParserBase {
 	// @RuleVersion(0)
 	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
 		let _localctx: TypeSpecifierExpressionContext = new TypeSpecifierExpressionContext(this._ctx, this.state);
-		this.enterRule(_localctx, 172, KipperParser.RULE_typeSpecifierExpression);
+		this.enterRule(_localctx, 176, KipperParser.RULE_typeSpecifierExpression);
 		try {
-			this.state = 818;
+			this.state = 860;
 			this._errHandler.sync(this);
-			switch (this.interpreter.adaptivePredict(this._input, 75, this._ctx)) {
+			switch (this.interpreter.adaptivePredict(this._input, 79, this._ctx)) {
 				case 1:
 					this.enterOuterAlt(_localctx, 1);
 					{
-						this.state = 815;
+						this.state = 857;
 						this.identifierTypeSpecifierExpression();
 					}
 					break;
@@ -4980,7 +5215,7 @@ export class KipperParser extends KipperParserBase {
 				case 2:
 					this.enterOuterAlt(_localctx, 2);
 					{
-						this.state = 816;
+						this.state = 858;
 						this.genericTypeSpecifierExpression();
 					}
 					break;
@@ -4988,7 +5223,7 @@ export class KipperParser extends KipperParserBase {
 				case 3:
 					this.enterOuterAlt(_localctx, 3);
 					{
-						this.state = 817;
+						this.state = 859;
 						this.typeofTypeSpecifierExpression();
 					}
 					break;
@@ -5012,11 +5247,11 @@ export class KipperParser extends KipperParserBase {
 			this._ctx,
 			this.state,
 		);
-		this.enterRule(_localctx, 174, KipperParser.RULE_identifierTypeSpecifierExpression);
+		this.enterRule(_localctx, 178, KipperParser.RULE_identifierTypeSpecifierExpression);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 820;
+				this.state = 862;
 				this.typeSpecifierIdentifier();
 			}
 		} catch (re) {
@@ -5038,51 +5273,51 @@ export class KipperParser extends KipperParserBase {
 			this._ctx,
 			this.state,
 		);
-		this.enterRule(_localctx, 176, KipperParser.RULE_genericTypeSpecifierExpression);
+		this.enterRule(_localctx, 180, KipperParser.RULE_genericTypeSpecifierExpression);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 822;
+				this.state = 864;
 				this.typeSpecifierIdentifier();
-				this.state = 823;
+				this.state = 865;
 				this.match(KipperParser.Less);
-				this.state = 832;
+				this.state = 874;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 				if (
-					(((_la - 29) & ~0x1f) === 0 &&
-						((1 << (_la - 29)) &
-							((1 << (KipperParser.Typeof - 29)) |
-								(1 << (KipperParser.Void - 29)) |
-								(1 << (KipperParser.Null - 29)) |
-								(1 << (KipperParser.Undefined - 29)))) !==
+					(((_la - 32) & ~0x1f) === 0 &&
+						((1 << (_la - 32)) &
+							((1 << (KipperParser.Typeof - 32)) |
+								(1 << (KipperParser.Void - 32)) |
+								(1 << (KipperParser.Null - 32)) |
+								(1 << (KipperParser.Undefined - 32)))) !==
 							0) ||
 					_la === KipperParser.Identifier
 				) {
 					{
-						this.state = 824;
+						this.state = 866;
 						this.typeSpecifierExpression();
-						this.state = 829;
+						this.state = 871;
 						this._errHandler.sync(this);
 						_la = this._input.LA(1);
 						while (_la === KipperParser.Comma) {
 							{
 								{
-									this.state = 825;
+									this.state = 867;
 									this.match(KipperParser.Comma);
-									this.state = 826;
+									this.state = 868;
 									this.typeSpecifierExpression();
 								}
 							}
-							this.state = 831;
+							this.state = 873;
 							this._errHandler.sync(this);
 							_la = this._input.LA(1);
 						}
 					}
 				}
 
-				this.state = 834;
+				this.state = 876;
 				this.match(KipperParser.Greater);
 			}
 		} catch (re) {
@@ -5104,17 +5339,17 @@ export class KipperParser extends KipperParserBase {
 			this._ctx,
 			this.state,
 		);
-		this.enterRule(_localctx, 178, KipperParser.RULE_typeofTypeSpecifierExpression);
+		this.enterRule(_localctx, 182, KipperParser.RULE_typeofTypeSpecifierExpression);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 836;
+				this.state = 878;
 				this.match(KipperParser.Typeof);
-				this.state = 837;
+				this.state = 879;
 				this.match(KipperParser.LeftParen);
-				this.state = 838;
+				this.state = 880;
 				this.typeSpecifierIdentifier();
-				this.state = 839;
+				this.state = 881;
 				this.match(KipperParser.RightParen);
 			}
 		} catch (re) {
@@ -5133,20 +5368,20 @@ export class KipperParser extends KipperParserBase {
 	// @RuleVersion(0)
 	public typeSpecifierIdentifier(): TypeSpecifierIdentifierContext {
 		let _localctx: TypeSpecifierIdentifierContext = new TypeSpecifierIdentifierContext(this._ctx, this.state);
-		this.enterRule(_localctx, 180, KipperParser.RULE_typeSpecifierIdentifier);
+		this.enterRule(_localctx, 184, KipperParser.RULE_typeSpecifierIdentifier);
 		let _la: number;
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
-				this.state = 841;
+				this.state = 883;
 				_la = this._input.LA(1);
 				if (
 					!(
-						(((_la - 33) & ~0x1f) === 0 &&
-							((1 << (_la - 33)) &
-								((1 << (KipperParser.Void - 33)) |
-									(1 << (KipperParser.Null - 33)) |
-									(1 << (KipperParser.Undefined - 33)))) !==
+						(((_la - 36) & ~0x1f) === 0 &&
+							((1 << (_la - 36)) &
+								((1 << (KipperParser.Void - 36)) |
+									(1 << (KipperParser.Null - 36)) |
+									(1 << (KipperParser.Undefined - 36)))) !==
 								0) ||
 						_la === KipperParser.Identifier
 					)
@@ -5193,24 +5428,30 @@ export class KipperParser extends KipperParserBase {
 				return this.bitwiseShiftExpression_sempred(_localctx as BitwiseShiftExpressionContext, predIndex);
 
 			case 75:
-				return this.relationalExpression_sempred(_localctx as RelationalExpressionContext, predIndex);
+				return this.instanceOfExpression_sempred(_localctx as InstanceOfExpressionContext, predIndex);
 
 			case 76:
-				return this.equalityExpression_sempred(_localctx as EqualityExpressionContext, predIndex);
+				return this.matchesExpression_sempred(_localctx as MatchesExpressionContext, predIndex);
 
 			case 77:
-				return this.bitwiseAndExpression_sempred(_localctx as BitwiseAndExpressionContext, predIndex);
+				return this.relationalExpression_sempred(_localctx as RelationalExpressionContext, predIndex);
 
 			case 78:
-				return this.bitwiseXorExpression_sempred(_localctx as BitwiseXorExpressionContext, predIndex);
+				return this.equalityExpression_sempred(_localctx as EqualityExpressionContext, predIndex);
 
 			case 79:
-				return this.bitwiseOrExpression_sempred(_localctx as BitwiseOrExpressionContext, predIndex);
+				return this.bitwiseAndExpression_sempred(_localctx as BitwiseAndExpressionContext, predIndex);
 
 			case 80:
-				return this.logicalAndExpression_sempred(_localctx as LogicalAndExpressionContext, predIndex);
+				return this.bitwiseXorExpression_sempred(_localctx as BitwiseXorExpressionContext, predIndex);
 
 			case 81:
+				return this.bitwiseOrExpression_sempred(_localctx as BitwiseOrExpressionContext, predIndex);
+
+			case 82:
+				return this.logicalAndExpression_sempred(_localctx as LogicalAndExpressionContext, predIndex);
+
+			case 83:
 				return this.logicalOrExpression_sempred(_localctx as LogicalOrExpressionContext, predIndex);
 		}
 		return true;
@@ -5219,91 +5460,108 @@ export class KipperParser extends KipperParserBase {
 		switch (predIndex) {
 			case 0:
 				return this.notInsideExpressionStatement();
+
+			case 1:
+				return this.insideLambda();
 		}
 		return true;
 	}
 	private computedPrimaryExpression_sempred(_localctx: ComputedPrimaryExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
-			case 1:
-				return this.precpred(this._ctx, 5);
-
 			case 2:
-				return this.precpred(this._ctx, 3);
+				return this.precpred(this._ctx, 6);
 
 			case 3:
-				return this.precpred(this._ctx, 2);
+				return this.precpred(this._ctx, 5);
 
 			case 4:
-				return this.precpred(this._ctx, 1);
+				return this.precpred(this._ctx, 4);
+
+			case 5:
+				return this.precpred(this._ctx, 3);
 		}
 		return true;
 	}
 	private multiplicativeExpression_sempred(_localctx: MultiplicativeExpressionContext, predIndex: number): boolean {
-		switch (predIndex) {
-			case 5:
-				return this.precpred(this._ctx, 1);
-		}
-		return true;
-	}
-	private additiveExpression_sempred(_localctx: AdditiveExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 6:
 				return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
-	private bitwiseShiftExpression_sempred(_localctx: BitwiseShiftExpressionContext, predIndex: number): boolean {
+	private additiveExpression_sempred(_localctx: AdditiveExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 7:
 				return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
-	private relationalExpression_sempred(_localctx: RelationalExpressionContext, predIndex: number): boolean {
+	private bitwiseShiftExpression_sempred(_localctx: BitwiseShiftExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 8:
 				return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
-	private equalityExpression_sempred(_localctx: EqualityExpressionContext, predIndex: number): boolean {
+	private instanceOfExpression_sempred(_localctx: InstanceOfExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 9:
 				return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
-	private bitwiseAndExpression_sempred(_localctx: BitwiseAndExpressionContext, predIndex: number): boolean {
+	private matchesExpression_sempred(_localctx: MatchesExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 10:
 				return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
-	private bitwiseXorExpression_sempred(_localctx: BitwiseXorExpressionContext, predIndex: number): boolean {
+	private relationalExpression_sempred(_localctx: RelationalExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 11:
 				return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
-	private bitwiseOrExpression_sempred(_localctx: BitwiseOrExpressionContext, predIndex: number): boolean {
+	private equalityExpression_sempred(_localctx: EqualityExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 12:
 				return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
-	private logicalAndExpression_sempred(_localctx: LogicalAndExpressionContext, predIndex: number): boolean {
+	private bitwiseAndExpression_sempred(_localctx: BitwiseAndExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 13:
 				return this.precpred(this._ctx, 1);
 		}
 		return true;
 	}
-	private logicalOrExpression_sempred(_localctx: LogicalOrExpressionContext, predIndex: number): boolean {
+	private bitwiseXorExpression_sempred(_localctx: BitwiseXorExpressionContext, predIndex: number): boolean {
 		switch (predIndex) {
 			case 14:
+				return this.precpred(this._ctx, 1);
+		}
+		return true;
+	}
+	private bitwiseOrExpression_sempred(_localctx: BitwiseOrExpressionContext, predIndex: number): boolean {
+		switch (predIndex) {
+			case 15:
+				return this.precpred(this._ctx, 1);
+		}
+		return true;
+	}
+	private logicalAndExpression_sempred(_localctx: LogicalAndExpressionContext, predIndex: number): boolean {
+		switch (predIndex) {
+			case 16:
+				return this.precpred(this._ctx, 1);
+		}
+		return true;
+	}
+	private logicalOrExpression_sempred(_localctx: LogicalOrExpressionContext, predIndex: number): boolean {
+		switch (predIndex) {
+			case 17:
 				return this.precpred(this._ctx, 1);
 		}
 		return true;
@@ -5311,7 +5569,7 @@ export class KipperParser extends KipperParserBase {
 
 	private static readonly _serializedATNSegments: number = 2;
 	private static readonly _serializedATNSegment0: string =
-		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03\\\u034E\x04\x02" +
+		"\x03\uC91D\uCABA\u058D\uAFBA\u4F53\u0607\uEA8B\uC241\x03_\u0378\x04\x02" +
 		"\t\x02\x04\x03\t\x03\x04\x04\t\x04\x04\x05\t\x05\x04\x06\t\x06\x04\x07" +
 		"\t\x07\x04\b\t\b\x04\t\t\t\x04\n\t\n\x04\v\t\v\x04\f\t\f\x04\r\t\r\x04" +
 		"\x0E\t\x0E\x04\x0F\t\x0F\x04\x10\t\x10\x04\x11\t\x11\x04\x12\t\x12\x04" +
@@ -5324,393 +5582,414 @@ export class KipperParser extends KipperParserBase {
 		"=\t=\x04>\t>\x04?\t?\x04@\t@\x04A\tA\x04B\tB\x04C\tC\x04D\tD\x04E\tE\x04" +
 		"F\tF\x04G\tG\x04H\tH\x04I\tI\x04J\tJ\x04K\tK\x04L\tL\x04M\tM\x04N\tN\x04" +
 		"O\tO\x04P\tP\x04Q\tQ\x04R\tR\x04S\tS\x04T\tT\x04U\tU\x04V\tV\x04W\tW\x04" +
-		"X\tX\x04Y\tY\x04Z\tZ\x04[\t[\x04\\\t\\\x03\x02\x05\x02\xBA\n\x02\x03\x02" +
-		"\x03\x02\x03\x03\x06\x03\xBF\n\x03\r\x03\x0E\x03\xC0\x03\x04\x03\x04\x03" +
-		"\x05\x06\x05\xC6\n\x05\r\x05\x0E\x05\xC7\x03\x06\x03\x06\x03\x06\x05\x06" +
-		"\xCD\n\x06\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07\x05\x07\xD5" +
-		"\n\x07\x03\b\x03\b\x03\b\x03\t\x03\t\x03\n\x03\n\x03\n\x03\n\x03\n\x05" +
-		"\n\xE1\n\n\x03\v\x03\v\x03\f\x03\f\x03\r\x03\r\x03\x0E\x03\x0E\x03\x0E" +
-		"\x03\x0E\x05\x0E\xED\n\x0E\x03\x0E\x03\x0E\x03\x0E\x03\x0E\x05\x0E\xF3" +
-		"\n\x0E\x03\x0F\x03\x0F\x03\x0F\x07\x0F\xF8\n\x0F\f\x0F\x0E\x0F\xFB\v\x0F" +
-		"\x03\x10\x03\x10\x03\x10\x03\x10\x03\x11\x03\x11\x03\x11\x03\x11\x07\x11" +
-		"\u0105\n\x11\f\x11\x0E\x11\u0108\v\x11\x03\x11\x03\x11\x03\x12\x03\x12" +
-		"\x05\x12\u010E\n\x12\x03\x13\x03\x13\x03\x13\x03\x13\x03\x13\x03\x14\x03" +
-		"\x14\x03\x14\x05\x14\u0118\n\x14\x03\x14\x03\x14\x03\x14\x03\x14\x03\x14" +
-		"\x03\x15\x03\x15\x03\x15\x03\x15\x03\x15\x07\x15\u0124\n\x15\f\x15\x0E" +
-		"\x15\u0127\v\x15\x03\x15\x03\x15\x03\x16\x03\x16\x03\x16\x05\x16\u012E" +
-		"\n\x16\x03\x17\x03\x17\x03\x17\x03\x17\x03\x18\x03\x18\x03\x18\x05\x18" +
-		"\u0137\n\x18\x03\x18\x03\x18\x03\x18\x03\x18\x05\x18\u013D\n\x18\x03\x19" +
-		"\x03\x19\x03\x19\x05\x19\u0142\n\x19\x03\x19\x03\x19\x03\x19\x03\x1A\x03" +
-		"\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x05\x1A\u014E\n\x1A\x03\x1B" +
-		"\x03\x1B\x03\x1B\x05\x1B\u0153\n\x1B\x03\x1B\x03\x1B\x03\x1C\x03\x1C\x03" +
-		"\x1C\x03\x1C\x03\x1C\x03\x1D\x03\x1D\x05\x1D\u015E\n\x1D\x03\x1E\x03\x1E" +
-		"\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x05\x1E\u0167\n\x1E\x03\x1F\x03" +
-		"\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x07\x1F\u016F\n\x1F\f\x1F\x0E\x1F" +
-		"\u0172\v\x1F\x03\x1F\x03\x1F\x03 \x03 \x03 \x03 \x03 \x03 \x03 \x03 \x05" +
-		' \u017E\n \x03!\x03!\x03!\x05!\u0183\n!\x03"\x03"\x03"\x03"\x05"' +
-		'\u0189\n"\x03"\x03"\x05"\u018D\n"\x03"\x03"\x03"\x03"\x05"\u0193' +
-		'\n"\x03"\x03"\x03"\x03"\x05"\u0199\n"\x03"\x03"\x03"\x03#\x03' +
-		"#\x03#\x03#\x03#\x03#\x03$\x03$\x03$\x03$\x03$\x03$\x03$\x03$\x03%\x03" +
-		"%\x03%\x03&\x03&\x05&\u01B1\n&\x03&\x03&\x03'\x03'\x07'\u01B7\n'\f" +
-		"'\x0E'\u01BA\v'\x03'\x05'\u01BD\n'\x03(\x03(\x03(\x03)\x03)\x03" +
-		")\x05)\u01C5\n)\x03)\x03)\x03)\x03*\x03*\x03*\x03+\x03+\x03+\x03+\x03" +
-		"+\x03+\x03+\x03+\x03+\x03+\x05+\u01D7\n+\x03,\x03,\x05,\u01DB\n,\x03," +
-		"\x03,\x03,\x03,\x03,\x03,\x05,\u01E3\n,\x03-\x03-\x03-\x03-\x03.\x03." +
-		"\x03/\x03/\x030\x030\x031\x031\x051\u01F1\n1\x032\x032\x033\x033\x073" +
-		"\u01F7\n3\f3\x0E3\u01FA\v3\x033\x033\x033\x073\u01FF\n3\f3\x0E3\u0202" +
-		"\v3\x033\x053\u0205\n3\x034\x034\x034\x054\u020A\n4\x034\x054\u020D\n" +
-		"4\x035\x035\x035\x055\u0212\n5\x035\x055\u0215\n5\x036\x036\x037\x037" +
-		"\x037\x037\x077\u021D\n7\f7\x0E7\u0220\v7\x057\u0222\n7\x037\x057\u0225" +
-		"\n7\x037\x037\x038\x038\x038\x038\x078\u022D\n8\f8\x0E8\u0230\v8\x058" +
-		"\u0232\n8\x038\x058\u0235\n8\x038\x038\x039\x039\x039\x039\x03:\x03:\x03" +
-		";\x03;\x03;\x03;\x03;\x03;\x05;\u0245\n;\x03;\x03;\x03;\x05;\u024A\n;" +
-		"\x03;\x03;\x03;\x05;\u024F\n;\x03;\x03;\x03;\x03;\x03;\x03;\x03;\x03;" +
-		"\x03;\x03;\x03;\x03;\x03;\x03;\x07;\u025F\n;\f;\x0E;\u0262\v;\x03<\x03" +
-		"<\x03<\x07<\u0267\n<\f<\x0E<\u026A\v<\x03=\x03=\x03=\x03>\x03>\x03>\x03" +
-		">\x03?\x03?\x03?\x03?\x05?\u0277\n?\x03?\x03?\x03?\x03?\x05?\u027D\n?" +
-		"\x03?\x03?\x03@\x03@\x03@\x05@\u0284\n@\x03A\x03A\x03A\x03B\x03B\x03B" +
-		"\x03B\x03B\x03B\x05B\u028F\nB\x03C\x03C\x03C\x05C\u0294\nC\x03D\x03D\x03" +
-		"D\x03E\x03E\x03E\x03F\x03F\x03G\x03G\x03H\x03H\x03H\x03H\x03H\x05H\u02A5" +
-		"\nH\x03I\x03I\x03I\x03I\x03I\x03I\x07I\u02AD\nI\fI\x0EI\u02B0\vI\x03J" +
-		"\x03J\x03J\x03J\x03J\x03J\x07J\u02B8\nJ\fJ\x0EJ\u02BB\vJ\x03K\x03K\x03" +
-		"K\x03K\x03K\x03K\x03K\x07K\u02C4\nK\fK\x0EK\u02C7\vK\x03L\x03L\x03M\x03" +
-		"M\x03M\x03M\x03M\x03M\x07M\u02D1\nM\fM\x0EM\u02D4\vM\x03N\x03N\x03N\x03" +
-		"N\x03N\x03N\x07N\u02DC\nN\fN\x0EN\u02DF\vN\x03O\x03O\x03O\x03O\x03O\x03" +
-		"O\x07O\u02E7\nO\fO\x0EO\u02EA\vO\x03P\x03P\x03P\x03P\x03P\x03P\x07P\u02F2" +
-		"\nP\fP\x0EP\u02F5\vP\x03Q\x03Q\x03Q\x03Q\x03Q\x03Q\x07Q\u02FD\nQ\fQ\x0E" +
-		"Q\u0300\vQ\x03R\x03R\x03R\x03R\x03R\x03R\x07R\u0308\nR\fR\x0ER\u030B\v" +
-		"R\x03S\x03S\x03S\x03S\x03S\x03S\x07S\u0313\nS\fS\x0ES\u0316\vS\x03T\x03" +
-		"T\x03T\x03T\x03T\x03T\x03T\x05T\u031F\nT\x03U\x03U\x03U\x03U\x03U\x05" +
-		"U\u0326\nU\x03V\x03V\x03W\x03W\x03W\x07W\u032D\nW\fW\x0EW\u0330\vW\x03" +
-		"X\x03X\x03X\x05X\u0335\nX\x03Y\x03Y\x03Z\x03Z\x03Z\x03Z\x03Z\x07Z\u033E" +
-		"\nZ\fZ\x0EZ\u0341\vZ\x05Z\u0343\nZ\x03Z\x03Z\x03[\x03[\x03[\x03[\x03[" +
-		"\x03\\\x03\\\x03\\\x02\x02\rt\x90\x92\x94\x98\x9A\x9C\x9E\xA0\xA2\xA4" +
-		"]\x02\x02\x04\x02\x06\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14" +
-		'\x02\x16\x02\x18\x02\x1A\x02\x1C\x02\x1E\x02 \x02"\x02$\x02&\x02(\x02' +
-		"*\x02,\x02.\x020\x022\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02" +
-		"F\x02H\x02J\x02L\x02N\x02P\x02R\x02T\x02V\x02X\x02Z\x02\\\x02^\x02`\x02" +
-		"b\x02d\x02f\x02h\x02j\x02l\x02n\x02p\x02r\x02t\x02v\x02x\x02z\x02|\x02" +
-		"~\x02\x80\x02\x82\x02\x84\x02\x86\x02\x88\x02\x8A\x02\x8C\x02\x8E\x02" +
-		"\x90\x02\x92\x02\x94\x02\x96\x02\x98\x02\x9A\x02\x9C\x02\x9E\x02\xA0\x02" +
-		"\xA2\x02\xA4\x02\xA6\x02\xA8\x02\xAA\x02\xAC\x02\xAE\x02\xB0\x02\xB2\x02" +
-		"\xB4\x02\xB6\x02\x02\x11\x03\x02\x07\b\x03\x02\x0E\x0F\x03\x02\x1D\x1E" +
-		"\x03\x02RS\x04\x02QQTT\x03\x02#%\x04\x022244\x06\x021133;;KK\x03\x025" +
-		"8\x04\x021133\x03\x02LN\x03\x02DG\x03\x02BC\x03\x02<A\x04\x02#%PP\x02" +
-		"\u0357\x02\xB9\x03\x02\x02\x02\x04\xBE\x03\x02\x02\x02\x06\xC2\x03\x02" +
-		"\x02\x02\b\xC5\x03\x02\x02\x02\n\xCC\x03\x02\x02\x02\f\xD4\x03\x02\x02" +
-		"\x02\x0E\xD6\x03\x02\x02\x02\x10\xD9\x03\x02\x02\x02\x12\xDB\x03\x02\x02" +
-		"\x02\x14\xE2\x03\x02\x02\x02\x16\xE4\x03\x02\x02\x02\x18\xE6\x03\x02\x02" +
-		"\x02\x1A\xE8\x03\x02\x02\x02\x1C\xF4\x03\x02\x02\x02\x1E\xFC\x03\x02\x02" +
-		'\x02 \u0100\x03\x02\x02\x02"\u010D\x03\x02\x02\x02$\u010F\x03\x02\x02' +
-		"\x02&\u0114\x03\x02\x02\x02(\u011E\x03\x02\x02\x02*\u012D\x03\x02\x02" +
-		"\x02,\u012F\x03\x02\x02\x02.\u0133\x03\x02\x02\x020\u013E\x03\x02\x02" +
-		"\x022\u014D\x03\x02\x02\x024\u014F\x03\x02\x02\x026\u0156\x03\x02\x02" +
-		"\x028\u015D\x03\x02\x02\x02:\u015F\x03\x02\x02\x02<\u0168\x03\x02\x02" +
-		"\x02>\u017D\x03\x02\x02\x02@\u0182\x03\x02\x02\x02B\u0184\x03\x02\x02" +
-		"\x02D\u019D\x03\x02\x02\x02F\u01A3\x03\x02\x02\x02H\u01AB\x03\x02\x02" +
-		"\x02J\u01AE\x03\x02\x02\x02L\u01B4\x03\x02\x02\x02N\u01BE\x03\x02\x02" +
-		"\x02P\u01C1\x03\x02\x02\x02R\u01C9\x03\x02\x02\x02T\u01D6\x03\x02\x02" +
-		"\x02V\u01D8\x03\x02\x02\x02X\u01E4\x03\x02\x02\x02Z\u01E8\x03\x02\x02" +
-		"\x02\\\u01EA\x03\x02\x02\x02^\u01EC\x03\x02\x02\x02`\u01F0\x03\x02\x02" +
-		"\x02b\u01F2\x03\x02\x02\x02d\u0204\x03\x02\x02\x02f\u020C\x03\x02\x02" +
-		"\x02h\u0214\x03\x02\x02\x02j\u0216\x03\x02\x02\x02l\u0218\x03\x02\x02" +
-		"\x02n\u0228\x03\x02\x02\x02p\u0238\x03\x02\x02\x02r\u023C\x03\x02\x02" +
-		"\x02t\u0249\x03\x02\x02\x02v\u0263\x03\x02\x02\x02x\u026B\x03\x02\x02" +
-		"\x02z\u026E\x03\x02\x02\x02|\u0272\x03\x02\x02\x02~\u0283\x03\x02\x02" +
-		"\x02\x80\u0285\x03\x02\x02\x02\x82\u0288\x03\x02\x02\x02\x84\u0293\x03" +
-		"\x02\x02\x02\x86\u0295\x03\x02\x02\x02\x88\u0298\x03\x02\x02\x02\x8A\u029B" +
-		"\x03\x02\x02\x02\x8C\u029D\x03\x02\x02\x02\x8E\u02A4\x03\x02\x02\x02\x90" +
-		"\u02A6\x03\x02\x02\x02\x92\u02B1\x03\x02\x02\x02\x94\u02BC\x03\x02\x02" +
-		"\x02\x96\u02C8\x03\x02\x02\x02\x98\u02CA\x03\x02\x02\x02\x9A\u02D5\x03" +
-		"\x02\x02\x02\x9C\u02E0\x03\x02\x02\x02\x9E\u02EB\x03\x02\x02\x02\xA0\u02F6" +
-		"\x03\x02\x02\x02\xA2\u0301\x03\x02\x02\x02\xA4\u030C\x03\x02\x02\x02\xA6" +
-		"\u031E\x03\x02\x02\x02\xA8\u0325\x03\x02\x02\x02\xAA\u0327\x03\x02\x02" +
-		"\x02\xAC\u0329\x03\x02\x02\x02\xAE\u0334\x03\x02\x02\x02\xB0\u0336\x03" +
-		"\x02\x02\x02\xB2\u0338\x03\x02\x02\x02\xB4\u0346\x03\x02\x02\x02\xB6\u034B" +
-		"\x03\x02\x02\x02\xB8\xBA\x05\x04\x03\x02\xB9\xB8\x03\x02\x02\x02\xB9\xBA" +
-		"\x03\x02\x02\x02\xBA\xBB\x03\x02\x02\x02\xBB\xBC\x07\x02\x02\x03\xBC\x03" +
-		"\x03\x02\x02\x02\xBD\xBF\x05\x06\x04\x02\xBE\xBD\x03\x02\x02\x02\xBF\xC0" +
-		"\x03\x02\x02\x02\xC0\xBE\x03\x02\x02\x02\xC0\xC1\x03\x02\x02\x02\xC1\x05" +
-		"\x03\x02\x02\x02\xC2\xC3\x05\b\x05\x02\xC3\x07\x03\x02\x02\x02\xC4\xC6" +
-		"\x05\n\x06\x02\xC5\xC4\x03\x02\x02\x02\xC6\xC7\x03\x02\x02\x02\xC7\xC5" +
-		"\x03\x02\x02\x02\xC7\xC8\x03\x02\x02\x02\xC8\t\x03\x02\x02\x02\xC9\xCD" +
-		"\x052\x1A\x02\xCA\xCD\x05\f\x07\x02\xCB\xCD\x07'\x02\x02\xCC\xC9\x03" +
-		"\x02\x02\x02\xCC\xCA\x03\x02\x02\x02\xCC\xCB\x03\x02\x02\x02\xCD\v\x03" +
-		"\x02\x02\x02\xCE\xCF\x05\x0E\b\x02\xCF\xD0\x07'\x02\x02\xD0\xD5\x03\x02" +
-		"\x02\x02\xD1\xD5\x05\x1A\x0E\x02\xD2\xD5\x05 \x11\x02\xD3\xD5\x05(\x15" +
-		"\x02\xD4\xCE\x03\x02\x02\x02\xD4\xD1\x03\x02\x02\x02\xD4\xD2\x03\x02\x02" +
-		"\x02\xD4\xD3\x03\x02\x02\x02\xD5\r\x03\x02\x02\x02\xD6\xD7\x05\x10\t\x02" +
-		"\xD7\xD8\x05\x12\n\x02\xD8\x0F\x03\x02\x02\x02\xD9\xDA\t\x02\x02\x02\xDA" +
-		"\x11\x03\x02\x02\x02\xDB\xDC\x05\x16\f\x02\xDC\xDD\x07)\x02\x02\xDD\xE0" +
-		"\x05\xAEX\x02\xDE\xDF\x07<\x02\x02\xDF\xE1\x05\x14\v\x02\xE0\xDE\x03\x02" +
-		"\x02\x02\xE0\xE1\x03\x02\x02\x02\xE1\x13\x03\x02\x02\x02\xE2\xE3\x05\xA8" +
-		"U\x02\xE3\x15\x03\x02\x02\x02\xE4\xE5\x05\x18\r\x02\xE5\x17\x03\x02\x02" +
-		"\x02\xE6\xE7\x07P\x02\x02\xE7\x19\x03\x02\x02\x02\xE8\xE9\x07\x16\x02" +
-		"\x02\xE9\xEA\x05\x16\f\x02\xEA\xEC\x07*\x02\x02\xEB\xED\x05\x1C\x0F\x02" +
-		"\xEC\xEB\x03\x02\x02\x02\xEC\xED\x03\x02\x02\x02\xED\xEE\x03\x02\x02\x02" +
-		"\xEE\xEF\x07+\x02\x02\xEF\xF0\x07\x19\x02\x02\xF0\xF2\x05\xAEX\x02\xF1" +
-		"\xF3\x054\x1B\x02\xF2\xF1\x03\x02\x02\x02\xF2\xF3\x03\x02\x02\x02\xF3" +
-		"\x1B\x03\x02\x02\x02\xF4\xF9\x05\x1E\x10\x02\xF5\xF6\x07&\x02\x02\xF6" +
-		"\xF8\x05\x1E\x10\x02\xF7\xF5\x03\x02\x02\x02\xF8\xFB\x03\x02\x02\x02\xF9" +
-		"\xF7\x03\x02\x02\x02\xF9\xFA\x03\x02\x02\x02\xFA\x1D\x03\x02\x02\x02\xFB" +
-		"\xF9\x03\x02\x02\x02\xFC\xFD\x05\x16\f\x02\xFD\xFE\x07)\x02\x02\xFE\xFF" +
-		"\x05\xAEX\x02\xFF\x1F\x03\x02\x02\x02\u0100\u0101\x07\x1B\x02\x02\u0101" +
-		'\u0102\x05\x16\f\x02\u0102\u0106\x07/\x02\x02\u0103\u0105\x05"\x12\x02' +
-		"\u0104\u0103\x03\x02\x02\x02\u0105\u0108\x03\x02\x02\x02\u0106\u0104\x03" +
-		"\x02\x02\x02\u0106\u0107\x03\x02\x02\x02\u0107\u0109\x03\x02\x02\x02\u0108" +
-		"\u0106\x03\x02\x02\x02\u0109\u010A\x070\x02\x02\u010A!\x03\x02\x02\x02" +
-		"\u010B\u010E\x05$\x13\x02\u010C\u010E\x05&\x14\x02\u010D\u010B\x03\x02" +
-		"\x02\x02\u010D\u010C\x03\x02\x02\x02\u010E#\x03\x02\x02\x02\u010F\u0110" +
-		"\x05\x16\f\x02\u0110\u0111\x07)\x02\x02\u0111\u0112\x05\xAEX\x02\u0112" +
-		"\u0113\x07'\x02\x02\u0113%\x03\x02\x02\x02\u0114\u0115\x05\x16\f\x02" +
-		"\u0115\u0117\x07*\x02\x02\u0116\u0118\x05\x1C\x0F\x02\u0117\u0116\x03" +
-		"\x02\x02\x02\u0117\u0118\x03\x02\x02\x02\u0118\u0119\x03\x02\x02\x02\u0119" +
-		"\u011A\x07+\x02\x02\u011A\u011B\x07)\x02\x02\u011B\u011C\x05\xAEX\x02" +
-		"\u011C\u011D\x07'\x02\x02\u011D'\x03\x02\x02\x02\u011E\u011F\x07\x1A" +
-		"\x02\x02\u011F\u0120\x05\x16\f\x02\u0120\u0125\x07/\x02\x02\u0121\u0124" +
-		"\x05*\x16\x02\u0122\u0124\x07'\x02\x02\u0123\u0121\x03\x02\x02\x02\u0123" +
-		"\u0122\x03\x02\x02\x02\u0124\u0127\x03\x02\x02\x02\u0125\u0123\x03\x02" +
-		"\x02\x02\u0125\u0126\x03\x02\x02\x02\u0126\u0128\x03\x02\x02\x02\u0127" +
-		"\u0125\x03\x02\x02\x02\u0128\u0129\x070\x02\x02\u0129)\x03\x02\x02\x02" +
-		"\u012A\u012E\x05,\x17\x02\u012B\u012E\x05.\x18\x02\u012C\u012E\x050\x19" +
-		"\x02\u012D\u012A\x03\x02\x02\x02\u012D\u012B\x03\x02\x02\x02\u012D\u012C" +
-		"\x03\x02\x02\x02\u012E+\x03\x02\x02\x02\u012F\u0130\x05\x16\f\x02\u0130" +
-		"\u0131\x07)\x02\x02\u0131\u0132\x05\xAEX\x02\u0132-\x03\x02\x02\x02\u0133" +
-		"\u0134\x05\x16\f\x02\u0134\u0136\x07*\x02\x02\u0135\u0137\x05\x1C\x0F" +
-		"\x02\u0136\u0135\x03\x02\x02\x02\u0136\u0137\x03\x02\x02\x02\u0137\u0138" +
-		"\x03\x02\x02\x02\u0138\u0139\x07+\x02\x02\u0139\u013A\x07)\x02\x02\u013A" +
-		"\u013C\x05\xAEX\x02\u013B\u013D\x054\x1B\x02\u013C\u013B\x03\x02\x02\x02" +
-		"\u013C\u013D\x03\x02\x02\x02\u013D/\x03\x02\x02\x02\u013E\u013F\x07\x1C" +
-		"\x02\x02\u013F\u0141\x07*\x02\x02\u0140\u0142\x05\x1C\x0F\x02\u0141\u0140" +
-		"\x03\x02\x02\x02\u0141\u0142\x03\x02\x02\x02\u0142\u0143\x03\x02\x02\x02" +
-		"\u0143\u0144\x07+\x02\x02\u0144\u0145\x054\x1B\x02\u01451\x03\x02\x02" +
-		"\x02\u0146\u014E\x056\x1C\x02\u0147\u014E\x058\x1D\x02\u0148\u014E\x05" +
-		"@!\x02\u0149\u014E\x05H%\x02\u014A\u014E\x05J&\x02\u014B\u014E\x054\x1B" +
-		"\x02\u014C\u014E\x05L'\x02\u014D\u0146\x03\x02\x02\x02\u014D\u0147\x03" +
-		"\x02\x02\x02\u014D\u0148\x03\x02\x02\x02\u014D\u0149\x03\x02\x02\x02\u014D" +
-		"\u014A\x03\x02\x02\x02\u014D\u014B\x03\x02\x02\x02\u014D\u014C\x03\x02" +
-		"\x02\x02\u014E3\x03\x02\x02\x02\u014F\u0150\x06\x1B\x02\x02\u0150\u0152" +
-		"\x07/\x02\x02\u0151\u0153\x05\b\x05\x02\u0152\u0151\x03\x02\x02\x02\u0152" +
-		"\u0153\x03\x02\x02\x02\u0153\u0154\x03\x02\x02\x02\u0154\u0155\x070\x02" +
-		"\x02\u01555\x03\x02\x02\x02\u0156\u0157\b\x1C\x01\x02\u0157\u0158\x05" +
-		"\xACW\x02\u0158\u0159\x07'\x02\x02\u0159\u015A\b\x1C\x01\x02\u015A7\x03" +
-		"\x02\x02\x02\u015B\u015E\x05:\x1E\x02\u015C\u015E\x05<\x1F\x02\u015D\u015B" +
-		"\x03\x02\x02\x02\u015D\u015C\x03\x02\x02\x02\u015E9\x03\x02\x02\x02\u015F" +
-		"\u0160\x07\x12\x02\x02\u0160\u0161\x07*\x02\x02\u0161\u0162\x05\xACW\x02" +
-		"\u0162\u0163\x07+\x02\x02\u0163\u0166\x052\x1A\x02\u0164\u0165\x07\x13" +
-		"\x02\x02\u0165\u0167\x052\x1A\x02\u0166\u0164\x03\x02\x02\x02\u0166\u0167" +
-		"\x03\x02\x02\x02\u0167;\x03\x02\x02\x02\u0168\u0169\x07\v\x02\x02\u0169" +
-		"\u016A\x07*\x02\x02\u016A\u016B\x05\xACW\x02\u016B\u016C\x07+\x02\x02" +
-		"\u016C\u0170\x07/\x02\x02\u016D\u016F\x05> \x02\u016E\u016D\x03\x02\x02" +
-		"\x02\u016F\u0172\x03\x02\x02\x02\u0170\u016E\x03\x02\x02\x02\u0170\u0171" +
-		"\x03\x02\x02\x02\u0171\u0173\x03\x02\x02\x02\u0172\u0170\x03\x02\x02\x02" +
-		"\u0173\u0174\x070\x02\x02\u0174=\x03\x02\x02\x02\u0175\u0176\x07\f\x02" +
-		"\x02\u0176\u0177\x05\xACW\x02\u0177\u0178\x07)\x02\x02\u0178\u0179\x05" +
-		"2\x1A\x02\u0179\u017E\x03\x02\x02\x02\u017A\u017B\x07\r\x02\x02\u017B" +
-		"\u017C\x07)\x02\x02\u017C\u017E\x052\x1A\x02\u017D\u0175\x03\x02\x02\x02" +
-		'\u017D\u017A\x03\x02\x02\x02\u017E?\x03\x02\x02\x02\u017F\u0183\x05B"' +
-		"\x02\u0180\u0183\x05D#\x02\u0181\u0183\x05F$\x02\u0182\u017F\x03\x02\x02" +
-		"\x02\u0182\u0180\x03\x02\x02\x02\u0182\u0181\x03\x02\x02\x02\u0183A\x03" +
-		"\x02\x02\x02\u0184\u0185\x07\x14\x02\x02\u0185\u018C\x07*\x02\x02\u0186" +
-		"\u0189\x05\x0E\b\x02\u0187\u0189\x05\xACW\x02\u0188\u0186\x03\x02\x02" +
-		"\x02\u0188\u0187\x03\x02\x02\x02\u0189\u018A\x03\x02\x02\x02\u018A\u018B" +
-		'\b"\x01\x02\u018B\u018D\x03\x02\x02\x02\u018C\u0188\x03\x02\x02\x02\u018C' +
-		"\u018D\x03\x02\x02\x02\u018D\u018E\x03\x02\x02\x02\u018E\u0192\x07'\x02" +
-		'\x02\u018F\u0190\x05\xACW\x02\u0190\u0191\b"\x01\x02\u0191\u0193\x03' +
-		"\x02\x02\x02\u0192\u018F\x03\x02\x02\x02\u0192\u0193\x03\x02\x02\x02\u0193" +
-		"\u0194\x03\x02\x02\x02\u0194\u0198\x07'\x02\x02\u0195\u0196\x05\xACW" +
-		'\x02\u0196\u0197\b"\x01\x02\u0197\u0199\x03\x02\x02\x02\u0198\u0195\x03' +
-		"\x02\x02\x02\u0198\u0199\x03\x02\x02\x02\u0199\u019A\x03\x02\x02\x02\u019A" +
-		"\u019B\x07+\x02\x02\u019B\u019C\x052\x1A\x02\u019CC\x03\x02\x02\x02\u019D" +
-		"\u019E\x07\x11\x02\x02\u019E\u019F\x07*\x02\x02\u019F\u01A0\x05\xACW\x02" +
-		"\u01A0\u01A1\x07+\x02\x02\u01A1\u01A2\x052\x1A\x02\u01A2E\x03\x02\x02" +
-		"\x02\u01A3\u01A4\x07\x10\x02\x02\u01A4\u01A5\x052\x1A\x02\u01A5\u01A6" +
-		"\x07\x11\x02\x02\u01A6\u01A7\x07*\x02\x02\u01A7\u01A8\x05\xACW\x02\u01A8" +
-		"\u01A9\x07+\x02\x02\u01A9\u01AA\x07'\x02\x02\u01AAG\x03\x02\x02\x02\u01AB" +
-		"\u01AC\t\x03\x02\x02\u01AC\u01AD\x07'\x02\x02\u01ADI\x03\x02\x02\x02" +
-		"\u01AE\u01B0\x07\x17\x02\x02\u01AF\u01B1\x05\xACW\x02\u01B0\u01AF\x03" +
-		"\x02\x02\x02\u01B0\u01B1\x03\x02\x02\x02\u01B1\u01B2\x03\x02\x02\x02\u01B2" +
-		"\u01B3\x07'\x02\x02\u01B3K\x03\x02\x02\x02\u01B4\u01B8\x05N(\x02\u01B5" +
-		"\u01B7\x05P)\x02\u01B6\u01B5\x03\x02\x02\x02\u01B7\u01BA\x03\x02\x02\x02" +
-		"\u01B8\u01B6\x03\x02\x02\x02\u01B8\u01B9\x03\x02\x02\x02\u01B9\u01BC\x03" +
-		"\x02\x02\x02\u01BA\u01B8\x03\x02\x02\x02\u01BB\u01BD\x05R*\x02\u01BC\u01BB" +
-		"\x03\x02\x02\x02\u01BC\u01BD\x03\x02\x02\x02\u01BDM\x03\x02\x02\x02\u01BE" +
-		"\u01BF\x07 \x02\x02\u01BF\u01C0\x054\x1B\x02\u01C0O\x03\x02\x02\x02\u01C1" +
-		"\u01C2\x07!\x02\x02\u01C2\u01C4\x07*\x02\x02\u01C3\u01C5\x05\x1E\x10\x02" +
-		"\u01C4\u01C3\x03\x02\x02\x02\u01C4\u01C5\x03\x02\x02\x02\u01C5\u01C6\x03" +
-		"\x02\x02\x02\u01C6\u01C7\x07+\x02\x02\u01C7\u01C8\x054\x1B\x02\u01C8Q" +
-		'\x03\x02\x02\x02\u01C9\u01CA\x07"\x02\x02\u01CA\u01CB\x054\x1B\x02\u01CB' +
-		"S\x03\x02\x02\x02\u01CC\u01D7\x05X-\x02\u01CD\u01D7\x05V,\x02\u01CE\u01D7" +
-		"\x05l7\x02\u01CF\u01D7\x05n8\x02\u01D0\u01D7\x05Z.\x02\u01D1\u01D7\x05" +
-		"\\/\x02\u01D2\u01D7\x05b2\x02\u01D3\u01D7\x05d3\x02\u01D4\u01D7\x05j6" +
-		"\x02\u01D5\u01D7\x05r:\x02\u01D6\u01CC\x03\x02\x02\x02\u01D6\u01CD\x03" +
-		"\x02\x02\x02\u01D6\u01CE\x03\x02\x02\x02\u01D6\u01CF\x03\x02\x02\x02\u01D6" +
-		"\u01D0\x03\x02\x02\x02\u01D6\u01D1\x03\x02\x02\x02\u01D6\u01D2\x03\x02" +
-		"\x02\x02\u01D6\u01D3\x03\x02\x02\x02\u01D6\u01D4\x03\x02\x02\x02\u01D6" +
-		"\u01D5\x03\x02\x02\x02\u01D7U\x03\x02\x02\x02\u01D8\u01DA\x07*\x02\x02" +
-		"\u01D9\u01DB\x05\x1C\x0F\x02\u01DA\u01D9\x03\x02\x02\x02\u01DA\u01DB\x03" +
-		"\x02\x02\x02\u01DB\u01DC\x03\x02\x02\x02\u01DC\u01DD\x07+\x02\x02\u01DD" +
-		"\u01DE\x07)\x02\x02\u01DE\u01DF\x05\xAEX\x02\u01DF\u01E2\x07\x19\x02\x02" +
-		"\u01E0\u01E3\x05\xACW\x02\u01E1\u01E3\x054\x1B\x02\u01E2\u01E0\x03\x02" +
-		"\x02\x02\u01E2\u01E1\x03\x02\x02\x02\u01E3W\x03\x02\x02\x02\u01E4\u01E5" +
-		"\x07*\x02\x02\u01E5\u01E6\x05\xACW\x02\u01E6\u01E7\x07+\x02\x02\u01E7" +
-		"Y\x03\x02\x02\x02\u01E8\u01E9\t\x04\x02\x02\u01E9[\x03\x02\x02\x02\u01EA" +
-		"\u01EB\x05^0\x02\u01EB]\x03\x02\x02\x02\u01EC\u01ED\x07P\x02\x02\u01ED" +
-		"_\x03\x02\x02\x02\u01EE\u01F1\x05^0\x02\u01EF\u01F1\x05b2\x02\u01F0\u01EE" +
-		"\x03\x02\x02\x02\u01F0\u01EF\x03\x02\x02\x02\u01F1a\x03\x02\x02\x02\u01F2" +
-		"\u01F3\t\x05\x02\x02\u01F3c\x03\x02\x02\x02\u01F4\u01F8\x07W\x02\x02\u01F5" +
-		"\u01F7\x05f4\x02\u01F6\u01F5\x03\x02\x02\x02\u01F7\u01FA\x03\x02\x02\x02" +
-		"\u01F8\u01F6\x03\x02\x02\x02\u01F8\u01F9\x03\x02\x02\x02\u01F9\u01FB\x03" +
-		"\x02\x02\x02\u01FA\u01F8\x03\x02\x02\x02\u01FB\u0205\x07Y\x02\x02\u01FC" +
-		"\u0200\x07X\x02\x02\u01FD\u01FF\x05h5\x02\u01FE\u01FD\x03\x02\x02\x02" +
-		"\u01FF\u0202\x03\x02\x02\x02\u0200\u01FE\x03\x02\x02\x02\u0200\u0201\x03" +
-		"\x02\x02\x02\u0201\u0203\x03\x02\x02\x02\u0202\u0200\x03\x02\x02\x02\u0203" +
-		"\u0205\x07[\x02\x02\u0204\u01F4\x03\x02\x02\x02\u0204\u01FC\x03\x02\x02" +
-		"\x02\u0205e\x03\x02\x02\x02\u0206\u020D\x07Z\x02\x02\u0207\u0209\x07\x03" +
-		"\x02\x02\u0208\u020A\x05\xACW\x02\u0209\u0208\x03\x02\x02\x02\u0209\u020A";
+		"X\tX\x04Y\tY\x04Z\tZ\x04[\t[\x04\\\t\\\x04]\t]\x04^\t^\x03\x02\x05\x02" +
+		"\xBE\n\x02\x03\x02\x03\x02\x03\x03\x06\x03\xC3\n\x03\r\x03\x0E\x03\xC4" +
+		"\x03\x04\x03\x04\x03\x05\x06\x05\xCA\n\x05\r\x05\x0E\x05\xCB\x03\x06\x03" +
+		"\x06\x03\x06\x05\x06\xD1\n\x06\x03\x07\x03\x07\x03\x07\x03\x07\x03\x07" +
+		"\x03\x07\x05\x07\xD9\n\x07\x03\b\x03\b\x03\b\x03\t\x03\t\x03\n\x03\n\x03" +
+		"\n\x03\n\x03\n\x05\n\xE5\n\n\x03\v\x03\v\x03\f\x03\f\x03\r\x03\r\x03\x0E" +
+		"\x03\x0E\x03\x0E\x03\x0E\x05\x0E\xF1\n\x0E\x03\x0E\x03\x0E\x03\x0E\x03" +
+		"\x0E\x05\x0E\xF7\n\x0E\x03\x0F\x03\x0F\x03\x0F\x07\x0F\xFC\n\x0F\f\x0F" +
+		"\x0E\x0F\xFF\v\x0F\x03\x10\x03\x10\x03\x10\x03\x10\x03\x11\x03\x11\x03" +
+		"\x11\x03\x11\x07\x11\u0109\n\x11\f\x11\x0E\x11\u010C\v\x11\x03\x11\x03" +
+		"\x11\x03\x12\x03\x12\x05\x12\u0112\n\x12\x03\x13\x03\x13\x03\x13\x03\x13" +
+		"\x03\x13\x03\x14\x03\x14\x03\x14\x05\x14\u011C\n\x14\x03\x14\x03\x14\x03" +
+		"\x14\x03\x14\x03\x14\x03\x15\x03\x15\x03\x15\x03\x15\x03\x15\x07\x15\u0128" +
+		"\n\x15\f\x15\x0E\x15\u012B\v\x15\x03\x15\x03\x15\x03\x16\x03\x16\x03\x16" +
+		"\x05\x16\u0132\n\x16\x03\x17\x03\x17\x03\x17\x03\x17\x03\x18\x03\x18\x03" +
+		"\x18\x05\x18\u013B\n\x18\x03\x18\x03\x18\x03\x18\x03\x18\x05\x18\u0141" +
+		"\n\x18\x03\x19\x03\x19\x03\x19\x05\x19\u0146\n\x19\x03\x19\x03\x19\x03" +
+		"\x19\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x03\x1A\x05\x1A\u0152" +
+		"\n\x1A\x03\x1B\x03\x1B\x03\x1B\x05\x1B\u0157\n\x1B\x03\x1B\x03\x1B\x03" +
+		"\x1B\x03\x1B\x03\x1B\x05\x1B\u015E\n\x1B\x03\x1B\x03\x1B\x05\x1B\u0162" +
+		"\n\x1B\x03\x1C\x03\x1C\x03\x1C\x03\x1C\x03\x1C\x03\x1D\x03\x1D\x05\x1D" +
+		"\u016B\n\x1D\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x05" +
+		"\x1E\u0174\n\x1E\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x03\x1F\x07\x1F" +
+		"\u017C\n\x1F\f\x1F\x0E\x1F\u017F\v\x1F\x03\x1F\x03\x1F\x03 \x03 \x03 " +
+		"\x03 \x03 \x03 \x03 \x03 \x05 \u018B\n \x03!\x03!\x03!\x05!\u0190\n!\x03" +
+		'"\x03"\x03"\x03"\x05"\u0196\n"\x03"\x03"\x05"\u019A\n"\x03"' +
+		'\x03"\x03"\x03"\x05"\u01A0\n"\x03"\x03"\x03"\x03"\x05"\u01A6' +
+		'\n"\x03"\x03"\x03"\x03#\x03#\x03#\x03#\x03#\x03#\x03$\x03$\x03$\x03' +
+		"$\x03$\x03$\x03$\x03$\x03%\x03%\x03%\x03&\x03&\x05&\u01BE\n&\x03&\x03" +
+		"&\x03'\x03'\x07'\u01C4\n'\f'\x0E'\u01C7\v'\x03'\x05'\u01CA\n" +
+		"'\x03(\x03(\x03(\x03)\x03)\x03)\x05)\u01D2\n)\x03)\x03)\x03)\x03*\x03" +
+		"*\x03*\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x03+\x05+\u01E4\n" +
+		"+\x03,\x03,\x03,\x05,\u01E9\n,\x03,\x03,\x03,\x03,\x03,\x03,\x05,\u01F1" +
+		"\n,\x03,\x03,\x03-\x03-\x03-\x03-\x03.\x03.\x03/\x03/\x030\x030\x031\x03" +
+		"1\x051\u0201\n1\x032\x032\x033\x033\x073\u0207\n3\f3\x0E3\u020A\v3\x03" +
+		"3\x033\x033\x073\u020F\n3\f3\x0E3\u0212\v3\x033\x053\u0215\n3\x034\x03" +
+		"4\x034\x054\u021A\n4\x034\x054\u021D\n4\x035\x035\x035\x055\u0222\n5\x03" +
+		"5\x055\u0225\n5\x036\x036\x037\x037\x037\x037\x077\u022D\n7\f7\x0E7\u0230" +
+		"\v7\x057\u0232\n7\x037\x057\u0235\n7\x037\x037\x038\x038\x038\x038\x07" +
+		"8\u023D\n8\f8\x0E8\u0240\v8\x058\u0242\n8\x038\x058\u0245\n8\x038\x03" +
+		"8\x039\x039\x039\x039\x03:\x03:\x03;\x03;\x03;\x03;\x03;\x03;\x05;\u0255" +
+		"\n;\x03;\x03;\x03;\x03;\x03;\x03;\x03;\x05;\u025E\n;\x03;\x03;\x03;\x05" +
+		";\u0263\n;\x03;\x03;\x03;\x03;\x03;\x03;\x03;\x03;\x03;\x03;\x03;\x03" +
+		";\x03;\x03;\x03;\x05;\u0274\n;\x03;\x03;\x07;\u0278\n;\f;\x0E;\u027B\v" +
+		";\x03<\x03<\x03<\x07<\u0280\n<\f<\x0E<\u0283\v<\x03=\x03=\x03=\x03>\x03" +
+		">\x03>\x03>\x03?\x03?\x03?\x03?\x05?\u0290\n?\x03?\x03?\x03?\x03?\x05" +
+		"?\u0296\n?\x03?\x03?\x03@\x03@\x03@\x05@\u029D\n@\x03A\x03A\x03A\x03B" +
+		"\x03B\x03B\x03C\x03C\x03C\x05C\u02A8\nC\x03D\x03D\x03D\x03E\x03E\x03E" +
+		"\x03F\x03F\x03G\x03G\x03H\x03H\x03H\x03H\x03H\x05H\u02B9\nH\x03I\x03I" +
+		"\x03I\x03I\x03I\x03I\x07I\u02C1\nI\fI\x0EI\u02C4\vI\x03J\x03J\x03J\x03" +
+		"J\x03J\x03J\x07J\u02CC\nJ\fJ\x0EJ\u02CF\vJ\x03K\x03K\x03K\x03K\x03K\x03" +
+		"K\x03K\x07K\u02D8\nK\fK\x0EK\u02DB\vK\x03L\x03L\x03M\x03M\x03M\x03M\x03" +
+		"M\x03M\x07M\u02E5\nM\fM\x0EM\u02E8\vM\x03N\x03N\x03N\x03N\x03N\x03N\x07" +
+		"N\u02F0\nN\fN\x0EN\u02F3\vN\x03O\x03O\x03O\x03O\x03O\x03O\x07O\u02FB\n" +
+		"O\fO\x0EO\u02FE\vO\x03P\x03P\x03P\x03P\x03P\x03P\x07P\u0306\nP\fP\x0E" +
+		"P\u0309\vP\x03Q\x03Q\x03Q\x03Q\x03Q\x03Q\x07Q\u0311\nQ\fQ\x0EQ\u0314\v" +
+		"Q\x03R\x03R\x03R\x03R\x03R\x03R\x07R\u031C\nR\fR\x0ER\u031F\vR\x03S\x03" +
+		"S\x03S\x03S\x03S\x03S\x07S\u0327\nS\fS\x0ES\u032A\vS\x03T\x03T\x03T\x03" +
+		"T\x03T\x03T\x07T\u0332\nT\fT\x0ET\u0335\vT\x03U\x03U\x03U\x03U\x03U\x03" +
+		"U\x07U\u033D\nU\fU\x0EU\u0340\vU\x03V\x03V\x03V\x03V\x03V\x03V\x03V\x05" +
+		"V\u0349\nV\x03W\x03W\x03W\x03W\x03W\x05W\u0350\nW\x03X\x03X\x03Y\x03Y" +
+		"\x03Y\x07Y\u0357\nY\fY\x0EY\u035A\vY\x03Z\x03Z\x03Z\x05Z\u035F\nZ\x03" +
+		"[\x03[\x03\\\x03\\\x03\\\x03\\\x03\\\x07\\\u0368\n\\\f\\\x0E\\\u036B\v" +
+		"\\\x05\\\u036D\n\\\x03\\\x03\\\x03]\x03]\x03]\x03]\x03]\x03^\x03^\x03" +
+		"^\x02\x02\x0Ft\x90\x92\x94\x98\x9A\x9C\x9E\xA0\xA2\xA4\xA6\xA8_\x02\x02" +
+		"\x04\x02\x06\x02\b\x02\n\x02\f\x02\x0E\x02\x10\x02\x12\x02\x14\x02\x16" +
+		'\x02\x18\x02\x1A\x02\x1C\x02\x1E\x02 \x02"\x02$\x02&\x02(\x02*\x02,\x02' +
+		".\x020\x022\x024\x026\x028\x02:\x02<\x02>\x02@\x02B\x02D\x02F\x02H\x02" +
+		"J\x02L\x02N\x02P\x02R\x02T\x02V\x02X\x02Z\x02\\\x02^\x02`\x02b\x02d\x02" +
+		"f\x02h\x02j\x02l\x02n\x02p\x02r\x02t\x02v\x02x\x02z\x02|\x02~\x02\x80" +
+		"\x02\x82\x02\x84\x02\x86\x02\x88\x02\x8A\x02\x8C\x02\x8E\x02\x90\x02\x92" +
+		"\x02\x94\x02\x96\x02\x98\x02\x9A\x02\x9C\x02\x9E\x02\xA0\x02\xA2\x02\xA4" +
+		"\x02\xA6\x02\xA8\x02\xAA\x02\xAC\x02\xAE\x02\xB0\x02\xB2\x02\xB4\x02\xB6" +
+		"\x02\xB8\x02\xBA\x02\x02\x11\x03\x02\b\t\x03\x02\x0F\x10\x03\x02\x1F " +
+		"\x03\x02UV\x04\x02TTWW\x03\x02&(\x04\x025577\x06\x024466>>NN\x03\x028" +
+		";\x04\x024466\x03\x02OQ\x03\x02GJ\x03\x02EF\x03\x02?D\x04\x02&(SS\x02" +
+		"\u0384\x02\xBD\x03\x02\x02\x02\x04\xC2\x03\x02\x02\x02\x06\xC6\x03\x02" +
+		"\x02\x02\b\xC9\x03\x02\x02\x02\n\xD0\x03\x02\x02\x02\f\xD8\x03\x02\x02" +
+		"\x02\x0E\xDA\x03\x02\x02\x02\x10\xDD\x03\x02\x02\x02\x12\xDF\x03\x02\x02" +
+		"\x02\x14\xE6\x03\x02\x02\x02\x16\xE8\x03\x02\x02\x02\x18\xEA\x03\x02\x02" +
+		"\x02\x1A\xEC\x03\x02\x02\x02\x1C\xF8\x03\x02\x02\x02\x1E\u0100\x03\x02" +
+		'\x02\x02 \u0104\x03\x02\x02\x02"\u0111\x03\x02\x02\x02$\u0113\x03\x02' +
+		"\x02\x02&\u0118\x03\x02\x02\x02(\u0122\x03\x02\x02\x02*\u0131\x03\x02" +
+		"\x02\x02,\u0133\x03\x02\x02\x02.\u0137\x03\x02\x02\x020\u0142\x03\x02" +
+		"\x02\x022\u0151\x03\x02\x02\x024\u0161\x03\x02\x02\x026\u0163\x03\x02" +
+		"\x02\x028\u016A\x03\x02\x02\x02:\u016C\x03\x02\x02\x02<\u0175\x03\x02" +
+		"\x02\x02>\u018A\x03\x02\x02\x02@\u018F\x03\x02\x02\x02B\u0191\x03\x02" +
+		"\x02\x02D\u01AA\x03\x02\x02\x02F\u01B0\x03\x02\x02\x02H\u01B8\x03\x02" +
+		"\x02\x02J\u01BB\x03\x02\x02\x02L\u01C1\x03\x02\x02\x02N\u01CB\x03\x02" +
+		"\x02\x02P\u01CE\x03\x02\x02\x02R\u01D6\x03\x02\x02\x02T\u01E3\x03\x02" +
+		"\x02\x02V\u01E5\x03\x02\x02\x02X\u01F4\x03\x02\x02\x02Z\u01F8\x03\x02" +
+		"\x02\x02\\\u01FA\x03\x02\x02\x02^\u01FC\x03\x02\x02\x02`\u0200\x03\x02" +
+		"\x02\x02b\u0202\x03\x02\x02\x02d\u0214\x03\x02\x02\x02f\u021C\x03\x02" +
+		"\x02\x02h\u0224\x03\x02\x02\x02j\u0226\x03\x02\x02\x02l\u0228\x03\x02" +
+		"\x02\x02n\u0238\x03\x02\x02\x02p\u0248\x03\x02\x02\x02r\u024C\x03\x02" +
+		"\x02\x02t\u0262\x03\x02\x02\x02v\u027C\x03\x02\x02\x02x\u0284\x03\x02" +
+		"\x02\x02z\u0287\x03\x02\x02\x02|\u028B\x03\x02\x02\x02~\u029C\x03\x02" +
+		"\x02\x02\x80\u029E\x03\x02\x02\x02\x82\u02A1\x03\x02\x02\x02\x84\u02A7" +
+		"\x03\x02\x02\x02\x86\u02A9\x03\x02\x02\x02\x88\u02AC\x03\x02\x02\x02\x8A" +
+		"\u02AF\x03\x02\x02\x02\x8C\u02B1\x03\x02\x02\x02\x8E\u02B8\x03\x02\x02" +
+		"\x02\x90\u02BA\x03\x02\x02\x02\x92\u02C5\x03\x02\x02\x02\x94\u02D0\x03" +
+		"\x02\x02\x02\x96\u02DC\x03\x02\x02\x02\x98\u02DE\x03\x02\x02\x02\x9A\u02E9" +
+		"\x03\x02\x02\x02\x9C\u02F4\x03\x02\x02\x02\x9E\u02FF\x03\x02\x02\x02\xA0" +
+		"\u030A\x03\x02\x02\x02\xA2\u0315\x03\x02\x02\x02\xA4\u0320\x03\x02\x02" +
+		"\x02\xA6\u032B\x03\x02\x02\x02\xA8\u0336\x03\x02\x02\x02\xAA\u0348\x03" +
+		"\x02\x02\x02\xAC\u034F\x03\x02\x02\x02\xAE\u0351\x03\x02\x02\x02\xB0\u0353" +
+		"\x03\x02\x02\x02\xB2\u035E\x03\x02\x02\x02\xB4\u0360\x03\x02\x02\x02\xB6" +
+		"\u0362\x03\x02\x02\x02\xB8\u0370\x03\x02\x02\x02\xBA\u0375\x03\x02\x02" +
+		"\x02\xBC\xBE\x05\x04\x03\x02\xBD\xBC\x03\x02\x02\x02\xBD\xBE\x03\x02\x02" +
+		"\x02\xBE\xBF\x03\x02\x02\x02\xBF\xC0\x07\x02\x02\x03\xC0\x03\x03\x02\x02" +
+		"\x02\xC1\xC3\x05\x06\x04\x02\xC2\xC1\x03\x02\x02\x02\xC3\xC4\x03\x02\x02" +
+		"\x02\xC4\xC2\x03\x02\x02\x02\xC4\xC5\x03\x02\x02\x02\xC5\x05\x03\x02\x02" +
+		"\x02\xC6\xC7\x05\b\x05\x02\xC7\x07\x03\x02\x02\x02\xC8\xCA\x05\n\x06\x02" +
+		"\xC9\xC8\x03\x02\x02\x02\xCA\xCB\x03\x02\x02\x02\xCB\xC9\x03\x02\x02\x02" +
+		"\xCB\xCC\x03\x02\x02\x02\xCC\t\x03\x02\x02\x02\xCD\xD1\x052\x1A\x02\xCE" +
+		"\xD1\x05\f\x07\x02\xCF\xD1\x07*\x02\x02\xD0\xCD\x03\x02\x02\x02\xD0\xCE" +
+		"\x03\x02\x02\x02\xD0\xCF\x03\x02\x02\x02\xD1\v\x03\x02\x02\x02\xD2\xD3" +
+		"\x05\x0E\b\x02\xD3\xD4\x07*\x02\x02\xD4\xD9\x03\x02\x02\x02\xD5\xD9\x05" +
+		"\x1A\x0E\x02\xD6\xD9\x05 \x11\x02\xD7\xD9\x05(\x15\x02\xD8\xD2\x03\x02" +
+		"\x02\x02\xD8\xD5\x03\x02\x02\x02\xD8\xD6\x03\x02\x02\x02\xD8\xD7\x03\x02" +
+		"\x02\x02\xD9\r\x03\x02\x02\x02\xDA\xDB\x05\x10\t\x02\xDB\xDC\x05\x12\n" +
+		"\x02\xDC\x0F\x03\x02\x02\x02\xDD\xDE\t\x02\x02\x02\xDE\x11\x03\x02\x02" +
+		"\x02\xDF\xE0\x05\x16\f\x02\xE0\xE1\x07,\x02\x02\xE1\xE4\x05\xB2Z\x02\xE2" +
+		"\xE3\x07?\x02\x02\xE3\xE5\x05\x14\v\x02\xE4\xE2\x03\x02\x02\x02\xE4\xE5" +
+		"\x03\x02\x02\x02\xE5\x13\x03\x02\x02\x02\xE6\xE7\x05\xACW\x02\xE7\x15" +
+		"\x03\x02\x02\x02\xE8\xE9\x05\x18\r\x02\xE9\x17\x03\x02\x02\x02\xEA\xEB" +
+		"\x07S\x02\x02\xEB\x19\x03\x02\x02\x02\xEC\xED\x07\x17\x02\x02\xED\xEE" +
+		"\x05\x16\f\x02\xEE\xF0\x07-\x02\x02\xEF\xF1\x05\x1C\x0F\x02\xF0\xEF\x03" +
+		"\x02\x02\x02\xF0\xF1\x03\x02\x02\x02\xF1\xF2\x03\x02\x02\x02\xF2\xF3\x07" +
+		".\x02\x02\xF3\xF4\x07\x1A\x02\x02\xF4\xF6\x05\xB2Z\x02\xF5\xF7\x054\x1B" +
+		"\x02\xF6\xF5\x03\x02\x02\x02\xF6\xF7\x03\x02\x02\x02\xF7\x1B\x03\x02\x02" +
+		"\x02\xF8\xFD\x05\x1E\x10\x02\xF9\xFA\x07)\x02\x02\xFA\xFC\x05\x1E\x10" +
+		"\x02\xFB\xF9\x03\x02\x02\x02\xFC\xFF\x03\x02\x02\x02\xFD\xFB\x03\x02\x02" +
+		"\x02\xFD\xFE\x03\x02\x02\x02\xFE\x1D\x03\x02\x02\x02\xFF\xFD\x03\x02\x02" +
+		"\x02\u0100\u0101\x05\x16\f\x02\u0101\u0102\x07,\x02\x02\u0102\u0103\x05" +
+		"\xB2Z\x02\u0103\x1F\x03\x02\x02\x02\u0104\u0105\x07\x1C\x02\x02\u0105" +
+		'\u0106\x05\x16\f\x02\u0106\u010A\x072\x02\x02\u0107\u0109\x05"\x12\x02' +
+		"\u0108\u0107\x03\x02\x02\x02\u0109\u010C\x03\x02\x02\x02\u010A\u0108\x03" +
+		"\x02\x02\x02\u010A\u010B\x03\x02\x02\x02\u010B\u010D\x03\x02\x02\x02\u010C" +
+		"\u010A\x03\x02\x02\x02\u010D\u010E\x073\x02\x02\u010E!\x03\x02\x02\x02" +
+		"\u010F\u0112\x05$\x13\x02\u0110\u0112\x05&\x14\x02\u0111\u010F\x03\x02" +
+		"\x02\x02\u0111\u0110\x03\x02\x02\x02\u0112#\x03\x02\x02\x02\u0113\u0114" +
+		"\x05\x16\f\x02\u0114\u0115\x07,\x02\x02\u0115\u0116\x05\xB2Z\x02\u0116" +
+		"\u0117\x07*\x02\x02\u0117%\x03\x02\x02\x02\u0118\u0119\x05\x16\f\x02\u0119" +
+		"\u011B\x07-\x02\x02\u011A\u011C\x05\x1C\x0F\x02\u011B\u011A\x03\x02\x02" +
+		"\x02\u011B\u011C\x03\x02\x02\x02\u011C\u011D\x03\x02\x02\x02\u011D\u011E" +
+		"\x07.\x02\x02\u011E\u011F\x07,\x02\x02\u011F\u0120\x05\xB2Z\x02\u0120" +
+		"\u0121\x07*\x02\x02\u0121'\x03\x02\x02\x02\u0122\u0123\x07\x1B\x02\x02" +
+		"\u0123\u0124\x05\x16\f\x02\u0124\u0129\x072\x02\x02\u0125\u0128\x05*\x16" +
+		"\x02\u0126\u0128\x07*\x02\x02\u0127\u0125\x03\x02\x02\x02\u0127\u0126" +
+		"\x03\x02\x02\x02\u0128\u012B\x03\x02\x02\x02\u0129\u0127\x03\x02\x02\x02" +
+		"\u0129\u012A\x03\x02\x02\x02\u012A\u012C\x03\x02\x02\x02\u012B\u0129\x03" +
+		"\x02\x02\x02\u012C\u012D\x073\x02\x02\u012D)\x03\x02\x02\x02\u012E\u0132" +
+		"\x05,\x17\x02\u012F\u0132\x05.\x18\x02\u0130\u0132\x050\x19\x02\u0131" +
+		"\u012E\x03\x02\x02\x02\u0131\u012F\x03\x02\x02\x02\u0131\u0130\x03\x02" +
+		"\x02\x02\u0132+\x03\x02\x02\x02\u0133\u0134\x05\x16\f\x02\u0134\u0135" +
+		"\x07,\x02\x02\u0135\u0136\x05\xB2Z\x02\u0136-\x03\x02\x02\x02\u0137\u0138" +
+		"\x05\x16\f\x02\u0138\u013A\x07-\x02\x02\u0139\u013B\x05\x1C\x0F\x02\u013A" +
+		"\u0139\x03\x02\x02\x02\u013A\u013B\x03\x02\x02\x02\u013B\u013C\x03\x02" +
+		"\x02\x02\u013C\u013D\x07.\x02\x02\u013D\u013E\x07,\x02\x02\u013E\u0140" +
+		"\x05\xB2Z\x02\u013F\u0141\x054\x1B\x02\u0140\u013F\x03\x02\x02\x02\u0140" +
+		"\u0141\x03\x02\x02\x02\u0141/\x03\x02\x02\x02\u0142\u0143\x07\x1D\x02" +
+		"\x02\u0143\u0145\x07-\x02\x02\u0144\u0146\x05\x1C\x0F\x02\u0145\u0144" +
+		"\x03\x02\x02\x02\u0145\u0146\x03\x02\x02\x02\u0146\u0147\x03\x02\x02\x02" +
+		"\u0147\u0148\x07.\x02\x02\u0148\u0149\x054\x1B\x02\u01491\x03\x02\x02" +
+		"\x02\u014A\u0152\x056\x1C\x02\u014B\u0152\x058\x1D\x02\u014C\u0152\x05" +
+		"@!\x02\u014D\u0152\x05H%\x02\u014E\u0152\x05J&\x02\u014F\u0152\x054\x1B" +
+		"\x02\u0150\u0152\x05L'\x02\u0151\u014A\x03\x02\x02\x02\u0151\u014B\x03" +
+		"\x02\x02\x02\u0151\u014C\x03\x02\x02\x02\u0151\u014D\x03\x02\x02\x02\u0151" +
+		"\u014E\x03\x02\x02\x02\u0151\u014F\x03\x02\x02\x02\u0151\u0150\x03\x02" +
+		"\x02\x02\u01523\x03\x02\x02\x02\u0153\u0154\x06\x1B\x02\x02\u0154\u0156" +
+		"\x072\x02\x02\u0155\u0157\x05\b\x05\x02\u0156\u0155\x03\x02\x02\x02\u0156" +
+		"\u0157\x03\x02\x02\x02\u0157\u0158\x03\x02\x02\x02\u0158\u0162\x073\x02" +
+		"\x02\u0159\u015A\x06\x1B\x03\x02\u015A\u015B\x072\x02\x02\u015B\u015D" +
+		"\b\x1B\x01\x02\u015C\u015E\x05\b\x05\x02\u015D\u015C\x03\x02\x02\x02\u015D" +
+		"\u015E\x03\x02\x02\x02\u015E\u015F\x03\x02\x02\x02\u015F\u0160\b\x1B\x01" +
+		"\x02\u0160\u0162\x073\x02\x02\u0161\u0153\x03\x02\x02\x02\u0161\u0159" +
+		"\x03\x02\x02\x02\u01625\x03\x02\x02\x02\u0163\u0164\b\x1C\x01\x02\u0164" +
+		"\u0165\x05\xB0Y\x02\u0165\u0166\x07*\x02\x02\u0166\u0167\b\x1C\x01\x02" +
+		"\u01677\x03\x02\x02\x02\u0168\u016B\x05:\x1E\x02\u0169\u016B\x05<\x1F" +
+		"\x02\u016A\u0168\x03\x02\x02\x02\u016A\u0169\x03\x02\x02\x02\u016B9\x03" +
+		"\x02\x02\x02\u016C\u016D\x07\x13\x02\x02\u016D\u016E\x07-\x02\x02\u016E" +
+		"\u016F\x05\xB0Y\x02\u016F\u0170\x07.\x02\x02\u0170\u0173\x052\x1A\x02" +
+		"\u0171\u0172\x07\x14\x02\x02\u0172\u0174\x052\x1A\x02\u0173\u0171\x03" +
+		"\x02\x02\x02\u0173\u0174\x03\x02\x02\x02\u0174;\x03\x02\x02\x02\u0175" +
+		"\u0176\x07\f\x02\x02\u0176\u0177\x07-\x02\x02\u0177\u0178\x05\xB0Y\x02" +
+		"\u0178\u0179\x07.\x02\x02\u0179\u017D\x072\x02\x02\u017A\u017C\x05> \x02" +
+		"\u017B\u017A\x03\x02\x02\x02\u017C\u017F\x03\x02\x02\x02\u017D\u017B\x03" +
+		"\x02\x02\x02\u017D\u017E\x03\x02\x02\x02\u017E\u0180\x03\x02\x02\x02\u017F" +
+		"\u017D\x03\x02\x02\x02\u0180\u0181\x073\x02\x02\u0181=\x03\x02\x02\x02" +
+		"\u0182\u0183\x07\r\x02\x02\u0183\u0184\x05\xB0Y\x02\u0184\u0185\x07,\x02" +
+		"\x02\u0185\u0186\x052\x1A\x02\u0186\u018B\x03\x02\x02\x02\u0187\u0188" +
+		"\x07\x0E\x02\x02\u0188\u0189\x07,\x02\x02\u0189\u018B\x052\x1A\x02\u018A" +
+		"\u0182\x03\x02\x02\x02\u018A\u0187\x03\x02\x02\x02\u018B?\x03\x02\x02" +
+		'\x02\u018C\u0190\x05B"\x02\u018D\u0190\x05D#\x02\u018E\u0190\x05F$\x02' +
+		"\u018F\u018C\x03\x02\x02\x02\u018F\u018D\x03\x02\x02\x02\u018F\u018E\x03" +
+		"\x02\x02\x02\u0190A\x03\x02\x02\x02\u0191\u0192\x07\x15\x02\x02\u0192" +
+		"\u0199\x07-\x02\x02\u0193\u0196\x05\x0E\b\x02\u0194\u0196\x05\xB0Y\x02" +
+		"\u0195\u0193\x03\x02\x02\x02\u0195\u0194\x03\x02\x02\x02\u0196\u0197\x03" +
+		'\x02\x02\x02\u0197\u0198\b"\x01\x02\u0198\u019A\x03\x02\x02\x02\u0199' +
+		"\u0195\x03\x02\x02\x02\u0199\u019A\x03\x02\x02\x02\u019A\u019B\x03\x02" +
+		"\x02\x02\u019B\u019F\x07*\x02\x02\u019C\u019D\x05\xB0Y\x02\u019D\u019E" +
+		'\b"\x01\x02\u019E\u01A0\x03\x02\x02\x02\u019F\u019C\x03\x02\x02\x02\u019F' +
+		"\u01A0\x03\x02\x02\x02\u01A0\u01A1\x03\x02\x02\x02\u01A1\u01A5\x07*\x02" +
+		'\x02\u01A2\u01A3\x05\xB0Y\x02\u01A3\u01A4\b"\x01\x02\u01A4\u01A6\x03' +
+		"\x02\x02\x02\u01A5\u01A2\x03\x02\x02\x02\u01A5\u01A6\x03\x02\x02\x02\u01A6" +
+		"\u01A7\x03\x02\x02\x02\u01A7\u01A8\x07.\x02\x02\u01A8\u01A9\x052\x1A\x02" +
+		"\u01A9C\x03\x02\x02\x02\u01AA\u01AB\x07\x12\x02\x02\u01AB\u01AC\x07-\x02" +
+		"\x02\u01AC\u01AD\x05\xB0Y\x02\u01AD\u01AE\x07.\x02\x02\u01AE\u01AF\x05" +
+		"2\x1A\x02\u01AFE\x03\x02\x02\x02\u01B0\u01B1\x07\x11\x02\x02\u01B1\u01B2" +
+		"\x052\x1A\x02\u01B2\u01B3\x07\x12\x02\x02\u01B3\u01B4\x07-\x02\x02\u01B4" +
+		"\u01B5\x05\xB0Y\x02\u01B5\u01B6\x07.\x02\x02\u01B6\u01B7\x07*\x02\x02" +
+		"\u01B7G\x03\x02\x02\x02\u01B8\u01B9\t\x03\x02\x02\u01B9\u01BA\x07*\x02" +
+		"\x02\u01BAI\x03\x02\x02\x02\u01BB\u01BD\x07\x18\x02\x02\u01BC\u01BE\x05" +
+		"\xB0Y\x02\u01BD\u01BC\x03\x02\x02\x02\u01BD\u01BE\x03\x02\x02\x02\u01BE" +
+		"\u01BF\x03\x02\x02\x02\u01BF\u01C0\x07*\x02\x02\u01C0K\x03\x02\x02\x02" +
+		"\u01C1\u01C5\x05N(\x02\u01C2\u01C4\x05P)\x02\u01C3\u01C2\x03\x02\x02\x02" +
+		"\u01C4\u01C7\x03\x02\x02\x02\u01C5\u01C3\x03\x02\x02\x02\u01C5\u01C6\x03" +
+		"\x02\x02\x02\u01C6\u01C9\x03\x02\x02\x02\u01C7\u01C5\x03\x02\x02\x02\u01C8" +
+		"\u01CA\x05R*\x02\u01C9\u01C8\x03\x02\x02\x02\u01C9\u01CA\x03\x02\x02\x02" +
+		"\u01CAM\x03\x02\x02\x02\u01CB\u01CC\x07#\x02\x02\u01CC\u01CD\x054\x1B" +
+		"\x02\u01CDO\x03\x02\x02\x02\u01CE\u01CF\x07$\x02\x02\u01CF\u01D1\x07-" +
+		"\x02\x02\u01D0\u01D2\x05\x1E\x10\x02\u01D1\u01D0\x03\x02\x02\x02\u01D1" +
+		"\u01D2\x03\x02\x02\x02\u01D2\u01D3\x03\x02\x02\x02\u01D3\u01D4\x07.\x02" +
+		"\x02\u01D4\u01D5\x054\x1B\x02\u01D5Q\x03\x02\x02\x02\u01D6\u01D7\x07%" +
+		"\x02\x02\u01D7\u01D8\x054\x1B\x02\u01D8S\x03\x02\x02\x02\u01D9\u01E4\x05" +
+		"X-\x02\u01DA\u01E4\x05V,\x02\u01DB\u01E4\x05l7\x02\u01DC\u01E4\x05n8\x02" +
+		"\u01DD\u01E4\x05Z.\x02\u01DE\u01E4\x05\\/\x02\u01DF\u01E4\x05b2\x02\u01E0" +
+		"\u01E4\x05d3\x02\u01E1\u01E4\x05j6\x02\u01E2\u01E4\x05r:\x02\u01E3\u01D9" +
+		"\x03\x02\x02\x02\u01E3\u01DA\x03\x02\x02\x02\u01E3\u01DB\x03\x02\x02\x02" +
+		"\u01E3\u01DC\x03\x02\x02\x02\u01E3\u01DD\x03\x02\x02\x02\u01E3\u01DE\x03" +
+		"\x02\x02\x02\u01E3\u01DF\x03\x02\x02\x02\u01E3\u01E0\x03\x02\x02\x02\u01E3" +
+		"\u01E1\x03\x02\x02\x02\u01E3\u01E2\x03\x02\x02\x02\u01E4U\x03\x02\x02" +
+		"\x02\u01E5\u01E6\b,\x01\x02\u01E6\u01E8\x07-\x02\x02\u01E7\u01E9\x05\x1C" +
+		"\x0F\x02\u01E8\u01E7\x03\x02\x02\x02\u01E8\u01E9\x03\x02\x02\x02\u01E9" +
+		"\u01EA\x03\x02\x02\x02\u01EA\u01EB\x07.\x02\x02\u01EB\u01EC\x07,\x02\x02" +
+		"\u01EC\u01ED\x05\xB2Z\x02\u01ED\u01F0\x07\x1A\x02\x02\u01EE\u01F1\x05" +
+		"\xB0Y\x02\u01EF\u01F1\x054\x1B\x02\u01F0\u01EE\x03\x02\x02\x02\u01F0\u01EF" +
+		"\x03\x02\x02\x02\u01F1\u01F2\x03\x02\x02\x02\u01F2\u01F3\b,\x01\x02\u01F3" +
+		"W\x03\x02\x02\x02\u01F4\u01F5\x07-\x02\x02\u01F5\u01F6\x05\xB0Y\x02\u01F6" +
+		"\u01F7\x07.\x02\x02\u01F7Y\x03\x02\x02\x02\u01F8\u01F9\t\x04\x02\x02\u01F9" +
+		"[\x03\x02\x02\x02\u01FA\u01FB\x05^0\x02\u01FB]\x03\x02\x02\x02\u01FC\u01FD" +
+		"\x07S\x02\x02\u01FD_\x03\x02\x02\x02\u01FE\u0201";
 	private static readonly _serializedATNSegment1: string =
-		"\x03\x02\x02\x02\u020A\u020B\x03\x02\x02\x02\u020B\u020D\x07.\x02\x02" +
-		"\u020C\u0206\x03\x02\x02\x02\u020C\u0207\x03\x02\x02\x02\u020Dg\x03\x02" +
-		"\x02\x02\u020E\u0215\x07\\\x02\x02\u020F\u0211\x07\x03\x02\x02\u0210\u0212" +
-		"\x05\xACW\x02\u0211\u0210\x03\x02\x02\x02\u0211\u0212\x03\x02\x02\x02" +
-		"\u0212\u0213\x03\x02\x02\x02\u0213\u0215\x07.\x02\x02\u0214\u020E\x03" +
-		"\x02\x02\x02\u0214\u020F\x03\x02\x02\x02\u0215i\x03\x02\x02\x02\u0216" +
-		"\u0217\t\x06\x02\x02\u0217k\x03\x02\x02\x02\u0218\u0221\x07,\x02\x02\u0219" +
-		"\u021E\x05\xACW\x02\u021A\u021B\x07&\x02\x02\u021B\u021D\x05\xACW\x02" +
-		"\u021C\u021A\x03\x02\x02\x02\u021D\u0220\x03\x02\x02\x02\u021E\u021C\x03" +
-		"\x02\x02\x02\u021E\u021F\x03\x02\x02\x02\u021F\u0222\x03\x02\x02\x02\u0220" +
-		"\u021E\x03\x02\x02\x02\u0221\u0219\x03\x02\x02\x02\u0221\u0222\x03\x02" +
-		"\x02\x02\u0222\u0224\x03\x02\x02\x02\u0223\u0225\x07&\x02\x02\u0224\u0223" +
-		"\x03\x02\x02\x02\u0224\u0225\x03\x02\x02\x02\u0225\u0226\x03\x02\x02\x02" +
-		"\u0226\u0227\x07-\x02\x02\u0227m\x03\x02\x02\x02\u0228\u0231\x07/\x02" +
-		"\x02\u0229\u022E\x05p9\x02\u022A\u022B\x07&\x02\x02\u022B\u022D\x05p9" +
-		"\x02\u022C\u022A\x03\x02\x02\x02\u022D\u0230\x03\x02\x02\x02\u022E\u022C" +
-		"\x03\x02\x02\x02\u022E\u022F\x03\x02\x02\x02\u022F\u0232\x03\x02\x02\x02" +
-		"\u0230\u022E\x03\x02\x02\x02\u0231\u0229\x03\x02\x02\x02\u0231\u0232\x03" +
-		"\x02\x02\x02\u0232\u0234\x03\x02\x02\x02\u0233\u0235\x07&\x02\x02\u0234" +
-		"\u0233\x03\x02\x02\x02\u0234\u0235\x03\x02\x02\x02\u0235\u0236\x03\x02" +
-		"\x02\x02\u0236\u0237\x070\x02\x02\u0237o\x03\x02\x02\x02\u0238\u0239\x05" +
-		"`1\x02\u0239\u023A\x07)\x02\x02\u023A\u023B\x05\xACW\x02\u023Bq\x03\x02" +
-		"\x02\x02\u023C\u023D\t\x07\x02\x02\u023Ds\x03\x02\x02\x02\u023E\u023F" +
-		"\b;\x01\x02\u023F\u024A\x05T+\x02\u0240\u0241\x07\x18\x02\x02\u0241\u0242" +
-		"\x05t;\x02\u0242\u0244\x07*\x02\x02\u0243\u0245\x05v<\x02\u0244\u0243" +
-		"\x03\x02\x02\x02\u0244\u0245\x03\x02\x02\x02\u0245\u0246\x03\x02\x02\x02" +
-		"\u0246\u0247\x07+\x02\x02\u0247\u0248\b;\x01\x02\u0248\u024A\x03\x02\x02" +
-		"\x02\u0249\u023E\x03\x02\x02\x02\u0249\u0240\x03\x02\x02\x02\u024A\u0260" +
-		"\x03\x02\x02\x02\u024B\u024C\f\x07\x02\x02\u024C\u024E\x07*\x02\x02\u024D" +
-		"\u024F\x05v<\x02\u024E\u024D\x03\x02\x02\x02\u024E\u024F\x03\x02\x02\x02" +
-		"\u024F\u0250\x03\x02\x02\x02\u0250\u0251\x07+\x02\x02\u0251\u025F\b;\x01" +
-		"\x02\u0252\u0253\f\x05\x02\x02\u0253\u0254\x05x=\x02\u0254\u0255\b;\x01" +
-		"\x02\u0255\u025F\x03\x02\x02\x02\u0256\u0257\f\x04\x02\x02\u0257\u0258" +
-		"\x05z>\x02\u0258\u0259\b;\x01\x02\u0259\u025F\x03\x02\x02\x02\u025A\u025B" +
-		"\f\x03\x02\x02\u025B\u025C\x05|?\x02\u025C\u025D\b;\x01\x02\u025D\u025F" +
-		"\x03\x02\x02\x02\u025E\u024B\x03\x02\x02\x02\u025E\u0252\x03\x02\x02\x02" +
-		"\u025E\u0256\x03\x02\x02\x02\u025E\u025A\x03\x02\x02\x02\u025F\u0262\x03" +
-		"\x02\x02\x02\u0260\u025E\x03\x02\x02\x02\u0260\u0261\x03\x02\x02\x02\u0261" +
-		"u\x03\x02\x02\x02\u0262\u0260\x03\x02\x02\x02\u0263\u0268\x05\xA8U\x02" +
-		"\u0264\u0265\x07&\x02\x02\u0265\u0267\x05\xA8U\x02\u0266\u0264\x03\x02" +
-		"\x02\x02\u0267\u026A\x03\x02\x02\x02\u0268\u0266\x03\x02\x02\x02\u0268" +
-		"\u0269\x03\x02\x02\x02\u0269w\x03\x02\x02\x02\u026A\u0268\x03\x02\x02" +
-		"\x02\u026B\u026C\x07O\x02\x02\u026C\u026D\x05^0\x02\u026Dy\x03\x02\x02" +
-		"\x02\u026E\u026F\x07,\x02\x02\u026F\u0270\x05\xACW\x02\u0270\u0271\x07" +
-		"-\x02\x02\u0271{\x03\x02\x02\x02\u0272\u0276\x07,\x02\x02\u0273\u0274" +
-		"\x05\xACW\x02\u0274\u0275\b?\x01\x02\u0275\u0277\x03\x02\x02\x02\u0276" +
-		"\u0273\x03\x02\x02\x02\u0276\u0277\x03\x02\x02\x02\u0277\u0278\x03\x02" +
-		"\x02\x02\u0278\u027C\x07)\x02\x02\u0279\u027A\x05\xACW\x02\u027A\u027B" +
-		"\b?\x01\x02\u027B\u027D\x03\x02\x02\x02\u027C\u0279\x03\x02\x02\x02\u027C" +
-		"\u027D\x03\x02\x02\x02\u027D\u027E\x03\x02\x02\x02\u027E\u027F\x07-\x02" +
-		"\x02\u027F}\x03\x02\x02\x02\u0280\u0284\x05t;\x02\u0281\u0284\x05\x80" +
-		"A\x02\u0282\u0284\x05\x82B\x02\u0283\u0280\x03\x02\x02\x02\u0283\u0281" +
-		"\x03\x02\x02\x02\u0283\u0282\x03\x02\x02\x02\u0284\x7F\x03\x02\x02\x02" +
-		"\u0285\u0286\x05t;\x02\u0286\u0287\x05\x8AF\x02\u0287\x81\x03\x02\x02" +
-		"\x02\u0288\u028E\x07\x1F\x02\x02\u0289\u028A\x07*\x02\x02\u028A\u028B" +
-		"\x05\xA8U\x02\u028B\u028C\x07+\x02\x02\u028C\u028F\x03\x02\x02\x02\u028D" +
-		"\u028F\x05\xA8U\x02\u028E\u0289\x03\x02\x02\x02\u028E\u028D\x03\x02\x02" +
-		"\x02\u028F\x83\x03\x02\x02\x02\u0290\u0294\x05~@\x02\u0291\u0294\x05\x86" +
-		"D\x02\u0292\u0294\x05\x88E\x02\u0293\u0290\x03\x02\x02\x02\u0293\u0291" +
-		"\x03\x02\x02\x02\u0293\u0292\x03\x02\x02\x02\u0294\x85\x03\x02\x02\x02" +
-		"\u0295\u0296\x05\x8AF\x02\u0296\u0297\x05~@\x02\u0297\x87\x03\x02\x02" +
-		"\x02\u0298\u0299\x05\x8CG\x02\u0299\u029A\x05~@\x02\u029A\x89\x03\x02" +
-		"\x02\x02\u029B\u029C\t\b\x02\x02\u029C\x8B\x03\x02\x02\x02\u029D\u029E" +
-		"\t\t\x02\x02\u029E\x8D\x03\x02\x02\x02\u029F\u02A5\x05\x84C\x02\u02A0" +
-		"\u02A1\x05\x84C\x02\u02A1\u02A2\x07\t\x02\x02\u02A2\u02A3\x05\xAEX\x02" +
-		"\u02A3\u02A5\x03\x02\x02\x02\u02A4\u029F\x03\x02\x02\x02\u02A4\u02A0\x03" +
-		"\x02\x02\x02\u02A5\x8F\x03\x02\x02\x02\u02A6\u02A7\bI\x01\x02\u02A7\u02A8" +
-		"\x05\x8EH\x02\u02A8\u02AE\x03\x02\x02\x02\u02A9\u02AA\f\x03\x02\x02\u02AA" +
-		"\u02AB\t\n\x02\x02\u02AB\u02AD\x05\x8EH\x02\u02AC\u02A9\x03\x02\x02\x02" +
-		"\u02AD\u02B0\x03\x02\x02\x02\u02AE\u02AC\x03\x02\x02\x02\u02AE\u02AF\x03" +
-		"\x02\x02\x02\u02AF\x91\x03\x02\x02\x02\u02B0\u02AE\x03\x02\x02\x02\u02B1" +
-		"\u02B2\bJ\x01\x02\u02B2\u02B3\x05\x90I\x02\u02B3\u02B9\x03\x02\x02\x02" +
-		"\u02B4\u02B5\f\x03\x02\x02\u02B5\u02B6\t\v\x02\x02\u02B6\u02B8\x05\x90" +
-		"I\x02\u02B7\u02B4\x03\x02\x02\x02\u02B8\u02BB\x03\x02\x02\x02\u02B9\u02B7" +
-		"\x03\x02\x02\x02\u02B9\u02BA\x03\x02\x02\x02\u02BA\x93\x03\x02\x02\x02" +
-		"\u02BB\u02B9\x03\x02\x02\x02\u02BC\u02BD\bK\x01\x02\u02BD\u02BE\x05\x92" +
-		"J\x02\u02BE\u02C5\x03\x02\x02\x02\u02BF\u02C0\f\x03\x02\x02\u02C0\u02C1" +
-		"\x05\x96L\x02\u02C1\u02C2\x05\x9CO\x02\u02C2\u02C4\x03\x02\x02\x02\u02C3" +
-		"\u02BF\x03\x02\x02\x02\u02C4\u02C7\x03\x02\x02\x02\u02C5\u02C3\x03\x02" +
-		"\x02\x02\u02C5\u02C6\x03\x02\x02\x02\u02C6\x95\x03\x02\x02\x02\u02C7\u02C5" +
-		"\x03\x02\x02\x02\u02C8\u02C9\t\f\x02\x02\u02C9\x97\x03\x02\x02\x02\u02CA" +
-		"\u02CB\bM\x01\x02\u02CB\u02CC\x05\x94K\x02\u02CC\u02D2\x03\x02\x02\x02" +
-		"\u02CD\u02CE\f\x03\x02\x02\u02CE\u02CF\t\r\x02\x02\u02CF\u02D1\x05\x94" +
-		"K\x02\u02D0\u02CD\x03\x02\x02\x02\u02D1\u02D4\x03\x02\x02\x02\u02D2\u02D0" +
-		"\x03\x02\x02\x02\u02D2\u02D3\x03\x02\x02\x02\u02D3\x99\x03\x02\x02\x02" +
-		"\u02D4\u02D2\x03\x02\x02\x02\u02D5\u02D6\bN\x01\x02\u02D6\u02D7\x05\x98" +
-		"M\x02\u02D7\u02DD\x03\x02\x02\x02\u02D8\u02D9\f\x03\x02\x02\u02D9\u02DA" +
-		"\t\x0E\x02\x02\u02DA\u02DC\x05\x98M\x02\u02DB\u02D8\x03\x02\x02\x02\u02DC" +
-		"\u02DF\x03\x02\x02\x02\u02DD\u02DB\x03\x02\x02\x02\u02DD\u02DE\x03\x02" +
-		"\x02\x02\u02DE\x9B\x03\x02\x02\x02\u02DF\u02DD\x03\x02\x02\x02\u02E0\u02E1" +
-		"\bO\x01\x02\u02E1\u02E2\x05\x9AN\x02\u02E2\u02E8\x03\x02\x02\x02\u02E3" +
-		"\u02E4\f\x03\x02\x02\u02E4\u02E5\x07H\x02\x02\u02E5\u02E7\x05\x9AN\x02" +
-		"\u02E6\u02E3\x03\x02\x02\x02\u02E7\u02EA\x03\x02\x02\x02\u02E8\u02E6\x03" +
-		"\x02\x02\x02\u02E8\u02E9\x03\x02\x02\x02\u02E9\x9D\x03\x02\x02\x02\u02EA" +
-		"\u02E8\x03\x02\x02\x02\u02EB\u02EC\bP\x01\x02\u02EC\u02ED\x05\x9CO\x02" +
-		"\u02ED\u02F3\x03\x02\x02\x02\u02EE\u02EF\f\x03\x02\x02\u02EF\u02F0\x07" +
-		"J\x02\x02\u02F0\u02F2\x05\x9CO\x02\u02F1\u02EE\x03\x02\x02\x02\u02F2\u02F5" +
-		"\x03\x02\x02\x02\u02F3\u02F1\x03\x02\x02\x02\u02F3\u02F4\x03\x02\x02\x02" +
-		"\u02F4\x9F\x03\x02\x02\x02\u02F5\u02F3\x03\x02\x02\x02\u02F6\u02F7\bQ" +
-		"\x01\x02\u02F7\u02F8\x05\x9EP\x02\u02F8\u02FE\x03\x02\x02\x02\u02F9\u02FA" +
-		"\f\x03\x02\x02\u02FA\u02FB\x07I\x02\x02\u02FB\u02FD\x05\x9EP\x02\u02FC" +
-		"\u02F9\x03\x02\x02\x02\u02FD\u0300\x03\x02\x02\x02\u02FE\u02FC\x03\x02" +
-		"\x02\x02\u02FE\u02FF\x03\x02\x02\x02\u02FF\xA1\x03\x02\x02\x02\u0300\u02FE" +
-		"\x03\x02\x02\x02\u0301\u0302\bR\x01\x02\u0302\u0303\x05\xA0Q\x02\u0303" +
-		"\u0309\x03\x02\x02\x02\u0304\u0305\f\x03\x02\x02\u0305\u0306\x079\x02" +
-		"\x02\u0306\u0308\x05\xA0Q\x02\u0307\u0304\x03\x02\x02\x02\u0308\u030B" +
-		"\x03\x02\x02\x02\u0309\u0307\x03\x02\x02\x02\u0309\u030A\x03\x02\x02\x02" +
-		"\u030A\xA3\x03\x02\x02\x02\u030B\u0309\x03\x02\x02\x02\u030C\u030D\bS" +
-		"\x01\x02\u030D\u030E\x05\xA2R\x02\u030E\u0314\x03\x02\x02\x02\u030F\u0310" +
-		"\f\x03\x02\x02\u0310\u0311\x07:\x02\x02\u0311\u0313\x05\xA2R\x02\u0312" +
-		"\u030F\x03\x02\x02\x02\u0313\u0316\x03\x02\x02\x02\u0314\u0312\x03\x02" +
-		"\x02\x02\u0314\u0315\x03\x02\x02\x02\u0315\xA5\x03\x02\x02\x02\u0316\u0314" +
-		"\x03\x02\x02\x02\u0317\u031F\x05\xA4S\x02\u0318\u0319\x05\xA4S\x02\u0319" +
-		"\u031A\x07(\x02\x02\u031A\u031B\x05\xA6T\x02\u031B\u031C\x07)\x02\x02" +
-		"\u031C\u031D\x05\xA6T\x02\u031D\u031F\x03\x02\x02\x02\u031E\u0317\x03" +
-		"\x02\x02\x02\u031E\u0318\x03\x02\x02\x02\u031F\xA7\x03\x02\x02\x02\u0320" +
-		"\u0326\x05\xA6T\x02\u0321\u0322\x05t;\x02\u0322\u0323\x05\xAAV\x02\u0323" +
-		"\u0324\x05\xA8U\x02\u0324\u0326\x03\x02\x02\x02\u0325\u0320\x03\x02\x02" +
-		"\x02\u0325\u0321\x03\x02\x02\x02\u0326\xA9\x03\x02\x02\x02\u0327\u0328" +
-		"\t\x0F\x02\x02\u0328\xAB\x03\x02\x02\x02\u0329\u032E\x05\xA8U\x02\u032A" +
-		"\u032B\x07&\x02\x02\u032B\u032D\x05\xA8U\x02\u032C\u032A\x03\x02\x02\x02" +
-		"\u032D\u0330\x03\x02\x02\x02\u032E\u032C\x03\x02\x02\x02\u032E\u032F\x03" +
-		"\x02\x02\x02\u032F\xAD\x03\x02\x02\x02\u0330\u032E\x03\x02\x02\x02\u0331" +
-		"\u0335\x05\xB0Y\x02\u0332\u0335\x05\xB2Z\x02\u0333\u0335\x05\xB4[\x02" +
-		"\u0334\u0331\x03\x02\x02\x02\u0334\u0332\x03\x02\x02\x02\u0334\u0333\x03" +
-		"\x02\x02\x02\u0335\xAF\x03\x02\x02\x02\u0336\u0337\x05\xB6\\\x02\u0337" +
-		"\xB1\x03\x02\x02\x02\u0338\u0339\x05\xB6\\\x02\u0339\u0342\x07D\x02\x02" +
-		"\u033A\u033F\x05\xAEX\x02\u033B\u033C\x07&\x02\x02\u033C\u033E\x05\xAE" +
-		"X\x02\u033D\u033B\x03\x02\x02\x02\u033E\u0341\x03\x02\x02\x02\u033F\u033D" +
-		"\x03\x02\x02\x02\u033F\u0340\x03\x02\x02\x02\u0340\u0343\x03\x02\x02\x02" +
-		"\u0341\u033F\x03\x02\x02\x02\u0342\u033A\x03\x02\x02\x02\u0342\u0343\x03" +
-		"\x02\x02\x02\u0343\u0344\x03\x02\x02\x02\u0344\u0345\x07F\x02\x02\u0345" +
-		"\xB3\x03\x02\x02\x02\u0346\u0347\x07\x1F\x02\x02\u0347\u0348\x07*\x02" +
-		"\x02\u0348\u0349\x05\xB6\\\x02\u0349\u034A\x07+\x02\x02\u034A\xB5\x03" +
-		"\x02\x02\x02\u034B\u034C\t\x10\x02\x02\u034C\xB7\x03\x02\x02\x02P\xB9" +
-		"\xC0\xC7\xCC\xD4\xE0\xEC\xF2\xF9\u0106\u010D\u0117\u0123\u0125\u012D\u0136" +
-		"\u013C\u0141\u014D\u0152\u015D\u0166\u0170\u017D\u0182\u0188\u018C\u0192" +
-		"\u0198\u01B0\u01B8\u01BC\u01C4\u01D6\u01DA\u01E2\u01F0\u01F8\u0200\u0204" +
-		"\u0209\u020C\u0211\u0214\u021E\u0221\u0224\u022E\u0231\u0234\u0244\u0249" +
-		"\u024E\u025E\u0260\u0268\u0276\u027C\u0283\u028E\u0293\u02A4\u02AE\u02B9" +
-		"\u02C5\u02D2\u02DD\u02E8\u02F3\u02FE\u0309\u0314\u031E\u0325\u032E\u0334" +
-		"\u033F\u0342";
+		"\x05^0\x02\u01FF\u0201\x05b2\x02\u0200\u01FE\x03\x02\x02\x02\u0200\u01FF" +
+		"\x03\x02\x02\x02\u0201a\x03\x02\x02\x02\u0202\u0203\t\x05\x02\x02\u0203" +
+		"c\x03\x02\x02\x02\u0204\u0208\x07Z\x02\x02\u0205\u0207\x05f4\x02\u0206" +
+		"\u0205\x03\x02\x02\x02\u0207\u020A\x03\x02\x02\x02\u0208\u0206\x03\x02" +
+		"\x02\x02\u0208\u0209\x03\x02\x02\x02\u0209\u020B\x03\x02\x02\x02\u020A" +
+		"\u0208\x03\x02\x02\x02\u020B\u0215\x07\\\x02\x02\u020C\u0210\x07[\x02" +
+		"\x02\u020D\u020F\x05h5\x02\u020E\u020D\x03\x02\x02\x02\u020F\u0212\x03" +
+		"\x02\x02\x02\u0210\u020E\x03\x02\x02\x02\u0210\u0211\x03\x02\x02\x02\u0211" +
+		"\u0213\x03\x02\x02\x02\u0212\u0210\x03\x02\x02\x02\u0213\u0215\x07^\x02" +
+		"\x02\u0214\u0204\x03\x02\x02\x02\u0214\u020C\x03\x02\x02\x02\u0215e\x03" +
+		"\x02\x02\x02\u0216\u021D\x07]\x02\x02\u0217\u0219\x07\x03\x02\x02\u0218" +
+		"\u021A\x05\xB0Y\x02\u0219\u0218\x03\x02\x02\x02\u0219\u021A\x03\x02\x02" +
+		"\x02\u021A\u021B\x03\x02\x02\x02\u021B\u021D\x071\x02\x02\u021C\u0216" +
+		"\x03\x02\x02\x02\u021C\u0217\x03\x02\x02\x02\u021Dg\x03\x02\x02\x02\u021E" +
+		"\u0225\x07_\x02\x02\u021F\u0221\x07\x03\x02\x02\u0220\u0222\x05\xB0Y\x02" +
+		"\u0221\u0220\x03\x02\x02\x02\u0221\u0222\x03\x02\x02\x02\u0222\u0223\x03" +
+		"\x02\x02\x02\u0223\u0225\x071\x02\x02\u0224\u021E\x03\x02\x02\x02\u0224" +
+		"\u021F\x03\x02\x02\x02\u0225i\x03\x02\x02\x02\u0226\u0227\t\x06\x02\x02" +
+		"\u0227k\x03\x02\x02\x02\u0228\u0231\x07/\x02\x02\u0229\u022E\x05\xB0Y" +
+		"\x02\u022A\u022B\x07)\x02\x02\u022B\u022D\x05\xB0Y\x02\u022C\u022A\x03" +
+		"\x02\x02\x02\u022D\u0230\x03\x02\x02\x02\u022E\u022C\x03\x02\x02\x02\u022E" +
+		"\u022F\x03\x02\x02\x02\u022F\u0232\x03\x02\x02\x02\u0230\u022E\x03\x02" +
+		"\x02\x02\u0231\u0229\x03\x02\x02\x02\u0231\u0232\x03\x02\x02\x02\u0232" +
+		"\u0234\x03\x02\x02\x02\u0233\u0235\x07)\x02\x02\u0234\u0233\x03\x02\x02" +
+		"\x02\u0234\u0235\x03\x02\x02\x02\u0235\u0236\x03\x02\x02\x02\u0236\u0237" +
+		"\x070\x02\x02\u0237m\x03\x02\x02\x02\u0238\u0241\x072\x02\x02\u0239\u023E" +
+		"\x05p9\x02\u023A\u023B\x07)\x02\x02\u023B\u023D\x05p9\x02\u023C\u023A" +
+		"\x03\x02\x02\x02\u023D\u0240\x03\x02\x02\x02\u023E\u023C\x03\x02\x02\x02" +
+		"\u023E\u023F\x03\x02\x02\x02\u023F\u0242\x03\x02\x02\x02\u0240\u023E\x03" +
+		"\x02\x02\x02\u0241\u0239\x03\x02\x02\x02\u0241\u0242\x03\x02\x02\x02\u0242" +
+		"\u0244\x03\x02\x02\x02\u0243\u0245\x07)\x02\x02\u0244\u0243\x03\x02\x02" +
+		"\x02\u0244\u0245\x03\x02\x02\x02\u0245\u0246\x03\x02\x02\x02\u0246\u0247" +
+		"\x073\x02\x02\u0247o\x03\x02\x02\x02\u0248\u0249\x05`1\x02\u0249\u024A" +
+		"\x07,\x02\x02\u024A\u024B\x05\xB0Y\x02\u024Bq\x03\x02\x02\x02\u024C\u024D" +
+		"\t\x07\x02\x02\u024Ds\x03\x02\x02\x02\u024E\u024F\b;\x01\x02\u024F\u0263" +
+		"\x05T+\x02\u0250\u0251\x07\x19\x02\x02\u0251\u0252\x05t;\x02\u0252\u0254" +
+		"\x07-\x02\x02\u0253\u0255\x05v<\x02\u0254\u0253\x03\x02\x02\x02\u0254" +
+		"\u0255\x03\x02\x02\x02\u0255\u0256\x03\x02\x02\x02\u0256\u0257\x07.\x02" +
+		"\x02\u0257\u0258\b;\x01\x02\u0258\u0263\x03\x02\x02\x02\u0259\u025A\x07" +
+		"\x1E\x02\x02\u025A\u025B\x05\xB2Z\x02\u025B\u025D\x07-\x02\x02\u025C\u025E" +
+		"\x05v<\x02\u025D\u025C\x03\x02\x02\x02\u025D\u025E\x03\x02\x02\x02\u025E" +
+		"\u025F\x03\x02\x02\x02\u025F\u0260\x07.\x02\x02\u0260\u0261\b;\x01\x02" +
+		"\u0261\u0263\x03\x02\x02\x02\u0262\u024E\x03\x02\x02\x02\u0262\u0250\x03" +
+		"\x02\x02\x02\u0262\u0259\x03\x02\x02\x02\u0263\u0279\x03\x02\x02\x02\u0264" +
+		"\u0265\f\b\x02\x02\u0265\u0266\x05x=\x02\u0266\u0267\b;\x01\x02\u0267" +
+		"\u0278\x03\x02\x02\x02\u0268\u0269\f\x07\x02\x02\u0269\u026A\x05z>\x02" +
+		"\u026A\u026B\b;\x01\x02\u026B\u0278\x03\x02\x02\x02\u026C\u026D\f\x06" +
+		"\x02\x02\u026D\u026E\x05|?\x02\u026E\u026F\b;\x01\x02\u026F\u0278\x03" +
+		"\x02\x02\x02\u0270\u0271\f\x05\x02\x02\u0271\u0273\x07-\x02\x02\u0272" +
+		"\u0274\x05v<\x02\u0273\u0272\x03\x02\x02\x02\u0273\u0274\x03\x02\x02\x02" +
+		"\u0274\u0275\x03\x02\x02\x02\u0275\u0276\x07.\x02\x02\u0276\u0278\b;\x01" +
+		"\x02\u0277\u0264\x03\x02\x02\x02\u0277\u0268\x03\x02\x02\x02\u0277\u026C" +
+		"\x03\x02\x02\x02\u0277\u0270\x03\x02\x02\x02\u0278\u027B\x03\x02\x02\x02" +
+		"\u0279\u0277\x03\x02\x02\x02\u0279\u027A\x03\x02\x02\x02\u027Au\x03\x02" +
+		"\x02\x02\u027B\u0279\x03\x02\x02\x02\u027C\u0281\x05\xACW\x02\u027D\u027E" +
+		"\x07)\x02\x02\u027E\u0280\x05\xACW\x02\u027F\u027D\x03\x02\x02\x02\u0280" +
+		"\u0283\x03\x02\x02\x02\u0281\u027F\x03\x02\x02\x02\u0281\u0282\x03\x02" +
+		"\x02\x02\u0282w\x03\x02\x02\x02\u0283\u0281\x03\x02\x02\x02\u0284\u0285" +
+		"\x07R\x02\x02\u0285\u0286\x05^0\x02\u0286y\x03\x02\x02\x02\u0287\u0288" +
+		"\x07/\x02\x02\u0288\u0289\x05\xB0Y\x02\u0289\u028A\x070\x02\x02\u028A" +
+		"{\x03\x02\x02\x02\u028B\u028F\x07/\x02\x02\u028C\u028D\x05\xB0Y\x02\u028D" +
+		"\u028E\b?\x01\x02\u028E\u0290\x03\x02\x02\x02\u028F\u028C\x03\x02\x02" +
+		"\x02\u028F\u0290\x03\x02\x02\x02\u0290\u0291\x03\x02\x02\x02\u0291\u0295" +
+		"\x07,\x02\x02\u0292\u0293\x05\xB0Y\x02\u0293\u0294\b?\x01\x02\u0294\u0296" +
+		"\x03\x02\x02\x02\u0295\u0292\x03\x02\x02\x02\u0295\u0296\x03\x02\x02\x02" +
+		"\u0296\u0297\x03\x02\x02\x02\u0297\u0298\x070\x02\x02\u0298}\x03\x02\x02" +
+		"\x02\u0299\u029D\x05t;\x02\u029A\u029D\x05\x80A\x02\u029B\u029D\x05\x82" +
+		"B\x02\u029C\u0299\x03\x02\x02\x02\u029C\u029A\x03\x02\x02\x02\u029C\u029B" +
+		"\x03\x02\x02\x02\u029D\x7F\x03\x02\x02\x02\u029E\u029F\x05t;\x02\u029F" +
+		'\u02A0\x05\x8AF\x02\u02A0\x81\x03\x02\x02\x02\u02A1\u02A2\x07"\x02\x02' +
+		"\u02A2\u02A3\x05\xACW\x02\u02A3\x83\x03\x02\x02\x02\u02A4\u02A8\x05~@" +
+		"\x02\u02A5\u02A8\x05\x86D\x02\u02A6\u02A8\x05\x88E\x02\u02A7\u02A4\x03" +
+		"\x02\x02\x02\u02A7\u02A5\x03\x02\x02\x02\u02A7\u02A6\x03\x02\x02\x02\u02A8" +
+		"\x85\x03\x02\x02\x02\u02A9\u02AA\x05\x8AF\x02\u02AA\u02AB\x05~@\x02\u02AB" +
+		"\x87\x03\x02\x02\x02\u02AC\u02AD\x05\x8CG\x02\u02AD\u02AE\x05~@\x02\u02AE" +
+		"\x89\x03\x02\x02\x02\u02AF\u02B0\t\b\x02\x02\u02B0\x8B\x03\x02\x02\x02" +
+		"\u02B1\u02B2\t\t\x02\x02\u02B2\x8D\x03\x02\x02\x02\u02B3\u02B9\x05\x84" +
+		"C\x02\u02B4\u02B5\x05\x84C\x02\u02B5\u02B6\x07\n\x02\x02\u02B6\u02B7\x05" +
+		"\xB2Z\x02\u02B7\u02B9\x03\x02\x02\x02\u02B8\u02B3\x03\x02\x02\x02\u02B8" +
+		"\u02B4\x03\x02\x02\x02\u02B9\x8F\x03\x02\x02\x02\u02BA\u02BB\bI\x01\x02" +
+		"\u02BB\u02BC\x05\x8EH\x02\u02BC\u02C2\x03\x02\x02\x02\u02BD\u02BE\f\x03" +
+		"\x02\x02\u02BE\u02BF\t\n\x02\x02\u02BF\u02C1\x05\x8EH\x02\u02C0\u02BD" +
+		"\x03\x02\x02\x02\u02C1\u02C4\x03\x02\x02\x02\u02C2\u02C0\x03\x02\x02\x02" +
+		"\u02C2\u02C3\x03\x02\x02\x02\u02C3\x91\x03\x02\x02\x02\u02C4\u02C2\x03" +
+		"\x02\x02\x02\u02C5\u02C6\bJ\x01\x02\u02C6\u02C7\x05\x90I\x02\u02C7\u02CD" +
+		"\x03\x02\x02\x02\u02C8\u02C9\f\x03\x02\x02\u02C9\u02CA\t\v\x02\x02\u02CA" +
+		"\u02CC\x05\x90I\x02\u02CB\u02C8\x03\x02\x02\x02\u02CC\u02CF\x03\x02\x02" +
+		"\x02\u02CD\u02CB\x03\x02\x02\x02\u02CD\u02CE\x03\x02\x02\x02\u02CE\x93" +
+		"\x03\x02\x02\x02\u02CF\u02CD\x03\x02\x02\x02\u02D0\u02D1\bK\x01\x02\u02D1" +
+		"\u02D2\x05\x92J\x02\u02D2\u02D9\x03\x02\x02\x02\u02D3\u02D4\f\x03\x02" +
+		"\x02\u02D4\u02D5\x05\x96L\x02\u02D5\u02D6\x05\xA0Q\x02\u02D6\u02D8\x03" +
+		"\x02\x02\x02\u02D7\u02D3\x03\x02\x02\x02\u02D8\u02DB\x03\x02\x02\x02\u02D9" +
+		"\u02D7\x03\x02\x02\x02\u02D9\u02DA\x03\x02\x02\x02\u02DA\x95\x03\x02\x02" +
+		"\x02\u02DB\u02D9\x03\x02\x02\x02\u02DC\u02DD\t\f\x02\x02\u02DD\x97\x03" +
+		"\x02\x02\x02\u02DE\u02DF\bM\x01\x02\u02DF\u02E0\x05\x94K\x02\u02E0\u02E6" +
+		"\x03\x02\x02\x02\u02E1\u02E2\f\x03\x02\x02\u02E2\u02E3\x07\x07\x02\x02" +
+		"\u02E3\u02E5\x05\xB2Z\x02\u02E4\u02E1\x03\x02\x02\x02\u02E5\u02E8\x03" +
+		"\x02\x02\x02\u02E6\u02E4\x03\x02\x02\x02\u02E6\u02E7\x03\x02\x02\x02\u02E7" +
+		"\x99\x03\x02\x02\x02\u02E8\u02E6\x03\x02\x02\x02\u02E9\u02EA\bN\x01\x02" +
+		"\u02EA\u02EB\x05\x98M\x02\u02EB\u02F1\x03\x02\x02\x02\u02EC\u02ED\f\x03" +
+		"\x02\x02\u02ED\u02EE\x07!\x02\x02\u02EE\u02F0\x05\xB2Z\x02\u02EF\u02EC" +
+		"\x03\x02\x02\x02\u02F0\u02F3\x03\x02\x02\x02\u02F1\u02EF\x03\x02\x02\x02" +
+		"\u02F1\u02F2\x03\x02\x02\x02\u02F2\x9B\x03\x02\x02\x02\u02F3\u02F1\x03" +
+		"\x02\x02\x02\u02F4\u02F5\bO\x01\x02\u02F5\u02F6\x05\x9AN\x02\u02F6\u02FC" +
+		"\x03\x02\x02\x02\u02F7\u02F8\f\x03\x02\x02\u02F8\u02F9\t\r\x02\x02\u02F9" +
+		"\u02FB\x05\x9CO\x04\u02FA\u02F7\x03\x02\x02\x02\u02FB\u02FE\x03\x02\x02" +
+		"\x02\u02FC\u02FA\x03\x02\x02\x02\u02FC\u02FD\x03\x02\x02\x02\u02FD\x9D" +
+		"\x03\x02\x02\x02\u02FE\u02FC\x03\x02\x02\x02\u02FF\u0300\bP\x01\x02\u0300" +
+		"\u0301\x05\x9CO\x02\u0301\u0307\x03\x02\x02\x02\u0302\u0303\f\x03\x02" +
+		"\x02\u0303\u0304\t\x0E\x02\x02\u0304\u0306\x05\x9CO\x02\u0305\u0302\x03" +
+		"\x02\x02\x02\u0306\u0309\x03\x02\x02\x02\u0307\u0305\x03\x02\x02\x02\u0307" +
+		"\u0308\x03\x02\x02\x02\u0308\x9F\x03\x02\x02\x02\u0309\u0307\x03\x02\x02" +
+		"\x02\u030A\u030B\bQ\x01\x02\u030B\u030C\x05\x9EP\x02\u030C\u0312\x03\x02" +
+		"\x02\x02\u030D\u030E\f\x03\x02\x02\u030E\u030F\x07K\x02\x02\u030F\u0311" +
+		"\x05\x9EP\x02\u0310\u030D\x03\x02\x02\x02\u0311\u0314\x03\x02\x02\x02" +
+		"\u0312\u0310\x03\x02\x02\x02\u0312\u0313\x03\x02\x02\x02\u0313\xA1\x03" +
+		"\x02\x02\x02\u0314\u0312\x03\x02\x02\x02\u0315\u0316\bR\x01\x02\u0316" +
+		"\u0317\x05\xA0Q\x02\u0317\u031D\x03\x02\x02\x02\u0318\u0319\f\x03\x02" +
+		"\x02\u0319\u031A\x07M\x02\x02\u031A\u031C\x05\xA0Q\x02\u031B\u0318\x03" +
+		"\x02\x02\x02\u031C\u031F\x03\x02\x02\x02\u031D\u031B\x03\x02\x02\x02\u031D" +
+		"\u031E\x03\x02\x02\x02\u031E\xA3\x03\x02\x02\x02\u031F\u031D\x03\x02\x02" +
+		"\x02\u0320\u0321\bS\x01\x02\u0321\u0322\x05\xA2R\x02\u0322\u0328\x03\x02" +
+		"\x02\x02\u0323\u0324\f\x03\x02\x02\u0324\u0325\x07L\x02\x02\u0325\u0327" +
+		"\x05\xA2R\x02\u0326\u0323\x03\x02\x02\x02\u0327\u032A\x03\x02\x02\x02" +
+		"\u0328\u0326\x03\x02\x02\x02\u0328\u0329\x03\x02\x02\x02\u0329\xA5\x03" +
+		"\x02\x02\x02\u032A\u0328\x03\x02\x02\x02\u032B\u032C\bT\x01\x02\u032C" +
+		"\u032D\x05\xA4S\x02\u032D\u0333\x03\x02\x02\x02\u032E\u032F\f\x03\x02" +
+		"\x02\u032F\u0330\x07<\x02\x02\u0330\u0332\x05\xA4S\x02\u0331\u032E\x03" +
+		"\x02\x02\x02\u0332\u0335\x03\x02\x02\x02\u0333\u0331\x03\x02\x02\x02\u0333" +
+		"\u0334\x03\x02\x02\x02\u0334\xA7\x03\x02\x02\x02\u0335\u0333\x03\x02\x02" +
+		"\x02\u0336\u0337\bU\x01\x02\u0337\u0338\x05\xA6T\x02\u0338\u033E\x03\x02" +
+		"\x02\x02\u0339\u033A\f\x03\x02\x02\u033A\u033B\x07=\x02\x02\u033B\u033D" +
+		"\x05\xA6T\x02\u033C\u0339\x03\x02\x02\x02\u033D\u0340\x03\x02\x02\x02" +
+		"\u033E\u033C\x03\x02\x02\x02\u033E\u033F\x03\x02\x02\x02\u033F\xA9\x03" +
+		"\x02\x02\x02\u0340\u033E\x03\x02\x02\x02\u0341\u0349\x05\xA8U\x02\u0342" +
+		"\u0343\x05\xA8U\x02\u0343\u0344\x07+\x02\x02\u0344\u0345\x05\xAAV\x02" +
+		"\u0345\u0346\x07,\x02\x02\u0346\u0347\x05\xAAV\x02\u0347\u0349\x03\x02" +
+		"\x02\x02\u0348\u0341\x03\x02\x02\x02\u0348\u0342\x03\x02\x02\x02\u0349" +
+		"\xAB\x03\x02\x02\x02\u034A\u0350\x05\xAAV\x02\u034B\u034C\x05t;\x02\u034C" +
+		"\u034D\x05\xAEX\x02\u034D\u034E\x05\xACW\x02\u034E\u0350\x03\x02\x02\x02" +
+		"\u034F\u034A\x03\x02\x02\x02\u034F\u034B\x03\x02\x02\x02\u0350\xAD\x03" +
+		"\x02\x02\x02\u0351\u0352\t\x0F\x02\x02\u0352\xAF\x03\x02\x02\x02\u0353" +
+		"\u0358\x05\xACW\x02\u0354\u0355\x07)\x02\x02\u0355\u0357\x05\xACW\x02" +
+		"\u0356\u0354\x03\x02\x02\x02\u0357\u035A\x03\x02\x02\x02\u0358\u0356\x03" +
+		"\x02\x02\x02\u0358\u0359\x03\x02\x02\x02\u0359\xB1\x03\x02\x02\x02\u035A" +
+		"\u0358\x03\x02\x02\x02\u035B\u035F\x05\xB4[\x02\u035C\u035F\x05\xB6\\" +
+		"\x02\u035D\u035F\x05\xB8]\x02\u035E\u035B\x03\x02\x02\x02\u035E\u035C" +
+		"\x03\x02\x02\x02\u035E\u035D\x03\x02\x02\x02\u035F\xB3\x03\x02\x02\x02" +
+		"\u0360\u0361\x05\xBA^\x02\u0361\xB5\x03\x02\x02\x02\u0362\u0363\x05\xBA" +
+		"^\x02\u0363\u036C\x07G\x02\x02\u0364\u0369\x05\xB2Z\x02\u0365\u0366\x07" +
+		")\x02\x02\u0366\u0368\x05\xB2Z\x02\u0367\u0365\x03\x02\x02\x02\u0368\u036B" +
+		"\x03\x02\x02\x02\u0369\u0367\x03\x02\x02\x02\u0369\u036A\x03\x02\x02\x02" +
+		"\u036A\u036D\x03\x02\x02\x02\u036B\u0369\x03\x02\x02\x02\u036C\u0364\x03" +
+		"\x02\x02\x02\u036C\u036D\x03\x02\x02\x02\u036D\u036E\x03\x02\x02\x02\u036E" +
+		'\u036F\x07I\x02\x02\u036F\xB7\x03\x02\x02\x02\u0370\u0371\x07"\x02\x02' +
+		"\u0371\u0372\x07-\x02\x02\u0372\u0373\x05\xBA^\x02\u0373\u0374\x07.\x02" +
+		"\x02\u0374\xB9\x03\x02\x02\x02\u0375\u0376\t\x10\x02\x02\u0376\xBB\x03" +
+		"\x02\x02\x02T\xBD\xC4\xCB\xD0\xD8\xE4\xF0\xF6\xFD\u010A\u0111\u011B\u0127" +
+		"\u0129\u0131\u013A\u0140\u0145\u0151\u0156\u015D\u0161\u016A\u0173\u017D" +
+		"\u018A\u018F\u0195\u0199\u019F\u01A5\u01BD\u01C5\u01C9\u01D1\u01E3\u01E8" +
+		"\u01F0\u0200\u0208\u0210\u0214\u0219\u021C\u0221\u0224\u022E\u0231\u0234" +
+		"\u023E\u0241\u0244\u0254\u025D\u0262\u0273\u0277\u0279\u0281\u028F\u0295" +
+		"\u029C\u02A7\u02B8\u02C2\u02CD\u02D9\u02E6\u02F1\u02FC\u0307\u0312\u031D" +
+		"\u0328\u0333\u033E\u0348\u034F\u0358\u035E\u0369\u036C";
 	public static readonly _serializedATN: string = Utils.join(
 		[KipperParser._serializedATNSegment0, KipperParser._serializedATNSegment1],
 		"",
@@ -8233,85 +8512,6 @@ export class PassOncomputedPrimaryExpressionContext extends ComputedPrimaryExpre
 		}
 	}
 }
-export class FunctionCallExpressionContext extends ComputedPrimaryExpressionContext {
-	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
-		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
-	}
-	public LeftParen(): TerminalNode {
-		return this.getToken(KipperParser.LeftParen, 0);
-	}
-	public RightParen(): TerminalNode {
-		return this.getToken(KipperParser.RightParen, 0);
-	}
-	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
-		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
-	}
-	constructor(ctx: ComputedPrimaryExpressionContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterFunctionCallExpression) {
-			listener.enterFunctionCallExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitFunctionCallExpression) {
-			listener.exitFunctionCallExpression(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitFunctionCallExpression) {
-			return visitor.visitFunctionCallExpression(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
-export class ExplicitCallFunctionCallExpressionContext extends ComputedPrimaryExpressionContext {
-	public CallFunc(): TerminalNode {
-		return this.getToken(KipperParser.CallFunc, 0);
-	}
-	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
-		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
-	}
-	public LeftParen(): TerminalNode {
-		return this.getToken(KipperParser.LeftParen, 0);
-	}
-	public RightParen(): TerminalNode {
-		return this.getToken(KipperParser.RightParen, 0);
-	}
-	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
-		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
-	}
-	constructor(ctx: ComputedPrimaryExpressionContext) {
-		super(ctx.parent, ctx.invokingState);
-		this.copyFrom(ctx);
-	}
-	// @Override
-	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterExplicitCallFunctionCallExpression) {
-			listener.enterExplicitCallFunctionCallExpression(this);
-		}
-	}
-	// @Override
-	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitExplicitCallFunctionCallExpression) {
-			listener.exitExplicitCallFunctionCallExpression(this);
-		}
-	}
-	// @Override
-	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitExplicitCallFunctionCallExpression) {
-			return visitor.visitExplicitCallFunctionCallExpression(this);
-		} else {
-			return visitor.visitChildren(this);
-		}
-	}
-}
 export class DotNotationMemberAccessExpressionContext extends ComputedPrimaryExpressionContext {
 	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
 		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
@@ -8403,6 +8603,126 @@ export class SliceNotationMemberAccessExpressionContext extends ComputedPrimaryE
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
 		if (visitor.visitSliceNotationMemberAccessExpression) {
 			return visitor.visitSliceNotationMemberAccessExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class FunctionCallExpressionContext extends ComputedPrimaryExpressionContext {
+	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
+		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
+	}
+	public LeftParen(): TerminalNode {
+		return this.getToken(KipperParser.LeftParen, 0);
+	}
+	public RightParen(): TerminalNode {
+		return this.getToken(KipperParser.RightParen, 0);
+	}
+	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
+		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
+	}
+	constructor(ctx: ComputedPrimaryExpressionContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperParserListener): void {
+		if (listener.enterFunctionCallExpression) {
+			listener.enterFunctionCallExpression(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperParserListener): void {
+		if (listener.exitFunctionCallExpression) {
+			listener.exitFunctionCallExpression(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
+		if (visitor.visitFunctionCallExpression) {
+			return visitor.visitFunctionCallExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class ExplicitCallFunctionCallExpressionContext extends ComputedPrimaryExpressionContext {
+	public CallFunc(): TerminalNode {
+		return this.getToken(KipperParser.CallFunc, 0);
+	}
+	public computedPrimaryExpression(): ComputedPrimaryExpressionContext {
+		return this.getRuleContext(0, ComputedPrimaryExpressionContext);
+	}
+	public LeftParen(): TerminalNode {
+		return this.getToken(KipperParser.LeftParen, 0);
+	}
+	public RightParen(): TerminalNode {
+		return this.getToken(KipperParser.RightParen, 0);
+	}
+	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
+		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
+	}
+	constructor(ctx: ComputedPrimaryExpressionContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperParserListener): void {
+		if (listener.enterExplicitCallFunctionCallExpression) {
+			listener.enterExplicitCallFunctionCallExpression(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperParserListener): void {
+		if (listener.exitExplicitCallFunctionCallExpression) {
+			listener.exitExplicitCallFunctionCallExpression(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
+		if (visitor.visitExplicitCallFunctionCallExpression) {
+			return visitor.visitExplicitCallFunctionCallExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class NewInstantiationExpressionContext extends ComputedPrimaryExpressionContext {
+	public New(): TerminalNode {
+		return this.getToken(KipperParser.New, 0);
+	}
+	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
+		return this.getRuleContext(0, TypeSpecifierExpressionContext);
+	}
+	public LeftParen(): TerminalNode {
+		return this.getToken(KipperParser.LeftParen, 0);
+	}
+	public RightParen(): TerminalNode {
+		return this.getToken(KipperParser.RightParen, 0);
+	}
+	public argumentExpressionList(): ArgumentExpressionListContext | undefined {
+		return this.tryGetRuleContext(0, ArgumentExpressionListContext);
+	}
+	constructor(ctx: ComputedPrimaryExpressionContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperParserListener): void {
+		if (listener.enterNewInstantiationExpression) {
+			listener.enterNewInstantiationExpression(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperParserListener): void {
+		if (listener.exitNewInstantiationExpression) {
+			listener.exitNewInstantiationExpression(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
+		if (visitor.visitNewInstantiationExpression) {
+			return visitor.visitNewInstantiationExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}
@@ -8661,14 +8981,8 @@ export class TypeofExpressionContext extends KipperParserRuleContext {
 	public Typeof(): TerminalNode {
 		return this.getToken(KipperParser.Typeof, 0);
 	}
-	public LeftParen(): TerminalNode | undefined {
-		return this.tryGetToken(KipperParser.LeftParen, 0);
-	}
-	public assignmentExpression(): AssignmentExpressionContext | undefined {
-		return this.tryGetRuleContext(0, AssignmentExpressionContext);
-	}
-	public RightParen(): TerminalNode | undefined {
-		return this.tryGetToken(KipperParser.RightParen, 0);
+	public assignmentExpression(): AssignmentExpressionContext {
+		return this.getRuleContext(0, AssignmentExpressionContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -9247,6 +9561,160 @@ export class BitwiseShiftOperatorsContext extends KipperParserRuleContext {
 	}
 }
 
+export class InstanceOfExpressionContext extends KipperParserRuleContext {
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number {
+		return KipperParser.RULE_instanceOfExpression;
+	}
+	public copyFrom(ctx: InstanceOfExpressionContext): void {
+		super.copyFrom(ctx);
+	}
+}
+export class PassOnInstanceOfExpressionContext extends InstanceOfExpressionContext {
+	public bitwiseShiftExpression(): BitwiseShiftExpressionContext {
+		return this.getRuleContext(0, BitwiseShiftExpressionContext);
+	}
+	constructor(ctx: InstanceOfExpressionContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperParserListener): void {
+		if (listener.enterPassOnInstanceOfExpression) {
+			listener.enterPassOnInstanceOfExpression(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperParserListener): void {
+		if (listener.exitPassOnInstanceOfExpression) {
+			listener.exitPassOnInstanceOfExpression(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
+		if (visitor.visitPassOnInstanceOfExpression) {
+			return visitor.visitPassOnInstanceOfExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class ActualInstanceOfExpressionContext extends InstanceOfExpressionContext {
+	public instanceOfExpression(): InstanceOfExpressionContext {
+		return this.getRuleContext(0, InstanceOfExpressionContext);
+	}
+	public InstanceOf(): TerminalNode {
+		return this.getToken(KipperParser.InstanceOf, 0);
+	}
+	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
+		return this.getRuleContext(0, TypeSpecifierExpressionContext);
+	}
+	constructor(ctx: InstanceOfExpressionContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperParserListener): void {
+		if (listener.enterActualInstanceOfExpression) {
+			listener.enterActualInstanceOfExpression(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperParserListener): void {
+		if (listener.exitActualInstanceOfExpression) {
+			listener.exitActualInstanceOfExpression(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
+		if (visitor.visitActualInstanceOfExpression) {
+			return visitor.visitActualInstanceOfExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
+export class MatchesExpressionContext extends KipperParserRuleContext {
+	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
+		super(parent, invokingState);
+	}
+	// @Override
+	public get ruleIndex(): number {
+		return KipperParser.RULE_matchesExpression;
+	}
+	public copyFrom(ctx: MatchesExpressionContext): void {
+		super.copyFrom(ctx);
+	}
+}
+export class PassOnMatchesExpressionContext extends MatchesExpressionContext {
+	public instanceOfExpression(): InstanceOfExpressionContext {
+		return this.getRuleContext(0, InstanceOfExpressionContext);
+	}
+	constructor(ctx: MatchesExpressionContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperParserListener): void {
+		if (listener.enterPassOnMatchesExpression) {
+			listener.enterPassOnMatchesExpression(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperParserListener): void {
+		if (listener.exitPassOnMatchesExpression) {
+			listener.exitPassOnMatchesExpression(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
+		if (visitor.visitPassOnMatchesExpression) {
+			return visitor.visitPassOnMatchesExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+export class ActualMatchesExpressionContext extends MatchesExpressionContext {
+	public matchesExpression(): MatchesExpressionContext {
+		return this.getRuleContext(0, MatchesExpressionContext);
+	}
+	public Matches(): TerminalNode {
+		return this.getToken(KipperParser.Matches, 0);
+	}
+	public typeSpecifierExpression(): TypeSpecifierExpressionContext {
+		return this.getRuleContext(0, TypeSpecifierExpressionContext);
+	}
+	constructor(ctx: MatchesExpressionContext) {
+		super(ctx.parent, ctx.invokingState);
+		this.copyFrom(ctx);
+	}
+	// @Override
+	public enterRule(listener: KipperParserListener): void {
+		if (listener.enterActualMatchesExpression) {
+			listener.enterActualMatchesExpression(this);
+		}
+	}
+	// @Override
+	public exitRule(listener: KipperParserListener): void {
+		if (listener.exitActualMatchesExpression) {
+			listener.exitActualMatchesExpression(this);
+		}
+	}
+	// @Override
+	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
+		if (visitor.visitActualMatchesExpression) {
+			return visitor.visitActualMatchesExpression(this);
+		} else {
+			return visitor.visitChildren(this);
+		}
+	}
+}
+
 export class RelationalExpressionContext extends KipperParserRuleContext {
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -9260,8 +9728,8 @@ export class RelationalExpressionContext extends KipperParserRuleContext {
 	}
 }
 export class PassOnRelationalExpressionContext extends RelationalExpressionContext {
-	public bitwiseShiftExpression(): BitwiseShiftExpressionContext {
-		return this.getRuleContext(0, BitwiseShiftExpressionContext);
+	public matchesExpression(): MatchesExpressionContext {
+		return this.getRuleContext(0, MatchesExpressionContext);
 	}
 	constructor(ctx: RelationalExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -9289,11 +9757,14 @@ export class PassOnRelationalExpressionContext extends RelationalExpressionConte
 	}
 }
 export class ActualRelationalExpressionContext extends RelationalExpressionContext {
-	public relationalExpression(): RelationalExpressionContext {
-		return this.getRuleContext(0, RelationalExpressionContext);
-	}
-	public bitwiseShiftExpression(): BitwiseShiftExpressionContext {
-		return this.getRuleContext(0, BitwiseShiftExpressionContext);
+	public relationalExpression(): RelationalExpressionContext[];
+	public relationalExpression(i: number): RelationalExpressionContext;
+	public relationalExpression(i?: number): RelationalExpressionContext | RelationalExpressionContext[] {
+		if (i === undefined) {
+			return this.getRuleContexts(RelationalExpressionContext);
+		} else {
+			return this.getRuleContext(i, RelationalExpressionContext);
+		}
 	}
 	public Less(): TerminalNode | undefined {
 		return this.tryGetToken(KipperParser.Less, 0);

@@ -8,12 +8,13 @@ export * from "./target";
 export * from "./semantic-analyser";
 export * from "./code-generator";
 export * from "./built-in-generator";
+export * from "./runtime-types";
 export * from "./tools";
 
 // eslint-disable-next-line no-unused-vars
 export const name = "@kipper/target-js";
 // eslint-disable-next-line no-unused-vars
-export const version = "0.12.0-alpha.1";
+export const version = "0.12.0";
 // eslint-disable-next-line no-unused-vars
 export const author = "Luna Klatzer";
 // eslint-disable-next-line no-unused-vars

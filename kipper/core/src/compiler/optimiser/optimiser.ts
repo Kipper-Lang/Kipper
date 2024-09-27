@@ -5,8 +5,8 @@
 import type { RootASTNode } from "../ast";
 import type { KipperProgramContext } from "../program-ctx";
 import type {
-	InternalFunction,
 	BuiltInReference,
+	InternalFunction,
 	ScopeFunctionDeclaration,
 	ScopeVariableDeclaration,
 } from "../semantics/";

@@ -1,6 +1,5 @@
 import type { ProcessedType } from "../../types";
-import { UnionType } from "../../types";
-import { BuiltInType, type CompilableType } from "../../types";
+import { BuiltInType, type CompilableType, UnionType } from "../../types";
 import { ArgumentAssignmentTypeError, AssignmentTypeError, PropertyAssignmentTypeError } from "../../../../errors";
 
 /**
