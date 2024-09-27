@@ -53,7 +53,7 @@ class Person {
 	}
 
 	sayHello(): void {
-		print("Hello, my name is " + this.name + " and I am " + this.age + " years old.");
+		print(f"Hello, my name is {this.name} and I am {this.age} years old.");
 	}
 }
 
