@@ -61,12 +61,19 @@ export class RuntimeTypesGenerator {
 			[
 				"const ",
 				identifier,
-				` = new ${TargetJS.internalObjectIdentifier}.Type("` + interfaceName + '"',
-				", [",
+				" = ",
+				`new ${TargetJS.getBuiltInIdentifier("Type")}`,
+				"(",
+				`"${interfaceName}"`,
+				",",
+				"[",
 				...propertiesWithTypes,
-				"], [",
+				"],",
+				"[",
 				...functionsWithTypes,
-				"])",
+				"],",
+				TargetJS.getBuiltInIdentifier("builtIn.obj"),
+				")",
 			],
 		];
 	}
