@@ -1469,6 +1469,36 @@ describe("Core functionality", () => {
 				stringResult,
 			);
 		});
+
+		describe("can use a lambda as a direct value in a function", () => {
+			it("using a lambda with an expression body", async () => {
+				const code = `var greet: Func<str> = (): str -> "Hello, World!"; print(greet());`;
+				const result = await compiler.compile(code, jsConfig);
+
+				assert.isDefined(result.programCtx);
+				assert.deepEqual(result.programCtx?.errors, [], "Expected no compilation errors");
+				const stringResult = result.write();
+
+				testPrintOutput(
+					(message: any) => assert.equal(message, "Hello, World!", "Expected different output"),
+					stringResult,
+				);
+			});
+
+			it("using a lambda with a compound statement body", async () => {
+				const code = `var greet: Func<str> = (): str -> { return "Hello, World!"; }; print(greet());`;
+				const result = await compiler.compile(code, jsConfig);
+
+				assert.isDefined(result.programCtx);
+				assert.deepEqual(result.programCtx?.errors, [], "Expected no compilation errors");
+				const stringResult = result.write();
+
+				testPrintOutput(
+					(message: any) => assert.equal(message, "Hello, World!", "Expected different output"),
+					stringResult,
+				);
+			});
+		});
 	});
 
 	describe("Functions", () => {
