@@ -1,8 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
-import type { ConfigFile } from "./config-file";
-import type { ConfigErrorMetaData } from "../errors";
-import { ConfigValidationError, UnknownFieldError } from "../errors";
-import type { RawEvaluatedKipperConfigFile } from "../evaluated-kipper-config-file";
+import type {ConfigFile} from "./config-file";
+import type {ConfigErrorMetaData} from "../errors";
+import {ConfigValidationError, UnknownFieldError} from "../errors";
+import type {RawEvaluatedKipperConfigFile} from "../evaluated-kipper-config-file";
 
 /**
  * A type that represents a configuration scheme definition.

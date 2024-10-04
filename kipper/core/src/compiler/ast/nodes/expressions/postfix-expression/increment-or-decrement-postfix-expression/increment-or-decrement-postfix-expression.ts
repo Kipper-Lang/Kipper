@@ -5,16 +5,20 @@
  * 49++; // 49 will be incremented by 1
  * 11--; // 11 will be decremented by 1
  */
-import type { IncrementOrDecrementPostfixExpressionSemantics } from "./increment-or-decrement-postfix-expression-semantics";
-import type { IncrementOrDecrementPostfixExpressionTypeSemantics } from "./increment-or-decrement-postfix-expression-type-semantics";
-import type { KipperPostfixOperator } from "../../../../../const";
-import type { Expression } from "../../expression";
-import { PostfixExpression } from "../postfix-expression";
-import type { IncrementOrDecrementPostfixExpressionContext } from "../../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { BuiltInTypes } from "../../../../../semantics";
+import type {
+	IncrementOrDecrementPostfixExpressionSemantics
+} from "./increment-or-decrement-postfix-expression-semantics";
+import type {
+	IncrementOrDecrementPostfixExpressionTypeSemantics
+} from "./increment-or-decrement-postfix-expression-type-semantics";
+import type {KipperPostfixOperator} from "../../../../../const";
+import type {Expression} from "../../expression";
+import {PostfixExpression} from "../postfix-expression";
+import type {IncrementOrDecrementPostfixExpressionContext} from "../../../../../lexer-parser";
+import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
+import type {CompilableASTNode} from "../../../../compilable-ast-node";
+import {UnableToDetermineSemanticDataError} from "../../../../../../errors";
+import {BuiltInTypes} from "../../../../../semantics";
 
 /**
  * Increment or Decrement expression, which represents a right-side -- or ++ expression modifying a numeric value.

@@ -2,14 +2,14 @@
  * Do-While loop statement class, which represents a do-while loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-import type { DoWhileLoopIterationStatementSemantics } from "./do-while-loop-iteration-statement-semantics";
-import type { DoWhileLoopIterationStatementTypeSemantics } from "./do-while-loop-iteration-statement-type-semantics";
-import type { CompilableNodeChild, CompilableNodeParent } from "../../../../compilable-ast-node";
-import { IterationStatement } from "../iteration-statement";
-import type { DoWhileLoopIterationStatementContext } from "../../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import type { Expression } from "../../../expressions";
-import type { Statement } from "../../statement";
+import type {DoWhileLoopIterationStatementSemantics} from "./do-while-loop-iteration-statement-semantics";
+import type {DoWhileLoopIterationStatementTypeSemantics} from "./do-while-loop-iteration-statement-type-semantics";
+import type {CompilableNodeChild, CompilableNodeParent} from "../../../../compilable-ast-node";
+import {IterationStatement} from "../iteration-statement";
+import type {DoWhileLoopIterationStatementContext} from "../../../../../lexer-parser";
+import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
+import type {Expression} from "../../../expressions";
+import type {Statement} from "../../statement";
 
 /**
  * Do-While loop statement class, which represents a do-while loop statement in the Kipper language and is compilable

@@ -2,11 +2,11 @@
  * Utility functions for working with {@link KipperParserRuleContext antlr4 contexts} (also known as parse rules).
  * @since 0.11.0
  */
-import type { KipperParserRuleContext } from "../../compiler";
-import { Interval } from "antlr4ts/misc/Interval";
-import type { CharStream } from "antlr4ts/CharStream";
-import type { Token } from "antlr4ts";
-import type { ParseTree } from "antlr4ts/tree";
+import type {KipperParserRuleContext} from "../../compiler";
+import {Interval} from "antlr4ts/misc/Interval";
+import type {CharStream} from "antlr4ts/CharStream";
+import type {Token} from "antlr4ts";
+import type {ParseTree} from "antlr4ts/tree";
 
 /**
  * Returns the token source for the passed {@link antlrCtx} instance.

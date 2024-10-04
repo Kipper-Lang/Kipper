@@ -2,11 +2,11 @@
  * BitwiseExpression which represents a bitwise operation.
  * @since 0.11.0
  */
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
-import type { ASTNodeMapper } from "../../../mapping";
-import { Expression } from "../expression";
-import type { BitwiseExpressionTypeSemantics } from "./bitwise-expression-type-semantics";
-import type { BitwiseExpressionSemantics } from "./bitwise-expression-semantics";
+import type {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../lexer-parser";
+import type {ASTNodeMapper} from "../../../mapping";
+import {Expression} from "../expression";
+import type {BitwiseExpressionTypeSemantics} from "./bitwise-expression-type-semantics";
+import type {BitwiseExpressionSemantics} from "./bitwise-expression-semantics";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link BitwiseExpression} AST node.

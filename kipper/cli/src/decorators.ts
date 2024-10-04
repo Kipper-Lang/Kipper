@@ -1,12 +1,12 @@
 /**
  * Utility decorators for the Kipper CLI.
  */
-import type { Command } from "@oclif/command";
-import { KipperInternalError } from "@kipper/core";
-import { KipperCLIError } from "./errors";
-import type { PrettyPrintableError } from "@oclif/errors";
-import { CLIError as OclifCLIError } from "@oclif/errors";
-import { ConfigError } from "@kipper/config";
+import type {Command} from "@oclif/command";
+import {KipperInternalError} from "@kipper/core";
+import {KipperCLIError} from "./errors";
+import type {PrettyPrintableError} from "@oclif/errors";
+import {CLIError as OclifCLIError} from "@oclif/errors";
+import {ConfigError} from "@kipper/config";
 
 /**
  * Wraps the given function with an async error handler that will pretty print errors using the {@link Command.error}

@@ -2,13 +2,13 @@
  * 'run' command for running a compiled kipper-file (.js file) or compiling and running a file in one
  * @since 0.0.3
  */
-import type { args } from "@oclif/parser";
-import { flags } from "@oclif/command";
-import { EvaluatedCompileConfig, KipperLogger, LogLevel } from "@kipper/core";
-import { fork } from "child_process";
-import { CLIEmitHandler } from "../logger";
-import { KipperEncodings, verifyEncoding } from "../input/";
-import { prettifiedErrors } from "../decorators";
+import type {args} from "@oclif/parser";
+import {flags} from "@oclif/command";
+import {EvaluatedCompileConfig, KipperLogger, LogLevel} from "@kipper/core";
+import {fork} from "child_process";
+import {CLIEmitHandler} from "../logger";
+import {KipperEncodings, verifyEncoding} from "../input/";
+import {prettifiedErrors} from "../decorators";
 import Compile from "./compile";
 
 export default class Run extends Compile {

@@ -2,7 +2,7 @@
  * Decorators for code generators.
  * @since 0.11.0
  */
-import type { ASTKind } from "../../compiler";
+import type {ASTKind} from "../../compiler";
 
 /**
  * A decorator function which registers the given method as a code generator for the specified {@link target}.

@@ -3,12 +3,12 @@
  * {@link KipperError}
  * @since 0.0.2
  */
-import type { InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
-import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
-import type { RecognitionException } from "antlr4ts/RecognitionException";
-import type { Recognizer } from "antlr4ts/Recognizer";
-import type { CompilableASTNode, KipperFileStream, KipperProgramContext } from "./compiler";
-import { addLeftIndent, getParseRuleSource } from "./tools";
+import type {InputMismatchException, LexerNoViableAltException, NoViableAltException} from "antlr4ts";
+import type {FailedPredicateException} from "antlr4ts/FailedPredicateException";
+import type {RecognitionException} from "antlr4ts/RecognitionException";
+import type {Recognizer} from "antlr4ts/Recognizer";
+import type {CompilableASTNode, KipperFileStream, KipperProgramContext} from "./compiler";
+import {addLeftIndent, getParseRuleSource} from "./tools";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.
@@ -747,8 +747,18 @@ export class ReadOnlyWriteTypeError extends TypeError {
  * @since 0.8.0
  */
 export class InvalidConversionTypeError extends TypeError {
+	constructor(operandType: string, destType: string) {
+		super(`Invalid conversion from '${operandType}' to '${destType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a cast is used that is not possible between T1 and T2.
+ * @since 0.12.0
+ */
+export class InvalidCastTypeError extends TypeError {
 	constructor(originalType: string, destType: string) {
-		super(`Invalid conversion from '${originalType}' to '${destType}'.`);
+		super(`Invalid cast from '${originalType}' to '${destType}'.`);
 	}
 }
 

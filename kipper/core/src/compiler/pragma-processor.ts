@@ -1,5 +1,5 @@
-import type { Token } from "antlr4ts";
-import type { CompileConfig } from "./compile-config";
+import type {Token} from "antlr4ts";
+import type {CompileConfig} from "./compile-config";
 
 /**
  * Processes the pragmas which were lexed by the {@link KipperLexer}.

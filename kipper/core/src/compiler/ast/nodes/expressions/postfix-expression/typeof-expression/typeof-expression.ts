@@ -5,16 +5,16 @@
  * typeof(49); // "__kipper.builtIn.num"
  * typeof("Hello, World!"); // "__kipper.builtIn.str"
  */
-import type { Expression } from "../../expression";
-import { PostfixExpression } from "../postfix-expression";
-import type { TypeofExpressionContext } from "../../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { BuiltInTypes } from "../../../../../semantics";
-import type { TypeofExpressionSemantics } from "./typeof-expression-semantics";
-import type { TypeofExpressionTypeSemantics } from "./typeof-expression-type-semantics";
-import type { KipperPostfixOperator } from "../../../../../const";
+import type {Expression} from "../../expression";
+import {PostfixExpression} from "../postfix-expression";
+import type {TypeofExpressionContext} from "../../../../../lexer-parser";
+import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
+import type {CompilableASTNode} from "../../../../compilable-ast-node";
+import {UnableToDetermineSemanticDataError} from "../../../../../../errors";
+import {BuiltInTypes} from "../../../../../semantics";
+import type {TypeofExpressionSemantics} from "./typeof-expression-semantics";
+import type {TypeofExpressionTypeSemantics} from "./typeof-expression-type-semantics";
+import type {KipperPostfixOperator} from "../../../../../const";
 
 /**
  * Typeof expression, which returns the runtime type of a value.

@@ -347,8 +347,27 @@ unaryOperator
 
 castOrConvertExpression
     :   unaryExpression # passOnCastOrConvertExpression
-    |   unaryExpression 'as' typeSpecifierExpression #actualCastOrConvertExpression
+    |   convertExpression # actualConvertExpression
+    |	castExpression #actualCastExpression
+    | 	forceCastExpression #actualForceCastExpression
+    |	tryCastExpression #actualTryCastExpression
     ;
+
+convertExpression
+	:	unaryExpression 'as' typeSpecifierExpression
+	;
+
+castExpression
+	:	unaryExpression 'cast as' typeSpecifierExpression
+	;
+
+forceCastExpression
+	:	unaryExpression 'force as' typeSpecifierExpression
+	;
+
+tryCastExpression
+	:	unaryExpression 'try as' typeSpecifierExpression
+	;
 
 multiplicativeExpression
     :   castOrConvertExpression # passOnMultiplicativeExpression

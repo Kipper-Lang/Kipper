@@ -2,13 +2,13 @@
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { JumpStatementSemantics } from "./jump-statement-semantics";
-import type { JumpStatementTypeSemantics } from "./jump-statement-type-semantics";
-import { Statement } from "../statement";
-import type { JumpStatementContext } from "../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
-import type { Expression } from "../../expressions";
+import type {CompilableNodeParent} from "../../../compilable-ast-node";
+import type {JumpStatementSemantics} from "./jump-statement-semantics";
+import type {JumpStatementTypeSemantics} from "./jump-statement-type-semantics";
+import {Statement} from "../statement";
+import type {JumpStatementContext} from "../../../../lexer-parser";
+import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../lexer-parser";
+import type {Expression} from "../../expressions";
 
 /**
  * Jump statement class, which represents a jump/break statement in the Kipper language and is compilable using

@@ -3,8 +3,10 @@
  * @since 0.8.0
  */
 import type {
+	CastExpression,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
+	ForceCastExpression,
 	FunctionDeclaration,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
@@ -13,12 +15,13 @@ import type {
 	ParameterDeclaration,
 	TranslatedCodeLine,
 	TranslatedExpression,
+	TryCastExpression,
 	VariableDeclaration,
 } from "@kipper/core";
-import { CompoundStatement, Expression, type LambdaPrimaryExpression } from "@kipper/core";
-import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
-import { indentLines, JavaScriptTargetCodeGenerator, RuntimeTypesGenerator, TargetJS } from "@kipper/target-js";
-import { TargetTS } from "./target";
+import {CompoundStatement, Expression, type LambdaPrimaryExpression} from "@kipper/core";
+import {createTSFunctionSignature, getTSFunctionSignature} from "./tools";
+import {indentLines, JavaScriptTargetCodeGenerator, RuntimeTypesGenerator, TargetJS} from "@kipper/target-js";
+import {TargetTS} from "./target";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.
@@ -231,5 +234,57 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeScriptType = TargetTS.getTypeScriptType(semanticData.typeSpecifier.getTypeSemanticData().storedType);
 
 		return [identifier, ":", " ", typeScriptType];
+	};
+
+	override castExpression = async (node: CastExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
+		return [
+			...(await semanticData.exp.translateCtxAndChildren()),
+			" ",
+			"as",
+			" ",
+			TargetJS.getRuntimeType(typeData.castType),
+		];
+	};
+
+	/**
+	 * Translates a {@link TryCastExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	tryCastExpression = async (node: TryCastExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		return [
+			"(",
+			TargetJS.getBuiltInIdentifier("tryCastAs"),
+			"(",
+			...(await semanticData.exp.translateCtxAndChildren()),
+			")",
+			" ",
+			"as",
+			" ",
+			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
+			")",
+		];
+	};
+
+	/**
+	 * Translates a {@link ForceCastExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	forceCastExpression = async (node: ForceCastExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		return [
+			"(",
+			TargetJS.getBuiltInIdentifier("forceCastAs"),
+			"(",
+			...(await semanticData.exp.translateCtxAndChildren()),
+			")",
+			" ",
+			"as",
+			" ",
+			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
+			")",
+		];
 	};
 }

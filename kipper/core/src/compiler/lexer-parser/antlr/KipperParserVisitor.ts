@@ -1,9 +1,11 @@
 // Generated from ./KipperParser.g4 by ANTLR 4.9.0-SNAPSHOT
 
-// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
-// kind values.
-import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
-import KipperParserBase from "./base/KipperParserBase";
+
+	// Import the required class for the ctx super class, as well as the 'ASTKind' type defining all possible syntax
+	// kind values.
+	import { KipperParserRuleContext, ParseRuleKindMapping, ASTKind } from "..";
+	import KipperParserBase from "./base/KipperParserBase";
+
 
 import { ParseTreeVisitor } from "antlr4ts/tree/ParseTreeVisitor";
 
@@ -28,7 +30,10 @@ import { NewInstantiationExpressionContext } from "./KipperParser";
 import { PassOnAssignmentExpressionContext } from "./KipperParser";
 import { ActualAssignmentExpressionContext } from "./KipperParser";
 import { PassOnCastOrConvertExpressionContext } from "./KipperParser";
-import { ActualCastOrConvertExpressionContext } from "./KipperParser";
+import { ActualConvertExpressionContext } from "./KipperParser";
+import { ActualCastExpressionContext } from "./KipperParser";
+import { ActualForceCastExpressionContext } from "./KipperParser";
+import { ActualTryCastExpressionContext } from "./KipperParser";
 import { PassOnBitwiseOrExpressionContext } from "./KipperParser";
 import { ActualBitwiseOrExpressionContext } from "./KipperParser";
 import { PassOnEqualityExpressionContext } from "./KipperParser";
@@ -112,6 +117,10 @@ import { OperatorModifiedUnaryExpressionContext } from "./KipperParser";
 import { IncrementOrDecrementOperatorContext } from "./KipperParser";
 import { UnaryOperatorContext } from "./KipperParser";
 import { CastOrConvertExpressionContext } from "./KipperParser";
+import { ConvertExpressionContext } from "./KipperParser";
+import { CastExpressionContext } from "./KipperParser";
+import { ForceCastExpressionContext } from "./KipperParser";
+import { TryCastExpressionContext } from "./KipperParser";
 import { MultiplicativeExpressionContext } from "./KipperParser";
 import { AdditiveExpressionContext } from "./KipperParser";
 import { BitwiseShiftExpressionContext } from "./KipperParser";
@@ -134,6 +143,7 @@ import { IdentifierTypeSpecifierExpressionContext } from "./KipperParser";
 import { GenericTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeofTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeSpecifierIdentifierContext } from "./KipperParser";
+
 
 /**
  * This interface defines a complete generic visitor for a parse tree produced
@@ -312,12 +322,36 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitPassOnCastOrConvertExpression?: (ctx: PassOnCastOrConvertExpressionContext) => Result;
 
 	/**
-	 * Visit a parse tree produced by the `actualCastOrConvertExpression`
+	 * Visit a parse tree produced by the `actualConvertExpression`
 	 * labeled alternative in `KipperParser.castOrConvertExpression`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	visitActualCastOrConvertExpression?: (ctx: ActualCastOrConvertExpressionContext) => Result;
+	visitActualConvertExpression?: (ctx: ActualConvertExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `actualCastExpression`
+	 * labeled alternative in `KipperParser.castOrConvertExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitActualCastExpression?: (ctx: ActualCastExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `actualForceCastExpression`
+	 * labeled alternative in `KipperParser.castOrConvertExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitActualForceCastExpression?: (ctx: ActualForceCastExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by the `actualTryCastExpression`
+	 * labeled alternative in `KipperParser.castOrConvertExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitActualTryCastExpression?: (ctx: ActualTryCastExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by the `passOnBitwiseOrExpression`
@@ -917,6 +951,34 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	visitCastOrConvertExpression?: (ctx: CastOrConvertExpressionContext) => Result;
 
 	/**
+	 * Visit a parse tree produced by `KipperParser.convertExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitConvertExpression?: (ctx: ConvertExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.castExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitCastExpression?: (ctx: CastExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.forceCastExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitForceCastExpression?: (ctx: ForceCastExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.tryCastExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitTryCastExpression?: (ctx: TryCastExpressionContext) => Result;
+
+	/**
 	 * Visit a parse tree produced by `KipperParser.multiplicativeExpression`.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -1070,3 +1132,4 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 */
 	visitTypeSpecifierIdentifier?: (ctx: TypeSpecifierIdentifierContext) => Result;
 }
+

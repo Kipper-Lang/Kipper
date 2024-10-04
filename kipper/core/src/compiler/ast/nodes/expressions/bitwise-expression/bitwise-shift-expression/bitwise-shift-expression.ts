@@ -9,17 +9,17 @@
  * 2 >> 1 // 1
  * 2 >>> 1 // 1
  */
-import { BitwiseExpression } from "../bitwise-expression";
-import type { BitwiseOrExpressionContext, BitwiseShiftExpressionContext } from "../../../../../lexer-parser";
-import { BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import type { Expression } from "../../expression";
-import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { BuiltInTypes } from "../../../../../semantics";
-import type { BitwiseShiftExpressionSemantics } from "./bitwise-shift-expression-semantics";
-import type { BitwiseShiftExpressionTypeSemantics } from "./bitwise-shift-expression-type-semantics";
-import type { KipperBitwiseShiftOperator } from "../../../../../const";
-import { kipperBitwiseShiftOperators } from "../../../../../const";
+import {BitwiseExpression} from "../bitwise-expression";
+import type {BitwiseOrExpressionContext, BitwiseShiftExpressionContext} from "../../../../../lexer-parser";
+import {BitwiseShiftOperatorsContext, KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
+import type {CompilableASTNode} from "../../../../compilable-ast-node";
+import type {Expression} from "../../expression";
+import {UnableToDetermineSemanticDataError} from "../../../../../../errors";
+import {BuiltInTypes} from "../../../../../semantics";
+import type {BitwiseShiftExpressionSemantics} from "./bitwise-shift-expression-semantics";
+import type {BitwiseShiftExpressionTypeSemantics} from "./bitwise-shift-expression-type-semantics";
+import type {KipperBitwiseShiftOperator} from "../../../../../const";
+import {kipperBitwiseShiftOperators} from "../../../../../const";
 
 /**
  * Bitwise shift expression node.

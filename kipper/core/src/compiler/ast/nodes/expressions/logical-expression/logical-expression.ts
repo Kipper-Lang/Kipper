@@ -4,11 +4,11 @@
  * abstract class only exists to provide the commonality between the different logical expressions.
  * @abstract
  */
-import type { LogicalExpressionSemantics } from "./logical-expression-semantics";
-import type { LogicalExpressionTypeSemantics } from "./logical-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
-import { Expression } from "../expression";
-import type { ASTNodeMapper } from "../../../mapping";
+import type {LogicalExpressionSemantics} from "./logical-expression-semantics";
+import type {LogicalExpressionTypeSemantics} from "./logical-expression-type-semantics";
+import type {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../lexer-parser";
+import {Expression} from "../expression";
+import type {ASTNodeMapper} from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link LogicalExpression} AST node.

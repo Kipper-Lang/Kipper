@@ -2,9 +2,9 @@
  * Mappings for KipperParser rules to AST nodes. This is used to map the parse tree to the AST.
  * @since 0.10.0
  */
-import type { InverseMap } from "../../tools/types";
-import { inverseMap } from "../../tools";
-import { KipperParser } from "./antlr";
+import type {InverseMap} from "../../tools/types";
+import {inverseMap} from "../../tools";
+import {KipperParser} from "./antlr";
 
 /**
  * A mapping object which maps the KipperParser rules to an AST syntax kind number and in extension with the
@@ -83,6 +83,10 @@ export const ParseRuleKindMapping = {
 	RULE_incrementOrDecrementOperator: KipperParser.RULE_incrementOrDecrementOperator,
 	RULE_unaryOperator: KipperParser.RULE_unaryOperator,
 	RULE_castOrConvertExpression: KipperParser.RULE_castOrConvertExpression,
+	RULE_convertExpression: KipperParser.RULE_convertExpression,
+	RULE_castExpression: KipperParser.RULE_castExpression,
+	RULE_forceCastExpression: KipperParser.RULE_forceCastExpression,
+	RULE_tryCastExpression: KipperParser.RULE_tryCastExpression,
 	RULE_multiplicativeExpression: KipperParser.RULE_multiplicativeExpression,
 	RULE_additiveExpression: KipperParser.RULE_additiveExpression,
 	RULE_bitwiseShiftExpression: KipperParser.RULE_bitwiseShiftExpression,

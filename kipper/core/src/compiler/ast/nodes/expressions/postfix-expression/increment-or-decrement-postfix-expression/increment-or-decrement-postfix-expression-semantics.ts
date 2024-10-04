@@ -2,9 +2,9 @@
  * Semantics for AST Node {@link IncrementOrDecrementPostfixExpression}.
  * @since 0.5.0
  */
-import type { KipperPostfixOperator } from "../../../../../const";
-import type { Expression } from "../../expression";
-import type { PostfixExpressionSemantics } from "../postfix-expression-semantics";
+import type {KipperPostfixOperator} from "../../../../../const";
+import type {Expression} from "../../expression";
+import type {PostfixExpressionSemantics} from "../postfix-expression-semantics";
 
 /**
  * Semantics for AST Node {@link IncrementOrDecrementPostfixExpression}.

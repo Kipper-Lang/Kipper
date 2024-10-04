@@ -4,11 +4,11 @@
  * @abstract
  * @since 0.11.0
  */
-import type { PrimaryExpressionSemantics } from "./primary-expression-semantics";
-import type { PrimaryExpressionTypeSemantics } from "./primary-expression-type-semantics";
-import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
-import { Expression } from "../expression";
-import type { ASTNodeMapper } from "../../../mapping";
+import type {PrimaryExpressionSemantics} from "./primary-expression-semantics";
+import type {PrimaryExpressionTypeSemantics} from "./primary-expression-type-semantics";
+import type {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../lexer-parser";
+import {Expression} from "../expression";
+import type {ASTNodeMapper} from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link PrimaryExpression} AST node.

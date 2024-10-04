@@ -5,16 +5,16 @@
  * ++49; // 49 will be incremented by 1
  * --11; // 11 will be decremented by 1
  */
-import type { IncrementOrDecrementUnaryExpressionSemantics } from "./increment-or-decrement-unary-expression-semantics";
-import type { IncrementOrDecrementUnaryTypeSemantics } from "./increment-or-decrement-unary-expression-type-semantics";
-import type { CompilableASTNode } from "../../../../compilable-ast-node";
-import type { Expression } from "../../expression";
-import type { KipperPostfixOperator } from "../../../../../const";
-import { UnaryExpression } from "../unary-expression";
-import type { IncrementOrDecrementUnaryExpressionContext } from "../../../../../lexer-parser";
-import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
-import { BuiltInTypes } from "../../../../../semantics";
+import type {IncrementOrDecrementUnaryExpressionSemantics} from "./increment-or-decrement-unary-expression-semantics";
+import type {IncrementOrDecrementUnaryTypeSemantics} from "./increment-or-decrement-unary-expression-type-semantics";
+import type {CompilableASTNode} from "../../../../compilable-ast-node";
+import type {Expression} from "../../expression";
+import type {KipperPostfixOperator} from "../../../../../const";
+import {UnaryExpression} from "../unary-expression";
+import type {IncrementOrDecrementUnaryExpressionContext} from "../../../../../lexer-parser";
+import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
+import {UnableToDetermineSemanticDataError} from "../../../../../../errors";
+import {BuiltInTypes} from "../../../../../semantics";
 
 /**
  * Increment or decrement expression class, which represents a left-side -- or ++ expression modifying a numeric value.

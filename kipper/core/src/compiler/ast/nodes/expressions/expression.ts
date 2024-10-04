@@ -5,13 +5,13 @@
  * These AST nodes can be created with the {@link ExpressionASTNodeFactory} class.
  * @since 0.1.0
  */
-import type { TargetASTNodeCodeGenerator } from "../../../target-presets";
-import type { ExpressionSemantics } from "./expression-semantics";
-import type { ExpressionTypeSemantics } from "./expression-type-semantics";
-import type { TranslatedExpression } from "../../../const";
-import { MissingRequiredSemanticDataError } from "../../../../errors";
-import { CompilableASTNode } from "../../compilable-ast-node";
-import type { ASTExpressionKind, ASTExpressionRuleName, ParserExpressionContext } from "../../common";
+import type {TargetASTNodeCodeGenerator} from "../../../target-presets";
+import type {ExpressionSemantics} from "./expression-semantics";
+import type {ExpressionTypeSemantics} from "./expression-type-semantics";
+import type {TranslatedExpression} from "../../../const";
+import {MissingRequiredSemanticDataError} from "../../../../errors";
+import {CompilableASTNode} from "../../compilable-ast-node";
+import type {ASTExpressionKind, ASTExpressionRuleName, ParserExpressionContext} from "../../common";
 
 /**
  * The base abstract AST node class for all expressions, which wrap their corresponding

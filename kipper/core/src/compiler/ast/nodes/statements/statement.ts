@@ -2,13 +2,13 @@
  * AST Node Statement classes of the Kipper language.
  * @since 0.1.0
  */
-import type { CompilableNodeParent } from "../../index";
-import type { ASTStatementKind, ASTStatementRuleName, ParserStatementContext } from "../../common";
-import type { TranslatedCodeLine } from "../../../const";
-import type { TargetASTNodeCodeGenerator } from "../../../target-presets";
-import type { StatementSemantics } from "./statement-semantics";
-import type { StatementTypeSemantics } from "./statement-type-semantics";
-import { CompilableASTNode } from "../../compilable-ast-node";
+import type {CompilableNodeParent} from "../../index";
+import type {ASTStatementKind, ASTStatementRuleName, ParserStatementContext} from "../../common";
+import type {TranslatedCodeLine} from "../../../const";
+import type {TargetASTNodeCodeGenerator} from "../../../target-presets";
+import type {StatementSemantics} from "./statement-semantics";
+import type {StatementTypeSemantics} from "./statement-type-semantics";
+import {CompilableASTNode} from "../../compilable-ast-node";
 
 /**
  * The base abstract AST node class for all statements, which wrap their corresponding
