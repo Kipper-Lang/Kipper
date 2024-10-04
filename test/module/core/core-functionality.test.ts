@@ -1659,7 +1659,7 @@ describe("Core functionality", () => {
 				`interface Test {\n` +
 					`  a: string;\n` +
 					`}\n` +
-					`const __intf_Test = new __kipper.Type("Test", [new __kipper.Property("a", __kipper.builtIn.str),], [])\n` +
+					`const __intf_Test = new __kipper.Type("Test",[new __kipper.Property("a", __kipper.builtIn.str),],[],__kipper.builtIn.obj)\n` +
 					"let x: Test = {\n" +
 					'  a: "3",\n' +
 					"};\n" +
