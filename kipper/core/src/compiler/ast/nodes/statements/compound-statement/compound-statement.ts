@@ -2,14 +2,14 @@
  * Compound statement class, which represents a compound statement containing other items in the Kipper
  * language and is compilable using {@link translateCtxAndChildren}.
  */
-import type {ScopeNode} from "../../../scope-node";
-import type {CompilableNodeParent} from "../../../compilable-ast-node";
-import type {CompoundStatementSemantics} from "./compound-statement-semantics";
-import type {CompoundStatementTypeSemantics} from "./compound-statement-type-semantics";
-import {Statement} from "../statement";
-import {LocalScope} from "../../../../semantics";
-import type {CompoundStatementContext} from "../../../../lexer-parser";
-import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../lexer-parser";
+import type { ScopeNode } from "../../../scope-node";
+import type { CompilableNodeParent } from "../../../compilable-ast-node";
+import type { CompoundStatementSemantics } from "./compound-statement-semantics";
+import type { CompoundStatementTypeSemantics } from "./compound-statement-type-semantics";
+import { Statement } from "../statement";
+import { LocalScope } from "../../../../semantics";
+import type { CompoundStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 
 /**
  * Compound statement class, which represents a compound statement containing other items in the Kipper

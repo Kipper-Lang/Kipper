@@ -2,8 +2,8 @@
  * Semantics for AST Node {@link IncrementOrDecrementUnaryExpression}.
  * @since 0.5.0
  */
-import type {KipperPostfixOperator} from "../../../../../const";
-import type {UnaryExpressionSemantics} from "../unary-expression-semantics";
+import type { KipperPostfixOperator } from "../../../../../const";
+import type { UnaryExpressionSemantics } from "../unary-expression-semantics";
 
 /**
  * Semantics for AST Node {@link IncrementOrDecrementUnaryExpression}.

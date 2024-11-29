@@ -1,4 +1,4 @@
-import type {InverseMap} from "../types";
+import type { InverseMap } from "../types";
 
 /**
  * Returns a given object with its keys and value inverted.

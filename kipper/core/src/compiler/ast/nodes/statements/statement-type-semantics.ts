@@ -2,7 +2,7 @@
  * Semantics for AST Node {@link Statement}.
  * @since 0.11.0
  */
-import type {TypeData} from "../../ast-node";
+import type { TypeData } from "../../ast-node";
 
 /**
  * Type semantics for AST Node {@link Statement}.

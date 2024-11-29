@@ -2,9 +2,9 @@
  * Semantics for AST Node {@link IterationStatement}.
  * @since 0.10.0
  */
-import type {Expression} from "../../expressions";
-import type {Statement} from "../statement";
-import type {StatementSemantics} from "../statement-semantics";
+import type { Expression } from "../../expressions";
+import type { Statement } from "../statement";
+import type { StatementSemantics } from "../statement-semantics";
 
 /**
  * Semantics for AST Node {@link IterationStatement}.

@@ -1,7 +1,7 @@
-import type {KipperFileStream} from "./file-stream";
-import type {CompilationUnitContext, KipperLexer, KipperParser} from "./antlr/";
-import type {CommonTokenStream} from "antlr4ts";
-import type {Token} from "antlr4ts/Token";
+import type { KipperFileStream } from "./file-stream";
+import type { CompilationUnitContext, KipperLexer, KipperParser } from "./antlr/";
+import type { CommonTokenStream } from "antlr4ts";
+import type { Token } from "antlr4ts/Token";
 
 /**
  * Parse data for a {@link KipperProgramContext}.

@@ -2,9 +2,9 @@
  * Semantics for AST Node {@link LogicalOrExpression}.
  * @since 0.5.0
  */
-import type {KipperLogicalOrOperator} from "../../../../../const";
-import type {Expression} from "../../expression";
-import type {LogicalExpressionSemantics} from "../logical-expression-semantics";
+import type { KipperLogicalOrOperator } from "../../../../../const";
+import type { Expression } from "../../expression";
+import type { LogicalExpressionSemantics } from "../logical-expression-semantics";
 
 /**
  * Semantics for AST Node {@link LogicalOrExpression}.

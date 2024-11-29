@@ -5,7 +5,7 @@
  * target language.
  * @since 0.0.3
  */
-import type {ANTLRErrorListener, Token, TokenStream} from "antlr4ts";
+import type { ANTLRErrorListener, Token, TokenStream } from "antlr4ts";
 import type {
 	CompilationUnitContext,
 	KipperFileStream,
@@ -13,12 +13,12 @@ import type {
 	KipperParser,
 	LexerParserData,
 } from "./lexer-parser";
-import type {KipperCompileTarget} from "./target-presets";
-import type {TranslatedCodeLine} from "./const";
-import type {KipperWarning} from "../warnings";
-import type {CompilableASTNode, Expression, RootASTNode} from "./ast";
-import {KipperFileASTGenerator} from "./ast";
-import type {EvaluatedCompileConfig} from "./compile-config";
+import type { KipperCompileTarget } from "./target-presets";
+import type { TranslatedCodeLine } from "./const";
+import type { KipperWarning } from "../warnings";
+import type { CompilableASTNode, Expression, RootASTNode } from "./ast";
+import { KipperFileASTGenerator } from "./ast";
+import type { EvaluatedCompileConfig } from "./compile-config";
 import type {
 	BuiltInFunction,
 	BuiltInReference,
@@ -36,13 +36,13 @@ import {
 	ScopeVariableDeclaration,
 	UniverseScope,
 } from "./semantics";
-import {KipperError, KipperInternalError, UndefinedSemanticsError} from "../errors";
-import type {OptimisationOptions} from "./optimiser";
-import {KipperOptimiser} from "./optimiser";
-import type {KipperLogger} from "../logger";
-import {LogLevel} from "../logger";
-import {KipperWarningIssuer} from "./semantics/analyser/warning-issuer";
-import {ParseTreeWalker} from "antlr4ts/tree";
+import { KipperError, KipperInternalError, UndefinedSemanticsError } from "../errors";
+import type { OptimisationOptions } from "./optimiser";
+import { KipperOptimiser } from "./optimiser";
+import type { KipperLogger } from "../logger";
+import { LogLevel } from "../logger";
+import { KipperWarningIssuer } from "./semantics/analyser/warning-issuer";
+import { ParseTreeWalker } from "antlr4ts/tree";
 
 /**
  * The program context class used to represent a program for a compilation.

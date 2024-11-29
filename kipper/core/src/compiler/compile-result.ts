@@ -2,9 +2,9 @@
  * The result of a {@link KipperCompiler} compilation.
  * @since 0.0.3
  */
-import type {KipperProgramContext} from "./program-ctx";
-import type {TranslatedCodeLine} from "./const";
-import type {KipperError, KipperSyntaxError} from "../errors";
+import type { KipperProgramContext } from "./program-ctx";
+import type { TranslatedCodeLine } from "./const";
+import type { KipperError, KipperSyntaxError } from "../errors";
 
 /**
  * The result of a {@link KipperCompiler} compilation.

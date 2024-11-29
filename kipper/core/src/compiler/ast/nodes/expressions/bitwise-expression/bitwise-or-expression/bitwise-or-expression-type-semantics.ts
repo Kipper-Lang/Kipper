@@ -1,4 +1,4 @@
-import type {BitwiseExpressionTypeSemantics} from "../bitwise-expression-type-semantics";
+import type { BitwiseExpressionTypeSemantics } from "../bitwise-expression-type-semantics";
 
 /**
  * Type semantics for AST Node {@link BitwiseOrExpression}.

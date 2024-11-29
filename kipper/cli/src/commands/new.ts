@@ -2,11 +2,11 @@
  * 'new' command for generating a new Kipper project.
  * @since 0.11.0
  */
-import type {args} from "@oclif/parser";
-import {Command, flags} from "@oclif/command";
-import {prettifiedErrors} from "../decorators";
-import {PromptModule} from "../prompt-module";
-import {version} from "..";
+import type { args } from "@oclif/parser";
+import { Command, flags } from "@oclif/command";
+import { prettifiedErrors } from "../decorators";
+import { PromptModule } from "../prompt-module";
+import { version } from "..";
 import * as path from "node:path";
 import * as fs from "node:fs/promises";
 import chalk from "chalk";

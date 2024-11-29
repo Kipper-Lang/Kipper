@@ -10,9 +10,9 @@ import type {
 	KipperProgramContext,
 	TranslatedCodeLine,
 } from "@kipper/core";
-import {KipperTargetBuiltInGenerator} from "@kipper/core";
-import {createJSFunctionSignature, getJSFunctionSignature} from "./tools";
-import {TargetJS} from "./target";
+import { KipperTargetBuiltInGenerator } from "@kipper/core";
+import { createJSFunctionSignature, getJSFunctionSignature } from "./tools";
+import { TargetJS } from "./target";
 
 /**
  * Generates a JavaScript function from the given signature and body.

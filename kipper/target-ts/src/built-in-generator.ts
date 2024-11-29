@@ -11,9 +11,9 @@ import type {
 	ProcessedType,
 	TranslatedCodeLine,
 } from "@kipper/core";
-import {JavaScriptTargetBuiltInGenerator} from "@kipper/target-js";
-import {createTSFunctionSignature, createTSGenericFunctionSignature, getTSFunctionSignature} from "./tools";
-import {TargetTS} from "./target";
+import { JavaScriptTargetBuiltInGenerator } from "@kipper/target-js";
+import { createTSFunctionSignature, createTSGenericFunctionSignature, getTSFunctionSignature } from "./tools";
+import { TargetTS } from "./target";
 
 /**
  * Generates a TypeScript function from the given signature and body.

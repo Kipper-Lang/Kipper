@@ -2,9 +2,9 @@
  * Semantics for AST Node {@link ReturnStatement}.
  * @since 0.10.0
  */
-import type {SemanticData} from "../../../ast-node";
-import type {Expression} from "../../expressions";
-import type {KipperCallable} from "../../../../const";
+import type { SemanticData } from "../../../ast-node";
+import type { Expression } from "../../expressions";
+import type { KipperCallable } from "../../../../const";
 
 /**
  * Semantics for AST Node {@link ReturnStatement}.

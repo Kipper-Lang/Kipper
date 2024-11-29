@@ -6,17 +6,17 @@
  * -41 // -41
  * +59 // 59
  */
-import type {OperatorModifiedUnaryExpressionSemantics} from "./operator-modified-unary-expression-semantics";
-import type {OperatorModifiedUnaryTypeSemantics} from "./operator-modified-unary-expression-type-semantics";
-import type {CompilableASTNode} from "../../../../compilable-ast-node";
-import type {Expression} from "../../expression";
-import type {KipperBitwiseNotOperator, KipperNegateOperator, KipperSignOperator} from "../../../../../const";
-import {kipperUnaryModifierOperators} from "../../../../../const";
-import {UnaryExpression} from "../unary-expression";
-import type {OperatorModifiedUnaryExpressionContext} from "../../../../../lexer-parser";
-import {KindParseRuleMapping, ParseRuleKindMapping, UnaryOperatorContext} from "../../../../../lexer-parser";
-import {UnableToDetermineSemanticDataError} from "../../../../../../errors";
-import {BuiltInTypes} from "../../../../../semantics";
+import type { OperatorModifiedUnaryExpressionSemantics } from "./operator-modified-unary-expression-semantics";
+import type { OperatorModifiedUnaryTypeSemantics } from "./operator-modified-unary-expression-type-semantics";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { Expression } from "../../expression";
+import type { KipperBitwiseNotOperator, KipperNegateOperator, KipperSignOperator } from "../../../../../const";
+import { kipperUnaryModifierOperators } from "../../../../../const";
+import { UnaryExpression } from "../unary-expression";
+import type { OperatorModifiedUnaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping, UnaryOperatorContext } from "../../../../../lexer-parser";
+import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Operator modified expressions, which are used to modify the value of an expression based on an

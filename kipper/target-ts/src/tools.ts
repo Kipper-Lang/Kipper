@@ -10,7 +10,7 @@ import type {
 	InternalFunctionArgument,
 	ProcessedType,
 } from "@kipper/core";
-import {TargetTS} from "./target";
+import { TargetTS } from "./target";
 
 /**
  * Generates the signature for the function based on the {@link funcSpec}, which can be used in an TypeScript env.

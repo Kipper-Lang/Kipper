@@ -7,15 +7,15 @@
  * 0 ^ 1 // 1
  * 0 ^ 0 // 0
  */
-import {BitwiseExpression} from "../bitwise-expression";
-import type {BitwiseXorExpressionContext} from "../../../../../lexer-parser";
-import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
-import type {CompilableASTNode} from "../../../../compilable-ast-node";
-import type {Expression} from "../../expression";
-import {UnableToDetermineSemanticDataError} from "../../../../../../errors";
-import {BuiltInTypes} from "../../../../../semantics";
-import type {BitwiseXorExpressionSemantics} from "./bitwise-xor-expression-semantics";
-import type {BitwiseXorExpressionTypeSemantics} from "./bitwise-xor-expression-type-semantics";
+import { BitwiseExpression } from "../bitwise-expression";
+import type { BitwiseXorExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { Expression } from "../../expression";
+import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
+import { BuiltInTypes } from "../../../../../semantics";
+import type { BitwiseXorExpressionSemantics } from "./bitwise-xor-expression-semantics";
+import type { BitwiseXorExpressionTypeSemantics } from "./bitwise-xor-expression-type-semantics";
 
 /**
  * Bitwise XOR expression AST node.

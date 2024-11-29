@@ -3,11 +3,11 @@
  * met. Provides the base class for all iteration statements.
  * @abstract
  */
-import type {IterationStatementSemantics} from "./iteration-statement-semantics";
-import type {IterationStatementTypeSemantics} from "./iteration-statement-type-semantics";
-import type {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../lexer-parser";
-import type {ASTNodeMapper} from "../../../mapping";
-import {Statement} from "../statement";
+import type { IterationStatementSemantics } from "./iteration-statement-semantics";
+import type { IterationStatementTypeSemantics } from "./iteration-statement-type-semantics";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
+import type { ASTNodeMapper } from "../../../mapping";
+import { Statement } from "../statement";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link MemberAccessExpression} AST

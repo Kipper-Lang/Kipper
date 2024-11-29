@@ -1,6 +1,6 @@
-import type {EvaluatedConfigFile, EvaluatedConfigValue} from "./abstract";
+import type { EvaluatedConfigFile, EvaluatedConfigValue } from "./abstract";
 import type * as semver from "semver";
-import type {CompileConfig, KipperCompileTarget} from "@kipper/core";
+import type { CompileConfig, KipperCompileTarget } from "@kipper/core";
 
 /**
  * A type that represents a path-like object.

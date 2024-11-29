@@ -3,12 +3,12 @@
  * {@link KipperError}
  * @since 0.0.2
  */
-import type {InputMismatchException, LexerNoViableAltException, NoViableAltException} from "antlr4ts";
-import type {FailedPredicateException} from "antlr4ts/FailedPredicateException";
-import type {RecognitionException} from "antlr4ts/RecognitionException";
-import type {Recognizer} from "antlr4ts/Recognizer";
-import type {CompilableASTNode, KipperFileStream, KipperProgramContext} from "./compiler";
-import {addLeftIndent, getParseRuleSource} from "./tools";
+import type { InputMismatchException, LexerNoViableAltException, NoViableAltException } from "antlr4ts";
+import type { FailedPredicateException } from "antlr4ts/FailedPredicateException";
+import type { RecognitionException } from "antlr4ts/RecognitionException";
+import type { Recognizer } from "antlr4ts/Recognizer";
+import type { CompilableASTNode, KipperFileStream, KipperProgramContext } from "./compiler";
+import { addLeftIndent, getParseRuleSource } from "./tools";
 
 /**
  * The interface representing the traceback data for a {@link KipperError}.

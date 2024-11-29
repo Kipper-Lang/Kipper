@@ -2,14 +2,14 @@
  * Boolean constant expression representing the built-in constants {@link true} and {@link false}.
  * @since 0.8.0
  */
-import type {BoolPrimaryExpressionSemantics} from "./bool-primary-expression-semantics";
-import type {BoolPrimaryExpressionTypeSemantics} from "./bool-primary-expression-type-semantics";
-import type {CompilableASTNode} from "../../../../compilable-ast-node";
-import type {KipperBoolTypeConstants} from "../../../../../const";
-import type {BoolPrimaryExpressionContext} from "../../../../../lexer-parser";
-import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
-import {BuiltInTypes} from "../../../../../semantics";
-import {PrimaryExpression} from "../primary-expression";
+import type { BoolPrimaryExpressionSemantics } from "./bool-primary-expression-semantics";
+import type { BoolPrimaryExpressionTypeSemantics } from "./bool-primary-expression-type-semantics";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import type { KipperBoolTypeConstants } from "../../../../../const";
+import type { BoolPrimaryExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
+import { BuiltInTypes } from "../../../../../semantics";
+import { PrimaryExpression } from "../primary-expression";
 
 /**
  * Boolean constant expression representing the built-in constants {@link true} and {@link false}.

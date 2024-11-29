@@ -2,8 +2,8 @@
  * Semantics for AST Node {@link BoolPrimaryExpression}.
  * @since 0.8.0
  */
-import type {KipperBoolTypeConstants} from "../../../../../const";
-import type {PrimaryExpressionSemantics} from "../primary-expression-semantics";
+import type { KipperBoolTypeConstants } from "../../../../../const";
+import type { PrimaryExpressionSemantics } from "../primary-expression-semantics";
 
 /**
  * Semantics for AST Node {@link BoolPrimaryExpression}.

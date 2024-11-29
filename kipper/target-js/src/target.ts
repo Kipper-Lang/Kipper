@@ -4,11 +4,11 @@
  * @copyright 2021-2022 Luna Klatzer
  * @since 0.10.0
  */
-import type {BuiltInFunction, ProcessedType} from "@kipper/core";
-import {BuiltInType, BuiltInVariable, KipperCompileTarget} from "@kipper/core";
-import {JavaScriptTargetSemanticAnalyser} from "./semantic-analyser";
-import {JavaScriptTargetCodeGenerator} from "./code-generator";
-import {JavaScriptTargetBuiltInGenerator} from "./built-in-generator";
+import type { BuiltInFunction, ProcessedType } from "@kipper/core";
+import { BuiltInType, BuiltInVariable, KipperCompileTarget } from "@kipper/core";
+import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
+import { JavaScriptTargetCodeGenerator } from "./code-generator";
+import { JavaScriptTargetBuiltInGenerator } from "./built-in-generator";
 
 /**
  * The JavaScript translation target for the Kipper language.

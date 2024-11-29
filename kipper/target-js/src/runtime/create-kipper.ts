@@ -20,7 +20,8 @@ export interface CreateKipperOptions {
  * runtime.
  * @since 0.13.0
  */
-export const createKipper = (args: CreateKipperOptions = {}): string => `var __createKipper = (forceNew = false) => {
+export const createKipper = (args: CreateKipperOptions = {}): string =>
+	`var __createKipper = (forceNew = false) => {
  	if (!forceNew && typeof __globalScope !== "undefined" && (__kipper = __globalScope.__kipper || (typeof __kipper !== "undefined" && __kipper))) {
  		return __kipper;
  	}

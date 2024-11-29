@@ -2,10 +2,10 @@
  * 'compile' command for compiling a Kipper program.
  * @since 0.0.5
  */
-import type {args} from "@oclif/parser";
-import {Command, flags} from "@oclif/command";
-import {Logger} from "tslog";
-import type {CompileConfig, KipperCompileResult, KipperCompileTarget} from "@kipper/core";
+import type { args } from "@oclif/parser";
+import { Command, flags } from "@oclif/command";
+import { Logger } from "tslog";
+import type { CompileConfig, KipperCompileResult, KipperCompileTarget } from "@kipper/core";
 import {
 	defaultOptimisationOptions,
 	EvaluatedCompileConfig,
@@ -13,12 +13,12 @@ import {
 	KipperLogger,
 	LogLevel,
 } from "@kipper/core";
-import {CLIEmitHandler, defaultKipperLoggerConfig} from "../logger";
-import {getParseStream, getTarget, KipperEncodings, KipperInputFile, verifyEncoding} from "../input/";
-import {writeCompilationResult} from "../output";
-import {prettifiedErrors} from "../decorators";
-import {loadAutoConfig} from "../config-loader";
-import {copyConfigResources} from "../copy-resources";
+import { CLIEmitHandler, defaultKipperLoggerConfig } from "../logger";
+import { getParseStream, getTarget, KipperEncodings, KipperInputFile, verifyEncoding } from "../input/";
+import { writeCompilationResult } from "../output";
+import { prettifiedErrors } from "../decorators";
+import { loadAutoConfig } from "../config-loader";
+import { copyConfigResources } from "../copy-resources";
 import path from "node:path";
 
 export default class Compile extends Command {

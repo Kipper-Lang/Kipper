@@ -4,11 +4,11 @@
  * expressions.
  * @since 0.9.0
  */
-import type {UnaryExpressionSemantics} from "./unary-expression-semantics";
-import type {UnaryExpressionTypeSemantics} from "./unary-expression-type-semantics";
-import type {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../lexer-parser";
-import {Expression} from "../expression";
-import type {ASTNodeMapper} from "../../../mapping";
+import type { UnaryExpressionSemantics } from "./unary-expression-semantics";
+import type { UnaryExpressionTypeSemantics } from "./unary-expression-type-semantics";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
+import { Expression } from "../expression";
+import type { ASTNodeMapper } from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link UnaryExpression} AST node.

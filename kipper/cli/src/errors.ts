@@ -2,7 +2,7 @@
  * CLI related errors that core on {@link KipperError}
  * @since 0.1.0
  */
-import {KipperError} from "@kipper/core";
+import { KipperError } from "@kipper/core";
 
 /**
  * A Kipper CLI error that extends from {@link KipperError} and represents any error that is unique to the CLI.

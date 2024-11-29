@@ -62,11 +62,9 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "../ast";
-import {KipperSemanticErrorHandler} from "../semantics";
-import type {
-	ClassConstructorDeclaration
-} from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
-import type {NewInstantiationExpression} from "../ast/nodes/expressions/new-instantiation-expression";
+import { KipperSemanticErrorHandler } from "../semantics";
+import type { ClassConstructorDeclaration } from "../ast/nodes/declarations/type-declaration/class-declaration/class-member-declaration/class-constructor-declaration/class-constructor-declaration";
+import type { NewInstantiationExpression } from "../ast/nodes/expressions/new-instantiation-expression";
 
 /**
  * Represents a function that checks the semantics for a {@link AnalysableASTNode}.

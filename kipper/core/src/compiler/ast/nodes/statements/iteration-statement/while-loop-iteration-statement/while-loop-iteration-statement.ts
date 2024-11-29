@@ -2,14 +2,14 @@
  * While loop statement class, which represents a while loop statement in the Kipper language and is compilable
  * using {@link translateCtxAndChildren}.
  */
-import type {CompilableNodeChild, CompilableNodeParent} from "../../../../compilable-ast-node";
-import type {WhileLoopStatementSemantics} from "./while-loop-iteration-statement-semantics";
-import type {WhileLoopStatementTypeSemantics} from "./while-loop-iteration-statement-type-semantics";
-import type {Expression} from "../../../expressions";
-import {IterationStatement} from "../iteration-statement";
-import type {WhileLoopIterationStatementContext} from "../../../../../lexer-parser";
-import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
-import type {Statement} from "../../statement";
+import type { CompilableNodeChild, CompilableNodeParent } from "../../../../compilable-ast-node";
+import type { WhileLoopStatementSemantics } from "./while-loop-iteration-statement-semantics";
+import type { WhileLoopStatementTypeSemantics } from "./while-loop-iteration-statement-type-semantics";
+import type { Expression } from "../../../expressions";
+import { IterationStatement } from "../iteration-statement";
+import type { WhileLoopIterationStatementContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
+import type { Statement } from "../../statement";
 
 /**
  * While loop statement class, which represents a while loop statement in the Kipper language and is compilable

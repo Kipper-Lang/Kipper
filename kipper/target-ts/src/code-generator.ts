@@ -18,10 +18,10 @@ import type {
 	TryCastExpression,
 	VariableDeclaration,
 } from "@kipper/core";
-import {CompoundStatement, Expression, type LambdaPrimaryExpression} from "@kipper/core";
-import {createTSFunctionSignature, getTSFunctionSignature} from "./tools";
-import {indentLines, JavaScriptTargetCodeGenerator, RuntimeTypesGenerator, TargetJS} from "@kipper/target-js";
-import {TargetTS} from "./target";
+import { CompoundStatement, Expression, type LambdaPrimaryExpression } from "@kipper/core";
+import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
+import { indentLines, JavaScriptTargetCodeGenerator, RuntimeTypesGenerator, TargetJS } from "@kipper/target-js";
+import { TargetTS } from "./target";
 
 /**
  * The TypeScript target-specific code generator for translating Kipper code into TypeScript.

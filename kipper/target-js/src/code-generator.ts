@@ -79,9 +79,9 @@ import {
 	ScopeDeclaration,
 	VariableDeclaration,
 } from "@kipper/core";
-import {createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces} from "./tools";
+import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
-import { createKipper, createGlobalScope, RuntimeTypesGenerator} from "./runtime";
+import { createKipper, createGlobalScope, RuntimeTypesGenerator } from "./runtime";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);

@@ -4,11 +4,11 @@
  * @abstract
  * @since 0.11.0
  */
-import type {PostfixExpressionSemantics} from "./postfix-expression-semantics";
-import type {PostfixExpressionTypeSemantics} from "./postfix-expression-type-semantics";
-import type {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../lexer-parser";
-import {Expression} from "../expression";
-import type {ASTNodeMapper} from "../../../mapping";
+import type { PostfixExpressionSemantics } from "./postfix-expression-semantics";
+import type { PostfixExpressionTypeSemantics } from "./postfix-expression-type-semantics";
+import type { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
+import { Expression } from "../expression";
+import type { ASTNodeMapper } from "../../../mapping";
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a constructable {@link PostfixExpression} AST node.

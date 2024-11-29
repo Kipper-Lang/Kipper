@@ -3,8 +3,8 @@
  * @since 0.0.3
  */
 
-import {KipperError} from "./errors";
-import type {KipperWarning} from "./warnings";
+import { KipperError } from "./errors";
+import type { KipperWarning } from "./warnings";
 
 /**
  * The log levels for the {@link KipperLogger}, but as numeric values to allow comparisons.

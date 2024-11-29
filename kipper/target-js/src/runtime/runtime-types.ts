@@ -1,6 +1,6 @@
-import type {InterfaceDeclaration, TranslatedCodeLine} from "@kipper/core";
-import {BuiltInType, InterfaceMethodDeclaration, InterfacePropertyDeclaration} from "@kipper/core";
-import {KipperJavaScriptTarget, TargetJS} from "../index";
+import type { InterfaceDeclaration, TranslatedCodeLine } from "@kipper/core";
+import { BuiltInType, InterfaceMethodDeclaration, InterfacePropertyDeclaration } from "@kipper/core";
+import { KipperJavaScriptTarget, TargetJS } from "../index";
 
 /**
  * The runtime types generator for the JavaScript target.

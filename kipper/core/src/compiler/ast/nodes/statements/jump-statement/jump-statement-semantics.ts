@@ -2,9 +2,9 @@
  * Semantics for AST Node {@link JumpStatement}.
  * @since 0.10.0
  */
-import type {SemanticData} from "../../../ast-node";
-import type {JmpStatementType} from "../../../../const";
-import type {IterationStatement} from "../iteration-statement";
+import type { SemanticData } from "../../../ast-node";
+import type { JmpStatementType } from "../../../../const";
+import type { IterationStatement } from "../iteration-statement";
 
 /**
  * Semantics for AST Node {@link JumpStatement}.

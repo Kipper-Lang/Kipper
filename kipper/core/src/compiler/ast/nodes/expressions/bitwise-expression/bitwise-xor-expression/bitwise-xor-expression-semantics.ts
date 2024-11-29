@@ -1,6 +1,6 @@
-import type {BitwiseExpressionSemantics} from "../bitwise-expression-semantics";
-import type {Expression} from "../../expression";
-import type {KipperBitwiseXorOperator} from "../../../../../const";
+import type { BitwiseExpressionSemantics } from "../bitwise-expression-semantics";
+import type { Expression } from "../../expression";
+import type { KipperBitwiseXorOperator } from "../../../../../const";
 
 /**
  * Semantics for AST Node {@link BitwiseXorExpression}.

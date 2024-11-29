@@ -2,7 +2,8 @@
  * Returns the string (JavaScript) representation of the global scope.
  * @since 0.13.0
  */
-export const createGlobalScope = (): string => `var __globalScope =
+export const createGlobalScope = (): string =>
+	`var __globalScope =
   typeof __globalScope !== "undefined"
     ? __globalScope
     : typeof globalThis !== "undefined"
@@ -15,4 +16,3 @@ export const createGlobalScope = (): string => `var __globalScope =
             ? self
             : {};
 `.replace(/\n| {2}|	/g, "");
-

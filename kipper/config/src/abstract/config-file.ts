@@ -1,5 +1,5 @@
-import type {ConfigErrorMetaData} from "../errors";
-import {JSONSyntaxError} from "../errors";
+import type { ConfigErrorMetaData } from "../errors";
+import { JSONSyntaxError } from "../errors";
 
 /**
  * An abstract class that represents a configuration file.

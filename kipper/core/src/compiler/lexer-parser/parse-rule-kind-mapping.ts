@@ -2,9 +2,9 @@
  * Mappings for KipperParser rules to AST nodes. This is used to map the parse tree to the AST.
  * @since 0.10.0
  */
-import type {InverseMap} from "../../tools/types";
-import {inverseMap} from "../../tools";
-import {KipperParser} from "./antlr";
+import type { InverseMap } from "../../tools/types";
+import { inverseMap } from "../../tools";
+import { KipperParser } from "./antlr";
 
 /**
  * A mapping object which maps the KipperParser rules to an AST syntax kind number and in extension with the

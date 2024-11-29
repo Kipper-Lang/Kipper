@@ -1,4 +1,4 @@
-import type {PromptModule as InquirerPromptModule} from "inquirer";
+import type { PromptModule as InquirerPromptModule } from "inquirer";
 import inquirer from "inquirer";
 import chalk from "chalk";
 

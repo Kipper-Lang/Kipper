@@ -8,16 +8,16 @@
  * false || true // true
  * true || true // true
  */
-import type {LogicalOrExpressionSemantics} from "./logical-or-expression-semantics";
-import type {LogicalOrExpressionTypeSemantics} from "./logical-or-expression-type-semantics";
-import type {Expression} from "../../expression";
-import {LogicalExpression} from "../logical-expression";
-import type {LogicalOrExpressionContext} from "../../../../../lexer-parser";
-import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../../lexer-parser";
-import type {CompilableASTNode} from "../../../../compilable-ast-node";
-import {UnableToDetermineSemanticDataError} from "../../../../../../errors";
-import {kipperLogicalOrOperator} from "../../../../../const";
-import {BuiltInTypes} from "../../../../../semantics";
+import type { LogicalOrExpressionSemantics } from "./logical-or-expression-semantics";
+import type { LogicalOrExpressionTypeSemantics } from "./logical-or-expression-type-semantics";
+import type { Expression } from "../../expression";
+import { LogicalExpression } from "../logical-expression";
+import type { LogicalOrExpressionContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
+import type { CompilableASTNode } from "../../../../compilable-ast-node";
+import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
+import { kipperLogicalOrOperator } from "../../../../../const";
+import { BuiltInTypes } from "../../../../../semantics";
 
 /**
  * Logical-or expression, representing an expression which can be used to combine multiple conditions. It returns true

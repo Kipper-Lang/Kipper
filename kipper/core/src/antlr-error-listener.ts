@@ -2,15 +2,15 @@
  * Antlr4 Error listener handling Antlr4 errors and reporting them.
  * @since 0.0.2
  */
-import type {KipperLogger} from "./logger";
-import {LogLevel} from "./logger";
-import {LexerOrParserSyntaxError} from "./errors";
-import {Interval} from "antlr4ts/misc/Interval";
-import {CommonToken} from "antlr4ts";
-import type {ANTLRErrorListener} from "antlr4ts/ANTLRErrorListener";
-import type {KipperFileStream} from "./compiler";
-import type {RecognitionException} from "antlr4ts/RecognitionException";
-import type {Recognizer} from "antlr4ts/Recognizer";
+import type { KipperLogger } from "./logger";
+import { LogLevel } from "./logger";
+import { LexerOrParserSyntaxError } from "./errors";
+import { Interval } from "antlr4ts/misc/Interval";
+import { CommonToken } from "antlr4ts";
+import type { ANTLRErrorListener } from "antlr4ts/ANTLRErrorListener";
+import type { KipperFileStream } from "./compiler";
+import type { RecognitionException } from "antlr4ts/RecognitionException";
+import type { Recognizer } from "antlr4ts/Recognizer";
 
 /**
  * The Error Handler for the Kipper implementation of {@link ANTLRErrorListener}

@@ -2,14 +2,14 @@
  * If statement class, which represents if, else-if and else statements in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-import type {CompilableNodeParent} from "../../../compilable-ast-node";
-import type {IfStatementSemantics} from "./if-statement-semantics";
-import type {IfStatementTypeSemantics} from "./if-statement-type-semantics";
-import type {Expression} from "../../expressions";
-import {Statement} from "../statement";
-import type {IfStatementContext} from "../../../../lexer-parser";
-import {KindParseRuleMapping, ParseRuleKindMapping} from "../../../../lexer-parser";
-import {UnableToDetermineSemanticDataError} from "../../../../../errors";
+import type { CompilableNodeParent } from "../../../compilable-ast-node";
+import type { IfStatementSemantics } from "./if-statement-semantics";
+import type { IfStatementTypeSemantics } from "./if-statement-type-semantics";
+import type { Expression } from "../../expressions";
+import { Statement } from "../statement";
+import type { IfStatementContext } from "../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
+import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 /**
  * If statement class, which represents if, else-if and else statements in the Kipper language and is compilable using
