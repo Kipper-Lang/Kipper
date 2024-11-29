@@ -4,7 +4,7 @@ import type { CompileConfig, KipperCompileResult, KipperError } from "@kipper/co
 import { KipperCompiler, KipperFileStream } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
-import { testPrintOutput } from "./core-functionality.test";
+import { testPrintOutput } from "./index";
 
 /**
  * Returns the JavaScript code from the given Kipper compilation result.
@@ -179,7 +179,7 @@ describe("Built-ins", () => {
 			assert.equal(result.programCtx!!.builtInVariableReferences.length, 1);
 
 			const code: string = getJSEvalCode(result);
-			testPrintOutput((out) => assert.equal(out, "test.kip"), code);
+			testPrintOutput((out: any) => assert.equal(out, "test.kip"), code);
 		});
 
 		it("NaN", async () => {
