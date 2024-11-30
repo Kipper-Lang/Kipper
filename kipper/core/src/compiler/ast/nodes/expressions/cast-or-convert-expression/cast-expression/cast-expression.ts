@@ -1,9 +1,30 @@
 /**
- * Convert expressions, which are used to convert a value to a different type.
- * @since 0.1.0
+ * Cast expressions, which cast a type to another type given the constraint T1 and T2 adhere to T1 <: T2 (T1 is a subtype of T2).
+ * @since 0.13.0
  * @example
- * "4" as num // 4
- * 39 as str // "39"
+ * interface X {
+ * 	 a: num;
+ * }
+ * interface Y {
+ * 	 a: str;
+ * 	 b: num;
+ * }
+ * interface Z {
+ *   a: num;
+ *   b: str;
+ * }
+ *
+ * const x: X = { a: 4 };
+ * const y: Y = x cast as Y; // -> TypeError: Property 'b' is missing in type 'X' but required in type 'Y'
+ * const z: Z = x cast as Z; // -> TypeError: Property 'b' is missing in type 'X' but required in type 'Z'
+ *
+ * const y2: Y = { a: "4", b: 4 };
+ * const x2: X = y2 cast as X; // -> OK
+ * const z2: Z = y2 cast as Z; // -> TypeError: Type 'str' is not assignable to type 'num'
+ *
+ * const z3: Z = { a: 4, b: "4" };
+ * const x3: X = z3 cast as X; // -> OK
+ * const y3: Y = z3 cast as Y; // -> TypeError: Type 'num' is not assignable to type 'str'
  */
 import type { CastExpressionSemantics } from "./cast-expression-semantics";
 import type { CastExpressionTypeSemantics } from "./cast-expression-type-semantics";
@@ -19,11 +40,32 @@ import { getConversionFunctionIdentifier } from "../../../../../../tools";
 import { CastOrConvertExpression } from "../cast-or-convert-expression";
 
 /**
- * Convert expressions, which are used to convert a value to a different type.
- * @since 0.1.0
+ * Cast expressions, which cast a type to another type given the constraint T1 and T2 adhere to T1 <: T2 (T1 is a subtype of T2).
+ * @since 0.13.0
  * @example
- * "4" as num // 4
- * 39 as str // "39"
+ * interface X {
+ * 	 a: num;
+ * }
+ * interface Y {
+ * 	 a: str;
+ * 	 b: num;
+ * }
+ * interface Z {
+ *   a: num;
+ *   b: str;
+ * }
+ *
+ * const x: X = { a: 4 };
+ * const y: Y = x cast as Y; // -> TypeError: Property 'b' is missing in type 'X' but required in type 'Y'
+ * const z: Z = x cast as Z; // -> TypeError: Property 'b' is missing in type 'X' but required in type 'Z'
+ *
+ * const y2: Y = { a: "4", b: 4 };
+ * const x2: X = y2 cast as X; // -> OK
+ * const z2: Z = y2 cast as Z; // -> TypeError: Type 'str' is not assignable to type 'num'
+ *
+ * const z3: Z = { a: 4, b: "4" };
+ * const x3: X = z3 cast as X; // -> OK
+ * const y3: Y = z3 cast as Y; // -> TypeError: Type 'num' is not assignable to type 'str'
  */
 export class CastExpression extends CastOrConvertExpression<CastExpressionSemantics, CastExpressionTypeSemantics> {
 	/**

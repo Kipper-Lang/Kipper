@@ -1,9 +1,31 @@
 /**
- * Convert expressions, which are used to convert a value to a different type.
- * @since 0.1.0
+ * Try cast expressions, which cast a value to T | null, where T is the type specified by the type specifier. If the cast
+ * is not possible, it will return null otherwise it will return the casted value as T.
+ * @since 0.13.0
  * @example
- * "4" as num // 4
- * 39 as str // "39"
+ * interface X {
+ * 	 a: num;
+ * }
+ * interface Y {
+ * 	 a: str;
+ * 	 b: num;
+ * }
+ * interface Z {
+ *   a: num;
+ *   b: str;
+ * }
+ *
+ * const x: X = { a: 4 };
+ * const y: Y = x try as Y; // -> null
+ * const z: Z = x try as Z; // -> null
+ *
+ * const y2: Y = { a: "4", b: 4 };
+ * const x2: X = y2 try as X; // -> { a: 4 }
+ * const z2: Z = y2 try as Z; // -> null
+ *
+ * const z3: Z = { a: 4, b: "4" };
+ * const x3: X = z3 try as X; // -> { a: 4 }
+ * const y3: Y = z3 try as Y; // -> null
  */
 import type { TryCastExpressionSemantics } from "./try-cast-expression-semantics";
 import type { TryCastExpressionTypeSemantics } from "./try-cast-expression-type-semantics";
@@ -18,11 +40,33 @@ import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CastOrConvertExpression } from "../cast-or-convert-expression";
 
 /**
- * Convert expressions, which are used to convert a value to a different type.
- * @since 0.1.0
+ * Try cast expressions, which cast a value to T | null, where T is the type specified by the type specifier. If the cast
+ * is not possible, it will return null otherwise it will return the casted value as T.
+ * @since 0.13.0
  * @example
- * "4" as num // 4
- * 39 as str // "39"
+ * interface X {
+ * 	 a: num;
+ * }
+ * interface Y {
+ * 	 a: str;
+ * 	 b: num;
+ * }
+ * interface Z {
+ *   a: num;
+ *   b: str;
+ * }
+ *
+ * const x: X = { a: 4 };
+ * const y: Y = x try as Y; // -> null
+ * const z: Z = x try as Z; // -> null
+ *
+ * const y2: Y = { a: "4", b: 4 };
+ * const x2: X = y2 try as X; // -> { a: 4 }
+ * const z2: Z = y2 try as Z; // -> null
+ *
+ * const z3: Z = { a: 4, b: "4" };
+ * const x3: X = z3 try as X; // -> { a: 4 }
+ * const y3: Y = z3 try as Y; // -> null
  */
 export class TryCastExpression extends CastOrConvertExpression<
 	TryCastExpressionSemantics,
