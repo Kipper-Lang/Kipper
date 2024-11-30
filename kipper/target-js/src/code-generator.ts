@@ -782,6 +782,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			TargetJS.getBuiltInIdentifier("tryCastAs"),
 			"(",
 			...(await semanticData.exp.translateCtxAndChildren()),
+			",",
+			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
 			")",
 		];
 	};
@@ -796,6 +798,8 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			TargetJS.getBuiltInIdentifier("forceCastAs"),
 			"(",
 			...(await semanticData.exp.translateCtxAndChildren()),
+			",",
+			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
 			")",
 		];
 	};

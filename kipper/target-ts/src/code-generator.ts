@@ -244,7 +244,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			" ",
 			"as",
 			" ",
-			TargetJS.getRuntimeType(typeData.castType),
+			TargetTS.getTypeScriptType(typeData.castType),
 		];
 	};
 
@@ -254,16 +254,19 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	 */
 	tryCastExpression = async (node: TryCastExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
+		const castTypeSpecifier = semanticData.castTypeSpecifier.getTypeSemanticData();
 		return [
 			"(",
 			TargetJS.getBuiltInIdentifier("tryCastAs"),
 			"(",
 			...(await semanticData.exp.translateCtxAndChildren()),
+			",",
+			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
 			")",
 			" ",
 			"as",
 			" ",
-			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
+			TargetTS.getTypeScriptType(castTypeSpecifier.storedType),
 			")",
 		];
 	};
@@ -274,16 +277,19 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	 */
 	forceCastExpression = async (node: ForceCastExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
+		const castTypeSpecifier = semanticData.castTypeSpecifier.getTypeSemanticData();
 		return [
 			"(",
 			TargetJS.getBuiltInIdentifier("forceCastAs"),
 			"(",
 			...(await semanticData.exp.translateCtxAndChildren()),
+			",",
+			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
 			")",
 			" ",
 			"as",
 			" ",
-			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
+			TargetTS.getTypeScriptType(castTypeSpecifier.storedType),
 			")",
 		];
 	};
