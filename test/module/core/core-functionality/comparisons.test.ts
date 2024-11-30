@@ -7,7 +7,7 @@ import { testPrintOutput } from "..";
 
 describe("Comparisons", () => {
 	it("==", async () => {
-		const fileContent = 'var x: num = 4;\nif (x == 4) call print("Works");';
+		const fileContent = 'var x: num = 4;\nif (x == 4) print("Works");';
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
@@ -26,7 +26,7 @@ describe("Comparisons", () => {
 	});
 
 	it("!=", async () => {
-		const fileContent = 'var x: num = 4;\nif (x != 5) call print("Works");';
+		const fileContent = 'var x: num = 4;\nif (x != 5) print("Works");';
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
@@ -44,7 +44,7 @@ describe("Comparisons", () => {
 	});
 
 	it("<", async () => {
-		const fileContent = 'var x: num = 4;\nif (x < 5) call print("Works");';
+		const fileContent = 'var x: num = 4;\nif (x < 5) print("Works");';
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
@@ -62,7 +62,7 @@ describe("Comparisons", () => {
 	});
 
 	it("<=", async () => {
-		const fileContent = 'var x: num = 4;\nif (x <= 5) call print("Works");';
+		const fileContent = 'var x: num = 4;\nif (x <= 5) print("Works");';
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
@@ -80,7 +80,7 @@ describe("Comparisons", () => {
 	});
 
 	it(">", async () => {
-		const fileContent = 'var x: num = 5;\nif (x > 4) call print("Works");';
+		const fileContent = 'var x: num = 5;\nif (x > 4) print("Works");';
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
@@ -98,7 +98,7 @@ describe("Comparisons", () => {
 	});
 
 	it(">=", async () => {
-		const fileContent = 'var x: num = 5;\nif (x >= 4) call print("Works");';
+		const fileContent = 'var x: num = 5;\nif (x >= 4) print("Works");';
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);

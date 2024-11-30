@@ -10,7 +10,7 @@ describe("Comment", () => {
 		assert.isDefined(instance.programCtx);
 		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 		assert.include(instance.write(), "let x: number = 5;", "Expected variable declaration to be present in output");
-		assert.include(instance.write(), '__kipper.print("");', "Expected print call to be present in output");
+		assert.include(instance.write(), '__kipper.print("");', "Expected print to be present in output");
 	});
 
 	it("Multi line", async () => {
@@ -20,6 +20,6 @@ describe("Comment", () => {
 		assert.isDefined(instance.programCtx);
 		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 		assert.include(instance.write(), "let x: number = 5;", "Expected variable declaration to be present in output");
-		assert.include(instance.write(), '__kipper.print("");', "Expected print call to be present in output");
+		assert.include(instance.write(), '__kipper.print("");', "Expected print to be present in output");
 	});
 });

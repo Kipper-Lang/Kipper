@@ -8,7 +8,7 @@ import { testPrintOutput } from "..";
 describe("Logical expressions", () => {
 	describe("Logical AND", () => {
 		it("true && true", async () => {
-			const fileContent = 'var x: num = 4;\nif (x > 3 && x < 5) { call print("Works"); }';
+			const fileContent = 'var x: num = 4;\nif (x > 3 && x < 5) { print("Works"); }';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -35,7 +35,7 @@ describe("Logical expressions", () => {
 		});
 
 		it("true && false", async () => {
-			const fileContent = 'var x: num = 4;\nif (x > 3 && x < 2) { call print("Works"); }';
+			const fileContent = 'var x: num = 4;\nif (x > 3 && x < 2) { print("Works"); }';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -53,7 +53,7 @@ describe("Logical expressions", () => {
 		});
 
 		it("false && true", async () => {
-			const fileContent = 'var x: num = 4;\nif (x > 5 && x < 3) { call print("Works"); }';
+			const fileContent = 'var x: num = 4;\nif (x > 5 && x < 3) { print("Works"); }';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -71,7 +71,7 @@ describe("Logical expressions", () => {
 		});
 
 		it("false && false", async () => {
-			const fileContent = 'var x: num = 4;\nif (x > 5 && x < 8) { call print("Works"); }';
+			const fileContent = 'var x: num = 4;\nif (x > 5 && x < 8) { print("Works"); }';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -91,7 +91,7 @@ describe("Logical expressions", () => {
 
 	describe("Logical OR", () => {
 		it("true || true", async () => {
-			const fileContent = 'var x: num = 4;\nif (x > 3 || x < 5) { call print("Works"); }';
+			const fileContent = 'var x: num = 4;\nif (x > 3 || x < 5) { print("Works"); }';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -109,7 +109,7 @@ describe("Logical expressions", () => {
 		});
 
 		it("true || false", async () => {
-			const fileContent = 'var x: num = 4;\nif (x > 3 || x < 2) { call print("Works"); }';
+			const fileContent = 'var x: num = 4;\nif (x > 3 || x < 2) { print("Works"); }';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -127,7 +127,7 @@ describe("Logical expressions", () => {
 		});
 
 		it("false || true", async () => {
-			const fileContent = 'var x: num = 4;\nif (x > 5 || x < 3) { call print("Works"); }';
+			const fileContent = 'var x: num = 4;\nif (x > 5 || x < 3) { print("Works"); }';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
@@ -145,7 +145,7 @@ describe("Logical expressions", () => {
 		});
 
 		it("false || false", async () => {
-			const fileContent = 'var x: num = 4;\nif (x > 5 || x > 8) { call print("Works"); }';
+			const fileContent = 'var x: num = 4;\nif (x > 5 || x > 8) { print("Works"); }';
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);

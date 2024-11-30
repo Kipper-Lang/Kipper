@@ -18,7 +18,7 @@ describe("Functions", () => {
 	});
 
 	it("Call", async () => {
-		const fileContent = 'def test() -> void { call print("Works"); return; }';
+		const fileContent = 'def test() -> void { print("Works"); return; }';
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);

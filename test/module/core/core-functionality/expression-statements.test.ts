@@ -26,7 +26,7 @@ describe("Expression Statements", () => {
 	});
 
 	it("three expressions", async () => {
-		const fileContent = 'call print("x"), call print("y"), call print("z");';
+		const fileContent = 'print("x"), print("y"), print("z");';
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
