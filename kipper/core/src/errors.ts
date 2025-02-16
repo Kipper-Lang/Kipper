@@ -670,12 +670,12 @@ export class PropertyAssignmentTypeError extends TypeError {
 }
 
 /**
- * Error that is thrown whenever a property can not be found in the object.
+ * Error that is thrown whenever a property is missing in this type but is required in another type.
  * @since 0.11.0
  */
 export class PropertyNotFoundError extends TypeError {
-	constructor(objType: string, identifier: string) {
-		super(`Property '${identifier}' not found in object of type '${objType}'.`);
+	constructor(thisType: string, objType: string, identifier: string) {
+		super(`Property '${identifier}' not found in '${thisType}' but required in object of type '${objType}'.`);
 	}
 }
 
