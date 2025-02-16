@@ -3,7 +3,7 @@ import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
 import { compiler, defaultTarget } from ".";
-import { testPrintOutput } from "..";
+import {errorsAreEmpty, testPrintOutput} from "..";
 
 describe("Cast-or-Convert", () => {
 	describe("as", () => {
@@ -16,7 +16,7 @@ describe("Cast-or-Convert", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			errorsAreEmpty(instance.programCtx!);
 
 			const code = instance.write();
 			assert.include(code, 'let x: string = "123.0";', "Invalid TypeScript code (Expected different output)");
@@ -42,7 +42,7 @@ describe("Cast-or-Convert", () => {
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				errorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
 				assert.include(code, "let x: number = 123;", "Invalid TypeScript code (Expected different output)");
@@ -62,7 +62,7 @@ describe("Cast-or-Convert", () => {
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				errorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
 				assert.include(
@@ -91,7 +91,7 @@ describe("Cast-or-Convert", () => {
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				errorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
 				assert.include(
@@ -115,13 +115,13 @@ describe("Cast-or-Convert", () => {
 				class Test { x: num; constructor() { this.x = 1; } }
 				interface Test2 { x: num; }
 				var x: Test = new Test();
-				var y: Test = x cast as Test2;
+				var y: Test2 = x cast as Test2;
 				print(y);
 				`;
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				errorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
 				assert.include(
@@ -135,7 +135,7 @@ describe("Cast-or-Convert", () => {
 					"Invalid TypeScript code (Expected different output)",
 				);
 				assert.include(code, "let x: Test = new Test();", "Invalid TypeScript code (Expected different output)");
-				assert.include(code, "let y: Test = x as Test2;", "Invalid TypeScript code (Expected different output)");
+				assert.include(code, "let y: Test2 = x as Test2;", "Invalid TypeScript code (Expected different output)");
 			});
 
 			it("interface cast as interface", async () => {
@@ -149,7 +149,7 @@ describe("Cast-or-Convert", () => {
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				errorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
 				assert.include(code, "interface X {\n  x: number;\n}", "Invalid TypeScript code (Expected different output)");

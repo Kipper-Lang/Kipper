@@ -1,3 +1,6 @@
+import {assert} from "chai";
+import type {KipperProgramContext} from "@kipper/core";
+
 /**
  * Tests the 'print' function of Kipper.
  * @param newConsoleLog The new console.log function, which is called by the 'print' function. This function should
@@ -16,4 +19,19 @@ export function testPrintOutput(
 	console.log = (v: any) => newConsoleLog(forceString ? String(v) : v);
 	eval(jsProgram); // Eval the program, which should call the 'print' function.
 	console.log = oldConsoleLog;
+}
+
+/**
+ * Asserts that the program context has no errors and reports all the errors if there are any.
+ * @param programCtx The program context to check for errors.
+ */
+export function errorsAreEmpty(programCtx: KipperProgramContext): void {
+	try {
+		assert.deepEqual(programCtx.errors, [], "Expected no compilation errors");
+	} catch (e) {
+		for (const error of programCtx.errors) {
+			console.error(error);
+		}
+		throw e;
+	}
 }
