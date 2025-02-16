@@ -10,7 +10,7 @@ describe("InvalidMatchesTypeError", () => {
 				await new KipperCompiler().compile("var x: obj = {}; x matches str;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidMatchesTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -22,7 +22,7 @@ describe("InvalidMatchesTypeError", () => {
 				await new KipperCompiler().compile("var x: obj = {}; class A {}; x matches A;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidMatchesTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

@@ -43,7 +43,7 @@ describe("Built-ins", () => {
 							"InvalidAmountOfArgumentsError",
 							"Expected different error",
 						);
-						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+						assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
@@ -59,7 +59,7 @@ describe("Built-ins", () => {
 							"InvalidAmountOfArgumentsError",
 							"Expected different error",
 						);
-						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+						assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
@@ -117,7 +117,7 @@ describe("Built-ins", () => {
 							"InvalidAmountOfArgumentsError",
 							"Expected different error",
 						);
-						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+						assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
@@ -133,7 +133,7 @@ describe("Built-ins", () => {
 							"InvalidAmountOfArgumentsError",
 							"Expected different error",
 						);
-						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+						assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
@@ -145,7 +145,7 @@ describe("Built-ins", () => {
 						await compiler.compile(fileContent, config);
 					} catch (e) {
 						assert.equal((<KipperError>e).constructor.name, "ArgumentAssignmentTypeError", "Expected different error");
-						assert((<KipperError>e).name === "TypeError", "Expected different error");
+						assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'ArgumentAssignmentTypeError'");

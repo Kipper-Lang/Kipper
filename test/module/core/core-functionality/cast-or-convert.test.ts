@@ -3,7 +3,7 @@ import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
 import { compiler, defaultTarget } from ".";
-import {errorsAreEmpty, testPrintOutput} from "..";
+import { errorsAreEmpty, testPrintOutput } from "..";
 
 describe("Cast-or-Convert", () => {
 	describe("as", () => {

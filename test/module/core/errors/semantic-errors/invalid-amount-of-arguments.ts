@@ -10,7 +10,7 @@ describe("InvalidAmountOfArgumentsError", () => {
 				await new KipperCompiler().compile('call print("x", "x");', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected different error");
-				assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+				assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -22,7 +22,7 @@ describe("InvalidAmountOfArgumentsError", () => {
 				await new KipperCompiler().compile('call print("x", "x", "x");', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected different error");
-				assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+				assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -34,7 +34,7 @@ describe("InvalidAmountOfArgumentsError", () => {
 				await new KipperCompiler().compile('call print("x", "x", "x", "x");', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected different error");
-				assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+				assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -46,7 +46,7 @@ describe("InvalidAmountOfArgumentsError", () => {
 				await new KipperCompiler().compile("call print();", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidAmountOfArgumentsError", "Expected different error");
-				assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+				assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

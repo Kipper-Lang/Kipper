@@ -1,5 +1,5 @@
-import {assert} from "chai";
-import type {KipperProgramContext} from "@kipper/core";
+import { assert } from "chai";
+import type { KipperProgramContext } from "@kipper/core";
 
 /**
  * Tests the 'print' function of Kipper.

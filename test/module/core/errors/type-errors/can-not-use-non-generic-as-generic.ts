@@ -8,7 +8,7 @@ describe("CanNotUseNonGenericAsGenericTypeError", () => {
 			await new KipperCompiler().compile("var x: num<str>;", defaultConfig);
 		} catch (e) {
 			assert.equal((<KipperError>e).constructor.name, "CanNotUseNonGenericAsGenericTypeError");
-			assert((<KipperError>e).name === "TypeError", "Expected different error");
+			assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}
