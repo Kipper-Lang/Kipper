@@ -20,6 +20,11 @@ To use development versions of Kipper download the
 
 ### Changed
 
+- Renamed:
+  - Error `MismatchingArgCountBetweenFuncTypesError` to `MismatchingArgCountBetweenFuncTypesTypeError`.
+  - Error `UnknownTypeError` to `UnknownTypeTypeError`.
+  - Error `PropertyNotFoundError` to `PropertyNotFoundTypeError`.
+
 ### Fixed
 
 ### Deprecated
