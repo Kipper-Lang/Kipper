@@ -66,7 +66,7 @@ import {
 	PropertyDoesNotExistError,
 	ReadOnlyWriteTypeError,
 	ReferenceCanNotBeUsedAsTypeError,
-	UnknownTypeError,
+	UnknownTypeTypeError,
 	ValueNotIndexableTypeError,
 	ValueTypeNotIndexableWithGivenAccessor,
 	InvalidMatchesTypeError,
@@ -94,7 +94,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public getTypeFromIdentifier(type: string, scope: Scope): ScopeTypeDeclaration {
 		const scopeEntry = scope.getEntryRecursively(type);
 		if (scopeEntry === undefined) {
-			throw this.assertError(new UnknownTypeError(type));
+			throw this.assertError(new UnknownTypeTypeError(type));
 		} else if (!(scopeEntry instanceof ScopeTypeDeclaration)) {
 			throw this.assertError(new ReferenceCanNotBeUsedAsTypeError(type));
 		}
@@ -688,12 +688,11 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			return;
 		}
 
-		const isStrOrArr = objType.isAssignableTo(BuiltInTypes.str)
-			|| objType.isAssignableTo(BuiltInTypes.Array);
+		const isStrOrArr = objType.isAssignableTo(BuiltInTypes.str) || objType.isAssignableTo(BuiltInTypes.Array);
 		const isObj = objType.isAssignableTo(BuiltInTypes.obj);
 		if (!isStrOrArr && !isObj) {
 			throw this.assertError(new ValueNotIndexableTypeError(objType.toString()));
-		} else if (isStrOrArr && accessType === "dot" || isObj && accessType !== "dot") {
+		} else if ((isStrOrArr && accessType === "dot") || (isObj && accessType !== "dot")) {
 			throw this.assertError(new ValueTypeNotIndexableWithGivenAccessor(objType.toString(), accessType));
 		}
 	}
