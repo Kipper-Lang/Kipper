@@ -162,21 +162,21 @@ export class CustomType extends ProcessedType {
 	 * @throws AssignmentTypeError If the types are not assignable.
 	 * @throws PropertyAssignmentTypeError If a property is not assignable.
 	 * @throws ArgumentAssignmentTypeError If an argument is not assignable.
-	 * @throws PropertyNotFoundError If a property is not found.
+	 * @throws PropertyNotFoundError If a property is not found in this type.
 	 * @since 0.12.0
 	 */
 	assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string): void {
 		if (this === type || type === BuiltInTypes.any || type === BuiltInTypes.obj) {
 			return;
 		} else if (type instanceof CustomType && type.kind === "interface") {
-			for (const [fieldName, fieldType] of this.fields) {
-				const targetTypeField = type.fields.get(fieldName);
-				if (!targetTypeField) {
-					throw new PropertyNotFoundError(type.identifier, fieldName);
+			for (const [fieldName, otherFieldType] of type.fields) {
+				const thisFieldType = this.fields.get(fieldName);
+				if (!thisFieldType) {
+					throw new PropertyNotFoundError(this.identifier, type.identifier, fieldName);
 				}
 
 				try {
-					fieldType.assertAssignableTo(targetTypeField, fieldName);
+					thisFieldType.assertAssignableTo(otherFieldType, fieldName);
 				} catch (error) {
 					if (propertyName) {
 						throw new PropertyAssignmentTypeError(propertyName, type.identifier, this.identifier, <TypeError>error);

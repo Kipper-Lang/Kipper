@@ -665,18 +665,12 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			return;
 		}
 
-		if (
-			!objType.isAssignableTo(BuiltInTypes.str) &&
-			!objType.isAssignableTo(BuiltInTypes.Array) &&
-			!objType.isAssignableTo(BuiltInTypes.obj)
-		) {
+		const isStrOrArr = objType.isAssignableTo(BuiltInTypes.str)
+			|| objType.isAssignableTo(BuiltInTypes.Array);
+		const isObj = objType.isAssignableTo(BuiltInTypes.obj);
+		if (!isStrOrArr && !isObj) {
 			throw this.assertError(new ValueNotIndexableTypeError(objType.toString()));
-		} else if (
-			(objType.isAssignableTo(BuiltInTypes.str) &&
-				objType.isAssignableTo(BuiltInTypes.Array) &&
-				accessType === "dot") ||
-			(objType.isAssignableTo(BuiltInTypes.obj) && accessType !== "dot")
-		) {
+		} else if (isStrOrArr && accessType === "dot" || isObj && accessType !== "dot") {
 			throw this.assertError(new ValueTypeNotIndexableWithGivenAccessor(objType.toString(), accessType));
 		}
 	}
