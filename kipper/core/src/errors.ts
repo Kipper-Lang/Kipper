@@ -845,7 +845,7 @@ export class ValueNotIndexableTypeError extends TypeError {
  * Error that is thrown whenever the given value can not be accessed using the given access method.
  * @since 0.12.0
  */
-export class ValueTypeNotIndexableWithGivenAccessor extends TypeError {
+export class ValueTypeNotIndexableWithGivenAccessorTypeError extends TypeError {
 	constructor(type: string, accessType: string) {
 		super(`Value of type '${type}' can not be accessed using '${accessType}' style indexing`);
 	}

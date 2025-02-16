@@ -68,7 +68,7 @@ import {
 	ReferenceCanNotBeUsedAsTypeError,
 	UnknownTypeTypeError,
 	ValueNotIndexableTypeError,
-	ValueTypeNotIndexableWithGivenAccessor,
+	ValueTypeNotIndexableWithGivenAccessorTypeError,
 	InvalidMatchesTypeError,
 	InvalidCastTypeError,
 } from "../../../errors";
@@ -693,7 +693,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 		if (!isStrOrArr && !isObj) {
 			throw this.assertError(new ValueNotIndexableTypeError(objType.toString()));
 		} else if ((isStrOrArr && accessType === "dot") || (isObj && accessType !== "dot")) {
-			throw this.assertError(new ValueTypeNotIndexableWithGivenAccessor(objType.toString(), accessType));
+			throw this.assertError(new ValueTypeNotIndexableWithGivenAccessorTypeError(objType.toString(), accessType));
 		}
 	}
 
