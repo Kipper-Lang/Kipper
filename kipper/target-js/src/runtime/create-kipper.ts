@@ -42,7 +42,7 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 		accepts(obj) {
 			if (this === obj) return true;
 			return obj instanceof KipperType && (this.customComparer ? this.customComparer(this, obj) : true);
-		},
+		}
 		acceptsVal(obj) {
 			return this.accepts(__tmpKip.typeOf(obj));
 		}
@@ -86,7 +86,7 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 	 obj: __type_obj,
 	 Array: __type_Array,
 	 Func: __type_Func,
-	}
+	};
 	__tmpKip.KipperError = KipperError;
 	__tmpKip.TypeError = (class KipperTypeError extends KipperError { constructor(msg) { super(msg); this.name = 'KipTypeError'; } });
 	__tmpKip.IndexError = (class KipperIndexError extends KipperError { constructor(msg) { super(msg); this.name = 'KipIndexError'; } });
