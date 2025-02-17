@@ -1,6 +1,5 @@
-import { GenericBuiltInType } from "../base/generic-built-in-type";
-import type { ProcessedType } from "../index";
-import { UnionType } from "../index";
+import { GenericBuiltInType, UnionType } from "../base";
+import type { ProcessedType } from "../base";
 import type { TypeError } from "../../../../errors";
 import {
 	ArgumentAssignmentTypeError,

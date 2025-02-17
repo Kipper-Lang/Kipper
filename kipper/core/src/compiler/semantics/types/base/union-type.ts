@@ -10,7 +10,7 @@ import {
 
 /**
  * Represents a union type, which is a type that can be one of multiple types.
- * @since 0.12.0
+ * @since 0.12.0 Partial internal support for various functionality, but no user specified union types are supported.
  */
 export class UnionType<T extends Array<ProcessedType> = [ProcessedType, ProcessedType]> extends ProcessedType {
 	/**
@@ -44,6 +44,8 @@ export class UnionType<T extends Array<ProcessedType> = [ProcessedType, Processe
 		let e: TypeError | undefined;
 		if (type instanceof UnionType) {
 			if (
+				// If all types in this union type are assignable to at least one type in the other union type
+				// then this union type is assignable to the other union type.
 				this.unionTypes.every((unionType) => type.unionTypes.some((t: ProcessedType) => unionType.isAssignableTo(t)))
 			) {
 				return;

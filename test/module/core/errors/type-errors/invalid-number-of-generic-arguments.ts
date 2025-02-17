@@ -14,7 +14,7 @@ describe("InvalidAmountOfGenericArgumentsError", () => {
 					"InvalidAmountOfGenericArgumentsError",
 					"Expected different error",
 				);
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -30,7 +30,7 @@ describe("InvalidAmountOfGenericArgumentsError", () => {
 					"InvalidAmountOfGenericArgumentsError",
 					"Expected different error",
 				);
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

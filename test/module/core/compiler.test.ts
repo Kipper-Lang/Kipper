@@ -6,7 +6,7 @@ import * as ts from "typescript";
 import * as path from "path";
 import { KipperTypeScriptTarget, TargetTS } from "@kipper/target-ts";
 import { KipperJavaScriptTarget } from "@kipper/target-js";
-import { testPrintOutput } from "./core-functionality.test";
+import { testPrintOutput } from "./index";
 
 export function getFileName(pathString: string): string {
 	return path.resolve(`${__dirname}/../../kipper-files/${pathString}`);

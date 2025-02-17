@@ -47,6 +47,10 @@ export function genJSVariable(varSpec: BuiltInVariable, value: string): Translat
  * @since 0.10.0
  */
 export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerator {
+	// ===================================================================================================================
+	// Internal functions which are used to provide specific syntax- or behaviour-specific functionality
+	// ===================================================================================================================
+
 	async numToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.params[0];
@@ -123,6 +127,36 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		return genJSFunction(signature, `{ return ${toRepeatIdentifier}.repeat(${timesIdentifier}); }`);
 	}
 
+	async tryCastAs(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const valIdentifier = signature.params[0];
+		const typeIdentifier = signature.params[1];
+
+		return genJSFunction(
+			signature,
+			`{ if (${typeIdentifier}.acceptsVal(${valIdentifier})) { return ${valIdentifier} }` + `return null; }`,
+		);
+	}
+
+	async forceCastAs(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const valIdentifier = signature.params[0];
+		const typeIdentifier = signature.params[1];
+
+		const typeErr = TargetJS.getBuiltInIdentifier("TypeError");
+		const valType = `${TargetJS.getBuiltInIdentifier("typeOf")}(${valIdentifier})`;
+		return genJSFunction(
+			signature,
+			`{ const valType = ${valType};` +
+				`if (${typeIdentifier}.accepts(valType)) { return ${valIdentifier} }` +
+				`throw new ${typeErr}(\`Invalid force cast from '\${${valType}.name}' to '\${${typeIdentifier}.name}'.\`); }`,
+		);
+	}
+
+	// ===================================================================================================================
+	// Built-in functions that are direct parts of the language
+	// ===================================================================================================================
+
 	async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
 		const printArgIdentifier = signature.params[0];
@@ -138,11 +172,11 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		return genJSFunction(signature, `{ return ${lenArgIdentifier}.length; }`);
 	}
 
-	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
-		return [genJSVariable(varSpec, `"${programCtx.fileName}"`)];
-	}
-
 	async NaN(varSpec: BuiltInVariable): Promise<Array<TranslatedCodeLine>> {
 		return [genJSVariable(varSpec, "NaN")];
+	}
+
+	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
+		return [genJSVariable(varSpec, `"${programCtx.fileName}"`)];
 	}
 }

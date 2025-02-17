@@ -87,6 +87,10 @@ export function genTSVariable(varSpec: BuiltInVariable, value: string): Translat
  * @since 0.8.0
  */
 export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGenerator {
+	// ===================================================================================================================
+	// Internal functions which are used to provide specific syntax- or behaviour-specific functionality
+	// ===================================================================================================================
+
 	override async numToStr(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const convArgIdentifier = signature.params[0].identifier;
@@ -173,6 +177,10 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		return genTSFunction(signature, `{ return ${repeatArgIdentifier}.repeat(${timesArgIdentifier}); }`);
 	}
 
+	// ===================================================================================================================
+	// Built-in functions that are direct parts of the language
+	// ===================================================================================================================
+
 	override async print(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getTSFunctionSignature(funcSpec);
 		const printArgIdentifier = signature.params[0].identifier;
@@ -188,11 +196,11 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		return genTSFunction(signature, `{ return ${lenArgIdentifier}.length; }`);
 	}
 
-	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
-		return [genTSVariable(varSpec, `"${programCtx.fileName}"`)];
-	}
-
 	async NaN(varSpec: BuiltInVariable): Promise<Array<TranslatedCodeLine>> {
 		return [genTSVariable(varSpec, "NaN")];
+	}
+
+	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {
+		return [genTSVariable(varSpec, `"${programCtx.fileName}"`)];
 	}
 }

@@ -670,12 +670,12 @@ export class PropertyAssignmentTypeError extends TypeError {
 }
 
 /**
- * Error that is thrown whenever a property can not be found in the object.
+ * Error that is thrown whenever a property is missing in this type but is required in another type.
  * @since 0.11.0
  */
-export class PropertyNotFoundError extends TypeError {
-	constructor(objType: string, identifier: string) {
-		super(`Property '${identifier}' not found in object of type '${objType}'.`);
+export class PropertyNotFoundTypeError extends TypeError {
+	constructor(thisType: string, objType: string, identifier: string) {
+		super(`Property '${identifier}' not found in '${thisType}' but required in object of type '${objType}'.`);
 	}
 }
 
@@ -693,7 +693,7 @@ export class GenericArgumentTypeError extends TypeError {
  * Error that is thrown whenever a function type is casted to a function with a different amount of arguments.
  * @since 0.12.0
  */
-export class MismatchingArgCountBetweenFuncTypesError extends TypeError {
+export class MismatchingArgCountBetweenFuncTypesTypeError extends TypeError {
 	constructor(expected: number, received: number) {
 		super(`Function type expects ${expected} arguments, received ${received}.`);
 	}
@@ -747,15 +747,25 @@ export class ReadOnlyWriteTypeError extends TypeError {
  * @since 0.8.0
  */
 export class InvalidConversionTypeError extends TypeError {
+	constructor(operandType: string, destType: string) {
+		super(`Invalid conversion from '${operandType}' to '${destType}'.`);
+	}
+}
+
+/**
+ * Error that is thrown whenever a cast is used that is not possible between T1 and T2.
+ * @since 0.12.0
+ */
+export class InvalidCastTypeError extends TypeError {
 	constructor(originalType: string, destType: string) {
-		super(`Invalid conversion from '${originalType}' to '${destType}'.`);
+		super(`Invalid cast from '${originalType}' to '${destType}'.`);
 	}
 }
 
 /**
  * Error that is thrown whenever a declaration type is used that is unknown to the program.
  */
-export class UnknownTypeError extends TypeError {
+export class UnknownTypeTypeError extends TypeError {
 	constructor(type: string) {
 		super(`Unknown type '${type}'.`);
 	}
@@ -835,7 +845,7 @@ export class ValueNotIndexableTypeError extends TypeError {
  * Error that is thrown whenever the given value can not be accessed using the given access method.
  * @since 0.12.0
  */
-export class ValueTypeNotIndexableWithGivenAccessor extends TypeError {
+export class ValueTypeNotIndexableWithGivenAccessorTypeError extends TypeError {
 	constructor(type: string, accessType: string) {
 		super(`Value of type '${type}' can not be accessed using '${accessType}' style indexing`);
 	}
