@@ -19,14 +19,11 @@ To use development versions of Kipper download the
 ### Added
 
 - New cast keywords `cast as`, `force as` and `try as`, which allow for various type-safe cast operations.
-	([#685](https://github.com/Kipper-Lang/Kipper/issues/685))
+  ([#685](https://github.com/Kipper-Lang/Kipper/issues/685))
 
 ### Changed
 
 - Renamed:
-  - Error `MismatchingArgCountBetweenFuncTypesError` to `MismatchingArgCountBetweenFuncTypesTypeError`.
-  - Error `UnknownTypeError` to `UnknownTypeTypeError`.
-  - Error `PropertyNotFoundError` to `PropertyNotFoundTypeError`.
   - Error `ValueTypeNotIndexableWithGivenAccessor` to `ValueTypeNotIndexableWithGivenAccessorTypeError`.
 
 ### Fixed
