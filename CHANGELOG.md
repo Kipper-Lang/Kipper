@@ -28,6 +28,24 @@ To use development versions of Kipper download the
 
 </details>
 
+## [0.12.1] - 2025-02-17
+
+### Changed
+
+- Renamed:
+  - Error `MismatchingArgCountBetweenFuncTypesError` to `MismatchingArgCountBetweenFuncTypesTypeError`.
+  - Error `UnknownTypeError` to `UnknownTypeTypeError`.
+  - Error `PropertyNotFoundError` to `PropertyNotFoundTypeError`.
+
+### Fixed
+
+- `PropertyNotFoundTypeError` being thrown as a stand-alone error instead of being set as the cause for any parent
+  assignment operation failure.
+- `PropertyNotFoundTypeError` being checked for in the wrong direction i.e. that `otherT` had to have all the properties
+  of `thisT` instead of the other way around (which is the correct way).
+- Indexable checks for `str` and `Array<T>` being accidentally turned off by incorrect logic. This caused
+  `ValueTypeNotIndexableWithGivenAccessorTypeError` to be only thrown for objects and not for arrays and strings.
+
 ## [0.12.0] - 2024-09-25
 
 ### Added
@@ -1606,7 +1624,8 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.12.0...HEAD
+[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.12.1...HEAD
+[0.12.1]: https://github.com/Kipper-Lang/Kipper/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.4...v0.11.0
 [0.10.4]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.3...v0.10.4
