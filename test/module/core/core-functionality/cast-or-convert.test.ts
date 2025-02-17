@@ -183,6 +183,52 @@ describe("Cast-or-Convert", () => {
 	});
 
 	describe("try as", () => {
-		// TODO!
+		it("should convert a correct value from EXP to T", async () => {
+			const fileContent = `
+			var x: any = 123;
+			var y: any = x try as num;
+			if (y == null) {
+				print("Failed to cast");
+			} else {
+				print(y);
+			}
+			`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assertErrorsAreEmpty(instance.programCtx!);
+
+			const code = instance.write();
+			assertCodeIncludesSnippet(code, "let x: any = 123;");
+			assertCodeIncludesSnippet(code, "let y: any = (__kipper.tryCastAs(x,__kipper.builtIn.num) as number | null);");
+
+			// Run the code to make sure it works
+			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+			testPrintOutput((message: any) => assert.equal(message, 123, "Expected different output"), jsCode);
+		});
+
+		it("should return null when converting an incorrect value from EXP to T", async () => {
+			const fileContent = `
+			var x: any = 123;
+			var y: any = x try as str;
+			if (y == null) {
+				print("Failed to cast");
+			} else {
+				print(y);
+			}
+			`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assertErrorsAreEmpty(instance.programCtx!);
+
+			const code = instance.write();
+			assertCodeIncludesSnippet(code, "let x: any = 123;");
+			assertCodeIncludesSnippet(code, "let y: any = (__kipper.tryCastAs(x,__kipper.builtIn.str) as string | null);");
+
+			// Run the code to make sure it works
+			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+			testPrintOutput((message: any) => assert.equal(message, "Failed to cast", "Expected different output"), jsCode);
+		});
 	});
 });
