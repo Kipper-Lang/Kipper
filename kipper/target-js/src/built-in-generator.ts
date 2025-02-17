@@ -129,10 +129,14 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 
 	async tryCastAs(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
-		const castTypeIdentifier = signature.params[0];
-		const toCastIdentifier = signature.params[1];
+		const valIdentifier = signature.params[0];
+		const typeIdentifier = signature.params[1];
 
-		return genJSFunction(signature, `{ return true ? ${toCastIdentifier} : null; }`);
+		return genJSFunction(
+			signature,
+			`{ if (${typeIdentifier}.acceptsVal(${valIdentifier})) { return ${valIdentifier} }` +
+			`return null; }`,
+		);
 	}
 
 	async forceCastAs(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {

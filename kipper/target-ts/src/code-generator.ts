@@ -266,6 +266,10 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			"as",
 			" ",
 			TargetTS.getTypeScriptType(castTypeSpecifier.storedType),
+			" ",
+			"|",
+			" ",
+			"null",
 			")",
 		];
 	};
