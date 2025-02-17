@@ -239,8 +239,10 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	override castExpression = async (node: CastExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const typeData = node.getTypeSemanticData();
+
+		const valExp = await semanticData.exp.translateCtxAndChildren();
 		return [
-			...(await semanticData.exp.translateCtxAndChildren()),
+			...(valExp),
 			" ",
 			"as",
 			" ",
@@ -255,13 +257,16 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	tryCastExpression = async (node: TryCastExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const castTypeSpecifier = semanticData.castTypeSpecifier.getTypeSemanticData();
+
+		const valExp = await semanticData.exp.translateCtxAndChildren();
+		const typeExp = await semanticData.castTypeSpecifier.translateCtxAndChildren();
 		return [
 			"(",
 			TargetJS.getBuiltInIdentifier("tryCastAs"),
 			"(",
-			...(await semanticData.exp.translateCtxAndChildren()),
+			...(valExp),
 			",",
-			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
+			...(typeExp),
 			")",
 			" ",
 			"as",
@@ -278,13 +283,16 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	forceCastExpression = async (node: ForceCastExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const castTypeSpecifier = semanticData.castTypeSpecifier.getTypeSemanticData();
+
+		const valExp = await semanticData.exp.translateCtxAndChildren();
+		const typeExp = await semanticData.castTypeSpecifier.translateCtxAndChildren();
 		return [
 			"(",
 			TargetJS.getBuiltInIdentifier("forceCastAs"),
 			"(",
-			...(await semanticData.exp.translateCtxAndChildren()),
+			...(valExp),
 			",",
-			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
+			...(typeExp),
 			")",
 			" ",
 			"as",

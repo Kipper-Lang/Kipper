@@ -177,22 +177,6 @@ export class TypeScriptTargetBuiltInGenerator extends JavaScriptTargetBuiltInGen
 		return genTSFunction(signature, `{ return ${repeatArgIdentifier}.repeat(${timesArgIdentifier}); }`);
 	}
 
-	override async tryCastAs(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
-		const signature = getTSFunctionSignature(funcSpec);
-		const castTypeIdentifier = signature.params[0].identifier;
-		const toCastIdentifier = signature.params[1].identifier;
-
-		return genTSFunction(signature, `{ return true ? ${toCastIdentifier} : null; }`);
-	}
-
-	override async forceCastAs(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
-		const signature = getTSFunctionSignature(funcSpec);
-		const castTypeIdentifier = signature.params[0].identifier;
-		const toCastIdentifier = signature.params[1].identifier;
-
-		return genTSFunction(signature, `{ return ${toCastIdentifier}; }`);
-	}
-
 	// ===================================================================================================================
 	// Built-in functions that are direct parts of the language
 	// ===================================================================================================================

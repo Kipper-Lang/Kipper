@@ -137,10 +137,17 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 
 	async forceCastAs(funcSpec: InternalFunction): Promise<Array<TranslatedCodeLine>> {
 		const signature = getJSFunctionSignature(funcSpec);
-		const castTypeIdentifier = signature.params[0];
-		const toCastIdentifier = signature.params[1];
+		const valIdentifier = signature.params[0];
+		const typeIdentifier = signature.params[1];
 
-		return genJSFunction(signature, `{ return ${toCastIdentifier}; }`);
+		const typeErr = TargetJS.getBuiltInIdentifier("TypeError");
+		const valType = `${TargetJS.getBuiltInIdentifier("typeOf")}(${valIdentifier})`
+		return genJSFunction(
+			signature,
+			`{ const valType = ${valType};` +
+			`if (${typeIdentifier}.accepts(valType)) { return ${valIdentifier} }` +
+			`throw new ${typeErr}(\`Invalid force cast from '\${${valType}.name}' to '\${${typeIdentifier}.name}'.\`); }`
+		);
 	}
 
 	// ===================================================================================================================

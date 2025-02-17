@@ -2,7 +2,7 @@
  * The JavaScript target-specific code generator for translating Kipper code into JavaScript.
  * @since 0.10.0
  */
-import type {
+import {
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	BitwiseAndExpression,
@@ -38,7 +38,7 @@ import type {
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
-	JumpStatement,
+	JumpStatement, KipperNotImplementedError,
 	KipperProgramContext,
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
@@ -628,21 +628,22 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	identifierTypeSpecifierExpression = async (
 		node: IdentifierTypeSpecifierExpression,
 	): Promise<TranslatedExpression> => {
-		return [];
+		const typeData = node.getTypeSemanticData();
+		return [TargetJS.getRuntimeType(typeData.storedType)];
 	};
 
 	/**
 	 * Translates a {@link GenericTypeSpecifierExpression} into the JavaScript language.
 	 */
 	genericTypeSpecifierExpression = async (node: GenericTypeSpecifierExpression): Promise<TranslatedExpression> => {
-		return [];
+		throw new KipperNotImplementedError("Generic type specifier expressions are not yet supported in target 'JavaScript'.");
 	};
 
 	/**
 	 * Translates a {@link TypeofTypeSpecifierExpression} into the JavaScript language.
 	 */
 	typeofTypeSpecifierExpression = async (node: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
-		return [];
+		throw new KipperNotImplementedError("Typeof type specifier expressions are not yet supported in target 'JavaScript'.");
 	};
 
 	/**
