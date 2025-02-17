@@ -2,7 +2,7 @@
  * Parcel build script which calls the parcel build command using PNPM.
  */
 import { spawn } from "child_process";
-import { debuggerMessage, prodFlag, rootDir } from "./const-config";
+import { debuggerMessages, prodFlag, rootDir } from "./const-config";
 import { log } from "./logger";
 
 const parcelDevBuildCommand: string = "pnpm run parcel-dev-build";
@@ -46,7 +46,7 @@ async function callProcess(command: string, args: string[], cwd: string, noStdOu
 				msg.includes(data.replace(/[\n\r]+/g, ""))
 			);
 		};
-		if (debuggerMessage.some(checkForDebuggerMessage) || data.replace(/[\n\r]+/g, "") === "") {
+		if (debuggerMessages.some(checkForDebuggerMessage) || data.replace(/[\n\r]+/g, "") === "") {
 			return; // Ignore debugger messages - this is not an error
 		}
 

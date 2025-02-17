@@ -14,7 +14,7 @@ import { typedoc } from "./overwrite/typedoc";
 import { DocsSidebar } from "./docs-sidebar";
 import { RelativeDocsURLPath } from "./base-types";
 import { MarkdownDocsBuilder } from "./markdown-docs-builder";
-import { debuggerMessage, rootDir } from "./const-config";
+import { debuggerMessages, rootDir } from "./const-config";
 import { log } from "./logger";
 import * as cheerio from "cheerio";
 import * as path from "path";
@@ -22,7 +22,7 @@ import * as fsSync from "fs";
 import * as fs from "fs/promises";
 import * as extractZip from "extract-zip";
 
-export const PROJECT_ZIP_PATH: string = "https://github.com/Luna-Klatzer/Kipper/zipball/$VERSION/";
+export const PROJECT_ZIP_PATH: string = "https://github.com/Kipper-Lang/Kipper/archive/refs/tags/$VERSION.zip";
 export const REPLACE_TEMPLATE: string = "<!-- Replace this with API docs generation -->";
 export const NPM_KIPPER_SCOPE_URL: string = "https://npmjs.com/package/@kipper";
 
@@ -185,7 +185,10 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		}
 
 		// First download the temp zip file
-		const { body } = await fetch(zipDownloadPath);
+		const { status, body } = await fetch(zipDownloadPath);
+    if (status !== 200) {
+      throw new Error(`Failed to download Kipper source code for version '${version}'`);
+    }
 		const fileStream = fsSync.createWriteStream(targetZipPath);
 
 		// @ts-ignore - For some reason the type definitions are wrong
@@ -231,7 +234,7 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 		// Handle any errors though
 		let hasFailed = false;
 		process.stderr.on("data", (data) => {
-			if (debuggerMessage.some((msg: string) => data.toString().includes(msg))) {
+			if (debuggerMessages.some((msg: string) => data.toString().includes(msg))) {
 				return; // Ignore debugger messages - this is not an error
 			}
 
