@@ -3,7 +3,7 @@ import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
 import { compiler, defaultTarget } from ".";
-import { errorsAreEmpty, testPrintOutput } from "..";
+import {assertCodeIncludesSnippet, assertErrorsAreEmpty, testErrorThrows, testPrintOutput} from "..";
 
 describe("Cast-or-Convert", () => {
 	describe("as", () => {
@@ -16,14 +16,13 @@ describe("Cast-or-Convert", () => {
 			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 			assert.isDefined(instance.programCtx);
-			errorsAreEmpty(instance.programCtx!);
+			assertErrorsAreEmpty(instance.programCtx!);
 
 			const code = instance.write();
-			assert.include(code, 'let x: string = "123.0";', "Invalid TypeScript code (Expected different output)");
-			assert.include(
+			assertCodeIncludesSnippet(code, 'let x: string = "123.0";');
+			assertCodeIncludesSnippet(
 				code,
 				"let y: number = __kipper.strToNum(x);",
-				"Invalid TypeScript code (Expected different output)",
 			);
 
 			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
@@ -42,11 +41,11 @@ describe("Cast-or-Convert", () => {
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				errorsAreEmpty(instance.programCtx!);
+				assertErrorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
-				assert.include(code, "let x: number = 123;", "Invalid TypeScript code (Expected different output)");
-				assert.include(code, "let y: number = x as number;", "Invalid TypeScript code (Expected different output)");
+				assertCodeIncludesSnippet(code, "let x: number = 123;");
+				assertCodeIncludesSnippet(code, "let y: number = x as number;");
 
 				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
 				testPrintOutput((message: any) => assert.equal(message, 123, "Expected different output"), jsCode);
@@ -62,16 +61,15 @@ describe("Cast-or-Convert", () => {
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				errorsAreEmpty(instance.programCtx!);
+				assertErrorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
-				assert.include(
+				assertCodeIncludesSnippet(
 					code,
 					"class Test {\n  x: number;\n  constructor()\n  {\n    this.x = 1;\n  }\n}",
-					"Invalid TypeScript code (Expected different output)",
 				);
-				assert.include(code, "let x: Test = new Test();", "Invalid TypeScript code (Expected different output)");
-				assert.include(code, "let y: object = x as object;", "Invalid TypeScript code (Expected different output)");
+				assertCodeIncludesSnippet(code, "let x: Test = new Test();");
+				assertCodeIncludesSnippet(code, "let y: object = x as object;");
 
 				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
 				testPrintOutput(
@@ -91,16 +89,15 @@ describe("Cast-or-Convert", () => {
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				errorsAreEmpty(instance.programCtx!);
+				assertErrorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
-				assert.include(
+				assertCodeIncludesSnippet(
 					code,
 					"interface Test {\n  x: number;\n}",
-					"Invalid TypeScript code (Expected different output)",
 				);
-				assert.include(code, "let x: Test = {\n  x: 1,\n}", "Invalid TypeScript code (Expected different output)");
-				assert.include(code, "let y: object = x as object;", "Invalid TypeScript code (Expected different output)");
+				assertCodeIncludesSnippet(code, "let x: Test = {\n  x: 1,\n}");
+				assertCodeIncludesSnippet(code, "let y: object = x as object;");
 
 				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
 				testPrintOutput(
@@ -121,21 +118,19 @@ describe("Cast-or-Convert", () => {
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				errorsAreEmpty(instance.programCtx!);
+				assertErrorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
-				assert.include(
+				assertCodeIncludesSnippet(
 					code,
 					"class Test {\n  x: number;\n  constructor()\n  {\n    this.x = 1;\n  }\n}",
-					"Invalid TypeScript code (Expected different output)",
 				);
-				assert.include(
+				assertCodeIncludesSnippet(
 					code,
 					"interface Test2 {\n  x: number;\n}",
-					"Invalid TypeScript code (Expected different output)",
 				);
-				assert.include(code, "let x: Test = new Test();", "Invalid TypeScript code (Expected different output)");
-				assert.include(code, "let y: Test2 = x as Test2;", "Invalid TypeScript code (Expected different output)");
+				assertCodeIncludesSnippet(code, "let x: Test = new Test();");
+				assertCodeIncludesSnippet(code, "let y: Test2 = x as Test2;");
 			});
 
 			it("interface cast as interface", async () => {
@@ -149,27 +144,69 @@ describe("Cast-or-Convert", () => {
 				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 				assert.isDefined(instance.programCtx);
-				errorsAreEmpty(instance.programCtx!);
+				assertErrorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
-				assert.include(code, "interface X {\n  x: number;\n}", "Invalid TypeScript code (Expected different output)");
-				assert.include(
+				assertCodeIncludesSnippet(code, "interface X {\n  x: number;\n}");
+				assertCodeIncludesSnippet(
 					code,
 					"interface Y {\n  x: number;\n  y: number;\n}",
-					"Invalid TypeScript code (Expected different output)",
 				);
-				assert.include(
+				assertCodeIncludesSnippet(
 					code,
 					"let y: Y = {\n  x: 1,\n  y: 2,\n};",
-					"Invalid TypeScript code (Expected different output)",
 				);
-				assert.include(code, "let x: X = y as X;", "Invalid TypeScript code (Expected different output)");
+				assertCodeIncludesSnippet(code, "let x: X = y as X;");
 			});
 		});
 	});
 
 	describe("force as", () => {
-		// TODO!
+		it("should convert a correct value from EXP to T", async () => {
+			const fileContent = `
+			var x: any = 123;
+			var y: num = x force as num;
+			print(y);
+			`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assertErrorsAreEmpty(instance.programCtx!);
+
+			const code = instance.write();
+			assertCodeIncludesSnippet(code, 'let x: any = 123;');
+			assertCodeIncludesSnippet(
+				code,
+				"let y: number = (__kipper.forceCastAs(x,__kipper.builtIn.num) as number);",
+			);
+
+			// Run the code to make sure it works
+			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+			testPrintOutput((message: any) => assert.equal(message, 123, "Expected different output"), jsCode);
+		});
+
+		it("should raise a type error when converting an incorrect value from EXP to T", async () => {
+			const fileContent = `
+			var x: any = 123;
+			var y: str = x force as str;
+			print(y);
+			`;
+			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assertErrorsAreEmpty(instance.programCtx!);
+
+			const code = instance.write();
+			assertCodeIncludesSnippet(code, 'let x: any = 123;');
+			assertCodeIncludesSnippet(
+				code,
+				"let y: string = (__kipper.forceCastAs(x,__kipper.builtIn.str) as string);",
+			);
+
+			// Run the code to make sure it works
+			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+			testErrorThrows("KipTypeError", "Invalid force cast from 'num' to 'str'.", jsCode);
+		});
 	});
 
 	describe("try as", () => {
