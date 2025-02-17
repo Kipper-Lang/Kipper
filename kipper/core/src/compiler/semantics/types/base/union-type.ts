@@ -46,9 +46,7 @@ export class UnionType<T extends Array<ProcessedType> = [ProcessedType, Processe
 			if (
 				// If all types in this union type are assignable to at least one type in the other union type
 				// then this union type is assignable to the other union type.
-				this.unionTypes.every(
-					(unionType) => type.unionTypes.some((t: ProcessedType) => unionType.isAssignableTo(t))
-				)
+				this.unionTypes.every((unionType) => type.unionTypes.some((t: ProcessedType) => unionType.isAssignableTo(t)))
 			) {
 				return;
 			} else {

@@ -34,14 +34,8 @@ import type { IdentifierTypeSpecifierExpression } from "../../type-specifier-exp
 import type { Expression } from "../../expression";
 import type { CastOrConvertExpressionContext, TryCastExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
-import {
-	type BuiltInTypeArray,
-	BuiltInTypeNull,
-	BuiltInTypes,
-	type BuiltInTypeStr, ProcessedType,
-	RawType,
-	UnionType
-} from "../../../../../semantics";
+import type { BuiltInTypeNull, ProcessedType, RawType } from "../../../../../semantics";
+import { type BuiltInTypeArray, BuiltInTypes, type BuiltInTypeStr, UnionType } from "../../../../../semantics";
 import { kipperInternalBuiltInFunctions } from "../../../../../semantics";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CastOrConvertExpression } from "../cast-or-convert-expression";

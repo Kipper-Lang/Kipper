@@ -134,8 +134,7 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 
 		return genJSFunction(
 			signature,
-			`{ if (${typeIdentifier}.acceptsVal(${valIdentifier})) { return ${valIdentifier} }` +
-			`return null; }`,
+			`{ if (${typeIdentifier}.acceptsVal(${valIdentifier})) { return ${valIdentifier} }` + `return null; }`,
 		);
 	}
 
