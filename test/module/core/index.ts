@@ -30,11 +30,7 @@ export function testPrintOutput(
  * @param expectedErrorMsg The expected error message. If undefined, the error message is not checked.
  * @param jsProgram The JavaScript program to evaluate.
  */
-export function testErrorThrows(
-	expectedError: string,
-	expectedErrorMsg: string | undefined,
-	jsProgram: string,
-): void {
+export function testErrorThrows(expectedError: string, expectedErrorMsg: string | undefined, jsProgram: string): void {
 	try {
 		eval(jsProgram);
 		assert.fail(`Expected error '${expectedError}' but no error was thrown.`);

@@ -141,12 +141,12 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		const typeIdentifier = signature.params[1];
 
 		const typeErr = TargetJS.getBuiltInIdentifier("TypeError");
-		const valType = `${TargetJS.getBuiltInIdentifier("typeOf")}(${valIdentifier})`
+		const valType = `${TargetJS.getBuiltInIdentifier("typeOf")}(${valIdentifier})`;
 		return genJSFunction(
 			signature,
 			`{ const valType = ${valType};` +
-			`if (${typeIdentifier}.accepts(valType)) { return ${valIdentifier} }` +
-			`throw new ${typeErr}(\`Invalid force cast from '\${${valType}.name}' to '\${${typeIdentifier}.name}'.\`); }`
+				`if (${typeIdentifier}.accepts(valType)) { return ${valIdentifier} }` +
+				`throw new ${typeErr}(\`Invalid force cast from '\${${valType}.name}' to '\${${typeIdentifier}.name}'.\`); }`,
 		);
 	}
 

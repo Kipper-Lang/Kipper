@@ -29,11 +29,11 @@ To use development versions of Kipper download the
 ### Fixed
 
 - `PropertyNotFoundTypeError` being thrown as a stand-alone error instead of being set as the cause for any parent
-	assignment operation failure.
+  assignment operation failure.
 - `PropertyNotFoundTypeError` being checked for in the wrong direction i.e. that `otherT` had to have all the properties
-	of `thisT` instead of the other way around (which is the correct way).
+  of `thisT` instead of the other way around (which is the correct way).
 - Indexable checks for `str` and `Array<T>` being accidentally turned off by incorrect logic. This caused
-	`ValueTypeNotIndexableWithGivenAccessorTypeError` to be only thrown for objects and not for arrays and strings.
+  `ValueTypeNotIndexableWithGivenAccessorTypeError` to be only thrown for objects and not for arrays and strings.
 
 ### Deprecated
 

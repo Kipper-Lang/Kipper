@@ -3,7 +3,7 @@ import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
 import { compiler, defaultTarget } from ".";
-import {assertCodeIncludesSnippet, assertErrorsAreEmpty, testErrorThrows, testPrintOutput} from "..";
+import { assertCodeIncludesSnippet, assertErrorsAreEmpty, testErrorThrows, testPrintOutput } from "..";
 
 describe("Cast-or-Convert", () => {
 	describe("as", () => {
@@ -20,10 +20,7 @@ describe("Cast-or-Convert", () => {
 
 			const code = instance.write();
 			assertCodeIncludesSnippet(code, 'let x: string = "123.0";');
-			assertCodeIncludesSnippet(
-				code,
-				"let y: number = __kipper.strToNum(x);",
-			);
+			assertCodeIncludesSnippet(code, "let y: number = __kipper.strToNum(x);");
 
 			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
 			testPrintOutput((message: any) => assert.equal(message, 123, "Expected different output"), jsCode);
@@ -64,10 +61,7 @@ describe("Cast-or-Convert", () => {
 				assertErrorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
-				assertCodeIncludesSnippet(
-					code,
-					"class Test {\n  x: number;\n  constructor()\n  {\n    this.x = 1;\n  }\n}",
-				);
+				assertCodeIncludesSnippet(code, "class Test {\n  x: number;\n  constructor()\n  {\n    this.x = 1;\n  }\n}");
 				assertCodeIncludesSnippet(code, "let x: Test = new Test();");
 				assertCodeIncludesSnippet(code, "let y: object = x as object;");
 
@@ -92,10 +86,7 @@ describe("Cast-or-Convert", () => {
 				assertErrorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
-				assertCodeIncludesSnippet(
-					code,
-					"interface Test {\n  x: number;\n}",
-				);
+				assertCodeIncludesSnippet(code, "interface Test {\n  x: number;\n}");
 				assertCodeIncludesSnippet(code, "let x: Test = {\n  x: 1,\n}");
 				assertCodeIncludesSnippet(code, "let y: object = x as object;");
 
@@ -121,14 +112,8 @@ describe("Cast-or-Convert", () => {
 				assertErrorsAreEmpty(instance.programCtx!);
 
 				const code = instance.write();
-				assertCodeIncludesSnippet(
-					code,
-					"class Test {\n  x: number;\n  constructor()\n  {\n    this.x = 1;\n  }\n}",
-				);
-				assertCodeIncludesSnippet(
-					code,
-					"interface Test2 {\n  x: number;\n}",
-				);
+				assertCodeIncludesSnippet(code, "class Test {\n  x: number;\n  constructor()\n  {\n    this.x = 1;\n  }\n}");
+				assertCodeIncludesSnippet(code, "interface Test2 {\n  x: number;\n}");
 				assertCodeIncludesSnippet(code, "let x: Test = new Test();");
 				assertCodeIncludesSnippet(code, "let y: Test2 = x as Test2;");
 			});
@@ -148,14 +133,8 @@ describe("Cast-or-Convert", () => {
 
 				const code = instance.write();
 				assertCodeIncludesSnippet(code, "interface X {\n  x: number;\n}");
-				assertCodeIncludesSnippet(
-					code,
-					"interface Y {\n  x: number;\n  y: number;\n}",
-				);
-				assertCodeIncludesSnippet(
-					code,
-					"let y: Y = {\n  x: 1,\n  y: 2,\n};",
-				);
+				assertCodeIncludesSnippet(code, "interface Y {\n  x: number;\n  y: number;\n}");
+				assertCodeIncludesSnippet(code, "let y: Y = {\n  x: 1,\n  y: 2,\n};");
 				assertCodeIncludesSnippet(code, "let x: X = y as X;");
 			});
 		});
@@ -174,11 +153,8 @@ describe("Cast-or-Convert", () => {
 			assertErrorsAreEmpty(instance.programCtx!);
 
 			const code = instance.write();
-			assertCodeIncludesSnippet(code, 'let x: any = 123;');
-			assertCodeIncludesSnippet(
-				code,
-				"let y: number = (__kipper.forceCastAs(x,__kipper.builtIn.num) as number);",
-			);
+			assertCodeIncludesSnippet(code, "let x: any = 123;");
+			assertCodeIncludesSnippet(code, "let y: number = (__kipper.forceCastAs(x,__kipper.builtIn.num) as number);");
 
 			// Run the code to make sure it works
 			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
@@ -197,11 +173,8 @@ describe("Cast-or-Convert", () => {
 			assertErrorsAreEmpty(instance.programCtx!);
 
 			const code = instance.write();
-			assertCodeIncludesSnippet(code, 'let x: any = 123;');
-			assertCodeIncludesSnippet(
-				code,
-				"let y: string = (__kipper.forceCastAs(x,__kipper.builtIn.str) as string);",
-			);
+			assertCodeIncludesSnippet(code, "let x: any = 123;");
+			assertCodeIncludesSnippet(code, "let y: string = (__kipper.forceCastAs(x,__kipper.builtIn.str) as string);");
 
 			// Run the code to make sure it works
 			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });

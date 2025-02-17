@@ -241,13 +241,7 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeData = node.getTypeSemanticData();
 
 		const valExp = await semanticData.exp.translateCtxAndChildren();
-		return [
-			...(valExp),
-			" ",
-			"as",
-			" ",
-			TargetTS.getTypeScriptType(typeData.castType),
-		];
+		return [...valExp, " ", "as", " ", TargetTS.getTypeScriptType(typeData.castType)];
 	};
 
 	/**
@@ -264,9 +258,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			"(",
 			TargetJS.getBuiltInIdentifier("tryCastAs"),
 			"(",
-			...(valExp),
+			...valExp,
 			",",
-			...(typeExp),
+			...typeExp,
 			")",
 			" ",
 			"as",
@@ -290,9 +284,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			"(",
 			TargetJS.getBuiltInIdentifier("forceCastAs"),
 			"(",
-			...(valExp),
+			...valExp,
 			",",
-			...(typeExp),
+			...typeExp,
 			")",
 			" ",
 			"as",
