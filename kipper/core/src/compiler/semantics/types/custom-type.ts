@@ -185,9 +185,19 @@ export class CustomType extends ProcessedType {
 
 				if (caughtError) {
 					if (propertyName) {
-						throw new PropertyAssignmentTypeError(propertyName, type.identifier, this.identifier, <TypeError>caughtError);
+						throw new PropertyAssignmentTypeError(
+							propertyName,
+							type.identifier,
+							this.identifier,
+							<TypeError>caughtError,
+						);
 					} else if (argumentName) {
-						throw new ArgumentAssignmentTypeError(argumentName, type.identifier, this.identifier, <TypeError>caughtError);
+						throw new ArgumentAssignmentTypeError(
+							argumentName,
+							type.identifier,
+							this.identifier,
+							<TypeError>caughtError,
+						);
 					} else {
 						throw new AssignmentTypeError(type.identifier, this.identifier, <TypeError>caughtError);
 					}
