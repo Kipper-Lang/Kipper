@@ -3,8 +3,10 @@
  * @since 0.8.0
  */
 import type {
+	CastExpression,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
+	ForceCastExpression,
 	FunctionDeclaration,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
@@ -13,6 +15,7 @@ import type {
 	ParameterDeclaration,
 	TranslatedCodeLine,
 	TranslatedExpression,
+	TryCastExpression,
 	VariableDeclaration,
 } from "@kipper/core";
 import { CompoundStatement, Expression, type LambdaPrimaryExpression } from "@kipper/core";
@@ -231,5 +234,69 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		const typeScriptType = TargetTS.getTypeScriptType(semanticData.typeSpecifier.getTypeSemanticData().storedType);
 
 		return [identifier, ":", " ", typeScriptType];
+	};
+
+	override castExpression = async (node: CastExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const typeData = node.getTypeSemanticData();
+
+		const valExp = await semanticData.exp.translateCtxAndChildren();
+		return [...valExp, " ", "as", " ", TargetTS.getTypeScriptType(typeData.castType)];
+	};
+
+	/**
+	 * Translates a {@link TryCastExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	tryCastExpression = async (node: TryCastExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const castTypeSpecifier = semanticData.castTypeSpecifier.getTypeSemanticData();
+
+		const valExp = await semanticData.exp.translateCtxAndChildren();
+		const typeExp = await semanticData.castTypeSpecifier.translateCtxAndChildren();
+		return [
+			"(",
+			TargetJS.getBuiltInIdentifier("tryCastAs"),
+			"(",
+			...valExp,
+			",",
+			...typeExp,
+			")",
+			" ",
+			"as",
+			" ",
+			TargetTS.getTypeScriptType(castTypeSpecifier.storedType),
+			" ",
+			"|",
+			" ",
+			"null",
+			")",
+		];
+	};
+
+	/**
+	 * Translates a {@link ForceCastExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	forceCastExpression = async (node: ForceCastExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		const castTypeSpecifier = semanticData.castTypeSpecifier.getTypeSemanticData();
+
+		const valExp = await semanticData.exp.translateCtxAndChildren();
+		const typeExp = await semanticData.castTypeSpecifier.translateCtxAndChildren();
+		return [
+			"(",
+			TargetJS.getBuiltInIdentifier("forceCastAs"),
+			"(",
+			...valExp,
+			",",
+			...typeExp,
+			")",
+			" ",
+			"as",
+			" ",
+			TargetTS.getTypeScriptType(castTypeSpecifier.storedType),
+			")",
+		];
 	};
 }

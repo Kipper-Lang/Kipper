@@ -9,7 +9,7 @@ describe("ReservedIdentifierOverwriteError", () => {
 			await new KipperCompiler().compile("var instanceof: str;", defaultConfig);
 		} catch (e) {
 			assert.equal((<KipperError>e).constructor.name, "LexerOrParserSyntaxError", "Expected different error");
-			assert((<KipperError>e).name === "SyntaxError", "Expected different error");
+			assert.equal((<KipperError>e).name, "SyntaxError", "Expected different error");
 			ensureTracebackDataExists(<KipperError>e);
 			return;
 		}

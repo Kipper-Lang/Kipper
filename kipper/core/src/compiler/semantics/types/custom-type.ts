@@ -4,7 +4,7 @@ import {
 	ArgumentAssignmentTypeError,
 	AssignmentTypeError,
 	PropertyAssignmentTypeError,
-	PropertyNotFoundError,
+	PropertyNotFoundTypeError,
 } from "../../../errors";
 import type { ClassDeclaration, InterfaceDeclaration, ObjectPrimaryExpression } from "../../ast";
 import { BuiltInTypes } from "../symbol-table";
@@ -162,28 +162,44 @@ export class CustomType extends ProcessedType {
 	 * @throws AssignmentTypeError If the types are not assignable.
 	 * @throws PropertyAssignmentTypeError If a property is not assignable.
 	 * @throws ArgumentAssignmentTypeError If an argument is not assignable.
-	 * @throws PropertyNotFoundError If a property is not found.
+	 * @throws PropertyNotFoundTypeError If a property is not found in this type.
 	 * @since 0.12.0
 	 */
 	assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string): void {
 		if (this === type || type === BuiltInTypes.any || type === BuiltInTypes.obj) {
 			return;
 		} else if (type instanceof CustomType && type.kind === "interface") {
-			for (const [fieldName, fieldType] of this.fields) {
-				const targetTypeField = type.fields.get(fieldName);
-				if (!targetTypeField) {
-					throw new PropertyNotFoundError(type.identifier, fieldName);
+			for (const [fieldName, otherFieldType] of type.fields) {
+				let caughtError: TypeError | undefined;
+
+				const thisFieldType = this.fields.get(fieldName);
+				if (!thisFieldType) {
+					caughtError = new PropertyNotFoundTypeError(this.identifier, type.identifier, fieldName);
+				} else {
+					try {
+						thisFieldType.assertAssignableTo(otherFieldType, fieldName);
+					} catch (error) {
+						caughtError = <TypeError>error;
+					}
 				}
 
-				try {
-					fieldType.assertAssignableTo(targetTypeField, fieldName);
-				} catch (error) {
+				if (caughtError) {
 					if (propertyName) {
-						throw new PropertyAssignmentTypeError(propertyName, type.identifier, this.identifier, <TypeError>error);
+						throw new PropertyAssignmentTypeError(
+							propertyName,
+							type.identifier,
+							this.identifier,
+							<TypeError>caughtError,
+						);
 					} else if (argumentName) {
-						throw new ArgumentAssignmentTypeError(argumentName, type.identifier, this.identifier, <TypeError>error);
+						throw new ArgumentAssignmentTypeError(
+							argumentName,
+							type.identifier,
+							this.identifier,
+							<TypeError>caughtError,
+						);
 					} else {
-						throw new AssignmentTypeError(type.identifier, this.identifier, <TypeError>error);
+						throw new AssignmentTypeError(type.identifier, this.identifier, <TypeError>caughtError);
 					}
 				}
 			}

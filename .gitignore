@@ -88,3 +88,8 @@ typings/
 
 # Nix
 .direnv
+
+# Root tmp tests
+/test.js
+/test.ts
+/test.kip

@@ -174,6 +174,16 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> imp
 		this._children.push(newChild);
 	}
 
+	private async _processAnalysis(toCall: (item: (typeof this.children)[number]) => Promise<void>): Promise<void> {
+		for (let child of this.children) {
+			try {
+				await toCall(child);
+			} catch (e) {
+				this.handleSemanticError(<Error>e);
+			}
+		}
+	}
+
 	/**
 	 * Semantically analyses the children tokens of this
 	 * {@link RootASTNode instance} and performs additional
@@ -182,41 +192,16 @@ export class RootASTNode extends ParserASTNode<NoSemantics, NoTypeSemantics> imp
 	 */
 	public async semanticAnalysis(): Promise<void> {
 		// Core semantic analysis
-		for (let child of this.children) {
-			try {
-				await child.semanticAnalysis();
-			} catch (e) {
-				await this.handleSemanticError(<Error>e);
-			}
-		}
+		await this._processAnalysis((item) => item.semanticAnalysis());
 
 		// Perform preliminary semantic analysis in case any specific type evaluation is required prematurely (ahead of
-		// time type evaluation)
-		for (let child of this.children) {
-			try {
-				await child.preliminaryTypeChecking();
-			} catch (e) {
-				await this.handleSemanticError(<Error>e);
-			}
-		}
+		await this._processAnalysis((item) => item.preliminaryTypeChecking());
 
 		// Perform type-checking based on the existing AST nodes and evaluated semantics
-		for (let child of this.children) {
-			try {
-				await child.semanticTypeChecking();
-			} catch (e) {
-				await this.handleSemanticError(<Error>e);
-			}
-		}
+		await this._processAnalysis((item) => item.semanticTypeChecking());
 
 		// Perform wrap-up semantic analysis for the specified target
-		for (let child of this.children) {
-			try {
-				await child.wrapUpSemanticAnalysis();
-			} catch (e) {
-				await this.handleSemanticError(<Error>e);
-			}
-		}
+		await this._processAnalysis((item) => item.wrapUpSemanticAnalysis());
 
 		// Check for warnings, if they are enabled
 		if (this.compileConfig.warnings) {

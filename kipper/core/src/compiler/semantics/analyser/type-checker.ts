@@ -47,7 +47,6 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
-import { InvalidMatchesTypeError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -67,9 +66,11 @@ import {
 	PropertyDoesNotExistError,
 	ReadOnlyWriteTypeError,
 	ReferenceCanNotBeUsedAsTypeError,
-	UnknownTypeError,
+	UnknownTypeTypeError,
 	ValueNotIndexableTypeError,
-	ValueTypeNotIndexableWithGivenAccessor,
+	ValueTypeNotIndexableWithGivenAccessorTypeError,
+	InvalidMatchesTypeError,
+	InvalidCastTypeError,
 } from "../../../errors";
 import type { BuiltInTypeArray, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
 import { BuiltInTypeFunc, BuiltInTypeObj, CustomType, UndefinedType } from "../types";
@@ -93,7 +94,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	public getTypeFromIdentifier(type: string, scope: Scope): ScopeTypeDeclaration {
 		const scopeEntry = scope.getEntryRecursively(type);
 		if (scopeEntry === undefined) {
-			throw this.assertError(new UnknownTypeError(type));
+			throw this.assertError(new UnknownTypeTypeError(type));
 		} else if (!(scopeEntry instanceof ScopeTypeDeclaration)) {
 			throw this.assertError(new ReferenceCanNotBeUsedAsTypeError(type));
 		}
@@ -508,28 +509,50 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validConversion(operand: Expression, targetType: ProcessedType): void {
 		// Get the compile-types for the specified conversion types
-		const originalCompileType = operand.getTypeSemanticData().evaluatedType;
+		const operandCompileType = operand.getTypeSemanticData().evaluatedType;
 		const targetCompileType = targetType;
 
 		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
-		if (!originalCompileType.isCompilable || !targetCompileType.isCompilable) {
+		if (!operandCompileType.isCompilable || !targetCompileType.isCompilable) {
 			return;
 		}
 
 		// Return early if the types are the same
-		if (originalCompileType === targetCompileType) {
+		if (operandCompileType === targetCompileType) {
 			return;
 		}
 
 		// Check whether a supported pair of types exist
 		const viableConversion =
 			kipperSupportedConversions.find(
-				(types) => BuiltInTypes[types[0]] === originalCompileType && BuiltInTypes[types[1]] === targetType,
+				(types) => BuiltInTypes[types[0]] === operandCompileType && BuiltInTypes[types[1]] === targetType,
 			) !== undefined;
 		if (!viableConversion) {
 			throw this.assertError(
-				new InvalidConversionTypeError(originalCompileType.toString(), targetCompileType.toString()),
+				new InvalidConversionTypeError(operandCompileType.toString(), targetCompileType.toString()),
 			);
+		}
+	}
+
+	/**
+	 * Asserts that the cast for the {@link operand} is valid.
+	 * @param operand The expression to cast.
+	 * @param targetType The type to cast to.
+	 * @throws {InvalidCastTypeError} If the cast is invalid/impossible.
+	 * @since 0.12.0
+	 */
+	public validCast(operand: Expression, targetType: ProcessedType): void {
+		// Get the compile-types for the specified conversion types
+		const operandCompileType = operand.getTypeSemanticData().evaluatedType;
+		const targetCompileType = targetType;
+
+		// If either one of the types is undefined, skip type checking (the types are invalid anyway)
+		if (!operandCompileType.isCompilable || !targetCompileType.isCompilable) {
+			return;
+		}
+
+		if (operandCompileType !== targetCompileType && !operandCompileType.isAssignableTo(targetCompileType)) {
+			throw this.assertError(new InvalidCastTypeError(operandCompileType.toString(), targetCompileType.toString()));
 		}
 	}
 
@@ -665,19 +688,12 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			return;
 		}
 
-		if (
-			!objType.isAssignableTo(BuiltInTypes.str) &&
-			!objType.isAssignableTo(BuiltInTypes.Array) &&
-			!objType.isAssignableTo(BuiltInTypes.obj)
-		) {
+		const isStrOrArr = objType.isAssignableTo(BuiltInTypes.str) || objType.isAssignableTo(BuiltInTypes.Array);
+		const isObj = objType.isAssignableTo(BuiltInTypes.obj);
+		if (!isStrOrArr && !isObj) {
 			throw this.assertError(new ValueNotIndexableTypeError(objType.toString()));
-		} else if (
-			(objType.isAssignableTo(BuiltInTypes.str) &&
-				objType.isAssignableTo(BuiltInTypes.Array) &&
-				accessType === "dot") ||
-			(objType.isAssignableTo(BuiltInTypes.obj) && accessType !== "dot")
-		) {
-			throw this.assertError(new ValueTypeNotIndexableWithGivenAccessor(objType.toString(), accessType));
+		} else if ((isStrOrArr && accessType === "dot") || (isObj && accessType !== "dot")) {
+			throw this.assertError(new ValueTypeNotIndexableWithGivenAccessorTypeError(objType.toString(), accessType));
 		}
 	}
 

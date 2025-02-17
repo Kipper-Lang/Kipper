@@ -84,4 +84,20 @@ export const kipperInternalBuiltInFunctions = {
 		],
 		returnType: BuiltInTypes.str,
 	},
+	tryCastAs: {
+		identifier: "tryCastAs",
+		params: [
+			new InternalFunctionArgument("value", BuiltInTypes.any),
+			new InternalFunctionArgument("type", BuiltInTypes.type),
+		],
+		returnType: BuiltInTypes.any,
+	},
+	forceCastAs: {
+		identifier: "forceCastAs",
+		params: [
+			new InternalFunctionArgument("value", BuiltInTypes.any),
+			new InternalFunctionArgument("type", BuiltInTypes.type),
+		],
+		returnType: BuiltInTypes.any,
+	},
 } satisfies Record<string, InternalFunction>;

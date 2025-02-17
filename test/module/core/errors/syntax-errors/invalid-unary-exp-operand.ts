@@ -14,7 +14,7 @@ describe("InvalidUnaryExpressionOperandError", () => {
 					"InvalidUnaryExpressionOperandError",
 					"Expected different error",
 				);
-				assert((<KipperError>e).name === "SyntaxError", "Expected different error");
+				assert.equal((<KipperError>e).name, "SyntaxError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -30,7 +30,7 @@ describe("InvalidUnaryExpressionOperandError", () => {
 					"InvalidUnaryExpressionOperandError",
 					"Expected different error",
 				);
-				assert((<KipperError>e).name === "SyntaxError", "Expected different error");
+				assert.equal((<KipperError>e).name, "SyntaxError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -46,7 +46,7 @@ describe("InvalidUnaryExpressionOperandError", () => {
 					"InvalidUnaryExpressionOperandError",
 					"Expected different error",
 				);
-				assert((<KipperError>e).name === "SyntaxError", "Expected different error");
+				assert.equal((<KipperError>e).name, "SyntaxError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -62,7 +62,7 @@ describe("InvalidUnaryExpressionOperandError", () => {
 					"InvalidUnaryExpressionOperandError",
 					"Expected different error",
 				);
-				assert((<KipperError>e).name === "SyntaxError", "Expected different error");
+				assert.equal((<KipperError>e).name, "SyntaxError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

@@ -10,7 +10,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" + 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -22,7 +22,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" - 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -34,7 +34,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" ** 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -46,7 +46,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" / 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -58,7 +58,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" % 4;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -70,7 +70,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('4 + "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -82,7 +82,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('4 - "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -94,7 +94,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('4 * "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -106,7 +106,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('4 ** "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -118,7 +118,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('4 / "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -130,7 +130,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('4 % "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -142,7 +142,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" + true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -154,7 +154,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" - true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -166,7 +166,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" * true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -178,7 +178,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" ** true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -190,7 +190,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" / true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -202,7 +202,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('"3" % true;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -214,7 +214,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('true + "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -226,7 +226,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('true - "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -238,7 +238,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('true * "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -250,7 +250,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('true ** "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -262,7 +262,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('true / "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -274,7 +274,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('true % "3";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -286,7 +286,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('var x: str = "3"; x -= "4";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -298,7 +298,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('var x: str = "3"; x *= "4";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -310,7 +310,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('var x: str = "3"; x /= "4";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -322,7 +322,7 @@ describe("ArithmeticOperationTypeError", () => {
 				await new KipperCompiler().compile('var x: str = "3"; x %= "4";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArithmeticOperationTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
