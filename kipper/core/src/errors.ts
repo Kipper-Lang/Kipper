@@ -670,12 +670,12 @@ export class PropertyAssignmentTypeError extends TypeError {
 }
 
 /**
- * Error that is thrown whenever a property can not be found in the object.
+ * Error that is thrown whenever a property is missing in this type but is required in another type.
  * @since 0.11.0
  */
-export class PropertyNotFoundError extends TypeError {
-	constructor(objType: string, identifier: string) {
-		super(`Property '${identifier}' not found in object of type '${objType}'.`);
+export class PropertyNotFoundTypeError extends TypeError {
+	constructor(thisType: string, objType: string, identifier: string) {
+		super(`Property '${identifier}' not found in '${thisType}' but required in object of type '${objType}'.`);
 	}
 }
 
@@ -693,7 +693,7 @@ export class GenericArgumentTypeError extends TypeError {
  * Error that is thrown whenever a function type is casted to a function with a different amount of arguments.
  * @since 0.12.0
  */
-export class MismatchingArgCountBetweenFuncTypesError extends TypeError {
+export class MismatchingArgCountBetweenFuncTypesTypeError extends TypeError {
 	constructor(expected: number, received: number) {
 		super(`Function type expects ${expected} arguments, received ${received}.`);
 	}
@@ -755,7 +755,7 @@ export class InvalidConversionTypeError extends TypeError {
 /**
  * Error that is thrown whenever a declaration type is used that is unknown to the program.
  */
-export class UnknownTypeError extends TypeError {
+export class UnknownTypeTypeError extends TypeError {
 	constructor(type: string) {
 		super(`Unknown type '${type}'.`);
 	}
