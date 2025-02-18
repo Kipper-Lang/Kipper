@@ -96,6 +96,7 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 	__tmpKip.Method = class KipperMethod { constructor(name, returnType, parameters) { this.name = name; this.returnType = returnType; this.parameters = parameters; } };
 	__tmpKip.Type = KipperType;
 	__tmpKip.assignTypeMeta = (value, typeMeta) => Object.assign(value, { __kipType: typeMeta });
+	__tmpKip.newArrayT = (type) => __tmpKip.builtIn.Array.changeGenericTypeArguments({ T: type });
 	__tmpKip.typeOf = (value) => {
 		const prim = typeof value;
 		switch (prim) {
