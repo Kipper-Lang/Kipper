@@ -3,7 +3,7 @@ import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
 import { compiler, defaultTarget } from ".";
-import { testPrintOutput } from "..";
+import { assertCodeIncludesSnippet, testPrintOutput } from "..";
 
 describe("Arrays", () => {
 	it("Simple array declaration", async () => {
@@ -14,10 +14,9 @@ describe("Arrays", () => {
 		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
 		const code = instance.write();
-		assert.include(
+		assertCodeIncludesSnippet(
 			code,
-			"let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num}));",
-			"Invalid TypeScript code (Expected different output)",
+			"let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.newArrayT(__kipper.builtIn.num));",
 		);
 	});
 
@@ -28,10 +27,10 @@ describe("Arrays", () => {
 		assert.isDefined(instance.programCtx);
 		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
-		const jsCode = instance.write();
-		assert.include(
-			jsCode,
-			`let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num}));\nlet y: Array<number> = x;`,
+		const tsCode = instance.write();
+		assertCodeIncludesSnippet(
+			tsCode,
+			`let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.newArrayT(__kipper.builtIn.num));\nlet y: Array<number> = x;`,
 		);
 	});
 
@@ -42,8 +41,8 @@ describe("Arrays", () => {
 		assert.isDefined(instance.programCtx);
 		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
-		const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
-		testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
+		const tsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
+		testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), tsCode);
 	});
 
 	it("Assigning one array element to another", async () => {
@@ -53,7 +52,83 @@ describe("Arrays", () => {
 		assert.isDefined(instance.programCtx);
 		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 
-		const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
-		testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), jsCode);
+		const tsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
+		testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), tsCode);
+	});
+
+	describe("Empty array", async () => {
+		it("Empty array assignable to any array variable definition", async () => {
+			const code = "var x: Array<num> = [];";
+			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+
+			const tsCode = instance.write();
+			assertCodeIncludesSnippet(
+				tsCode,
+				"let x: Array<number> = __kipper.assignTypeMeta(__kipper.assignTypeMeta([],__kipper.newArrayT(__kipper.builtIn.any)),__kipper.newArrayT(__kipper.builtIn.num));",
+			);
+		});
+
+		it("Nested empty array assignable to any array variable definition", async () => {
+			const code = "var x: Array<num> = ((([])));";
+			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+
+			const tsCode = instance.write();
+			assertCodeIncludesSnippet(
+				tsCode,
+				"let x: Array<number> = __kipper.assignTypeMeta((((__kipper.assignTypeMeta([],__kipper.newArrayT(__kipper.builtIn.any))))),__kipper.newArrayT(__kipper.builtIn.num));",
+			);
+		});
+
+		it("Empty array assignable to any array variable", async () => {
+			const code = "var x: Array<num> = [1, 2, 3]; x = [];";
+			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+
+			const tsCode = instance.write();
+			assertCodeIncludesSnippet(
+				tsCode,
+				"let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.newArrayT(__kipper.builtIn.num));",
+			);
+			assertCodeIncludesSnippet(
+				tsCode,
+				"x = __kipper.assignTypeMeta(__kipper.assignTypeMeta([],__kipper.newArrayT(__kipper.builtIn.any)),__kipper.newArrayT(__kipper.builtIn.num));",
+			);
+		});
+
+		it("Empty array passable to any array function argument", async () => {
+			const code = "def test(x: Array<num>) -> void { print(x); } test([]);";
+			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+
+			const tsCode = instance.write();
+			assertCodeIncludesSnippet(
+				tsCode,
+				"test(__kipper.assignTypeMeta(__kipper.assignTypeMeta([],__kipper.newArrayT(__kipper.builtIn.any)),__kipper.newArrayT(__kipper.builtIn.num)));",
+			);
+		});
+
+		it("Empty array passable to any array constructor argument", async () => {
+			const code = "class Test { constructor(x: Array<num>) { print(x); } } new Test([]);";
+			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+
+			const tsCode = instance.write();
+			assertCodeIncludesSnippet(
+				tsCode,
+				"new Test(__kipper.assignTypeMeta(__kipper.assignTypeMeta([],__kipper.newArrayT(__kipper.builtIn.any)),__kipper.newArrayT(__kipper.builtIn.num)));",
+			);
+		});
 	});
 });
