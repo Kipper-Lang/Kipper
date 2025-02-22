@@ -6,7 +6,12 @@ import {
 	PropertyAssignmentTypeError,
 	PropertyNotFoundTypeError,
 } from "../../../errors";
-import type { ClassDeclaration, InterfaceDeclaration, ObjectPrimaryExpression } from "../../ast";
+import {
+	ClassConstructorDeclaration,
+	ClassDeclaration, Declaration,
+	InterfaceDeclaration,
+	ObjectPrimaryExpression
+} from "../../ast";
 import { BuiltInTypes } from "../symbol-table";
 
 /**
@@ -36,6 +41,13 @@ export type CustomTypeFields = Map<string, CustomTypeField>;
 export class CustomType extends ProcessedType {
 	private readonly _fields: CustomTypeFields;
 	private readonly _clsStaticFields?: CustomTypeFields;
+	private readonly _clsConstructor?: ClassConstructorDeclaration;
+
+	/**
+	 * The source node that this type was created from.
+	 * @since 0.13.0
+	 */
+	public readonly sourceNode: Declaration | ObjectPrimaryExpression;
 
 	/**
 	 * The kind of this type. This is simply used to differentiate between classes and interfaces.
@@ -62,15 +74,19 @@ export class CustomType extends ProcessedType {
 	public readonly intfExtends?: CustomType;
 
 	protected constructor(
+		sourceNode: Declaration | ObjectPrimaryExpression,
 		identifier: string,
 		kind: CustomTypeKind,
 		fields: CustomTypeFields,
 		staticFields?: CustomTypeFields,
+		constructor?: ClassConstructorDeclaration,
 	) {
 		super(identifier);
+		this.sourceNode = sourceNode;
 		this.kind = kind;
 		this._fields = fields;
 		this._clsStaticFields = staticFields;
+		this._clsConstructor = constructor;
 	}
 
 	/**
@@ -101,6 +117,14 @@ export class CustomType extends ProcessedType {
 	}
 
 	/**
+	 * The constructor of this type. This is only applicable to classes.
+	 * @since 0.13.0
+	 */
+	public get clsConstructor(): ClassConstructorDeclaration | undefined {
+		return this._clsConstructor;
+	}
+
+	/**
 	 * Creates a custom type from a class declaration.
 	 *
 	 * This can only be run AFTER the class declaration has passed semantic validation.
@@ -112,11 +136,12 @@ export class CustomType extends ProcessedType {
 
 		const fields: CustomTypeFields = new Map();
 		const semanticData = classDeclaration.getSemanticData();
-
 		for (const field of semanticData.classMembers) {
-			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().valueType);
+			const fieldSemanticData = field.getSemanticData();
+			const fieldTypeSemantics = field.getTypeSemanticData();
+			fields.set(fieldSemanticData.identifier, fieldTypeSemantics.valueType);
 		}
-		return new CustomType(classDeclaration.getSemanticData().identifier, "class", fields);
+		return new CustomType(classDeclaration, semanticData.identifier, "class", fields, undefined, semanticData.constructorDeclaration);
 	}
 
 	/**
@@ -130,10 +155,13 @@ export class CustomType extends ProcessedType {
 		interfaceDeclaration.ensureSemanticallyValid();
 
 		const fields: CustomTypeFields = new Map();
-		for (const field of interfaceDeclaration.getSemanticData().members) {
-			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().valueType);
+		const semanticData = interfaceDeclaration.getSemanticData();
+		for (const field of semanticData.members) {
+			const fieldSemanticData = field.getSemanticData();
+			const fieldTypeSemantics = field.getTypeSemanticData();
+			fields.set(fieldSemanticData.identifier, fieldTypeSemantics.valueType);
 		}
-		return new CustomType(interfaceDeclaration.getSemanticData().identifier, "interface", fields);
+		return new CustomType(interfaceDeclaration, semanticData.identifier, "interface", fields);
 	}
 
 	/**
@@ -145,11 +173,15 @@ export class CustomType extends ProcessedType {
 	 */
 	public static fromObjectLiteral(objectPrimaryExpression: ObjectPrimaryExpression): CustomType {
 		objectPrimaryExpression.ensureSemanticallyValid();
+
 		const fields: CustomTypeFields = new Map();
-		for (const field of objectPrimaryExpression.getSemanticData().keyValuePairs) {
-			fields.set(field.getSemanticData().identifier, field.getTypeSemanticData().evaluatedType);
+		const semanticData = objectPrimaryExpression.getSemanticData();
+		for (const field of semanticData.keyValuePairs) {
+			const fieldSemanticData = field.getSemanticData();
+			const fieldTypeSemantics = field.getTypeSemanticData();
+			fields.set(fieldSemanticData.identifier, fieldTypeSemantics.evaluatedType);
 		}
-		return new CustomType("", "interface", fields);
+		return new CustomType(objectPrimaryExpression, "", "interface", fields);
 	}
 
 	/**

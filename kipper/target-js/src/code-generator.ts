@@ -68,21 +68,23 @@ import type {
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
 } from "@kipper/core";
-import { KipperNotImplementedError } from "@kipper/core";
 import {
 	AssignmentExpression,
+	BuiltInTypeArray,
+	BuiltInTypeEmptyArray,
 	BuiltInTypes,
 	CompoundStatement,
 	Expression,
 	getConversionFunctionIdentifier,
 	IfStatement,
+	KipperNotImplementedError,
 	KipperTargetCodeGenerator,
 	ScopeDeclaration,
 	VariableDeclaration,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
 import { TargetJS, version } from "./index";
-import { createKipper, createGlobalScope, RuntimeTypesGenerator } from "./runtime";
+import { createGlobalScope, createKipper, RuntimeTypesGenerator } from "./runtime";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -380,15 +382,38 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
+		const typeSemantics = node.getTypeSemanticData();
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
-		// Only add ' = EXP' if assignValue is defined
-		return [[storage, " ", semanticData.identifier, ...(assign.length > 0 ? [" ", "=", " ", ...assign] : []), ";"]];
+		let valueToAssign: Array<TranslatedCodeToken> = [];
+		if (semanticData.value) {
+			valueToAssign = await semanticData.value.translateCtxAndChildren();
+
+			// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+			// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+			if (
+				typeSemantics.valueType instanceof BuiltInTypeArray &&
+				semanticData.value.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+			) {
+				valueToAssign = [
+					TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+					"(",
+					...valueToAssign,
+					",",
+					TargetJS.getBuiltInIdentifier("newArrayT"),
+					"(",
+					TargetJS.getRuntimeType(typeSemantics.valueType.valueType),
+					")",
+					")",
+				];
+			}
+			valueToAssign = [" ", "=", " ", ...valueToAssign];
+		}
+		return [[storage, " ", semanticData.identifier, ...valueToAssign, ";"]];
 	};
 
 	/**
-	 * Translates a {@link AssignmentExpression} into the JavaScript language.
+	 * Translates a {@link InterfaceDeclaration} into the JavaScript language.
 	 */
 	interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const runtimeInterfaceType = await RuntimeTypesGenerator.generateInterfaceRuntimeType(node);
@@ -404,7 +429,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link InterfaceMethodDeclaration} into the JavaScript language.
-	 * @param node
 	 */
 	interfaceMethodDeclaration = async (node: InterfaceMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		return [];
@@ -438,18 +462,53 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		];
 	};
 
+	/**
+	 * Translates a {@link NewInstantiationExpression} into the JavaScript language.
+	 */
 	newInstantiationExpression = async (node: NewInstantiationExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-		const identifier = semanticData.class.getSemanticData().rawType.identifier;
-		const args = semanticData.args;
-		const translatedArgs = args.map(async (arg) => {
-			return await arg.translateCtxAndChildren();
-		});
-		const finishedArgs = await Promise.all(translatedArgs);
+		const typeSemantics = node.getTypeSemanticData();
 
-		return ["new", " ", identifier, "(", ...finishedArgs.join(", "), ")"];
+		const identifier = semanticData.classRef.getSemanticData().rawType.identifier;
+		const args = semanticData.args;
+		const constructorType = typeSemantics.constructor?.getTypeSemanticData().valueType;
+
+		let argsTokens: Array<TranslatedExpression> = []
+		if (constructorType) {
+			const translatedArgs = args.map(async (arg, i) => {
+				let tokens = await arg.translateCtxAndChildren();
+
+				// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+				// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+				let corrType = constructorType.paramTypes[i];
+				if (
+					corrType instanceof BuiltInTypeArray &&
+					arg.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+				) {
+					tokens = [
+						TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+						"(",
+						...tokens,
+						",",
+						TargetJS.getBuiltInIdentifier("newArrayT"),
+						"(",
+						TargetJS.getRuntimeType(corrType.valueType),
+						")",
+						")",
+					];
+				}
+				return tokens.concat([",", " "]);
+			});
+			argsTokens = await Promise.all(translatedArgs);
+		}
+
+		const finishedArgs = argsTokens.flat().slice(0, -2); // Remove the last comma and space
+		return ["new", " ", identifier, "(", ...finishedArgs, ")"];
 	};
 
+	/**
+	 * Translates a {@link ClassPropertyDeclaration} into the JavaScript language.
+	 */
 	classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {
 		const semanticData = node.getSemanticData();
 		const identifier = semanticData.identifier;
@@ -457,6 +516,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [`${identifier};`];
 	};
 
+	/**
+	 * Translates a {@link ClassMethodDeclaration} into the JavaScript language.
+	 */
 	classMethodDeclaration = async (node: ClassMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const identifier = semanticData.identifier;
@@ -523,6 +585,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			}),
 		);
 
+		// Otherwise we have to add metadata information to the array to ensure that the type is correctly typed at runtime
 		return [
 			TargetJS.getBuiltInIdentifier("assignTypeMeta"),
 			"(",
@@ -530,9 +593,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			...translatedValues.flat(),
 			"]",
 			",",
-			TargetJS.getBuiltInIdentifier("builtIn.Array.changeGenericTypeArguments"),
+			TargetJS.getBuiltInIdentifier("newArrayT"),
 			"(",
-			`{T: ${valueTypeIdentifier}}`,
+			valueTypeIdentifier,
 			")",
 			")",
 		];
@@ -719,7 +782,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	functionCallExpression = async (node: FunctionCallExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-		const func = node.getTypeSemanticData().funcOrExp;
+		const typeSemantics = node.getTypeSemanticData();
+		const func = typeSemantics.funcOrExp;
+		const funcType = typeSemantics.funcType;
 
 		// Get the proper identifier for the function
 		const exp = func instanceof Expression ? await func.translateCtxAndChildren() : undefined;
@@ -730,16 +795,39 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					: func.identifier
 				: undefined;
 
-		// Generate the arguments
-		let args: TranslatedExpression = [];
-		for (const i of semanticData.args) {
-			const arg = await i.translateCtxAndChildren();
-			args = args.concat(arg.concat(", "));
+		// Generate the arguments and cover any edge cases
+		let i = 0;
+		let argsTokens: TranslatedExpression = [];
+		for (const arg of semanticData.args) {
+			let argTokens = await arg.translateCtxAndChildren();
+
+			// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+			// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+			let corrType = funcType.paramTypes[i];
+			if (
+				corrType instanceof BuiltInTypeArray &&
+				arg.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+			) {
+				argTokens = [
+					TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+					"(",
+					...argTokens,
+					",",
+					TargetJS.getBuiltInIdentifier("newArrayT"),
+					"(",
+					TargetJS.getRuntimeType(corrType.valueType),
+					")",
+					")",
+				];
+			}
+
+			argsTokens = [...argsTokens, ...argTokens, ",", " "];
+			i++;
 		}
-		args = args.slice(0, -1); // Removing last whitespace and comma before the closing parenthesis
+		argsTokens = argsTokens.slice(0, -2); // Removing last whitespace and comma before the closing parenthesis
 
 		// Return the compiled function call
-		return [...(identifier ? [identifier] : exp!!), "(", ...args, ")"];
+		return [...(identifier ? [identifier] : exp!!), "(", ...argsTokens, ")"];
 	};
 
 	/**
@@ -965,9 +1053,29 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const toAssign = await semanticData.toAssign.translateCtxAndChildren();
-		const assignExp = await semanticData.value.translateCtxAndChildren();
+		let valueToAssign = await semanticData.value.translateCtxAndChildren();
 
-		return [...toAssign, " ", semanticData.operator, " ", ...assignExp];
+		// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+		// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+		const assignTargetType = semanticData.toAssign.getTypeSemanticData().evaluatedType;
+		if (
+			assignTargetType instanceof BuiltInTypeArray &&
+			semanticData.value.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+		) {
+			valueToAssign = [
+				TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+				"(",
+				...valueToAssign,
+				",",
+				TargetJS.getBuiltInIdentifier("newArrayT"),
+				"(",
+				TargetJS.getRuntimeType(assignTargetType.valueType),
+				")",
+				")",
+			];
+		}
+
+		return [...toAssign, " ", semanticData.operator, " ", ...valueToAssign];
 	};
 
 	/**

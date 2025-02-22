@@ -52,7 +52,7 @@ describe("Assignment", () => {
 			instance
 				.write()
 				.includes(
-					"let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num}));\nx = __kipper.assignTypeMeta([4, 5, 6],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num}));",
+					"let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.newArrayT(__kipper.builtIn.num));\nx = __kipper.assignTypeMeta([4, 5, 6],__kipper.newArrayT(__kipper.builtIn.num));",
 				),
 			"Invalid TypeScript code (Expected different output)",
 		);
@@ -80,7 +80,7 @@ describe("Assignment", () => {
 			instance
 				.write()
 				.includes(
-					"let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num}));\nx[0] = 4;",
+					"let x: Array<number> = __kipper.assignTypeMeta([1, 2, 3],__kipper.newArrayT(__kipper.builtIn.num));\nx[0] = 4;",
 				),
 			"Invalid TypeScript code (Expected different output)",
 		);

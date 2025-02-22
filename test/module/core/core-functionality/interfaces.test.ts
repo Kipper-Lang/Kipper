@@ -1,6 +1,7 @@
 import type { KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
 import { compiler, defaultTarget } from ".";
+import {assertErrorsAreEmpty} from "../index";
 
 describe("Interfaces", async () => {
 	it("Can initialize empty interface", async () => {
@@ -8,7 +9,8 @@ describe("Interfaces", async () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		assertErrorsAreEmpty(instance.programCtx!);
+
 		let written = instance.write();
 		assert.include(written, "interface Test {\n}", "Invalid TypeScript code (Expected different output)");
 	});
@@ -18,7 +20,8 @@ describe("Interfaces", async () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assertErrorsAreEmpty(instance.programCtx!);
+
 		let written = instance.write();
 		assert.include(
 			written,
@@ -39,7 +42,8 @@ describe("Interfaces", async () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		assertErrorsAreEmpty(instance.programCtx!);
+
 		let written = instance.write();
 		assert.include(
 			written,
@@ -53,7 +57,8 @@ describe("Interfaces", async () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		assertErrorsAreEmpty(instance.programCtx!);
+
 		let written = instance.write();
 		assert.include(
 			written,

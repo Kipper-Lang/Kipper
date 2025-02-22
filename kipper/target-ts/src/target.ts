@@ -47,6 +47,15 @@ export class KipperTypeScriptTarget extends KipperCompileTarget {
 	}
 
 	/**
+	 * Fetches the runtime type for a {@link ProcessedType}.
+	 * @param type The type to get the runtime type for.
+	 * @since 0.13.0
+	 */
+	public static getRuntimeType(type: ProcessedType): string {
+		return TargetJS.getRuntimeType(type);
+	}
+
+	/**
 	 * Fetches the typescript equivalent for a {@link KipperBuiltInTypeLiteral}.
 	 * @param kipperType The type to get the equivalent for.
 	 * @since 0.8.0

@@ -7,3 +7,4 @@ export * from "./built-in/";
 export * from "./raw-type";
 export * from "./undefined-type";
 export * from "./custom-type";
+export * from "./extra";
