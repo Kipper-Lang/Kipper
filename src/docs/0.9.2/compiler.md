@@ -1,6 +1,6 @@
 # Kipper Compiler
 
-The Kipper Compiler is a TypeScript-based compiler that can compile Kipper code into TypeScript and generate the required overhead for the Kipper program. (In the future, native JavaScript should be supported as well. See [#32](https://github.com/Luna-Klatzer/Kipper/issues/32) for more information.)
+The Kipper Compiler is a TypeScript-based compiler that can compile Kipper code into TypeScript and generate the required overhead for the Kipper program. (In the future, native JavaScript should be supported as well. See [#32](https://github.com/Kipper-Lang/Kipper/issues/32) for more information.)
 
 ## Kipper API
 

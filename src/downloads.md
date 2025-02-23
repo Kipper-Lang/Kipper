@@ -95,5 +95,5 @@ Quickstart guide.
 
 To download the latest stable source code of Kipper, download the compressed package as a `zip` or `tar.gz` with the links below:
 
-- [GitHub Source Code (zip)](https://github.com/Luna-Klatzer/Kipper/zipball/main/)
-- [GitHub Source Code (tar.gz)](https://github.com/Luna-Klatzer/Kipper/tarball/main/)
+- [GitHub Source Code (zip)](https://github.com/Kipper-Lang/Kipper/zipball/main/)
+- [GitHub Source Code (tar.gz)](https://github.com/Kipper-Lang/Kipper/tarball/main/)

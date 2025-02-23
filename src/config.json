@@ -1,12 +1,12 @@
 {
-  "releasesURL": "https://github.com/Luna-Klatzer/Kipper/releases",
-  "kipperGithubURL": "https://github.com/Luna-Klatzer/Kipper",
-  "projectPanelURL": "https://github.com/users/Luna-Klatzer/projects/2",
-  "securityURL": "https://github.com/Luna-Klatzer/Kipper/security/policy",
-  "issueTrackerURL": "https://github.com/Luna-Klatzer/Kipper/issues",
-  "licenseURL": "https://github.com/Luna-Klatzer/Kipper/blob/main/LICENSE",
-  "docsEditURL": "https://github.com/Luna-Klatzer/Kipper/edit/docs",
-  "roadmapURL": "https://github.com/Luna-Klatzer/Kipper/discussions/139",
+  "releasesURL": "https://github.com/Kipper-Lang/Kipper/releases",
+  "kipperGithubURL": "https://github.com/Kipper-Lang/Kipper",
+  "projectPanelURL": "https://github.com/users/Kipper-Lang/projects/2",
+  "securityURL": "https://github.com/Kipper-Lang/Kipper/security/policy",
+  "issueTrackerURL": "https://github.com/Kipper-Lang/Kipper/issues",
+  "licenseURL": "https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE",
+  "docsEditURL": "https://github.com/Kipper-Lang/Kipper/edit/docs",
+  "roadmapURL": "https://github.com/Kipper-Lang/Kipper/discussions/139",
   "websitePublicURL": "https://kipper-lang.org",
   "copyright": "Copyright © 2021-2025 Luna Klatzer, Lorenz Holzbauer & Fabian Baitura"
 }

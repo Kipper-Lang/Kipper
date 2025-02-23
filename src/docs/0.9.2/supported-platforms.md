@@ -16,7 +16,7 @@ Generally speaking, Kipper should work in any browser that supports the `ES2016`
 be some exceptions to this rule, so it is recommended to use the latest version of a browser.
 
 List of all browsers that were tested for support of Kipper
-([_Please report any mistakes_](https://github.com/Luna-Klatzer/Kipper/issues/new/choose)):
+([_Please report any mistakes_](https://github.com/Kipper-Lang/Kipper/issues/new/choose)):
 
 <table>
   <colgroup>

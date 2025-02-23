@@ -22,7 +22,7 @@ For running Kipper in the browser, you will have to include:
 
 1. The primary `kipper-standalone.min.js` file, which provides the kipper source code compatible for _modern_ browsers.
    View the [support list](./supported-platforms.html) to make sure your browser is supported.
-2. The Babel typescript transpiler, which allows native browser transpiling and code generation. This is required as Kipper is not a language that compiles directly to JavaScript code, but uses TypeScript as another level of abstraction. (This may change in the future. View [#208](https://github.com/Luna-Klatzer/Kipper/issues/208) for more info.)
+2. The Babel typescript transpiler, which allows native browser transpiling and code generation. This is required as Kipper is not a language that compiles directly to JavaScript code, but uses TypeScript as another level of abstraction. (This may change in the future. View [#208](https://github.com/Kipper-Lang/Kipper/issues/208) for more info.)
 
 ### Including the Kipper Script
 
