@@ -204,6 +204,11 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	typeofTypeSpecifierExpression = undefined;
 
 	/**
+	 * Performs typescript-specific semantic analysis for {@link NullableTypeSpecifierExpression} instances.
+	 */
+	nullableTypeSpecifierExpression = undefined;
+
+	/**
 	 * Performs typescript-specific semantic analysis for {@link StringPrimaryExpression} instances.
 	 */
 	stringPrimaryExpression = undefined;

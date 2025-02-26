@@ -9,6 +9,7 @@ import { TypeSpecifierExpression } from "../type-specifier-expression";
 import type { TypeofTypeSpecifierExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { BuiltInTypes, RawType } from "../../../../../semantics";
+import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 
 /**
  * Typeof type specifier expression, which represents a runtime typeof expression evaluating the type of a value.
@@ -83,19 +84,17 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	public async primarySemanticAnalysis(): Promise<void> {
 		const antlrChildren = this.antlrRuleCtx.children;
 		if (!antlrChildren?.length) {
-			throw new Error("Invalid typeof expression");
+			throw new UnableToDetermineSemanticDataError();
 		}
 		const identifier = antlrChildren[2].text;
 		const ref = this.programCtx.semanticCheck(this).getExistingReference(identifier, this.scope);
 
 		this.semanticData = {
 			rawType: new RawType(identifier),
-			ref: {
-				refTarget: ref,
-				srcExpr: this,
-			},
+			refTarget: ref,
 		};
 	}
+
 	/**
 	 * Preliminary registers the class declaration type to allow for internal self-referential type checking.
 	 *
@@ -104,11 +103,11 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 	 */
 	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
-		const valueReference = semanticData.ref;
+		const refTarget = semanticData.refTarget;
 
 		this.typeSemantics = {
 			evaluatedType: BuiltInTypes.type,
-			storedType: valueReference.refTarget.type,
+			storedType: refTarget.type,
 		};
 	}
 	public readonly primarySemanticTypeChecking: undefined;

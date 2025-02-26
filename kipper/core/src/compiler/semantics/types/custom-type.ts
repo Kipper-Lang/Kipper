@@ -6,11 +6,12 @@ import {
 	PropertyAssignmentTypeError,
 	PropertyNotFoundTypeError,
 } from "../../../errors";
-import {
+import type {
 	ClassConstructorDeclaration,
-	ClassDeclaration, Declaration,
+	ClassDeclaration,
+	Declaration,
 	InterfaceDeclaration,
-	ObjectPrimaryExpression
+	ObjectPrimaryExpression,
 } from "../../ast";
 import { BuiltInTypes } from "../symbol-table";
 
@@ -141,7 +142,14 @@ export class CustomType extends ProcessedType {
 			const fieldTypeSemantics = field.getTypeSemanticData();
 			fields.set(fieldSemanticData.identifier, fieldTypeSemantics.valueType);
 		}
-		return new CustomType(classDeclaration, semanticData.identifier, "class", fields, undefined, semanticData.constructorDeclaration);
+		return new CustomType(
+			classDeclaration,
+			semanticData.identifier,
+			"class",
+			fields,
+			undefined,
+			semanticData.constructorDeclaration,
+		);
 	}
 
 	/**

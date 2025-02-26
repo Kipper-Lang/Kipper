@@ -43,6 +43,7 @@ import type {
 	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
+	NullableTypeSpecifierExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -242,6 +243,11 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link TypeofTypeSpecifierExpression} instances.
 	 */
 	public abstract typeofTypeSpecifierExpression?: TargetASTNodeSemanticAnalyser<TypeofTypeSpecifierExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link NullableTypeSpecifierExpression} instances.
+	 */
+	public abstract nullableTypeSpecifierExpression?: TargetASTNodeSemanticAnalyser<NullableTypeSpecifierExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link TangledPrimaryExpression} instances.

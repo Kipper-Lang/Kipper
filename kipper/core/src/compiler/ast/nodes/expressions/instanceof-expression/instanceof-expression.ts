@@ -20,12 +20,11 @@ export class InstanceOfExpression extends Expression<
 > {
 	/**
 	 * The static kind for this AST Node.
-	 * @since 0.12.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_instanceofExpression;
+
 	/**
 	 * The static rule name for this AST Node.
-	 * @since 0.12.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
 
@@ -47,7 +46,6 @@ export class InstanceOfExpression extends Expression<
 	 *
 	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
 	 * {@link ParseRuleKindMapping.RULE_expression}.
-	 * @since 0.12.0
 	 */
 	public override get kind() {
 		return InstanceOfExpression.kind;
@@ -59,12 +57,18 @@ export class InstanceOfExpression extends Expression<
 	 *
 	 * This may be compared using the {@link ParseRuleKindMapping rule fields}, for example
 	 * {@link ParseRuleKindMapping.RULE_expression}.
-	 * @since 0.12.0
 	 */
 	public override get ruleName() {
 		return InstanceOfExpression.ruleName;
 	}
 
+	/**
+	 * Performs the semantic analysis for this Kipper token. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the semantic analysis of
+	 * the children has already failed and as such no parent node should run type checking.
+	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const children = this.children;
 		if (!children || children.length < 2) {
@@ -79,6 +83,13 @@ export class InstanceOfExpression extends Expression<
 		};
 	}
 
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
+	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 		const classType = semanticData.classTypeSpecifier.getTypeSemanticData().storedType;

@@ -49,6 +49,7 @@ import type {
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
+	NullableTypeSpecifierExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -473,7 +474,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		const args = semanticData.args;
 		const constructorType = typeSemantics.constructor?.getTypeSemanticData().valueType;
 
-		let argsTokens: Array<TranslatedExpression> = []
+		let argsTokens: Array<TranslatedExpression> = [];
 		if (constructorType) {
 			const translatedArgs = args.map(async (arg, i) => {
 				let tokens = await arg.translateCtxAndChildren();
@@ -701,7 +702,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	genericTypeSpecifierExpression = async (node: GenericTypeSpecifierExpression): Promise<TranslatedExpression> => {
 		throw new KipperNotImplementedError(
-			"Generic type specifier expressions are not yet supported in target 'JavaScript'.",
+			"Runtime translation of generic type specifier expressions are not supported in target 'JavaScript'.",
 		);
 	};
 
@@ -710,7 +711,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	typeofTypeSpecifierExpression = async (node: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
 		throw new KipperNotImplementedError(
-			"Typeof type specifier expressions are not yet supported in target 'JavaScript'.",
+			"Runtime translation of typeof type specifier expressions are not supported in target 'JavaScript'.",
+		);
+	};
+
+	/**
+	 * Translates a {@link NullableTypeSpecifierExpression} into the JavaScript language.
+	 */
+	nullableTypeSpecifierExpression = async (node: NullableTypeSpecifierExpression): Promise<TranslatedExpression> => {
+		throw new KipperNotImplementedError(
+			"Runtime translation of nullable type specifier expressions are not supported in target 'JavaScript'.",
 		);
 	};
 
@@ -1146,7 +1156,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			...translatedExpression,
 			", ",
 			// Always only accepts a Kipper interface
-			`${TargetJS.internalInterfacePrefix}_${pattern.storedType.identifier}`,
+			TargetJS.getRuntimeType(pattern.storedType),
 			")",
 		];
 	};
