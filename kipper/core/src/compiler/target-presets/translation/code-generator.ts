@@ -46,6 +46,7 @@ import type {
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
+	NullableTypeSpecifierExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -326,6 +327,14 @@ export abstract class KipperTargetCodeGenerator {
 	>;
 
 	/**
+	 * Translates a {@link NullableTypeSpecifierExpression} into a specific language.
+	 */
+	public abstract nullableTypeSpecifierExpression: TargetASTNodeCodeGenerator<
+		NullableTypeSpecifierExpression,
+		TranslatedExpression
+	>;
+
+	/**
 	 * Translates a {@link TangledPrimaryExpression} into a specific language.
 	 */
 	public abstract tangledPrimaryExpression: TargetASTNodeCodeGenerator<TangledPrimaryExpression, TranslatedExpression>;
@@ -463,7 +472,7 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract matchesExpression: TargetASTNodeCodeGenerator<MatchesExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@Link InstanceOfExpression} into a specific language.
+	 * Translates a {@link InstanceOfExpression} into a specific language.
 	 */
 	public abstract instanceOfExpression: TargetASTNodeCodeGenerator<InstanceOfExpression, TranslatedExpression>;
 }

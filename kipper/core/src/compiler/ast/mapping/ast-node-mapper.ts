@@ -47,6 +47,7 @@ import {
 	LogicalOrExpressionContext,
 	MultiplicativeExpressionContext,
 	NewInstantiationExpressionContext,
+	NullableTypeSpecifierExpressionContext,
 	NumberPrimaryExpressionContext,
 	ObjectPrimaryExpressionContext,
 	ObjectPropertyContext,
@@ -75,6 +76,7 @@ import type {
 	ASTStatementRuleName,
 } from "../common";
 import type { Declaration, Expression, Statement } from "../nodes";
+import { NullableTypeSpecifierExpression } from "../nodes";
 import { CastExpression, ConvertExpression, ForceCastExpression, TryCastExpression } from "../nodes";
 import {
 	AdditiveExpression,
@@ -85,7 +87,6 @@ import {
 	BitwiseShiftExpression,
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
-	CastOrConvertExpression,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
@@ -194,6 +195,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression]: IdentifierTypeSpecifierExpression,
 		[ParseRuleKindMapping.RULE_genericTypeSpecifierExpression]: GenericTypeSpecifierExpression,
 		[ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression]: TypeofTypeSpecifierExpression,
+		[ParseRuleKindMapping.RULE_nullableTypeSpecifierExpression]: NullableTypeSpecifierExpression,
 		[ParseRuleKindMapping.RULE_memberAccessExpression]: MemberAccessExpression,
 		[ParseRuleKindMapping.RULE_newInstantiationExpression]: NewInstantiationExpression,
 		[ParseRuleKindMapping.RULE_bitwiseOrExpression]: BitwiseOrExpression,
@@ -276,6 +278,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression]: IdentifierTypeSpecifierExpressionContext,
 		[ParseRuleKindMapping.RULE_genericTypeSpecifierExpression]: GenericTypeSpecifierExpressionContext,
 		[ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression]: TypeofTypeSpecifierExpressionContext,
+		[ParseRuleKindMapping.RULE_nullableTypeSpecifierExpression]: NullableTypeSpecifierExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseOrExpression]: BitwiseOrExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseAndExpression]: BitwiseAndExpressionContext,
 		[ParseRuleKindMapping.RULE_bitwiseXorExpression]: BitwiseXorExpressionContext,
@@ -363,6 +366,7 @@ export class ASTNodeMapper {
 		RULE_identifierTypeSpecifierExpression: IdentifierTypeSpecifierExpression,
 		RULE_genericTypeSpecifierExpression: GenericTypeSpecifierExpression,
 		RULE_typeofTypeSpecifierExpression: TypeofTypeSpecifierExpression,
+		RULE_nullableTypeSpecifierExpression: NullableTypeSpecifierExpression,
 		RULE_memberAccessExpression: MemberAccessExpression,
 		RULE_bitwiseOrExpression: BitwiseOrExpression,
 		RULE_bitwiseAndExpression: BitwiseAndExpression,

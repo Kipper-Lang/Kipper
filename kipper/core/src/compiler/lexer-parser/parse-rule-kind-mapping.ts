@@ -107,6 +107,7 @@ export const ParseRuleKindMapping = {
 	RULE_identifierTypeSpecifierExpression: KipperParser.RULE_identifierTypeSpecifierExpression,
 	RULE_genericTypeSpecifierExpression: KipperParser.RULE_genericTypeSpecifierExpression,
 	RULE_typeofTypeSpecifierExpression: KipperParser.RULE_typeofTypeSpecifierExpression,
+	RULE_nullableTypeSpecifierExpression: KipperParser.RULE_nullableTypeSpecifierExpression,
 	RULE_typeSpecifierIdentifier: KipperParser.RULE_typeSpecifierIdentifier,
 	RULE_instanceofExpression: KipperParser.RULE_instanceOfExpression,
 	RULE_matchesExpression: KipperParser.RULE_matchesExpression,

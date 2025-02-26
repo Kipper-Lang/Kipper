@@ -109,7 +109,7 @@ describe("Member access", () => {
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
-					"let x: Array<number> = __kipper.slice(__kipper.assignTypeMeta([1, 2, 3, 4],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num})), 1, 2);",
+					"let x: Array<number> = __kipper.slice(__kipper.assignTypeMeta([1, 2, 3, 4],__kipper.newArrayT(__kipper.builtIn.num)), 1, 2);",
 					"Expected different TypeScript code",
 				);
 			});
@@ -123,7 +123,7 @@ describe("Member access", () => {
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
-					`let x: Array<number> = __kipper.slice(__kipper.assignTypeMeta([1, 2, 3, 4],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num})), 1, undefined);`,
+					`let x: Array<number> = __kipper.slice(__kipper.assignTypeMeta([1, 2, 3, 4],__kipper.newArrayT(__kipper.builtIn.num)), 1, undefined);`,
 					"Expected different TypeScript code",
 				);
 			});
@@ -137,7 +137,7 @@ describe("Member access", () => {
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
-					"let x: Array<number> = __kipper.slice(__kipper.assignTypeMeta([1, 2, 3, 4],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num})), undefined, 2);",
+					"let x: Array<number> = __kipper.slice(__kipper.assignTypeMeta([1, 2, 3, 4],__kipper.newArrayT(__kipper.builtIn.num)), undefined, 2);",
 					"Expected different TypeScript code",
 				);
 			});
@@ -151,7 +151,7 @@ describe("Member access", () => {
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
-					`let x: Array<number> = __kipper.slice(__kipper.assignTypeMeta([1, 2, 3, 4],__kipper.builtIn.Array.changeGenericTypeArguments({T: __kipper.builtIn.num})), undefined, undefined);`,
+					`let x: Array<number> = __kipper.slice(__kipper.assignTypeMeta([1, 2, 3, 4],__kipper.newArrayT(__kipper.builtIn.num)), undefined, undefined);`,
 					"Expected different TypeScript code",
 				);
 			});

@@ -35,7 +35,7 @@ import type { Expression } from "../../expression";
 import type { CastOrConvertExpressionContext, TryCastExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { BuiltInTypeNull, ProcessedType, RawType } from "../../../../../semantics";
-import { type BuiltInTypeArray, BuiltInTypes, type BuiltInTypeStr, UnionType } from "../../../../../semantics";
+import { BuiltInTypes, UnionType } from "../../../../../semantics";
 import { kipperInternalBuiltInFunctions } from "../../../../../semantics";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CastOrConvertExpression } from "../cast-or-convert-expression";
@@ -169,7 +169,7 @@ export class TryCastExpression extends CastOrConvertExpression<
 		// Get the type specified by the type specifier
 		const evalType = semanticData.castTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			evaluatedType: new UnionType<[BuiltInTypeNull, ProcessedType]>([BuiltInTypes.null, evalType]),
+			evaluatedType: new UnionType<[ProcessedType, BuiltInTypeNull]>([evalType, BuiltInTypes.null]),
 			castType: evalType,
 		};
 		this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions["tryCastAs"]);

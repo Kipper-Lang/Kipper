@@ -7,9 +7,11 @@ import type { ArrayPrimaryExpressionTypeSemantics } from "./array-primary-expres
 import type { CompilableASTNode } from "../../../../compilable-ast-node";
 import type { ArrayPrimaryExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
+import type { ProcessedType } from "../../../../../semantics";
 import { BuiltInTypes } from "../../../../../semantics";
 import { PrimaryExpression } from "../primary-expression";
 import { BuiltInTypeArray } from "../../../../../semantics/types/built-in";
+import { BuiltInTypeEmptyArray } from "../../../../../semantics/types/extra/empty-array";
 
 /**
  * List constant expression, which represents a list constant that was defined in the source code.
@@ -84,6 +86,7 @@ export class ArrayPrimaryExpression extends PrimaryExpression<
 	public async primarySemanticAnalysis(): Promise<void> {
 		this.semanticData = {
 			value: this.children,
+			empty: this.children.length === 0,
 		};
 	}
 
@@ -96,12 +99,18 @@ export class ArrayPrimaryExpression extends PrimaryExpression<
 	 * @since 0.7.0
 	 */
 	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
 		this.programCtx.typeCheck(this).validArrayExpression(this);
 
-		const valueType =
-			this.children.length > 0 ? this.children[0].getTypeSemanticData().evaluatedType : BuiltInTypes.any;
+		let valueType: ProcessedType = BuiltInTypes.any;
+		let evaluatedType: BuiltInTypeArray = new BuiltInTypeEmptyArray();
+		if (!semanticData.empty) {
+			valueType = this.children[0].getTypeSemanticData().evaluatedType;
+			evaluatedType = new BuiltInTypeArray(valueType);
+		}
+
 		this.typeSemantics = {
-			evaluatedType: new BuiltInTypeArray(valueType),
+			evaluatedType,
 			valueType,
 		};
 	}

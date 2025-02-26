@@ -7,5 +7,6 @@ export * from "./type-specifier-expression";
 export * from "./type-specifier-expression-semantics";
 export * from "./type-specifier-expression-type-semantics";
 export * from "./identifier-type-specifier-expression/";
-export * from "./typeof-type-specifier-expression/";
 export * from "./generic-type-specifier-expression/";
+export * from "./typeof-type-specifier-expression/";
+export * from "./nullable-type-specifier-expression/";

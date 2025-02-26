@@ -12,7 +12,8 @@ import type {
 import type { KipperParser, KipperParserRuleContext } from "../lexer-parser";
 import type { TypeData } from "./ast-node";
 import type { TokenStream } from "antlr4ts/TokenStream";
-import type { RootASTNode, SemanticData } from "./index";
+import type { SemanticData } from "./index";
+import { Declaration, RootASTNode, Statement } from "./index";
 import type { ClassScope, GlobalScope, LocalScope } from "../semantics";
 import type { ScopeNode } from "./scope-node";
 import type { TargetCompilableNode } from "./target-node";
@@ -60,6 +61,26 @@ export abstract class CompilableASTNode<
 	 */
 	public get parent(): CompilableNodeParent {
 		return this._parent;
+	}
+
+	/**
+	 * Recursively traces back the parent stack and searches for the closest parent that is a {@link Statement} or
+	 * {@link Declaration}.
+	 * @returns The closest parent that is a {@link Statement} or {@link Declaration}, or `undefined` if the current
+	 * node is already at the top level (and as such naturally also a {@link Statement} or {@link Declaration}).
+	 * @since 0.13.0
+	 */
+	public get closestHigherLevelParent(): Statement | Declaration | undefined {
+		let parent: CompilableNodeParent = this.parent;
+		while (parent !== undefined) {
+			if (parent instanceof Statement || parent instanceof Declaration) {
+				return parent;
+			} else if (parent instanceof RootASTNode) {
+				return undefined;
+			}
+			parent = parent.parent;
+		}
+		return undefined;
 	}
 
 	protected override _children: Array<CompilableNodeChild>;
