@@ -46,6 +46,7 @@ import type {
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
+	NullableTypeSpecifierExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -322,6 +323,14 @@ export abstract class KipperTargetCodeGenerator {
 	 */
 	public abstract typeofTypeSpecifierExpression: TargetASTNodeCodeGenerator<
 		TypeofTypeSpecifierExpression,
+		TranslatedExpression
+	>;
+
+	/**
+	 * Translates a {@link NullableTypeSpecifierExpression} into a specific language.
+	 */
+	public abstract nullableTypeSpecifierExpression: TargetASTNodeCodeGenerator<
+		NullableTypeSpecifierExpression,
 		TranslatedExpression
 	>;
 

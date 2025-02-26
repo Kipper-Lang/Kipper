@@ -5,6 +5,7 @@
  * @since 0.10.0
  */
 import type { BuiltInFunction, ProcessedType } from "@kipper/core";
+import { CustomType } from "@kipper/core";
 import { BuiltInType, BuiltInVariable, KipperCompileTarget } from "@kipper/core";
 import { JavaScriptTargetSemanticAnalyser } from "./semantic-analyser";
 import { JavaScriptTargetCodeGenerator } from "./code-generator";
@@ -126,8 +127,19 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 	public static getRuntimeType(type: ProcessedType): string {
 		if (type instanceof BuiltInType) {
 			return this.getBuiltInIdentifier(`builtIn.${type.identifier}`);
+		} else if (type instanceof CustomType && type.kind === "interface") {
+			return this.getInterfaceIdentifier(type);
 		}
 		return type.identifier;
+	}
+
+	/**
+	 * Gets the interface identifier for a custom type.
+	 * @param type
+	 * @since 0.13.0
+	 */
+	public static getInterfaceIdentifier(type: CustomType): string {
+		return `${this.internalInterfacePrefix}_${type.identifier}`;
 	}
 }
 

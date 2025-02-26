@@ -107,6 +107,7 @@ Undefined : 'undefined';
 Comma : ',';
 SemiColon : ';';
 QuestionMark : '?';
+DoubleQuestionMark : '??';
 Colon : ':';
 LeftParen : '(';
 RightParen : ')';

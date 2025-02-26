@@ -455,6 +455,7 @@ typeSpecifierExpression
     :   identifierTypeSpecifierExpression
     |	genericTypeSpecifierExpression
     |	typeofTypeSpecifierExpression
+    |	nullableTypeSpecifierExpression
     ;
 
 identifierTypeSpecifierExpression
@@ -467,6 +468,10 @@ genericTypeSpecifierExpression
 
 typeofTypeSpecifierExpression
 	:	'typeof' '(' typeSpecifierIdentifier ')'
+	;
+
+nullableTypeSpecifierExpression
+	:	(identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression) ('?' | '??') // Union with null or undefined
 	;
 
 typeSpecifierIdentifier
