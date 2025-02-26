@@ -6,7 +6,7 @@ import { compiler, defaultTarget } from ".";
 import { assertCodeIncludesSnippet, testPrintOutput } from "..";
 
 describe("Arrays", () => {
-	it("Simple array declaration", async () => {
+	it("simple array declaration", async () => {
 		const fileContent = `var x: Array<num> = [1, 2, 3];`;
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
@@ -20,7 +20,7 @@ describe("Arrays", () => {
 		);
 	});
 
-	it("Assign array to array", async () => {
+	it("assign array to array", async () => {
 		const code = "var x: Array<num> = [1, 2, 3]; var y: Array<num> = x;";
 		const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
@@ -34,7 +34,7 @@ describe("Arrays", () => {
 		);
 	});
 
-	it("Accessing array element", async () => {
+	it("accessing array element", async () => {
 		const code = "var x: Array<num> = [1, 2, 3]; print(x[1] as str);";
 		const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
@@ -45,7 +45,7 @@ describe("Arrays", () => {
 		testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), tsCode);
 	});
 
-	it("Assigning one array element to another", async () => {
+	it("assigning one array element to another", async () => {
 		const code = "var x: Array<num> = [1, 2, 3]; var y: num = x[1]; print(y as str);";
 		const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
@@ -56,8 +56,8 @@ describe("Arrays", () => {
 		testPrintOutput((message: any) => assert.equal(message, "2", "Expected different output"), tsCode);
 	});
 
-	describe("Empty array", async () => {
-		it("Empty array assignable to any array variable definition", async () => {
+	describe("empty array", async () => {
+		it("empty array assignable to any array variable definition", async () => {
 			const code = "var x: Array<num> = [];";
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
@@ -71,7 +71,7 @@ describe("Arrays", () => {
 			);
 		});
 
-		it("Nested empty array assignable to any array variable definition", async () => {
+		it("nested empty array assignable to any array variable definition", async () => {
 			const code = "var x: Array<num> = ((([])));";
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
@@ -85,7 +85,7 @@ describe("Arrays", () => {
 			);
 		});
 
-		it("Empty array assignable to any array variable", async () => {
+		it("empty array assignable to any array variable", async () => {
 			const code = "var x: Array<num> = [1, 2, 3]; x = [];";
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
@@ -103,7 +103,7 @@ describe("Arrays", () => {
 			);
 		});
 
-		it("Empty array passable to any array function argument", async () => {
+		it("empty array passable to any array function argument", async () => {
 			const code = "def test(x: Array<num>) -> void { print(x); } test([]);";
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
@@ -117,7 +117,7 @@ describe("Arrays", () => {
 			);
 		});
 
-		it("Empty array passable to any array constructor argument", async () => {
+		it("empty array passable to any array constructor argument", async () => {
 			const code = "class Test { constructor(x: Array<num>) { print(x); } } new Test([]);";
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 
@@ -131,7 +131,7 @@ describe("Arrays", () => {
 			);
 		});
 
-		it("Empty array returnable from any array function", async () => {
+		it("empty array returnable from any array function", async () => {
 			const code = "def test() -> Array<num> { return []; } print(test());";
 			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
 

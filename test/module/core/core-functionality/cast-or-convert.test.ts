@@ -141,94 +141,299 @@ describe("Cast-or-Convert", () => {
 	});
 
 	describe("force as", () => {
-		it("should convert a correct value from EXP to T", async () => {
-			const fileContent = `
-			var x: any = 123;
-			var y: num = x force as num;
-			print(y);
-			`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+		describe("should convert a correct value from EXP to T", () => {
+			it("using primitives", async () => {
+				const fileContent = `
+				var x: any = 123;
+				var y: num = x force as num;
+				print(y);
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert.isDefined(instance.programCtx);
-			assertErrorsAreEmpty(instance.programCtx!);
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
 
-			const code = instance.write();
-			assertCodeIncludesSnippet(code, "let x: any = 123;");
-			assertCodeIncludesSnippet(code, "let y: number = (__kipper.forceCastAs(x,__kipper.builtIn.num) as number);");
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = 123;");
+				assertCodeIncludesSnippet(code, "let y: number = (__kipper.forceCastAs(x,__kipper.builtIn.num) as number);");
 
-			// Run the code to make sure it works
-			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
-			testPrintOutput((message: any) => assert.equal(message, 123, "Expected different output"), jsCode);
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testPrintOutput((message: any) => assert.equal(message, 123, "Expected different output"), jsCode);
+			});
+
+			it("using interfaces", async () => {
+				const fileContent = `
+				interface Test { x: num; }
+				var x: any = { x: 1 };
+				var y: Test = x force as Test;
+				print(y.x);
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
+
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = {\n  x: 1,\n};");
+				assertCodeIncludesSnippet(code, "let y: Test = (__kipper.forceCastAs(x,__intf_Test) as Test);");
+
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testPrintOutput((message: any) => assert.equal(message, 1, "Expected different output"), jsCode);
+			});
+
+			it("using class instances", async () => {
+				const fileContent = `
+				class Test { x: num; constructor() { this.x = 1; } }
+				var x: any = new Test();
+				var y: Test = x force as Test;
+				print(y.x);
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
+
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "class Test {\n  x: number;\n  constructor()\n  {\n    this.x = 1;\n  }\n}");
+				assertCodeIncludesSnippet(code, "let x: any = new Test();");
+				assertCodeIncludesSnippet(code, "let y: Test = (__kipper.forceCastAs(x,Test) as Test);");
+
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testPrintOutput((message: any) => assert.equal(message, 1, "Expected different output"), jsCode);
+			});
 		});
 
-		it("should raise a type error when converting an incorrect value from EXP to T", async () => {
-			const fileContent = `
-			var x: any = 123;
-			var y: str = x force as str;
-			print(y);
-			`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+		describe("should raise a type error when converting an incorrect value from EXP to T", () => {
+			it("using primitives", async () => {
+				const fileContent = `
+				var x: any = 123;
+				var y: str = x force as str;
+				print(y);
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert.isDefined(instance.programCtx);
-			assertErrorsAreEmpty(instance.programCtx!);
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
 
-			const code = instance.write();
-			assertCodeIncludesSnippet(code, "let x: any = 123;");
-			assertCodeIncludesSnippet(code, "let y: string = (__kipper.forceCastAs(x,__kipper.builtIn.str) as string);");
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = 123;");
+				assertCodeIncludesSnippet(code, "let y: string = (__kipper.forceCastAs(x,__kipper.builtIn.str) as string);");
 
-			// Run the code to make sure it works
-			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
-			testErrorThrows("KipTypeError", "Invalid force cast from 'num' to 'str'.", jsCode);
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testErrorThrows("KipTypeError", "Invalid force cast from 'num' to 'str'.", jsCode);
+			});
+
+			it("using interfaces", async () => {
+				const fileContent = `
+				interface Test { x: num; }
+				var x: any = { y: 2 };
+				var y: Test = x force as Test;
+				print(y.x);
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
+
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = {\n  y: 2,\n};");
+				assertCodeIncludesSnippet(code, "let y: Test = (__kipper.forceCastAs(x,__intf_Test) as Test);");
+
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testErrorThrows("KipTypeError", "Invalid force cast from 'obj' to 'Test'.", jsCode);
+			});
+
+			it("using class instances", async () => {
+				const fileContent = `
+				class Test { x: num; constructor() { this.x = 1; } }
+				var x: any = { x: 1, y: 2 };
+				var y: Test = x force as Test;
+				print(y.x);
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
+
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = {\n  x: 1,\n  y: 2,\n};");
+				assertCodeIncludesSnippet(code, "let y: Test = (__kipper.forceCastAs(x,Test) as Test);");
+
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testErrorThrows("KipTypeError", "Invalid force cast from 'obj' to 'Test'.", jsCode);
+			});
 		});
 	});
 
 	describe("try as", () => {
-		it("should convert a correct value from EXP to T", async () => {
-			const fileContent = `
-			var x: any = 123;
-			var y: any = x try as num;
-			if (y == null) {
-				print("Failed to cast");
-			} else {
-				print(y);
-			}
-			`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+		describe("should convert a correct value from EXP to T", () => {
+			it("using primitives", async () => {
+				const fileContent = `
+				var x: any = 123;
+				var y: num? = x try as num;
+				if (y == null) {
+					print("Failed to cast");
+				} else {
+					print(y);
+				}
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert.isDefined(instance.programCtx);
-			assertErrorsAreEmpty(instance.programCtx!);
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
 
-			const code = instance.write();
-			assertCodeIncludesSnippet(code, "let x: any = 123;");
-			assertCodeIncludesSnippet(code, "let y: any = (__kipper.tryCastAs(x,__kipper.builtIn.num) as number | null);");
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = 123;");
+				assertCodeIncludesSnippet(
+					code,
+					"let y: number | null = (__kipper.tryCastAs(x,__kipper.builtIn.num) as number | null);",
+				);
 
-			// Run the code to make sure it works
-			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
-			testPrintOutput((message: any) => assert.equal(message, 123, "Expected different output"), jsCode);
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testPrintOutput((message: any) => assert.equal(message, 123, "Expected different output"), jsCode);
+			});
+
+			it("using interfaces", async () => {
+				const fileContent = `
+				interface Test { x: num; }
+				var x: any = { x: 1 };
+				var y: Test? = x try as Test;
+				if (y == null) {
+					print("Failed to cast");
+				} else {
+					print("Succeeded to cast");
+				}
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
+
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = {\n  x: 1,\n};");
+				assertCodeIncludesSnippet(code, "let y: Test | null = (__kipper.tryCastAs(x,__intf_Test) as Test | null);");
+
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testPrintOutput(
+					(message: any) => assert.equal(message, "Succeeded to cast", "Expected different output"),
+					jsCode,
+				);
+			});
+
+			it("using class instances", async () => {
+				const fileContent = `
+				class Test { x: num; constructor() { this.x = 1; } }
+				var x: any = new Test();
+				var y: Test? = x try as Test;
+				if (y == null) {
+					print("Failed to cast");
+				} else {
+					print("Succeeded to cast");
+				}
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
+
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = new Test();");
+				assertCodeIncludesSnippet(code, "let y: Test | null = (__kipper.tryCastAs(x,Test) as Test | null);");
+
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testPrintOutput(
+					(message: any) => assert.equal(message, "Succeeded to cast", "Expected different output"),
+					jsCode,
+				);
+			});
 		});
 
-		it("should return null when converting an incorrect value from EXP to T", async () => {
-			const fileContent = `
-			var x: any = 123;
-			var y: any = x try as str;
-			if (y == null) {
-				print("Failed to cast");
-			} else {
-				print(y);
-			}
-			`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+		describe("should return null when converting an incorrect value from EXP to T", () => {
+			it("using primitives", async () => {
+				const fileContent = `
+				var x: any = 123;
+				var y: str? = x try as str;
+				if (y == null) {
+					print("Failed to cast");
+				} else {
+					print(y);
+				}
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
-			assert.isDefined(instance.programCtx);
-			assertErrorsAreEmpty(instance.programCtx!);
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
 
-			const code = instance.write();
-			assertCodeIncludesSnippet(code, "let x: any = 123;");
-			assertCodeIncludesSnippet(code, "let y: any = (__kipper.tryCastAs(x,__kipper.builtIn.str) as string | null);");
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = 123;");
+				assertCodeIncludesSnippet(
+					code,
+					"let y: string | null = (__kipper.tryCastAs(x,__kipper.builtIn.str) as string | null);",
+				);
 
-			// Run the code to make sure it works
-			const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
-			testPrintOutput((message: any) => assert.equal(message, "Failed to cast", "Expected different output"), jsCode);
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testPrintOutput((message: any) => assert.equal(message, "Failed to cast", "Expected different output"), jsCode);
+			});
+
+			it("using interfaces", async () => {
+				const fileContent = `
+				interface Test { x: num; }
+				var x: any = { y: 2 };
+				var y: Test? = x try as Test;
+				if (y == null) {
+					print("Failed to cast");
+				} else {
+					print("Succeeded to cast");
+				}
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
+
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = {\n  y: 2,\n};");
+				assertCodeIncludesSnippet(code, "let y: Test | null = (__kipper.tryCastAs(x,__intf_Test) as Test | null);");
+
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testPrintOutput((message: any) => assert.equal(message, "Failed to cast", "Expected different output"), jsCode);
+			});
+
+			it("using class instances", async () => {
+				const fileContent = `
+				class Test { x: num; constructor() { this.x = 1; } }
+				var x: any = { x: 1, y: 2 };
+				var y: Test? = x try as Test;
+				if (y == null) {
+					print("Failed to cast");
+				} else {
+					print("Succeeded to cast");
+				}
+				`;
+				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+				assert.isDefined(instance.programCtx);
+				assertErrorsAreEmpty(instance.programCtx!);
+
+				const code = instance.write();
+				assertCodeIncludesSnippet(code, "let x: any = {\n  x: 1,\n  y: 2,\n};");
+				assertCodeIncludesSnippet(code, "let y: Test | null = (__kipper.tryCastAs(x,Test) as Test | null);");
+
+				// Run the code to make sure it works
+				const jsCode = ts.transpile(code, { target: ScriptTarget.ES2015 });
+				testPrintOutput((message: any) => assert.equal(message, "Failed to cast", "Expected different output"), jsCode);
+			});
 		});
 	});
 });
