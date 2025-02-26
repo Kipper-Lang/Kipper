@@ -134,7 +134,9 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 
 		return genJSFunction(
 			signature,
-			`{ if (${typeIdentifier}.acceptsVal(${valIdentifier})) { return ${valIdentifier} }` + `return null; }`,
+			`{ if ('acceptsVal' in ${typeIdentifier} && ${typeIdentifier}.acceptsVal(${valIdentifier})) { return ${valIdentifier} }` +
+				`try { if (${valIdentifier} instanceof ${typeIdentifier}) { return ${valIdentifier} } } catch (_) {}` +
+				`return null; }`,
 		);
 	}
 
@@ -148,7 +150,8 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		return genJSFunction(
 			signature,
 			`{ const valType = ${valType};` +
-				`if (${typeIdentifier}.accepts(valType)) { return ${valIdentifier} }` +
+				`if ('acceptsVal' in ${typeIdentifier} && ${typeIdentifier}.acceptsVal(${valIdentifier})) { return ${valIdentifier} }` +
+				`try { if (${valIdentifier} instanceof ${typeIdentifier}) { return ${valIdentifier} } } catch (_) {}` +
 				`throw new ${typeErr}(\`Invalid force cast from '\${${valType}.name}' to '\${${typeIdentifier}.name}'.\`); }`,
 		);
 	}

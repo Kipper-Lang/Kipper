@@ -62,7 +62,7 @@ export class RuntimeTypesGenerator {
 				"const ",
 				identifier,
 				" = ",
-				`new ${TargetJS.getBuiltInIdentifier("Type")}`,
+				TargetJS.getBuiltInIdentifier("newIntfT"),
 				"(",
 				`"${interfaceName}"`,
 				",",
