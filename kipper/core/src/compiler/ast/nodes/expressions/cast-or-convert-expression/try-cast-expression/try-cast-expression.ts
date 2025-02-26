@@ -169,7 +169,7 @@ export class TryCastExpression extends CastOrConvertExpression<
 		// Get the type specified by the type specifier
 		const evalType = semanticData.castTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			evaluatedType: new UnionType<[BuiltInTypeNull, ProcessedType]>([BuiltInTypes.null, evalType]),
+			evaluatedType: new UnionType<[ProcessedType, BuiltInTypeNull]>([evalType, BuiltInTypes.null]),
 			castType: evalType,
 		};
 		this.programCtx.addInternalReference(this, kipperInternalBuiltInFunctions["tryCastAs"]);

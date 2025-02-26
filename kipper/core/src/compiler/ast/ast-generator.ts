@@ -91,6 +91,7 @@ import type {
 	ConvertExpressionContext,
 	TryCastExpressionContext,
 	ForceCastExpressionContext,
+	NullableTypeSpecifierExpressionContext,
 } from "../lexer-parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
@@ -1292,6 +1293,20 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx the parse tree
 	 */
 	public exitTypeofTypeSpecifierExpression: (ctx: TypeofTypeSpecifierExpressionContext) => void =
+		this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.nullableTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	public enterNullableTypeSpecifierExpression: (ctx: NullableTypeSpecifierExpressionContext) => void =
+		this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.nullableTypeSpecifier`.
+	 * @param ctx the parse tree
+	 */
+	public exitNullableTypeSpecifierExpression: (ctx: NullableTypeSpecifierExpressionContext) => void =
 		this.handleExitingTreeNode;
 
 	/**

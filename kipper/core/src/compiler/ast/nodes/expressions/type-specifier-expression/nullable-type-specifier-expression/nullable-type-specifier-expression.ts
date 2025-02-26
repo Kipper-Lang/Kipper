@@ -109,15 +109,15 @@ export class NullableTypeSpecifierExpression extends TypeSpecifierExpression<
 		);
 
 		let resultType:
-			| UnionType<[BuiltInTypeNull, ProcessedType] | [BuiltInTypeUndefined, ProcessedType]>
+			| UnionType<[ProcessedType, BuiltInTypeNull] | [ProcessedType, BuiltInTypeUndefined]>
 			| BuiltInTypeNull
 			| BuiltInTypeUndefined;
 		if (typeRef === BuiltInTypes.null || typeRef === BuiltInTypes.undefined) {
 			resultType = <BuiltInTypeNull | BuiltInTypeUndefined>typeRef;
 		} else if (semanticData.operator === kipperNullableNullOperator) {
-			resultType = new UnionType<[BuiltInTypeNull, ProcessedType]>([BuiltInTypes.null, typeRef]);
+			resultType = new UnionType<[ProcessedType, BuiltInTypeNull]>([typeRef, BuiltInTypes.null]);
 		} else {
-			resultType = new UnionType<[BuiltInTypeUndefined, ProcessedType]>([BuiltInTypes.undefined, typeRef]);
+			resultType = new UnionType<[ProcessedType, BuiltInTypeUndefined]>([typeRef, BuiltInTypes.undefined]);
 		}
 
 		this.typeSemantics = {

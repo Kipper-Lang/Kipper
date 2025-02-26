@@ -20,15 +20,17 @@ To use development versions of Kipper download the
 
 - New cast keywords `cast as`, `force as` and `try as`, which allow for various type-safe cast operations.
   ([#685](https://github.com/Kipper-Lang/Kipper/issues/685))
+- Implemented new `T?` and `T??` nullable type operator which marks the given type as `T | null` and `T | undefined`
+  respectively.
 - New classes:
   - `NullableTypeSpecifierExpression`, which represents an AST nullable type specifier expression that marks a given
-  	type as nullable with either `null` or `undefined`.
+    type as nullable with either `null` or `undefined`.
 - New interfaces:
   - `NullableTypeSpecifierExpressionSemantics`, which represents the semantics of a nullable type specifier expression.
   - `NullableTypeSpecifierExpressionTypeSemantics`, which represents the type semantics of a nullable type specifier
-		expression.
+    expression.
 - New functions:
-	- `KipperTypeScriptTarget.getRuntimeType`, which gets the corresponding runtime representation of a type.
+  - `KipperTypeScriptTarget.getRuntimeType`, which gets the corresponding runtime representation of a type.
 - New properties:
   - `CompilableASTNode.closestHigherLevelParent`, which returns the closest parent of the node that is of a higher level
     than the node itself. (Higher level as in statement or declaration level, undefined means the item itself is already
