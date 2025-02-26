@@ -11,14 +11,16 @@ import type {
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
+	LambdaPrimaryExpression,
 	ObjectPrimaryExpression,
 	ParameterDeclaration,
 	TranslatedCodeLine,
+	TranslatedCodeToken,
 	TranslatedExpression,
 	TryCastExpression,
 	VariableDeclaration,
 } from "@kipper/core";
-import { CompoundStatement, Expression, type LambdaPrimaryExpression } from "@kipper/core";
+import { BuiltInTypeArray, BuiltInTypeEmptyArray, CompoundStatement, Expression } from "@kipper/core";
 import { createTSFunctionSignature, getTSFunctionSignature } from "./tools";
 import { indentLines, JavaScriptTargetCodeGenerator, RuntimeTypesGenerator, TargetJS } from "@kipper/target-js";
 import { TargetTS } from "./target";
@@ -48,26 +50,40 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 	override variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const typeSemantics = node.getTypeSemanticData();
-
 		const storage = semanticData.storageType === "const" ? "const" : "let";
 		const tsType = TargetTS.getTypeScriptType(typeSemantics.valueType);
-		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
-		// Only add ' = EXP' if assignValue is defined
-		return [
-			[
-				storage,
-				" ",
-				semanticData.identifier,
-				":",
-				" ",
-				tsType,
-				...(assign.length > 0 ? [" ", "=", " ", ...assign] : []),
-				";",
-			],
-		];
+		let valueToAssign: Array<TranslatedCodeToken> = [];
+		if (semanticData.value) {
+			valueToAssign = await semanticData.value.translateCtxAndChildren();
+
+			// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+			// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+			if (
+				typeSemantics.valueType instanceof BuiltInTypeArray &&
+				semanticData.value.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+			) {
+				valueToAssign = [
+					TargetTS.getBuiltInIdentifier("assignTypeMeta"),
+					"(",
+					...valueToAssign,
+					",",
+					TargetTS.getBuiltInIdentifier("newArrayT"),
+					"(",
+					TargetTS.getRuntimeType(typeSemantics.valueType.valueType),
+					")",
+					")",
+				];
+			}
+			valueToAssign = [" ", "=", " ", ...valueToAssign];
+		}
+
+		return [[storage, " ", semanticData.identifier, ":", " ", tsType, ...valueToAssign, ";"]];
 	};
 
+	/**
+	 * Translates a {@link InterfaceDeclaration} into the TypeScript language.
+	 */
 	override interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const interfaceName = semanticData.identifier;
@@ -87,6 +103,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		];
 	};
 
+	/**
+	 * Translates a {@link InterfaceMethodDeclaration} into the TypeScript language.
+	 */
 	override interfaceMethodDeclaration = async (
 		node: InterfaceMethodDeclaration,
 	): Promise<Array<TranslatedCodeLine>> => {
@@ -117,6 +136,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		];
 	};
 
+	/**
+	 * Translates a {@link InterfacePropertyDeclaration} into the TypeScript language.
+	 */
 	override interfacePropertyDeclaration = async (
 		node: InterfacePropertyDeclaration,
 	): Promise<Array<TranslatedCodeLine>> => {
@@ -129,6 +151,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		return [[identifier, ":", " ", valueType, ";"]];
 	};
 
+	/**
+	 * Translates a {@link LambdaPrimaryExpression} into the TypeScript language.
+	 */
 	override lambdaPrimaryExpression = async (node: LambdaPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const typeData = node.getTypeSemanticData();
@@ -153,8 +178,8 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 			body instanceof Expression
 				? await body.translateCtxAndChildren()
 				: (await body.translateCtxAndChildren()).map((line) => <TranslatedExpression>[...line, "\n"]).flat();
-		const paramTypes = funcType.paramTypes.map((type) => TargetJS.getRuntimeType(type.getCompilableType()));
-		const returnType = TargetJS.getRuntimeType(funcType.returnType.getCompilableType());
+		const paramTypes = funcType.paramTypes.map((type) => TargetTS.getRuntimeType(type.getCompilableType()));
+		const returnType = TargetTS.getRuntimeType(funcType.returnType.getCompilableType());
 
 		if (body instanceof CompoundStatement) {
 			translatedBody.pop(); // remove unnecessary newline
@@ -177,6 +202,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		];
 	};
 
+	/**
+	 * Translates a {@link ParameterDeclaration} into the TypeScript language.
+	 */
 	override parameterDeclaration = async (node: ParameterDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const typeSemantics = node.getTypeSemanticData();
@@ -187,6 +215,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		return [[identifier, ":", " ", valueType]];
 	};
 
+	/**
+	 * Translates a {@link ObjectPrimaryExpression} into the TypeScript language.
+	 */
 	override objectPrimaryExpression = async (node: ObjectPrimaryExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const keyValuePairs = semanticData.keyValuePairs;
@@ -200,6 +231,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		return ["{", "\n", ...indentLines(translatedKeyValuePairs).flat(), "}"];
 	};
 
+	/**
+	 * Translates a {@link ClassMethodDeclaration} into the TypeScript language.
+	 */
 	override classMethodDeclaration = async (node: ClassMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const typeData = node.getTypeSemanticData();
@@ -228,6 +262,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		];
 	};
 
+	/**
+	 * Translates a {@link ClassMethodDeclaration} into the TypeScript language.
+	 */
 	override classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {
 		const semanticData = node.getSemanticData();
 		const identifier = semanticData.identifier;
@@ -236,6 +273,9 @@ export class TypeScriptTargetCodeGenerator extends JavaScriptTargetCodeGenerator
 		return [identifier, ":", " ", typeScriptType];
 	};
 
+	/**
+	 * Translates a {@link CastExpression} into the TypeScript language.
+	 */
 	override castExpression = async (node: CastExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const typeData = node.getTypeSemanticData();

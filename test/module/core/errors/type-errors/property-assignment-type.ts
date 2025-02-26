@@ -1,6 +1,6 @@
 import type { KipperCompileResult, TypeError } from "@kipper/core";
 import { KipperCompiler } from "@kipper/core";
-import { defaultConfig, defaultTarget, ensureTracebackDataExists } from "../index";
+import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
 describe("PropertyAssignmentTypeError", () => {

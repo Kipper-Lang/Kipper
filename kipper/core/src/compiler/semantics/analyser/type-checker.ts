@@ -9,7 +9,6 @@ import type {
 	ArrayPrimaryExpression,
 	AssignmentExpression,
 	FunctionDeclaration,
-	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementPostfixExpressionSemantics,
 	LambdaPrimaryExpression,

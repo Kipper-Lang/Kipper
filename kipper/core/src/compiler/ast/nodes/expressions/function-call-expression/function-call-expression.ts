@@ -156,6 +156,7 @@ export class FunctionCallExpression extends Expression<
 		this.typeSemantics = {
 			evaluatedType: funcType.returnType,
 			funcOrExp: calledExp,
+			funcType: funcType,
 		};
 	}
 
