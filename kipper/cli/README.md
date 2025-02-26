@@ -44,7 +44,7 @@ $ npm install -g @kipper/cli
 $ kipper COMMAND
 running command...
 $ kipper (--version)
-@kipper/cli/0.13.0-alpha.1 linux-x64 node-v23.4.0
+@kipper/cli/0.13.0-alpha.2 linux-x64 node-v23.4.0
 $ kipper --help [COMMAND]
 USAGE
   $ kipper COMMAND
@@ -111,7 +111,7 @@ EXAMPLES
   kipper compile -t ts ./path/to/file.kip -o build/ -e utf16le --warnings --log-timestamp
 ```
 
-_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.1/kipper/cli/src/commands/compile.ts)_
+_See code: [src/commands/compile.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.2/kipper/cli/src/commands/compile.ts)_
 
 ## `kipper help [COMMAND]`
 
@@ -128,7 +128,7 @@ OPTIONS
   --all  see all commands in CLI
 ```
 
-_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.1/kipper/cli/src/commands/help.ts)_
+_See code: [src/commands/help.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.2/kipper/cli/src/commands/help.ts)_
 
 ## `kipper new [LOCATION]`
 
@@ -145,7 +145,7 @@ OPTIONS
   -d, --default  Use the default settings for the new project. Skips the setup wizard.
 ```
 
-_See code: [src/commands/new.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.1/kipper/cli/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.2/kipper/cli/src/commands/new.ts)_
 
 ## `kipper run [FILE]`
 
@@ -190,7 +190,7 @@ EXAMPLES
   kipper run -t ts -o build/ -e utf8 -s "print('Hello, World!');" --warnings --log-timestamp
 ```
 
-_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.1/kipper/cli/src/commands/run.ts)_
+_See code: [src/commands/run.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.2/kipper/cli/src/commands/run.ts)_
 
 ## `kipper version`
 
@@ -201,7 +201,7 @@ USAGE
   $ kipper version
 ```
 
-_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.1/kipper/cli/src/commands/version.ts)_
+_See code: [src/commands/version.ts](https://github.com/Kipper-Lang/Kipper/blob/v0.13.0-alpha.2/kipper/cli/src/commands/version.ts)_
 <!-- commandsstop -->
 
 ## Contributing to Kipper

@@ -35,9 +35,15 @@ export function testErrorThrows(expectedError: string, expectedErrorMsg: string 
 		eval(jsProgram);
 		assert.fail(`Expected error '${expectedError}' but no error was thrown.`);
 	} catch (e) {
-		assert.equal((<Error>e).name, expectedError, `Expected error '${expectedError}' but got '${(<Error>e).name}'.`);
-		if (expectedErrorMsg) {
-			assert.include((<Error>e).message, expectedErrorMsg, `Expected error message to include '${expectedErrorMsg}'`);
+		try {
+			assert.equal((<Error>e).name, expectedError, `Expected error '${expectedError}' but got '${(<Error>e).name}'.`);
+			if (expectedErrorMsg) {
+				assert.include((<Error>e).message, expectedErrorMsg, `Expected error message to include '${expectedErrorMsg}'`);
+			}
+		} catch (assertErr) {
+			console.error(`Encountered error: ${e}`);
+			console.error(`Actual code:\n${jsProgram}`);
+			throw assertErr;
 		}
 	}
 }

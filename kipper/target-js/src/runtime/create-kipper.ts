@@ -39,9 +39,9 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 			if (type.baseType === null) { return false; }
 			return this.isInHierarchyOfType(type.baseType);
 		}
-		accepts(obj) {
-			if (this === obj) return true;
-			return obj instanceof KipperType && (this.customComparer ? this.customComparer(this, obj) : true);
+		accepts(objT) {
+			if (this === objT) return true;
+			return objT instanceof KipperType && (this.customComparer ? this.customComparer(this, objT) : true);
 		}
 		acceptsVal(obj) {
 			return this.accepts(__tmpKip.typeOf(obj));
@@ -51,12 +51,12 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 		constructor(name, fields, methods, genericArgs, baseType = null, customComparer = null) {
 			super(name, fields, methods, baseType, customComparer); this.genericArgs = genericArgs;
 		}
-		accepts(obj) {
-			if (this === obj) return true;
-			if (!(obj instanceof KipperGenericType) || this.genericArgs.length !== obj.genericArgs.length) return false;
-			const foreignGenericArgs = Object.entries(obj.genericArgs);
-			return this.name === obj.name &&
-				(this.customComparer ? this.customComparer(this, obj) : true) &&
+		accepts(objT) {
+			if (this === objT) return true;
+			if (!(objT instanceof KipperGenericType) || this.genericArgs.length !== objT.genericArgs.length) return false;
+			const foreignGenericArgs = Object.entries(objT.genericArgs);
+			return this.name === objT.name &&
+				(this.customComparer ? this.customComparer(this, objT) : true) &&
 				Object.entries(this.genericArgs).every((arg, i) => {
 					if (Array.isArray(arg)) {
 						if (!Array.isArray(foreignGenericArgs[i]) || arg.length !== foreignGenericArgs[i].length) { return false; }
@@ -67,6 +67,32 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 		}
 		changeGenericTypeArguments(genericArgs) { return new KipperGenericType(this.name, this.fields, this.methods, genericArgs, this.baseType) }
 	};
+	class KipperInterfaceType extends KipperType {
+		constructor(name, fields, methods, baseType = null, customComparer = null) {
+			super(name, fields, methods, baseType, customComparer);
+		}
+		accepts(objT) {
+			if (this === objT) return true;
+			if (!(objT instanceof KipperInterfaceType)) return false;
+			return this.isSubsetOfOrEqual(objT) &&
+				(this.customComparer ? this.customComparer(this, objT) : true);
+		}
+		acceptsVal(obj) {
+			const objT = __tmpKip.typeOf(obj);
+			if (objT !== __tmpKip.builtIn.obj && !(obj instanceof Object)) return false;
+			return __tmpKip.matches(obj, this);
+		}
+		isSubsetOfOrEqual(objT) {
+			return this.fields.every((field) => {
+				const fieldInObjT = objT.fields.find((f) => f.name === field.name);
+				return fieldInObjT && field.type.accepts(fieldInObjT.type);
+			}) && this.methods.every((method) => {
+				const methodInObjT = objT.methods.find((m) => m.name === method.name);
+				return methodInObjT && method.returnType.accepts(methodInObjT.returnType) && method.parameters.length === methodInObjT.parameters.length &&
+					method.parameters.every((param, i) => param.type.accepts(methodInObjT.parameters[i].type));
+			});
+		}
+	}
 	const __type_any = new KipperType('any', undefined, undefined);
 	const __type_null = new KipperType('null', undefined, undefined, undefined, (a, b) => a.name === b.name);
 	const __type_undefined = new KipperType('undefined', undefined, undefined, undefined, (a, b) => a.name === b.name);
@@ -77,15 +103,15 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 	const __type_Array = new KipperGenericType('Array', undefined, undefined, {T: __type_any}, undefined, (a, b) => a.name === b.name);
 	const __type_Func = new KipperGenericType('Func', undefined, undefined, {T: [], R: __type_any}, undefined, (a, b) => a.name === b.name);
 	__tmpKip.builtIn = {
-	 any: __type_any,
-	 null: __type_null,
-	 undefined: __type_undefined,
-	 str: __type_str,
-	 num: __type_num,
-	 bool: __type_bool,
-	 obj: __type_obj,
-	 Array: __type_Array,
-	 Func: __type_Func,
+		any: __type_any,
+		null: __type_null,
+		undefined: __type_undefined,
+		str: __type_str,
+		num: __type_num,
+		bool: __type_bool,
+		obj: __type_obj,
+		Array: __type_Array,
+		Func: __type_Func,
 	};
 	__tmpKip.KipperError = KipperError;
 	__tmpKip.TypeError = (class KipperTypeError extends KipperError { constructor(msg) { super(msg); this.name = 'KipTypeError'; } });
@@ -96,29 +122,32 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 	__tmpKip.Method = class KipperMethod { constructor(name, returnType, parameters) { this.name = name; this.returnType = returnType; this.parameters = parameters; } };
 	__tmpKip.Type = KipperType;
 	__tmpKip.assignTypeMeta = (value, typeMeta) => Object.assign(value, { __kipType: typeMeta });
+	__tmpKip.getTypeMeta = (value) => value.__kipType;
 	__tmpKip.newArrayT = (type) => __tmpKip.builtIn.Array.changeGenericTypeArguments({ T: type });
+	__tmpKip.newFuncT = (params, returnType) => __tmpKip.builtIn.Func.changeGenericTypeArguments({ T: params, R: returnType });
+	__tmpKip.newIntfT = (name, fields, methods, baseType = __tmpKip.builtIn.obj, customComparer = null) => new KipperInterfaceType(name, fields, methods, baseType, customComparer);
 	__tmpKip.typeOf = (value) => {
 		const prim = typeof value;
 		switch (prim) {
-			case 'undefined': return __kipper.builtIn.undefined;
-			case 'string': return __kipper.builtIn.str;
-			case 'number': return __kipper.builtIn.num;
-			case 'boolean': return __kipper.builtIn.bool;
+			case 'undefined': return __tmpKip.builtIn.undefined;
+			case 'string': return __tmpKip.builtIn.str;
+			case 'number': return __tmpKip.builtIn.num;
+			case 'boolean': return __tmpKip.builtIn.bool;
 			case 'function': {
-				return '__kipType' in value ? value.__kipType : __kipper.builtIn.Func;
+				return '__kipType' in value ? value.__kipType : __tmpKip.builtIn.Func;
 			}
 			case 'symbol':
 			case 'bigint':
 			case 'object': {
-				if (value === null) return __kipper.builtIn.null;
+				if (value === null) return __tmpKip.builtIn.null;
 				if (Array.isArray(value)) {
-					return '__kipType' in value ? value.__kipType : __kipper.builtIn.Array;
+					return '__kipType' in value ? value.__kipType : __tmpKip.builtIn.Array;
 				}
 				const prot = Object.getPrototypeOf(value);
 				if (prot && prot.constructor !== Object) {
 					return prot.constructor;
 				}
-				return __kipper.builtIn.obj;
+				return __tmpKip.builtIn.obj;
 			}
 		}
 	};
@@ -134,7 +163,7 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 					return false;
 				}
 				const fieldValue = value[fieldName];
-				const isSameType = __kipper.typeOf(fieldValue) === field.type;
+				const isSameType = __tmpKip.typeOf(fieldValue) === field.type;
 				if (primTypes.includes(field.type.name) && !isSameType) {
 					return false;
 				}
@@ -142,7 +171,7 @@ export const createKipper = (args: CreateKipperOptions = {}): string =>
 					throw new KipperNotImplementedError("Matches does not yet support the 'Array' and 'Func' types");
 				}
 				if (!primTypes.includes(fieldType.name)) {
-					if (!__kipper.matches(fieldValue, fieldType)) {
+					if (!__tmpKip.matches(fieldValue, fieldType)) {
 						return false;
 					}
 				}
