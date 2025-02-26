@@ -1,9 +1,7 @@
 import type { KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
-import * as ts from "typescript";
-import { ScriptTarget } from "typescript";
 import { compiler, defaultTarget } from ".";
-import { assertCodeIncludesSnippet, testPrintOutput } from "..";
+import { assertCodeIncludesSnippet } from "..";
 
 describe("Type Specifier", () => {
 	describe("Identifier Type Specifier", () => {
