@@ -29,10 +29,10 @@ To use development versions of Kipper download the
   - `BuiltInTypeArray.valueType`, which returns the value type of the array.
   - `FunctionCallExpressionTypeSemantics.funcType`, which returns the function type of the function call expression.
   - `NewInstantiationExpressionTypeSemantics.constructor`, which returns the constructor of the new instantiation
-		expression that is being called (if it exists).
+    expression that is being called (if it exists).
   - `CustomType.sourceNode`, which returns the source node of the custom type.
   - `CustomType.clsConstructor`, which returns the constructor of the class if the type is a class and the class has a
-		constructor.
+    constructor.
 
 ### Changed
 
@@ -42,8 +42,8 @@ To use development versions of Kipper download the
 ### Fixed
 
 - Empty arrays not being assignable to `Array<T>` types, due to a strict type checking error. This was fixed by adding
-	a special case for empty arrays in the type checking logic and code generation to ensure the type of the empty array
-	matches the required type set by the declaration or parameter. ([#696](https://github.com/Kipper-Lang/Kipper/issues/696))
+  a special case for empty arrays in the type checking logic and code generation to ensure the type of the empty array
+  matches the required type set by the declaration or parameter. ([#696](https://github.com/Kipper-Lang/Kipper/issues/696))
 
 ### Deprecated
 
