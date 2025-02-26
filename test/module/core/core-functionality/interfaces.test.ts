@@ -1,7 +1,7 @@
 import type { KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
 import { compiler, defaultTarget } from ".";
-import {assertErrorsAreEmpty} from "../index";
+import { assertErrorsAreEmpty } from "../index";
 
 describe("Interfaces", async () => {
 	it("Can initialize empty interface", async () => {
