@@ -1,0 +1,109 @@
+:root {
+  --scheme-primary: #e01a4f;
+  --scheme-primary-rgb: 224, 26, 79;
+  --scheme-dark-primary: #c71242;
+  --scheme-dark-primary-rgb: 199, 18, 66;
+  --scheme-secondary: #ffe74c;
+  --scheme-secondary-rgb: 255, 231, 76;
+  --scheme-url-blue: #002240;
+  --scheme-background-gray: #002240;
+  --scheme-shadow-gray: #ccc;
+  --scheme-shadow-gray-rgb: 204, 204, 204;
+  --scheme-gray: #f0f0f0;
+  --scheme-gray-rgb: 240, 240, 240;
+  --scheme-dark-gray: #787878;
+  --scheme-dark-gray-rgb: 120, 120, 120;
+  --scheme-white: #e9eaed;
+  --scheme-white-rgb: 233, 234, 237;
+  --scheme-dark: #1a1f36;
+  --scheme-dark-rgb: 26, 31, 54;
+  --scheme-console-blue: #1e1e3f;
+  --scheme-console-blue-rgb: 30, 30, 63;
+  --default-border-radius: .5em;
+  --default-text-margin: 2em;
+  --large-screen-size: 1200px;
+  --medium-screen-size: 920px;
+  --small-screen-size: 600px;
+  --button-dark-primary: #c71242;
+}
+
+#footer-bar {
+  background-color: #002240;
+  margin-top: auto;
+}
+
+#footer-bar #footer-content {
+  flex-shrink: 1;
+  padding: .5rem 1.5rem 1.5rem;
+}
+
+#footer-bar #footer-content li#development-and-support-notice {
+  color: #fff;
+  margin: .5rem 0 0;
+  font-size: .8rem;
+}
+
+#footer-bar #footer-content li#footer-logos {
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 1rem;
+  display: flex;
+}
+
+#footer-bar #footer-content li#footer-logos #htlleonding-logo {
+  height: 2.5rem;
+  margin: 1rem;
+}
+
+#footer-bar #footer-content li#footer-logos #jku-logo {
+  height: 1.6rem;
+  margin: 1.45rem;
+}
+
+#footer-bar #footer-content ul#footer-bar-list li {
+  margin-left: 2rem;
+  margin-right: 2rem;
+  font-weight: 400;
+}
+
+#footer-bar #footer-content li#copyright {
+  border-top: 1px solid #f4f4f4;
+  margin-top: 1em;
+  padding-top: 1rem;
+}
+
+#footer-bar #footer-content li#copyright small {
+  display: flex;
+}
+
+@media screen and (width <= 600px) {
+  #footer-bar {
+    width: 100vw;
+  }
+
+  #footer-bar #footer-content {
+    width: calc(100vw - 2rem);
+    padding: .5rem 1rem 1rem;
+  }
+
+  #footer-bar #footer-content li#footer-logos > #htlleonding-logo, #footer-bar #footer-content li#footer-logos > #jku-logo {
+    height: unset;
+    width: 12rem;
+    margin: 1.5rem;
+  }
+
+  #footer-bar #footer-content ul#footer-bar-list {
+    flex-direction: column;
+  }
+
+  #footer-bar #footer-content li#copyright {
+    border: none;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    display: flex;
+  }
+}
+
+/*# sourceMappingURL=index.06a4d211.css.map */
