@@ -351,7 +351,29 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	returnStatement = async (node: ReturnStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-		const returnValue = await semanticData.returnValue?.translateCtxAndChildren();
+		const functionReturnType = node.getSemanticData().function.getTypeSemanticData().valueType;
+		let returnValue = await semanticData.returnValue?.translateCtxAndChildren();
+
+		if (returnValue) {
+			// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+			// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+			if (
+				functionReturnType.returnType instanceof BuiltInTypeArray &&
+				semanticData.returnValue?.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+			) {
+				returnValue = [
+					TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+					"(",
+					...returnValue,
+					",",
+					TargetJS.getBuiltInIdentifier("newArrayT"),
+					"(",
+					TargetJS.getRuntimeType(functionReturnType.returnType.valueType),
+					")",
+					")",
+				];
+			}
+		}
 
 		return [["return", ...(returnValue ? [" ", ...returnValue] : []), ";"]];
 	};

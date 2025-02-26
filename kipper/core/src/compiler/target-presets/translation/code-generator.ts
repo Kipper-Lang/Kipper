@@ -472,7 +472,7 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract matchesExpression: TargetASTNodeCodeGenerator<MatchesExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@Link InstanceOfExpression} into a specific language.
+	 * Translates a {@link InstanceOfExpression} into a specific language.
 	 */
 	public abstract instanceOfExpression: TargetASTNodeCodeGenerator<InstanceOfExpression, TranslatedExpression>;
 }

@@ -130,5 +130,19 @@ describe("Arrays", () => {
 				"new Test(__kipper.assignTypeMeta(__kipper.assignTypeMeta([],__kipper.newArrayT(__kipper.builtIn.any)),__kipper.newArrayT(__kipper.builtIn.num)));",
 			);
 		});
+
+		it("Empty array returnable from any array function", async () => {
+			const code = "def test() -> Array<num> { return []; } print(test());";
+			const instance: KipperCompileResult = await compiler.compile(code, { target: defaultTarget });
+
+			assert.isDefined(instance.programCtx);
+			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+
+			const tsCode = instance.write();
+			assertCodeIncludesSnippet(
+				tsCode,
+				"return __kipper.assignTypeMeta(__kipper.assignTypeMeta([],__kipper.newArrayT(__kipper.builtIn.any)),__kipper.newArrayT(__kipper.builtIn.num));",
+			);
+		});
 	});
 });
