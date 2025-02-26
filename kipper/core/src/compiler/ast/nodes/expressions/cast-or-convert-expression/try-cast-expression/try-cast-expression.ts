@@ -35,7 +35,7 @@ import type { Expression } from "../../expression";
 import type { CastOrConvertExpressionContext, TryCastExpressionContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import type { BuiltInTypeNull, ProcessedType, RawType } from "../../../../../semantics";
-import { type BuiltInTypeArray, BuiltInTypes, type BuiltInTypeStr, UnionType } from "../../../../../semantics";
+import { BuiltInTypes, UnionType } from "../../../../../semantics";
 import { kipperInternalBuiltInFunctions } from "../../../../../semantics";
 import { UnableToDetermineSemanticDataError } from "../../../../../../errors";
 import { CastOrConvertExpression } from "../cast-or-convert-expression";

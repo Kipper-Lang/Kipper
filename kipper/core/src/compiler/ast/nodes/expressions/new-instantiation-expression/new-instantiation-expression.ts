@@ -7,7 +7,7 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-pa
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
-import {CustomType} from "../../../../semantics";
+import type { CustomType } from "../../../../semantics";
 
 /**
  * New instantiation expressions, which are used to create a new instance of a class.
