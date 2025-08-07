@@ -21,9 +21,9 @@ nav:
 # Welcome to the Kipper Docs
 
 <% if (docsVersion === 'next') { %>
-<p class="important">
-	Viewing experimental features for the <a href="https://www.npmjs.com/package/kipper/v/next"><code>next</code></a> release of Kipper! Features may change or be removed in the future, as well as not being fully implemented yet due to the ongoing development of Kipper.
-</p>
+	<p class="important">
+		Viewing experimental features for the <a href="https://www.npmjs.com/package/kipper/v/next"><code>next</code></a> release of Kipper! Features may change or be removed in the future, as well as not being fully implemented yet due to the ongoing development of Kipper.
+	</p>
 <% } %>
 
 This is the in-depth documentation and API reference for the Kipper programming language and compiler, which aims to
