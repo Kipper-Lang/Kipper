@@ -198,7 +198,7 @@ TypeScript already does a great job at this, so why is Kipper needed and how doe
 an amazing language, which is why Kipper has many of its designs and features similarly implemented. A big issue
 that TypeScript can't detect and properly resolve is the issue of inconsistent or non-determined typing. This is a
 fundamental issue when working with dynamic data or JavaScript code in TypeScript, where types are unknown or can't be
-known before runtime. TypeScript is unable to appropriately work with this code and requires the user to make
+known before runtime. TypeScript is unable to work with this code appropriately and requires the user to make
 assumptions about its types at compile-time. This leads to many issues where the compiler is unable to check for many
 potential issues and is often largely turned off, as the developers themselves are required to decide what is correct
 and often make serious mistakes in the process, causing code to become unpredictable and error-prone during execution.
@@ -220,7 +220,7 @@ Using this approach, Kipper will add many features developers know from other la
 - Consistent Typing and Compile Time Cast Checks
 - Custom Runtime Types
 
-Beyond this, there is a whole paper illustrating the design, implementation and reasons behind Kipper, which can be found
+Beyond this, there is a whole paper illustrating the design, implementation and reasons behind Kipper, which can be found at
 <a href="https://raw.githubusercontent.com/Kipper-Lang/Thesis/refs/heads/main/Kipper-Thesis-2025-04-08.pdf">"Kipper - Programming Language for Improved Runtime Type-Safety"</a> (written in English,
 with additional German oath and abstract).
 
