@@ -4,13 +4,6 @@ A `matches` expression is an expression used to pattern match a given value agai
 is used to check whether a value qualifies as a certain type (using the duck typing principle) and executes at runtime
 allowing any value to be checked.
 
-<p class="important">
-    Due to a bug in the current implementation, the `matches` expression is not yet available for the
-		<code>Array&lt;T&gt;</code> and <code>Func&lt;ARGS..., RET&gt;</code> types.
-
-		Should be fixed with the release of <code>v0.12.1</code>.
-</p>
-
 ## Syntax
 
 ```kipper
