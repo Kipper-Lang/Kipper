@@ -55,7 +55,7 @@
       }
     },
     "footer": {
-      "supported-by": "Developed at and supported by:",
+      "supported-by": "Developed at:",
       "list": {
         "releases": "Releases",
         "github": "GitHub",
