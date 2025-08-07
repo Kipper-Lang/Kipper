@@ -11,7 +11,8 @@
 [![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
-straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
+straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction! 
+Integrating strict type handling, runtime types, casts, among many other features, for a safer development experience!
 
 It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
 
