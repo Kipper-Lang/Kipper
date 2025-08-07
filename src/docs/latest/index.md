@@ -6,7 +6,7 @@ nav:
   - ./goals-and-roadmap.md
   - ./supported-platforms.md
   - ./usage-examples.md
-  - ./api/
+  - ./concepts/
   - ./variables.md
   - ./datatypes/
   - ./expressions/
@@ -16,6 +16,7 @@ nav:
   - ./classes.md
   - ./comments.md
   - ./built-in-functions.md
+  - ./api/
 ---
 
 # Welcome to the Kipper Docs

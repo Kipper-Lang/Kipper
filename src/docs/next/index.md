@@ -6,7 +6,7 @@ nav:
   - ./goals-and-roadmap.md
   - ./supported-platforms.md
   - ./usage-examples.md
-  - ./api/
+  - ./concepts/
   - ./variables.md
   - ./datatypes/
   - ./expressions/
@@ -16,13 +16,14 @@ nav:
   - ./classes.md
   - ./comments.md
   - ./built-in-functions.md
+  - ./api/
 ---
 
 # Welcome to the Kipper Docs
 
 <% if (docsVersion === 'next') { %>
 	<p class="important">
-		Viewing experimental features for the <a href="https://www.npmjs.com/package/kipper/v/next"><code>next</code></a> release of Kipper! Features may change or be removed in the future, as well as not being fully implemented yet due to the ongoing development of Kipper.
+	Viewing experimental features for the <a href="https://www.npmjs.com/package/kipper/v/next"><code>next</code></a> release of Kipper! Features may change or be removed in the future, as well as not being fully implemented yet due to the ongoing development of Kipper.
 	</p>
 <% } %>
 

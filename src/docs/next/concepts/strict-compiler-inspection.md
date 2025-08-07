@@ -1,0 +1,1 @@
+# Strict Compiler Inspection
