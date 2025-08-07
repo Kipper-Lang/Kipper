@@ -3,8 +3,15 @@
 <!-- docsVersion: <%= docsVersion %> -->
 <!-- latestVersion: <%= latestVersion %> -->
 <%
-let titleSuffix = `Kipper ${isDocsFile ? "Docs " : ""}`
-    + `v${!docsVersion || docsVersion === "latest" ? latestVersion : docsVersion}`
+let version = !docsVersion || docsVersion === "latest" ?
+    latestVersion :
+    docsVersion === "next" ?
+        "Preview (next)" :
+        docsVersion;
+if (!["latest", "next"].includes(version)) {
+    version = `v${version}`;
+}
+let titleSuffix = `Kipper ${isDocsFile ? "Docs " : ""} ${version}`;
 %>
 
 <%# Defining the title %>
