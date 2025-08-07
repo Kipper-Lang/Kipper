@@ -3,6 +3,10 @@ title: Overview
 dropdownTitle: Concepts
 nav:
 	- ./index.md
+	- ./type-consistency.md
+	- ./runtime-type-casting.md
+	- ./strict-compiler-inspection.md
+	- ./integrated-runtime-library.md
 ---
 
 This section of the Kipper documentation talks about its core concepts, which are the building blocks of the Kipper
