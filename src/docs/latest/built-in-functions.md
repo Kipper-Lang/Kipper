@@ -8,7 +8,7 @@ results might differ depending on whether you are using Node.js or a browser env
 
 List of all built-in functions, which are usable in the current release of Kipper.
 
-<h3 id="print" class="starts-with-code-tag"><code>print(msg: str) -> void</code></h3>
+<h3 id="print" class="starts-with-code-tag"><code>print(msg: any) -> void</code></h3>
 
 <p class="docs-version-indicator">Since v0.1.0</p>
 
@@ -23,7 +23,7 @@ This function under the hood `console.log()` in both Node.js and Browser environ
 | Node.js             | Supported <em class="green-checkmark">✓</em> |
 | Native JS (Browser) | Supported <em class="green-checkmark">✓</em> |
 
-<h3 id="len" class="starts-with-code-tag"><code>len(iterable: str | Array<any>) -> num</code></h3>
+<h3 id="len" class="starts-with-code-tag"><code>len(iterable: str | Array&lt;any&gt;) -> num</code></h3>
 
 <p class="docs-version-indicator">Since v0.10.0</p>
 
