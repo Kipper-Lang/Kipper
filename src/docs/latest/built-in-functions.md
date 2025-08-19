@@ -23,7 +23,7 @@ This function under the hood `console.log()` in both Node.js and Browser environ
 | Node.js             | Supported <em class="green-checkmark">✓</em> |
 | Native JS (Browser) | Supported <em class="green-checkmark">✓</em> |
 
-<h3 id="len" class="starts-with-code-tag"><code>len(iterable: str) -> num</code></h3>
+<h3 id="len" class="starts-with-code-tag"><code>len(iterable: str | Array<any>) -> num</code></h3>
 
 <p class="docs-version-indicator">Since v0.10.0</p>
 
