@@ -27,7 +27,7 @@ This function under the hood `console.log()` in both Node.js and Browser environ
 
 <p class="docs-version-indicator">Since v0.10.0</p>
 
-Returns the length of the specified iterable `iterable`, which may be of type <a href="./datatypes/str-type.html"><code>str</code></a> and <a href="./datatypes/array-type.html"><code>Array<T></code></a>.
+Returns the length of the specified iterable `iterable`, which may be of type <a href="./datatypes/str-type.html"><code>str</code></a> and <a href="./datatypes/array-type.html"><code>Array&lt;T&gt;</code></a>.
 
 #### List of supported environments
 
