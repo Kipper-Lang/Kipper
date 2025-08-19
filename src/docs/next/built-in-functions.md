@@ -34,5 +34,4 @@ Returns the length of the specified iterable `iterable`, which may be of type <a
 | Platform            | Status                                       |
 | ------------------- | -------------------------------------------- |
 | Node.js             | Supported <em class="green-checkmark">✓</em> |
-| Native JS (Browser) | Supported <em class="green-check
-																		mark">✓</em> |
+| Native JS (Browser) | Supported <em class="green-checkmark">✓</em> |
