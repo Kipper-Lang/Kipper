@@ -1,0 +1,2133 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+		<!-- isDocsFile: true -->
+		<!-- docsVersion: latest -->
+		<!-- latestVersion: 0.12.1 -->
+
+		<meta charset="utf-8">
+
+		<title>compiler - Kipper Docs v0.12.1</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="manifest" href="https://kipper-lang.org/up_/site.webmanifest">
+		<link rel="apple-touch-icon" href="https://kipper-lang.org/kipper-icon.4fb9d618.png">
+		<link rel="shortcut icon" type="image/ico" href="https://kipper-lang.org/favicon.dcdc2d88.ico">
+
+		<!-- Loading the prism highlighting style-sheet -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.f4d6a214.css">
+
+		<!-- Font Awesome Icons -->
+		<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+		<!-- Loading the main stylesheets -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.0b0dca04.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.244b5875.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.e24a109c.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.64273195.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.ee0d14b6.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.a30088c4.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.acde3bdd.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.4a54af2e.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.45a9510a.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.06a4d211.css">
+
+		<!-- Phone header nav bar functionality script -->
+		<script defer="" src="https://kipper-lang.org/index.f9a5285a.js"></script>
+
+		<!-- Including stylesheet for the Inter-Font -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+		<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+		<meta name="theme-color" content="#e01a4f">
+
+		<!-- Meta fields -->
+		<meta property="og:site_name" content="Kipper">
+		<meta property="og:title" content="compiler - Kipper Docs  v0.12.1">
+		<meta property="og:description" content="">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://kipper-lang.org/docs/api/module/core/compiler.html">
+		<meta property="og:image" content="https://kipper-lang.org/img/icons/kipper-head-icon.png">
+		<meta property="og:locale" content="en_GB">
+
+		<!-- Load in the entire locale object -->
+		<script>var locale = {
+    name: "en-US",
+    values: {
+        pages: {
+            homepage: {
+                title: "Welcome to Kipper!",
+                description: "The new customisable and easy to use type-safe language for the web and Node.js!"
+            },
+            downloads: {
+                title: "Downloads",
+                description: "Download the latest version of Kipper for your platform."
+            },
+            docs: {
+                title: "Documentation",
+                description: "Learn how to use Kipper with our comprehensive documentation."
+            },
+            playground: {
+                title: "Playground",
+                description: "Try out Kipper in our online playground."
+            },
+            changelog: {
+                title: "Changelog",
+                description: "View the latest changes to Kipper."
+            }
+        },
+        homepage: {
+            welcome: "Welcome to Kipper!",
+            description: "The new customisable and easy to use type-safe language for the web and Node.js!",
+            "play-button": "Try our Playground",
+            "docs-button": "View the Docs"
+        },
+        "nav-bar": {
+            downloads: "Downloads",
+            docs: "Docs",
+            playground: "Playground",
+            changelog: "Changelog"
+        },
+        playground: {
+            buttons: {
+                run: "Run",
+                stop: "Stop",
+                copy: "Copy",
+                clear: "Clear",
+                console: "Console",
+                compiler: "Compiler"
+            },
+            "save-state": {
+                saving: "Saving...",
+                saved: "Saved!",
+                loaded: "Loaded :)"
+            },
+            actions: {
+                cleared: "Cleared!",
+                copied: "Copied!"
+            }
+        },
+        footer: {
+            "supported-by": "Developed at:",
+            list: {
+                releases: "Releases",
+                github: "GitHub",
+                security: "Security",
+                issues: "Issue Tracker",
+                license: "License"
+            },
+            license: "Kipper is licensed under the GPL-3.0-or-later license."
+        }
+    }
+};
+window.locale = locale;
+var localeKey = "locale";
+window.localeKey = localeKey;
+let storedLocale = localStorage.getItem(localeKey);
+if (storedLocale === null) localStorage.setItem(localeKey, locale.name);
+// In case a site was loaded with a different locale than the one in the locale storage, then we redirect to
+// the correct locale
+if (!!storedLocale && storedLocale !== locale.name && !window.location.pathname.includes(`/${storedLocale}/`) && !window.location.pathname.includes("/docs/")) {
+    if (window.location.pathname.includes("/" + locale.name + "/")) window.location.pathname = window.location.pathname.replace(`/${locale.name}/`, `/${storedLocale}/`);
+    else window.location.pathname = `/${storedLocale}${window.location.pathname}`;
+}
+
+</script>
+
+		<link rel="stylesheet" href="https://kipper-lang.org/docs/index.9b1a8e07.css">
+	
+	
+		<script defer="" src="https://kipper-lang.org/index.ab8b3880.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.c645b044.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.27bd5b50.js"></script>
+
+		<!-- Show Error if JS is disabled or blocked -->
+		<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our site!</noscript>
+
+		<!-- Docs specific scripts -->
+		<script defer="" src="https://kipper-lang.org/docs/index.8234afb6.js"></script>
+
+		<div id="main-frame">
+			<div id="actual-content">
+				<!-- The top element: menu and search bar -->
+
+				<header id="primary-page-header" class="page-header">
+					<nav id="header-nav-bar">
+						<ul id="std-header-primary-content">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/index.html">
+									<script defer="">(()=>{
+    const link = document.querySelector(".kipper-version-and-logo .underline-button.kipper-logo-identifier");
+    const localeName = localStorage.getItem(window.localeKey);
+    const href = link.getAttribute("href");
+    if (!href.includes(localeName)) link.setAttribute("href", `/${localeName}${href}`);
+})();
+
+</script>
+									<h2>Kipper</h2>
+								</a>
+								<a id="version-identifier" href="https://github.com/Kipper-Lang/Kipper/releases/tag/v0.12.1">
+									<small>v0.12.1</small>
+								</a>
+							</li>
+
+							<!-- Main navigation links -->
+
+							<li>
+								<a href="https://kipper-lang.org/downloads.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Downloads</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Docs</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Playground</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/changelog.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Changelog</h4>
+								</a>
+							</li>
+
+							<script defer="">function changeHrefLocaleIfNecessary(links) {
+    const localeName = localStorage.getItem(window.localeKey);
+    for (const link of links){
+        // Insert locale name into the URL and replace the domain if it's included in the URL
+        const href = link.getAttribute("href").replace(window.location.origin, "").replace(`${window.location.protocol}//`, "");
+        if (!href.includes(localeName) && !href.includes("docs")) link.setAttribute("href", `/${localeName}${href}`);
+    }
+}
+(()=>{
+    const deskLinks = document.querySelectorAll("#phone-header-nav-bar-menu li .top-nav-menu-item");
+    const phoneLinks = document.querySelectorAll("#std-header-primary-content li .top-nav-menu-item");
+    changeHrefLocaleIfNecessary(deskLinks);
+    changeHrefLocaleIfNecessary(phoneLinks);
+})();
+
+</script>
+						</ul>
+						<div class="search-bar-wrapper">
+							<ul class="no-style-list">
+								<li class="search-icon-wrapper">
+									<i class="search-icon fa-solid fa-magnifying-glass"></i>
+								</li>
+								<li id="std-search-bar" class="search-bar">
+									<label for="std-search-bar-input"></label>
+									<input id="std-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<!-- Per default invisible phone nav bar, which is shown on smaller screens -->
+					<nav id="phone-header-nav-bar">
+						<ul id="phone-header-primary-content" class="no-style-list">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/index.html">
+									<script defer="">(()=>{
+    const link = document.querySelector(".kipper-version-and-logo .underline-button.kipper-logo-identifier");
+    const localeName = localStorage.getItem(window.localeKey);
+    const href = link.getAttribute("href");
+    if (!href.includes(localeName)) link.setAttribute("href", `/${localeName}${href}`);
+})();
+
+</script>
+									<h2>Kipper</h2>
+								</a>
+								<a id="version-identifier" href="https://github.com/Kipper-Lang/Kipper/releases/tag/v0.12.1">
+									<small>v0.12.1</small>
+								</a>
+							</li>
+
+							<!--
+        Unlike the standard nav, the links will be not shown per default and there will be a dropdown menu.
+        Additionally, the search bar is shown in the dropdown menu.
+        -->
+							<li class="phone-header-nav-bar-menu-toggle">
+								<i class="fa-solid fa-bars"></i>
+							</li>
+						</ul>
+
+						<!-- Dropdown menu -->
+						<ul id="phone-header-nav-bar-menu" class="no-style-list">
+							<li>
+								<ul id="phone-header-dropdown-urls" class="no-style-list">
+									<!-- Main navigation links - 'pages' is a global variable added by the parent 'header-nav-bar.ejs' -->
+
+									<li>
+										<a href="https://kipper-lang.org/downloads.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Downloads</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Docs</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Playground</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/changelog.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Changelog</h4>
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<div class="search-bar-wrapper">
+									<ul class="no-style-list">
+										<li class="search-icon-wrapper">
+											<i class="search-icon fa-solid fa-magnifying-glass"></i>
+										</li>
+										<li id="phone-search-bar" class="search-bar">
+											<label for="phone-search-bar-input"></label>
+											<input id="phone-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+										</li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</nav>
+
+					<div id="header-description-content" class="text-page-content-container"></div>
+				</header>
+
+				<!-- Main Content, where the text is located and the items unique to this site are defined -->
+				<div class="flex-parent-container flex-fill-to-parent">
+					<ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
+						<li id="docs-sidebar-nav-wrapper">
+							<nav id="docs-sidebar-nav">
+								<!-- Only visible on small screens to enhance navigability -->
+								<!-- Phone Path Nav - To not show the entire sidebar on phones and simplify the display -->
+								<nav class="phone-docs-nav">
+									<!-- Class as it appears twice. Here and in the nav sidebar -->
+									<ul class="no-style-list">
+										<li class="phone-docs-nav-bar-menu-toggle"><i class="fa-solid fa-bars"></i></li>
+										<li>
+											<ul class="phone-docs-nav-path">
+												<li>
+													<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/latest/index.html">
+														latest
+													</a>
+													<span> /</span>
+												</li>
+
+												<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/index.html">
+														Kipper API
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/index.html">
+														Module
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/index.html">
+														@kipper/core
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+														compiler
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+
+								<div id="docs-sidebar-std-nav">
+									<!-- Standard sidebar nav visible on all screen sizes -->
+									<div id="docs-sidebar-nav-head">
+										<h6><a class="docs-page-header-path-item" href="https://kipper-lang.org/index.html">Kipper Docs</a></h6>
+										<div id="docs-version-selection">
+											<div id="docs-version-selector-root-button-wrapper">
+												<button>
+													<span class="h6">
+														<span>latest</span>
+														<i class="fa-solid fa-xs fa-caret-down"></i>
+													</span>
+												</button>
+											</div>
+											<ul id="docs-versions-dropdown" class="no-style-list flex-column">
+												<li id="docs-version-selector-next" class="docs-version-selector-button-wrapper" data-version="next">
+													<a href="https://kipper-lang.org/docs/next/api/module/core/compiler.html">next</a>
+												</li>
+
+												<li id="docs-version-selector-latest" class="docs-version-selector-button-wrapper" data-version="latest">
+													<a href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">latest</a>
+												</li>
+
+												<li id="docs-version-selector-0.11.0" class="docs-version-selector-button-wrapper" data-version="0.11.0">
+													<a href="https://kipper-lang.org/docs/0.11.0/api/module/core/compiler.html">0.11.0</a>
+												</li>
+
+												<li id="docs-version-selector-0.10.4" class="docs-version-selector-button-wrapper" data-version="0.10.4">
+													<a href="https://kipper-lang.org/docs/0.10.4/index.html">0.10.4</a>
+												</li>
+
+												<li id="docs-version-selector-0.9.2" class="docs-version-selector-button-wrapper" data-version="0.9.2">
+													<a href="https://kipper-lang.org/docs/0.9.2/index.html">0.9.2</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<ul class="docs-sidebar-nav-list no-style-list flex-column">
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/index.html">Overview</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/quickstart.html">Quickstart</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/goals-and-roadmap.html">Goals for Kipper</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/supported-platforms.html">Supported platforms</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/usage-examples.html">Usage Examples</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Concepts</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/type-consistency.html">Type Consistency</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/runtime-type-casting.html">Runtime Type Casting</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/strict-compiler-inspection.html">Strict Compiler Inspection</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/integrated-runtime-library.html">Integrated Runtime Library</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/variables.html">Variables</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Datatypes</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/str-type.html">String Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/num-type.html">Number Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/bool-type.html">Boolean Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/void-type.html">Void Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/null-type.html">Null Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/undefined-type.html">Undefined Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/array-type.html">Array Type</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Expressions</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/tangled-expression.html">Tangled Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/arithmetic-expression.html">Arithmetic Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/assignment-expression.html">Assignment Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/conditional-expression.html">Conditional Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/logical-expression.html">Logical Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/bitwise-expression.html">Bitwise Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/relational-expression.html">Relational Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/convert-expression.html">Convert Or Cast Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/f-string-expression.html">F-String Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/member-access-expression.html">Member Access Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/function-call-expression.html">Function Call Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/lambda-expression.html">Lambda Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/matches-expression.html">Matches Expression</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Statements</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/expression-statement.html">Expression Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/if-statement.html">If Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/while-loop.html">While Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/do-while-loop.html">Do-While Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/for-loop.html">For Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/compound-statement.html">Compound Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/jump-statement.html">Jump Statement</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/functions.html">Functions</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/interfaces.html">Interfaces</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/classes.html">Classes</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/comments.html">Comments</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/built-in-functions.html">Built-in Functions</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Kipper API</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+												<!-- core, module, api -->
+												<!-- api -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/api/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- api -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/api/compiler-setup.html">Compiler Setup</a>
+													</p>
+												</li>
+
+												<li>
+													<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+														<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Module</span></button>
+													</p>
+													<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+														<!-- core, module, api -->
+														<!-- module, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/module/index.html">Overview</a>
+															</p>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+																<button><i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/core</span></button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/index.html">index</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">compiler</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/errors.html">errors</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/logger.html">logger</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/utils.html">utils</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button><i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/config</span></button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- config, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/config/index.html">config</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button>
+																	<i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/target-js</span>
+																</button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- target-js, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/target-js/index.html">index</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button>
+																	<i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/target-ts</span>
+																</button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- target-ts, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/target-ts/index.html">index</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+													</ul>
+												</li>
+
+												<li>
+													<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+														<button><i class="fa-solid fa-xs fa-caret-down"></i><span>CLI</span></button>
+													</p>
+													<ul class="docs-sidebar-nav-list no-style-list flex-column">
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/index.html">Overview</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/new.html">new</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/run.html">run</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/compile.html">compile</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/help.html">help</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/version.html">version</a>
+															</p>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</nav>
+						</li>
+						<li id="docs-page-content-wrapper">
+							<!-- Phone-specific navigation bar, for the top of the page -->
+							<!-- Phone Path Nav - To not show the entire sidebar on phones and simplify the display -->
+							<nav class="phone-docs-nav">
+								<!-- Class as it appears twice. Here and in the nav sidebar -->
+								<ul class="no-style-list">
+									<li class="phone-docs-nav-bar-menu-toggle"><i class="fa-solid fa-bars"></i></li>
+									<li>
+										<ul class="phone-docs-nav-path">
+											<li>
+												<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/latest/index.html">
+													latest
+												</a>
+												<span> /</span>
+											</li>
+
+											<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/index.html">
+													Kipper API
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/index.html">
+													Module
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/index.html">
+													@kipper/core
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+													compiler
+												</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</nav>
+
+							<section id="docs-content" class="shadowed-box">
+								<nav id="docs-page-header">
+									<ul id="docs-nav-current-page-path" class="flex-row no-style-list">
+										<li>
+											<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/latest/index.html"> latest </a>
+											<span> /</span>
+										</li>
+
+										<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/index.html">
+												Kipper API
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/index.html">
+												Module
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/index.html">
+												@kipper/core
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+												compiler
+											</a>
+										</li>
+									</ul>
+									<a id="edit-page-on-github" href="https://github.com/Kipper-Lang/Kipper/edit/docs/src/docs/latest/api/module/core/compiler.md" title="Edit this page on GitHub">
+										<i class="fa-brands fa-github"></i>
+										<p>Edit page</p>
+									</a>
+								</nav>
+								<article class="markdown-content">
+									<h1 id="class-dowhileloopiterationstatement">Class: DoWhileLoopIterationStatement</h1>
+<p><a href="../compiler.html">compiler</a>.DoWhileLoopIterationStatement</p>
+<p>Do-While loop statement class, which represents a do-while loop statement in the Kipper language and is compilable
+using <a href="compiler.Statement.html#translatectxandchildren">translateCtxAndChildren</a>.</p>
+<h2 id="hierarchy">Hierarchy</h2>
+<ul>
+<li><p><a href="compiler.IterationStatement.html"><code>IterationStatement</code></a>&lt;<a href="../interfaces/compiler.DoWhileLoopIterationStatementSemantics.html"><code>DoWhileLoopIterationStatementSemantics</code></a>, <a href="../interfaces/compiler.DoWhileLoopIterationStatementTypeSemantics.html"><code>DoWhileLoopIterationStatementTypeSemantics</code></a>&gt;</p>
+<p>↳ <strong><code>DoWhileLoopIterationStatement</code></strong></p></li>
+</ul>
+<h2 id="table-of-contents">Table of contents</h2>
+<h3 id="constructors">Constructors</h3>
+<ul>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#constructor">constructor</a></li>
+</ul>
+<h3 id="properties">Properties</h3>
+<ul>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#_antlrrulectx">_antlrRuleCtx</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#_children">_children</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#_errors">_errors</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#_parent">_parent</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#_semanticdata">_semanticData</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#_skippedsemanticanalysis">_skippedSemanticAnalysis</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#_skippedsemantictypechecking">_skippedSemanticTypeChecking</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#_skippedtargetsemanticanalysis">_skippedTargetSemanticAnalysis</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#_typesemantics">_typeSemantics</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#checkforwarnings">checkForWarnings</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#primarysemantictypechecking">primarySemanticTypeChecking</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#targetcodegenerator">targetCodeGenerator</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#targetsemanticanalysis">targetSemanticAnalysis</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#kind">kind</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#rulename">ruleName</a></li>
+</ul>
+<h3 id="accessors">Accessors</h3>
+<ul>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#antlrrulectx">antlrRuleCtx</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#children">children</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#codegenerator">codeGenerator</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#compileconfig">compileConfig</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#errors">errors</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#hasfailed">hasFailed</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#kind-1">kind</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#parent">parent</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#parser">parser</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#programctx">programCtx</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#rulename-1">ruleName</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#scope">scope</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#scopectx">scopeCtx</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#semanticanalyser">semanticAnalyser</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#semanticdata">semanticData</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#skippedsemanticanalysis">skippedSemanticAnalysis</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#skippedsemantictypechecking">skippedSemanticTypeChecking</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#sourcecode">sourceCode</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#target">target</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#tokenstream">tokenStream</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#typesemantics">typeSemantics</a></li>
+</ul>
+<h3 id="methods">Methods</h3>
+<ul>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#adderror">addError</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#addnewchild">addNewChild</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#ensuresemanticallyvalid">ensureSemanticallyValid</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#ensuretypesemanticallyvalid">ensureTypeSemanticallyValid</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#getantlrrulechildren">getAntlrRuleChildren</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#getsemanticdata">getSemanticData</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#gettypesemanticdata">getTypeSemanticData</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#handlesemanticerror">handleSemanticError</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#hassideeffects">hasSideEffects</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#preliminarytypechecking">preliminaryTypeChecking</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#preliminarytypecheckingchildren">preliminaryTypeCheckingChildren</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#primarypreliminarytypechecking">primaryPreliminaryTypeChecking</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#primarysemanticanalysis">primarySemanticAnalysis</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#recursivelycheckforwarnings">recursivelyCheckForWarnings</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#semanticanalysis">semanticAnalysis</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#semantictypechecking">semanticTypeChecking</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#semanticallyanalysechildren">semanticallyAnalyseChildren</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#semanticallytypecheckchildren">semanticallyTypeCheckChildren</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#targetsemanticallyanalysechildren">targetSemanticallyAnalyseChildren</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#translatectxandchildren">translateCtxAndChildren</a></li>
+<li><a href="compiler.DoWhileLoopIterationStatement.html#wrapupsemanticanalysis">wrapUpSemanticAnalysis</a></li>
+</ul>
+<h2 id="constructors-1">Constructors</h2>
+<h3 id="constructor">constructor</h3>
+<p>• <strong>new DoWhileLoopIterationStatement</strong>(<code>antlrRuleCtx</code>, <code>parent</code>)</p>
+<h4 id="parameters">Parameters</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th id="name" style="text-align:left;">Name</th>
+<th id="type" style="text-align:left;">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>antlrRuleCtx</code></td>
+<td style="text-align:left;"><a href="compiler.DoWhileLoopIterationStatementContext.html"><code>DoWhileLoopIterationStatementContext</code></a></td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>parent</code></td>
+<td style="text-align:left;"><a href="../compiler.html#compilablenodeparent"><code>CompilableNodeParent</code></a></td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="overrides">Overrides</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#constructor">constructor</a></p>
+<h4 id="defined-in">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:43</p>
+<h2 id="properties-1">Properties</h2>
+<h3 id="_antlrrulectx">_antlrRuleCtx</h3>
+<p>• <code>Readonly</code> <code>Private</code> <strong>_antlrRuleCtx</strong>: <a href="compiler.DoWhileLoopIterationStatementContext.html"><code>DoWhileLoopIterationStatementContext</code></a></p>
+<p>The private field '_antlrRuleCtx' that actually stores the variable data,
+which is returned inside the this.antlrRuleCtx.</p>
+<h4 id="overrides-1">Overrides</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#_antlrrulectx">_antlrRuleCtx</a></p>
+<h4 id="defined-in-1">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:39</p>
+<hr>
+<h3 id="_children">_children</h3>
+<p>• <code>Protected</code> <code>Readonly</code> <strong>_children</strong>: <a href="../compiler.html#compilablenodechild"><code>CompilableNodeChild</code></a>[]</p>
+<h4 id="overrides-2">Overrides</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#_children">_children</a></p>
+<h4 id="defined-in-2">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:41</p>
+<hr>
+<h3 id="_errors">_errors</h3>
+<p>• <code>Protected</code> <strong>_errors</strong>: <a href="errors.KipperError.html"><code>KipperError</code></a>[]</p>
+<h4 id="inherited-from">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#_errors">_errors</a></p>
+<h4 id="defined-in-3">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:75</p>
+<hr>
+<h3 id="_parent">_parent</h3>
+<p>• <code>Protected</code> <strong>_parent</strong>: <a href="../compiler.html#compilablenodeparent"><code>CompilableNodeParent</code></a></p>
+<h4 id="inherited-from-1">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#_parent">_parent</a></p>
+<h4 id="defined-in-4">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:55</p>
+<hr>
+<h3 id="_semanticdata">_semanticData</h3>
+<p>• <code>Protected</code> <strong>_semanticData</strong>: <code>undefined</code> | <a href="../interfaces/compiler.DoWhileLoopIterationStatementSemantics.html"><code>DoWhileLoopIterationStatementSemantics</code></a></p>
+<h4 id="inherited-from-2">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#_semanticdata">_semanticData</a></p>
+<h4 id="defined-in-5">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:56</p>
+<hr>
+<h3 id="_skippedsemanticanalysis">_skippedSemanticAnalysis</h3>
+<p>• <code>Protected</code> <strong>_skippedSemanticAnalysis</strong>: <code>boolean</code></p>
+<h4 id="inherited-from-3">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#_skippedsemanticanalysis">_skippedSemanticAnalysis</a></p>
+<h4 id="defined-in-6">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:85</p>
+<hr>
+<h3 id="_skippedsemantictypechecking">_skippedSemanticTypeChecking</h3>
+<p>• <code>Protected</code> <strong>_skippedSemanticTypeChecking</strong>: <code>boolean</code></p>
+<h4 id="inherited-from-4">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#_skippedsemantictypechecking">_skippedSemanticTypeChecking</a></p>
+<h4 id="defined-in-7">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:96</p>
+<hr>
+<h3 id="_skippedtargetsemanticanalysis">_skippedTargetSemanticAnalysis</h3>
+<p>• <code>Protected</code> <strong>_skippedTargetSemanticAnalysis</strong>: <code>boolean</code></p>
+<h4 id="inherited-from-5">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#_skippedtargetsemanticanalysis">_skippedTargetSemanticAnalysis</a></p>
+<h4 id="defined-in-8">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:43</p>
+<hr>
+<h3 id="_typesemantics">_typeSemantics</h3>
+<p>• <code>Protected</code> <strong>_typeSemantics</strong>: <code>undefined</code> | <a href="../interfaces/compiler.DoWhileLoopIterationStatementTypeSemantics.html"><code>DoWhileLoopIterationStatementTypeSemantics</code></a></p>
+<h4 id="inherited-from-6">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#_typesemantics">_typeSemantics</a></p>
+<h4 id="defined-in-9">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:75</p>
+<hr>
+<h3 id="checkforwarnings">checkForWarnings</h3>
+<p>• <strong>checkForWarnings</strong>: <code>undefined</code> = <code>undefined</code></p>
+<p>Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.</p>
+<p>This will log all warnings using programCtx.logger and store them in <a href="compiler.KipperProgramContext.html#warnings">warnings</a>.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.9.0</p>
+<h4 id="overrides-3">Overrides</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#checkforwarnings">checkForWarnings</a></p>
+<h4 id="defined-in-10">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:120</p>
+<hr>
+<h3 id="primarysemantictypechecking">primarySemanticTypeChecking</h3>
+<p>• <strong>primarySemanticTypeChecking</strong>: <code>undefined</code> = <code>undefined</code></p>
+<p>Performs type checking for this AST Node. This will log all warnings using programCtx.logger
+and throw errors if encountered.</p>
+<p>This will not run in case that this.hasFailed is true, as that indicates that the type checking of
+the children has already failed and as such no parent node should run type checking.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.7.0</p>
+<h4 id="overrides-4">Overrides</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#primarysemantictypechecking">primarySemanticTypeChecking</a></p>
+<h4 id="defined-in-11">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:112</p>
+<hr>
+<h3 id="targetcodegenerator">targetCodeGenerator</h3>
+<p>• <code>Readonly</code> <strong>targetCodeGenerator</strong>: <a href="../compiler.html#targetastnodecodegenerator"><code>TargetASTNodeCodeGenerator</code></a>&lt;<a href="compiler.DoWhileLoopIterationStatement.html"><code>DoWhileLoopIterationStatement</code></a>, <a href="../compiler.html#translatedcodeline"><code>TranslatedCodeLine</code></a>[]&gt;</p>
+<p>Code generator function that is specific for the <a href="compiler.KipperCompileTarget.html">target language</a>.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="overrides-5">Overrides</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#targetcodegenerator">targetCodeGenerator</a></p>
+<h4 id="defined-in-12">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:123</p>
+<hr>
+<h3 id="targetsemanticanalysis">targetSemanticAnalysis</h3>
+<p>• <code>Readonly</code> <strong>targetSemanticAnalysis</strong>: <code>undefined</code> | <a href="../compiler.html#targetastnodesemanticanalyser"><code>TargetASTNodeSemanticAnalyser</code></a>&lt;<a href="compiler.DoWhileLoopIterationStatement.html"><code>DoWhileLoopIterationStatement</code></a>&gt;</p>
+<p>Semantic analyser function that is specific for the <a href="compiler.KipperCompileTarget.html">target</a>. This only should
+perform logical analysis and not interpret the code/modify the <a href="compiler.DoWhileLoopIterationStatement.html#semanticdata">semanticData</a> field.</p>
+<p>If this is undefined then it means there is no target specific semantic analysis that needs to be done.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="overrides-6">Overrides</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#targetsemanticanalysis">targetSemanticAnalysis</a></p>
+<h4 id="defined-in-13">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:122</p>
+<hr>
+<h3 id="kind">kind</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>kind</strong>: <code>34</code></p>
+<p>The static kind for this AST Node.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.11.0</p>
+<h4 id="defined-in-14">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:26</p>
+<hr>
+<h3 id="rulename">ruleName</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>ruleName</strong>: <code>"RULE_doWhileLoopIterationStatement"</code></p>
+<p>The static rule name for this AST Node.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.11.0</p>
+<h4 id="defined-in-15">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:32</p>
+<h2 id="accessors-1">Accessors</h2>
+<h3 id="antlrrulectx">antlrRuleCtx</h3>
+<p>• <code>get</code> <strong>antlrRuleCtx</strong>(): <a href="compiler.DoWhileLoopIterationStatementContext.html"><code>DoWhileLoopIterationStatementContext</code></a></p>
+<p>The antlr context containing the antlr4 metadata for this statement.</p>
+<h4 id="returns">Returns</h4>
+<p><a href="compiler.DoWhileLoopIterationStatementContext.html"><code>DoWhileLoopIterationStatementContext</code></a></p>
+<h4 id="overrides-7">Overrides</h4>
+<p>IterationStatement.antlrRuleCtx</p>
+<h4 id="defined-in-16">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:83</p>
+<hr>
+<h3 id="children">children</h3>
+<p>• <code>get</code> <strong>children</strong>(): <a href="../compiler.html#compilablenodechild"><code>CompilableNodeChild</code></a>[]</p>
+<p>The children of this parse token.</p>
+<h4 id="returns-1">Returns</h4>
+<p><a href="../compiler.html#compilablenodechild"><code>CompilableNodeChild</code></a>[]</p>
+<h4 id="overrides-8">Overrides</h4>
+<p>IterationStatement.children</p>
+<h4 id="defined-in-17">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:76</p>
+<hr>
+<h3 id="codegenerator">codeGenerator</h3>
+<p>• <code>get</code> <strong>codeGenerator</strong>(): <a href="compiler.KipperTargetCodeGenerator.html"><code>KipperTargetCodeGenerator</code></a></p>
+<p>The code generator, which will generate the code for this specific token into the
+this.target target language.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-2">Returns</h4>
+<p><a href="compiler.KipperTargetCodeGenerator.html"><code>KipperTargetCodeGenerator</code></a></p>
+<h4 id="inherited-from-7">Inherited from</h4>
+<p>IterationStatement.codeGenerator</p>
+<h4 id="defined-in-18">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:104</p>
+<hr>
+<h3 id="compileconfig">compileConfig</h3>
+<p>• <code>get</code> <strong>compileConfig</strong>(): <a href="compiler.EvaluatedCompileConfig.html"><code>EvaluatedCompileConfig</code></a></p>
+<p>The compilation config for the program of this AST node.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-3">Returns</h4>
+<p><a href="compiler.EvaluatedCompileConfig.html"><code>EvaluatedCompileConfig</code></a></p>
+<h4 id="inherited-from-8">Inherited from</h4>
+<p>IterationStatement.compileConfig</p>
+<h4 id="defined-in-19">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:120</p>
+<hr>
+<h3 id="errors">errors</h3>
+<p>• <code>get</code> <strong>errors</strong>(): <a href="errors.KipperError.html"><code>KipperError</code></a>[]</p>
+<p>The errors that were caused by this node. Includes all errors from children.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-4">Returns</h4>
+<p><a href="errors.KipperError.html"><code>KipperError</code></a>[]</p>
+<h4 id="inherited-from-9">Inherited from</h4>
+<p>IterationStatement.errors</p>
+<h4 id="defined-in-20">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:81</p>
+<hr>
+<h3 id="hasfailed">hasFailed</h3>
+<p>• <code>get</code> <strong>hasFailed</strong>(): <code>boolean</code></p>
+<p>Returns true if the this.primarySemanticAnalysis semantic analysis or
+this.primarySemanticTypeChecking type checking of <a href="compiler.CompilableASTNode.html">this node</a> or any
+<a href="compiler.AnalysableASTNode.html#children">children nodes</a> failed.</p>
+<p>This indicates that the node is not valid and can not be translated.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-5">Returns</h4>
+<p><code>boolean</code></p>
+<h4 id="inherited-from-10">Inherited from</h4>
+<p>IterationStatement.hasFailed</p>
+<h4 id="defined-in-21">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:132</p>
+<hr>
+<h3 id="kind-1">kind</h3>
+<p>• <code>get</code> <strong>kind</strong>(): <code>34</code></p>
+<p>Returns the kind of this AST node. This represents the specific type of the <a href="compiler.DoWhileLoopIterationStatement.html#antlrrulectx">antlrRuleCtx</a> that this AST
+node wraps.</p>
+<p>This may be compared using the <a href="../compiler.html#parserulekindmapping">rule fields</a>, for example
+<a href="../compiler.html#rule_statement">RULE_statement</a>.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-6">Returns</h4>
+<p><code>34</code></p>
+<h4 id="overrides-9">Overrides</h4>
+<p>IterationStatement.kind</p>
+<h4 id="defined-in-22">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:57</p>
+<hr>
+<h3 id="parent">parent</h3>
+<p>• <code>get</code> <strong>parent</strong>(): <a href="../compiler.html#compilablenodeparent"><code>CompilableNodeParent</code></a></p>
+<p>Returns the <a href="compiler.CompilableASTNode.html">parent</a> that has this node as a child.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-7">Returns</h4>
+<p><a href="../compiler.html#compilablenodeparent"><code>CompilableNodeParent</code></a></p>
+<h4 id="inherited-from-11">Inherited from</h4>
+<p>IterationStatement.parent</p>
+<h4 id="defined-in-23">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:61</p>
+<hr>
+<h3 id="parser">parser</h3>
+<p>• <code>get</code> <strong>parser</strong>(): <a href="compiler.KipperParser.html"><code>KipperParser</code></a></p>
+<p>The parser that generated the parse tree and <a href="compiler.ParserASTNode.html#antlrrulectx">antlr rule context</a>.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-8">Returns</h4>
+<p><a href="compiler.KipperParser.html"><code>KipperParser</code></a></p>
+<h4 id="inherited-from-12">Inherited from</h4>
+<p>IterationStatement.parser</p>
+<h4 id="defined-in-24">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:79</p>
+<hr>
+<h3 id="programctx">programCtx</h3>
+<p>• <code>get</code> <strong>programCtx</strong>(): <a href="compiler.KipperProgramContext.html"><code>KipperProgramContext</code></a></p>
+<p>The file context instance containing the metadata for the listener and this AST node.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-9">Returns</h4>
+<p><a href="compiler.KipperProgramContext.html"><code>KipperProgramContext</code></a></p>
+<h4 id="inherited-from-13">Inherited from</h4>
+<p>IterationStatement.programCtx</p>
+<h4 id="defined-in-25">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:112</p>
+<hr>
+<h3 id="rulename-1">ruleName</h3>
+<p>• <code>get</code> <strong>ruleName</strong>(): <code>"RULE_doWhileLoopIterationStatement"</code></p>
+<p>Returns the rule name of this AST Node. This represents the specific type of the <a href="compiler.DoWhileLoopIterationStatement.html#antlrrulectx">antlrRuleCtx</a> that this
+AST node wraps.</p>
+<p>This may be compared using the <a href="../compiler.html#parserulekindmapping">rule fields</a>, for example
+<a href="../compiler.html#rule_statement">RULE_statement</a>.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.11.0</p>
+<h4 id="returns-10">Returns</h4>
+<p><code>"RULE_doWhileLoopIterationStatement"</code></p>
+<h4 id="overrides-10">Overrides</h4>
+<p>IterationStatement.ruleName</p>
+<h4 id="defined-in-26">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:69</p>
+<hr>
+<h3 id="scope">scope</h3>
+<p>• <code>get</code> <strong>scope</strong>(): <a href="compiler.LocalScope.html"><code>LocalScope</code></a> | <a href="compiler.ClassScope.html"><code>ClassScope</code></a> | <a href="compiler.GlobalScope.html"><code>GlobalScope</code></a></p>
+<p>The <a href="compiler.CompilableASTNode.html#scope">scope</a> of this AST node.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-11">Returns</h4>
+<p><a href="compiler.LocalScope.html"><code>LocalScope</code></a> | <a href="compiler.ClassScope.html"><code>ClassScope</code></a> | <a href="compiler.GlobalScope.html"><code>GlobalScope</code></a></p>
+<h4 id="inherited-from-14">Inherited from</h4>
+<p>IterationStatement.scope</p>
+<h4 id="defined-in-27">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:112</p>
+<hr>
+<h3 id="scopectx">scopeCtx</h3>
+<p>• <code>get</code> <strong>scopeCtx</strong>(): <a href="../interfaces/compiler.ScopeNode.html"><code>ScopeNode</code></a>&lt;<a href="compiler.LocalScope.html"><code>LocalScope</code></a> | <a href="compiler.ClassScope.html"><code>ClassScope</code></a> | <a href="compiler.GlobalScope.html"><code>GlobalScope</code></a>&gt;</p>
+<p>The context / AST node of the <a href="compiler.CompilableASTNode.html#scope">scope</a>.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-12">Returns</h4>
+<p><a href="../interfaces/compiler.ScopeNode.html"><code>ScopeNode</code></a>&lt;<a href="compiler.LocalScope.html"><code>LocalScope</code></a> | <a href="compiler.ClassScope.html"><code>ClassScope</code></a> | <a href="compiler.GlobalScope.html"><code>GlobalScope</code></a>&gt;</p>
+<h4 id="inherited-from-15">Inherited from</h4>
+<p>IterationStatement.scopeCtx</p>
+<h4 id="defined-in-28">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:120</p>
+<hr>
+<h3 id="semanticanalyser">semanticAnalyser</h3>
+<p>• <code>get</code> <strong>semanticAnalyser</strong>(): <a href="compiler.KipperTargetSemanticAnalyser.html"><code>KipperTargetSemanticAnalyser</code></a></p>
+<p>The translation-specific semantic analyser, which will perform semantic analysis specific for the
+this.target target language.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-13">Returns</h4>
+<p><a href="compiler.KipperTargetSemanticAnalyser.html"><code>KipperTargetSemanticAnalyser</code></a></p>
+<h4 id="inherited-from-16">Inherited from</h4>
+<p>IterationStatement.semanticAnalyser</p>
+<h4 id="defined-in-29">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:138</p>
+<hr>
+<h3 id="semanticdata">semanticData</h3>
+<p>• <code>get</code> <strong>semanticData</strong>(): <code>undefined</code> | <code>Semantics</code></p>
+<p>Returns the semantic data of this AST node.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-14">Returns</h4>
+<p><code>undefined</code> | <code>Semantics</code></p>
+<h4 id="inherited-from-17">Inherited from</h4>
+<p>IterationStatement.semanticData</p>
+<h4 id="defined-in-30">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:62</p>
+<p>• <code>set</code> <strong>semanticData</strong>(<code>value</code>): <code>void</code></p>
+<p>Sets the semantic data of this AST node.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="parameters-1">Parameters</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th id="name" style="text-align:left;">Name</th>
+<th id="type" style="text-align:left;">Type</th>
+<th id="description" style="text-align:left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>value</code></td>
+<td style="text-align:left;"><code>undefined</code> | <code>Semantics</code></td>
+<td style="text-align:left;">The semantic data that should be written onto this AST node.</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="returns-15">Returns</h4>
+<p><code>void</code></p>
+<h4 id="inherited-from-18">Inherited from</h4>
+<p>IterationStatement.semanticData</p>
+<h4 id="defined-in-31">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:71</p>
+<hr>
+<h3 id="skippedsemanticanalysis">skippedSemanticAnalysis</h3>
+<p>• <code>get</code> <strong>skippedSemanticAnalysis</strong>(): <code>boolean</code></p>
+<p>Returns true if the this.primarySemanticAnalysis semantic analysis of <a href="compiler.CompilableASTNode.html">this node</a>
+was skipped, due to required semantic data being missing. This indicates that the node is impossible to analyse
+as the required semantic data from other nodes is missing.</p>
+<h4 id="returns-16">Returns</h4>
+<p><code>boolean</code></p>
+<h4 id="inherited-from-19">Inherited from</h4>
+<p>IterationStatement.skippedSemanticAnalysis</p>
+<h4 id="defined-in-32">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:92</p>
+<hr>
+<h3 id="skippedsemantictypechecking">skippedSemanticTypeChecking</h3>
+<p>• <code>get</code> <strong>skippedSemanticTypeChecking</strong>(): <code>boolean</code></p>
+<p>Returns true if the this.primarySemanticTypeChecking type checking of <a href="compiler.CompilableASTNode.html">this node</a>
+was skipped, due to required semantic data being missing. This indicates that the node is impossible to type check
+as the required semantic data from other nodes is missing.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-17">Returns</h4>
+<p><code>boolean</code></p>
+<h4 id="inherited-from-20">Inherited from</h4>
+<p>IterationStatement.skippedSemanticTypeChecking</p>
+<h4 id="defined-in-33">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:104</p>
+<hr>
+<h3 id="sourcecode">sourceCode</h3>
+<p>• <code>get</code> <strong>sourceCode</strong>(): <code>string</code></p>
+<p>The Kipper source code that was used to generate this <a href="compiler.CompilableASTNode.html">CompilableASTNode</a>.</p>
+<p>Any left-over whitespaces will be removed using trim().</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-18">Returns</h4>
+<p><code>string</code></p>
+<h4 id="inherited-from-21">Inherited from</h4>
+<p>IterationStatement.sourceCode</p>
+<h4 id="defined-in-34">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:133</p>
+<hr>
+<h3 id="target">target</h3>
+<p>• <code>get</code> <strong>target</strong>(): <a href="compiler.KipperCompileTarget.html"><code>KipperCompileTarget</code></a></p>
+<p>The compilation translation for this specific token.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-19">Returns</h4>
+<p><a href="compiler.KipperCompileTarget.html"><code>KipperCompileTarget</code></a></p>
+<h4 id="inherited-from-22">Inherited from</h4>
+<p>IterationStatement.target</p>
+<h4 id="defined-in-35">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:95</p>
+<hr>
+<h3 id="tokenstream">tokenStream</h3>
+<p>• <code>get</code> <strong>tokenStream</strong>(): <code>TokenStream</code></p>
+<p>Returns the token stream source for this token.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-20">Returns</h4>
+<p><code>TokenStream</code></p>
+<h4 id="inherited-from-23">Inherited from</h4>
+<p>IterationStatement.tokenStream</p>
+<h4 id="defined-in-36">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:87</p>
+<hr>
+<h3 id="typesemantics">typeSemantics</h3>
+<p>• <code>get</code> <strong>typeSemantics</strong>(): <code>undefined</code> | <code>TypeSemantics</code></p>
+<p>Returns the type data of this AST node.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-21">Returns</h4>
+<p><code>undefined</code> | <code>TypeSemantics</code></p>
+<h4 id="inherited-from-24">Inherited from</h4>
+<p>IterationStatement.typeSemantics</p>
+<h4 id="defined-in-37">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:81</p>
+<p>• <code>set</code> <strong>typeSemantics</strong>(<code>value</code>): <code>void</code></p>
+<p>Sets the type data of this AST node.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="parameters-2">Parameters</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th id="name" style="text-align:left;">Name</th>
+<th id="type" style="text-align:left;">Type</th>
+<th id="description" style="text-align:left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>value</code></td>
+<td style="text-align:left;"><code>undefined</code> | <code>TypeSemantics</code></td>
+<td style="text-align:left;">The semantic data that should be written onto this AST node.</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="returns-22">Returns</h4>
+<p><code>void</code></p>
+<h4 id="inherited-from-25">Inherited from</h4>
+<p>IterationStatement.typeSemantics</p>
+<h4 id="defined-in-38">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:90</p>
+<h2 id="methods-1">Methods</h2>
+<h3 id="adderror">addError</h3>
+<p>▸ <strong>addError</strong>(<code>error</code>): <code>void</code></p>
+<p>Adds the specified error to the list of errors caused by this node.</p>
+<p>This is not the same as <a href="compiler.KipperProgramContext.html#reporterror">reportError</a>, since that function automatically logs the error
+as well and this function does not! This is only intended to keep track if a node has failed.</p>
+<h4 id="parameters-3">Parameters</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th id="name" style="text-align:left;">Name</th>
+<th id="type" style="text-align:left;">Type</th>
+<th id="description" style="text-align:left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>error</code></td>
+<td style="text-align:left;"><a href="errors.KipperError.html"><code>KipperError</code></a></td>
+<td style="text-align:left;">The error to add.</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="returns-23">Returns</h4>
+<p><code>void</code></p>
+<h4 id="inherited-from-26">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#adderror">addError</a></p>
+<h4 id="defined-in-39">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:143</p>
+<hr>
+<h3 id="addnewchild">addNewChild</h3>
+<p>▸ <strong>addNewChild</strong>(<code>newChild</code>): <code>void</code></p>
+<p>Adds new child ctx item to this AST node. The child item should be in the order that they appeared in the
+this.antlrCtx parse tree.</p>
+<p>This will also automatically set the parent of newChild to this instance.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="parameters-4">Parameters</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th id="name" style="text-align:left;">Name</th>
+<th id="type" style="text-align:left;">Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>newChild</code></td>
+<td style="text-align:left;"><a href="../compiler.html#compilablenodechild"><code>CompilableNodeChild</code></a></td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="returns-24">Returns</h4>
+<p><code>void</code></p>
+<h4 id="inherited-from-27">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#addnewchild">addNewChild</a></p>
+<h4 id="defined-in-40">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:149</p>
+<hr>
+<h3 id="ensuresemanticallyvalid">ensureSemanticallyValid</h3>
+<p>▸ <code>Protected</code> <strong>ensureSemanticallyValid</strong>(): <code>void</code></p>
+<p>Ensures that this node successfully passed the semantic analysis. This will be primarily used by statements and
+declarations, which depend on other nodes to be semantically valid.</p>
+<p>This is done by checking if the <a href="compiler.AnalysableASTNode.html#hasfailed">hasFailed</a> property is set to true and if the
+<a href="compiler.ParserASTNode.html#semanticdata">semanticData</a> property is undefined. If both of these conditions are met,
+then the node failed in an intended way and the parent should not continue processing, as it will cause errors.</p>
+<p>This is used to help the control flow and also to ensure that other nodes do not try to access the semantic
+data of a node that failed, as that would cause an <a href="errors.UndefinedSemanticsError.html">UndefinedSemanticsError</a>.</p>
+<p>Intentionally this will also likely cause an <a href="errors.UndefinedSemanticsError.html">UndefinedSemanticsError</a> in case the semantic data is missing
+and <a href="compiler.AnalysableASTNode.html#hasfailed">hasFailed</a> is returning false. Since that's an automatic contradiction, it's
+better to ignore it here and let the <a href="errors.UndefinedSemanticsError.html">UndefinedSemanticsError</a> be thrown later.</p>
+<p><strong><code>Throws</code></strong></p>
+<p>If the child failed and the semantic data is undefined. Note that this
+is not like <a href="errors.UndefinedSemanticsError.html">UndefinedSemanticsError</a>, as that error is thrown when the semantic data is undefined in an
+unintended or unexpected way. This error on the other will be handled by the compiler and influence the control
+flow.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-25">Returns</h4>
+<p><code>void</code></p>
+<h4 id="inherited-from-28">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#ensuresemanticallyvalid">ensureSemanticallyValid</a></p>
+<h4 id="defined-in-41">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:168</p>
+<hr>
+<h3 id="ensuretypesemanticallyvalid">ensureTypeSemanticallyValid</h3>
+<p>▸ <code>Protected</code> <strong>ensureTypeSemanticallyValid</strong>(): <code>void</code></p>
+<p>Ensures that this node successfully passed the type checking step of semantic analysis. This will be primarily used
+by statements and declarations, which depend on other nodes to be semantically valid.</p>
+<p>This is done by checking if the <a href="compiler.AnalysableASTNode.html#hasfailed">hasFailed</a> property is set to true and if the
+<a href="compiler.ParserASTNode.html#typesemantics">typeSemantics</a> property is undefined. If both of these conditions are met,
+then the child failed in an intended way and the parent should not continue processing, as it will cause errors.</p>
+<p>This is used to help the control flow and also to ensure that the parent node does not try to access the type
+semantic data of a child node that has failed.</p>
+<p>Intentionally this will also likely cause an <a href="errors.UndefinedSemanticsError.html">UndefinedSemanticsError</a> in case the semantic data is missing
+and <a href="compiler.AnalysableASTNode.html#hasfailed">hasFailed</a> is returning false. Since that's an automatic contradiction, it's
+better to ignore it here and let the <a href="errors.UndefinedSemanticsError.html">UndefinedSemanticsError</a> be thrown later.</p>
+<p><strong><code>Throws</code></strong></p>
+<p>If the child failed and the semantic data is undefined. Note that this
+is not like <a href="errors.UndefinedSemanticsError.html">UndefinedSemanticsError</a>, as that error is thrown when the semantic data is undefined in an
+unintended or unexpected way. This error on the other will be handled by the compiler and influence the control
+flow.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-26">Returns</h4>
+<p><code>void</code></p>
+<h4 id="inherited-from-29">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#ensuretypesemanticallyvalid">ensureTypeSemanticallyValid</a></p>
+<h4 id="defined-in-42">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:195</p>
+<hr>
+<h3 id="getantlrrulechildren">getAntlrRuleChildren</h3>
+<p>▸ <strong>getAntlrRuleChildren</strong>(): <code>ParseTree</code>[]</p>
+<p>Returns the children of the <a href="compiler.ParserASTNode.html#antlrrulectx">antlrRuleCtx</a> and throws an error in case they are undefined.</p>
+<p><strong><code>Throws</code></strong></p>
+<p>If antlrRuleCtx.children is undefined.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-27">Returns</h4>
+<p><code>ParseTree</code>[]</p>
+<h4 id="inherited-from-30">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#getantlrrulechildren">getAntlrRuleChildren</a></p>
+<h4 id="defined-in-43">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:161</p>
+<hr>
+<h3 id="getsemanticdata">getSemanticData</h3>
+<p>▸ <strong>getSemanticData</strong>(): <a href="../interfaces/compiler.DoWhileLoopIterationStatementSemantics.html"><code>DoWhileLoopIterationStatementSemantics</code></a></p>
+<p>Returns the semantic data of this AST node and throws an error in case it is undefined.</p>
+<p><strong><code>Throws</code></strong></p>
+<p>If <a href="compiler.ParserASTNode.html#semanticdata">semanticData</a> is undefined.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-28">Returns</h4>
+<p><a href="../interfaces/compiler.DoWhileLoopIterationStatementSemantics.html"><code>DoWhileLoopIterationStatementSemantics</code></a></p>
+<h4 id="inherited-from-31">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#getsemanticdata">getSemanticData</a></p>
+<h4 id="defined-in-44">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:174</p>
+<hr>
+<h3 id="gettypesemanticdata">getTypeSemanticData</h3>
+<p>▸ <strong>getTypeSemanticData</strong>(): <a href="../interfaces/compiler.DoWhileLoopIterationStatementTypeSemantics.html"><code>DoWhileLoopIterationStatementTypeSemantics</code></a></p>
+<p>Returns the type semantic data of this AST node and throws an error in case it is undefined.</p>
+<p><strong><code>Throws</code></strong></p>
+<p>UndefinedSemanticsError If <a href="compiler.ParserASTNode.html#semanticdata">semanticData</a> is undefined.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-29">Returns</h4>
+<p><a href="../interfaces/compiler.DoWhileLoopIterationStatementTypeSemantics.html"><code>DoWhileLoopIterationStatementTypeSemantics</code></a></p>
+<h4 id="inherited-from-32">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#gettypesemanticdata">getTypeSemanticData</a></p>
+<h4 id="defined-in-45">Defined in</h4>
+<p>kipper/core/src/compiler/ast/ast-node.ts:187</p>
+<hr>
+<h3 id="handlesemanticerror">handleSemanticError</h3>
+<p>▸ <code>Protected</code> <strong>handleSemanticError</strong>(<code>error</code>): <code>void</code></p>
+<p>Handles the specified error that occurred during the semantic analysis of this node in a standardised way.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="parameters-5">Parameters</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th id="name" style="text-align:left;">Name</th>
+<th id="type" style="text-align:left;">Type</th>
+<th id="description" style="text-align:left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>error</code></td>
+<td style="text-align:left;"><a href="errors.KipperError.html"><code>KipperError</code></a> | <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error"><code>Error</code></a></td>
+<td style="text-align:left;">The error to handle.</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="returns-30">Returns</h4>
+<p><code>void</code></p>
+<h4 id="inherited-from-33">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#handlesemanticerror">handleSemanticError</a></p>
+<h4 id="defined-in-46">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:343</p>
+<hr>
+<h3 id="hassideeffects">hasSideEffects</h3>
+<p>▸ <strong>hasSideEffects</strong>(): <code>boolean</code></p>
+<p>Returns whether this AST node has any side effects. This means that the node will change the state of the
+program in some way and not only return a value.</p>
+<p>This specifically can mean it assigns or modifies a variable, calls a function, or throws an error.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.11.0</p>
+<h4 id="returns-31">Returns</h4>
+<p><code>boolean</code></p>
+<h4 id="inherited-from-34">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#hassideeffects">hasSideEffects</a></p>
+<h4 id="defined-in-47">Defined in</h4>
+<p>kipper/core/src/compiler/ast/compilable-ast-node.ts:160</p>
+<hr>
+<h3 id="preliminarytypechecking">preliminaryTypeChecking</h3>
+<p>▸ <strong>preliminaryTypeChecking</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Performs preliminary type checking on this AST node and all this.children children nodes. This uses the
+this.semanticData semantic data that was evaluated during this.semanticAnalysis semantic analysis.</p>
+<p>This preliminarily sets the this.typeSemantics type semantics of this node and allows the use of
+this.getTypeSemanticData in any child that may need the data, without getting any error.</p>
+<p>This is a special step in the type checking process, where the type semantics are evaluated before the actual type
+checking is done. This is useful for cases where children need parent data to be already evaluated, like for
+example inside a class when the class type is needed for checking the "this" keyword.</p>
+<p>We will call this "Ahead of time" type evaluation, as it is done before the actual proper type checking of the
+node, preceding any other type checking in the entire tree.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.12.0</p>
+<h4 id="returns-32">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-35">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#preliminarytypechecking">preliminaryTypeChecking</a></p>
+<h4 id="defined-in-48">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:246</p>
+<hr>
+<h3 id="preliminarytypecheckingchildren">preliminaryTypeCheckingChildren</h3>
+<p>▸ <code>Protected</code> <strong>preliminaryTypeCheckingChildren</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Runs <a href="compiler.AnalysableASTNode.html#preliminarytypechecking">preliminaryTypeChecking</a> of all children nodes.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.12.0</p>
+<h4 id="returns-33">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-36">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#preliminarytypecheckingchildren">preliminaryTypeCheckingChildren</a></p>
+<h4 id="defined-in-49">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:367</p>
+<hr>
+<h3 id="primarypreliminarytypechecking">primaryPreliminaryTypeChecking</h3>
+<p>▸ <code>Protected</code> <code>Optional</code> <strong>primaryPreliminaryTypeChecking</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Preliminary type checks the code inside this AST node.</p>
+<p>This is a special step in the type checking process, where the type semantics are evaluated before the actual type
+checking is done. This is useful for cases where children need parent data to be already evaluated, like for
+example inside a class when the class type is needed for checking the "this" keyword.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.12.0</p>
+<h4 id="returns-34">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-37">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#primarypreliminarytypechecking">primaryPreliminaryTypeChecking</a></p>
+<h4 id="defined-in-50">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:426</p>
+<hr>
+<h3 id="primarysemanticanalysis">primarySemanticAnalysis</h3>
+<p>▸ <strong>primarySemanticAnalysis</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Performs the semantic analysis for this Kipper token. This will log all warnings using programCtx.logger
+and throw errors if encountered.</p>
+<p>This will not run in case that this.hasFailed is true, as that indicates that the semantic analysis of
+the children has already failed and as such no parent node should run type checking.</p>
+<h4 id="returns-35">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="overrides-11">Overrides</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#primarysemanticanalysis">primarySemanticAnalysis</a></p>
+<h4 id="defined-in-51">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/iteration-statement/do-while-loop-iteration-statement/do-while-loop-iteration-statement.ts:94</p>
+<hr>
+<h3 id="recursivelycheckforwarnings">recursivelyCheckForWarnings</h3>
+<p>▸ <strong>recursivelyCheckForWarnings</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Recursively checks for warnings by calling this function on all this.children children and calling
+<a href="compiler.AnalysableASTNode.html#checkforwarnings">checkForWarnings</a> on this class as well.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-36">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-38">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#recursivelycheckforwarnings">recursivelyCheckForWarnings</a></p>
+<h4 id="defined-in-52">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:327</p>
+<hr>
+<h3 id="semanticanalysis">semanticAnalysis</h3>
+<p>▸ <strong>semanticAnalysis</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Semantically analyses the code inside this AST node and all this.children children nodes.</p>
+<p>This function will recursively call itself on the this.children instances and analyse the deepest children
+nodes first, working up as the tokens get more complex. This way the parent tokens can access the semantics of
+the children and properly process itself.</p>
+<p>This function will set the this.semanticData property and allow the use of this.getSemanticData,
+without getting any error.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.8.0</p>
+<h4 id="returns-37">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-39">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#semanticanalysis">semanticAnalysis</a></p>
+<h4 id="defined-in-53">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:212</p>
+<hr>
+<h3 id="semantictypechecking">semanticTypeChecking</h3>
+<p>▸ <strong>semanticTypeChecking</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Performs type checking on this AST node and all this.children children nodes. This uses the
+this.semanticData semantic data that was evaluated during this.semanticAnalysis semantic analysis.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-38">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-40">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#semantictypechecking">semanticTypeChecking</a></p>
+<h4 id="defined-in-54">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:269</p>
+<hr>
+<h3 id="semanticallyanalysechildren">semanticallyAnalyseChildren</h3>
+<p>▸ <code>Protected</code> <strong>semanticallyAnalyseChildren</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Runs <a href="compiler.AnalysableASTNode.html#semanticanalysis">semanticAnalysis</a> of all children nodes.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-39">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-41">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#semanticallyanalysechildren">semanticallyAnalyseChildren</a></p>
+<h4 id="defined-in-55">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:352</p>
+<hr>
+<h3 id="semanticallytypecheckchildren">semanticallyTypeCheckChildren</h3>
+<p>▸ <code>Protected</code> <strong>semanticallyTypeCheckChildren</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Runs <a href="compiler.AnalysableASTNode.html#semantictypechecking">semanticTypeChecking</a> of all children nodes.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-40">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-42">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#semanticallytypecheckchildren">semanticallyTypeCheckChildren</a></p>
+<h4 id="defined-in-56">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:382</p>
+<hr>
+<h3 id="targetsemanticallyanalysechildren">targetSemanticallyAnalyseChildren</h3>
+<p>▸ <code>Protected</code> <strong>targetSemanticallyAnalyseChildren</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Runs <a href="compiler.AnalysableASTNode.html#semantictypechecking">semanticTypeChecking</a> of all children nodes.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-41">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-43">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#targetsemanticallyanalysechildren">targetSemanticallyAnalyseChildren</a></p>
+<h4 id="defined-in-57">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:397</p>
+<hr>
+<h3 id="translatectxandchildren">translateCtxAndChildren</h3>
+<p>▸ <strong>translateCtxAndChildren</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<a href="../compiler.html#translatedcodeline"><code>TranslatedCodeLine</code></a>[]&gt;</p>
+<p>Generates the typescript code for this item, and all children (if they exist).</p>
+<p>Every item in the array represents a single line of code.</p>
+<h4 id="returns-42">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<a href="../compiler.html#translatedcodeline"><code>TranslatedCodeLine</code></a>[]&gt;</p>
+<h4 id="inherited-from-44">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#translatectxandchildren">translateCtxAndChildren</a></p>
+<h4 id="defined-in-58">Defined in</h4>
+<p>kipper/core/src/compiler/ast/nodes/statements/statement.ts:72</p>
+<hr>
+<h3 id="wrapupsemanticanalysis">wrapUpSemanticAnalysis</h3>
+<p>▸ <strong>wrapUpSemanticAnalysis</strong>(): <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<p>Wrap-up semantic analysis, which analyses this AST node and all this.children children nodes, and
+checks whether they are semantically valid for the this.target target language. This uses the
+this.semanticData semantic data and this.typeData type data that was evaluated during the previous
+this.semanticAnalysis semantic analysis and this.semanticTypeChecking type checking steps.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-43">Returns</h4>
+<p><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise"><code>Promise</code></a>&lt;<code>void</code>&gt;</p>
+<h4 id="inherited-from-45">Inherited from</h4>
+<p><a href="compiler.IterationStatement.html">IterationStatement</a>.<a href="compiler.IterationStatement.html#wrapupsemanticanalysis">wrapUpSemanticAnalysis</a></p>
+<h4 id="defined-in-59">Defined in</h4>
+<p>kipper/core/src/compiler/ast/analysable-ast-node.ts:301</p>
+								</article>
+							</section>
+						</li>
+					</ul>
+				</div>
+				<!-- Footer bar - contains some links and general copyright notice -->
+				<footer id="footer-bar" class="flex-parent-container flex-column">
+					<ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+						<li id="development-and-support-notice">
+							<p>Developed at:</p>
+						</li>
+						<li id="footer-logos">
+							<img id="htlleonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="">
+							<img id="jku-logo" src="https://www.jku.at/typo3conf/ext/jku_distribution/Resources/Public/Images/Footer/jku-logo-mobile-en.svg" alt="">
+						</li>
+						<li>
+							<ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/releases">Releases</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper">GitHub</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/security/policy">Security</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/issues">Issue Tracker</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE">License</a>
+									</small>
+								</li>
+							</ul>
+						</li>
+						<li id="copyright">
+							<small class="centered-text white-text">
+								Copyright © 2021-2025 Luna Klatzer, 2024-2025 Lorenz Holzbauer &amp; Fabian Baitura. <br>
+								Kipper is licensed under the GPL-3.0-or-later license.
+							</small>
+						</li>
+					</ul>
+				</footer>
+			</div>
+		</div>
+
+		<!-- Overlay for displaying search results -->
+		<div id="search-result-overlay">
+			<div class="flex-column flex-parent-container" id="search-result"></div>
+		</div>
+		<script src="https://kipper-lang.org/index.3b69bdcb.js" defer=""></script>
+	
+

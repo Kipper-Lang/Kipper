@@ -1,0 +1,411 @@
+:root {
+  --scheme-primary: #e01a4f;
+  --scheme-primary-rgb: 224, 26, 79;
+  --scheme-dark-primary: #c71242;
+  --scheme-dark-primary-rgb: 199, 18, 66;
+  --scheme-secondary: #ffe74c;
+  --scheme-secondary-rgb: 255, 231, 76;
+  --scheme-url-blue: #002240;
+  --scheme-background-gray: #002240;
+  --scheme-shadow-gray: #ccc;
+  --scheme-shadow-gray-rgb: 204, 204, 204;
+  --scheme-gray: #f0f0f0;
+  --scheme-gray-rgb: 240, 240, 240;
+  --scheme-dark-gray: #787878;
+  --scheme-dark-gray-rgb: 120, 120, 120;
+  --scheme-white: #e9eaed;
+  --scheme-white-rgb: 233, 234, 237;
+  --scheme-dark: #1a1f36;
+  --scheme-dark-rgb: 26, 31, 54;
+  --scheme-console-blue: #1e1e3f;
+  --scheme-console-blue-rgb: 30, 30, 63;
+  --default-border-radius: .5em;
+  --default-text-margin: 2em;
+  --large-screen-size: 1200px;
+  --medium-screen-size: 920px;
+  --small-screen-size: 600px;
+  --button-dark-primary: #c71242;
+}
+
+#interactive-playground {
+  flex-direction: row;
+}
+
+#interactive-playground #interactive-code-editor {
+  flex-grow: 2;
+  margin: 0;
+  display: flex;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu {
+  border-bottom: 2px solid #f0f0f0;
+  flex-direction: row;
+  place-content: center flex-start;
+  display: flex;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #clear-content-list-item {
+  margin-right: 1rem;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #version-selection {
+  z-index: 2;
+  margin-bottom: 0;
+  margin-left: 0;
+  position: relative;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #version-selection > #versions-dropdown {
+  visibility: hidden;
+  z-index: 2;
+  border-radius: 5px;
+  width: calc(100% - 8px);
+  max-height: 60vh;
+  margin: 4px 0 0 4px;
+  display: none;
+  position: absolute;
+  top: 100%;
+  overflow-y: auto;
+  box-shadow: 0 4px 12px #00000059;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #version-selection > #versions-dropdown:last-child.version-selector-button-wrapper {
+  border-bottom: none;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #version-selection > #versions-dropdown li.version-selector-button-wrapper {
+  border-bottom: 2px solid #f0f0f0;
+  place-content: center;
+  display: flex;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #version-selection > #versions-dropdown li.version-selector-button-wrapper button {
+  cursor: pointer;
+  background-color: #fff;
+  border: none;
+  flex-grow: 1;
+  padding: .8rem;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #version-selection > #versions-dropdown li.version-selector-button-wrapper button:hover {
+  color: #e01a4f;
+  background-color: #f0f0f0;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #version-selection #version-selector-root-button-wrapper {
+  min-width: 5rem;
+  display: flex;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #version-selection #version-selector-root-button-wrapper button {
+  flex-direction: row;
+  flex-grow: 1;
+  place-content: center;
+  column-gap: .4rem;
+  display: flex;
+}
+
+#interactive-playground #interactive-code-editor #playground-option-menu #version-selection #version-selector-root-button-wrapper button .fa-caret-down:before {
+  margin-top: .7em;
+  display: block;
+}
+
+#interactive-playground #interactive-code-editor #code-editor {
+  flex-grow: 0;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+}
+
+#interactive-playground #interactive-code-editor #code-editor > #phone-text-saving-state {
+  visibility: hidden;
+  display: none;
+}
+
+#interactive-playground #interactive-code-editor #code-editor .line-numbers .line-numbers-rows {
+  border-right: none;
+  width: 2em;
+  left: -2.8em;
+}
+
+#interactive-playground #interactive-code-editor #code-editor #code-editor-textarea, #interactive-playground #interactive-code-editor #code-editor #code-editor-highlighting-field {
+  resize: none;
+  border: none;
+  border-radius: 0;
+  outline: none;
+  flex-grow: 0;
+  max-width: 65vw;
+  margin: 0;
+  padding: 1rem 1rem 1rem 3rem;
+  position: absolute;
+  overflow: auto;
+}
+
+#interactive-playground #interactive-code-editor #code-editor #code-editor-textarea, #interactive-playground #interactive-code-editor #code-editor #code-editor-highlighting-field, #interactive-playground #interactive-code-editor #code-editor #code-editor-highlighting-field * {
+  tab-size: 2;
+  background-color: #fff;
+  font-family: consolas, monospace;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+#interactive-playground #interactive-code-editor #code-editor #code-editor-textarea {
+  z-index: 1;
+  color: #0000;
+  caret-color: #e01a4f;
+  background: none;
+}
+
+#interactive-playground #interactive-code-editor #code-editor #code-editor-textarea::selection {
+  text-shadow: none;
+  background: #465da033;
+}
+
+#interactive-playground #interactive-code-editor #code-editor #code-editor-highlighting-field {
+  z-index: 0;
+}
+
+#interactive-playground #interactive-code-editor #code-editor #code-editor-highlighting-field > #code-editor-highlighting-field-content {
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+  display: block;
+}
+
+#interactive-playground .playground-button-wrapper {
+  place-content: center;
+  display: flex;
+}
+
+#interactive-playground .playground-button-wrapper button {
+  cursor: pointer;
+  background-color: #fff;
+  border: none;
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+#interactive-playground .playground-button-wrapper button:hover {
+  color: #e01a4f;
+  background-color: #f0f0f0;
+}
+
+#interactive-playground #shell-sidebar {
+  width: 35vw;
+  min-width: 35vw;
+  max-width: 35vw;
+  margin: 0;
+  display: flex;
+}
+
+#interactive-playground #shell-sidebar #shell-menu {
+  width: inherit;
+  padding: 0;
+}
+
+#interactive-playground #shell-sidebar #shell-menu .playground-button-wrapper {
+  flex-grow: 1;
+  display: flex;
+}
+
+#interactive-playground #shell-sidebar #shell-menu button {
+  border-bottom: 2px solid #f0f0f0;
+  flex-grow: 1;
+}
+
+#interactive-playground #shell-sidebar #shell-output > .code-toolbar {
+  color: #9efeff;
+}
+
+#interactive-playground #shell-sidebar #shell-output > .code-toolbar pre, #interactive-playground #shell-sidebar #shell-output > .code-toolbar code {
+  border-radius: 0;
+}
+
+#interactive-playground #shell-sidebar #shell-output, #interactive-playground #shell-sidebar #shell-output > .code-toolbar, #interactive-playground #shell-sidebar #shell-output > .code-toolbar > pre {
+  flex-grow: 1;
+  display: flex;
+}
+
+#interactive-playground #shell-sidebar #shell-output #shell-sidebar-highlight-field {
+  width: inherit;
+  background-color: #1e1e3f;
+  flex-grow: 1;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  overflow: auto;
+}
+
+#interactive-playground #shell-sidebar #shell-output #shell-sidebar-highlight-field > #shell-sidebar-highlight-field-content {
+  overflow: unset;
+  tab-size: 1;
+  border-radius: 0;
+  flex-grow: 1;
+  align-self: flex-start;
+  width: 30vw;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 1rem;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+@media screen and (width <= 920px) {
+  #header-description-content {
+    visibility: hidden;
+    display: none;
+  }
+
+  #interactive-playground {
+    flex-direction: column;
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
+    min-height: 90vh;
+  }
+
+  #interactive-playground #interactive-code-editor {
+    min-height: calc(50vh + 6px);
+  }
+
+  #interactive-playground #interactive-code-editor, #interactive-playground #interactive-code-editor > #code-editor {
+    max-height: unset;
+    min-width: 100vw;
+    max-width: 100vw;
+  }
+
+  #interactive-playground #interactive-code-editor > #playground-option-menu {
+    flex-grow: 0;
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
+    height: 3rem;
+    min-height: 3rem;
+    max-height: 3rem;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  #interactive-playground #interactive-code-editor > #playground-option-menu > #version-selection > #version-selector-root-button-wrapper > button, #interactive-playground #interactive-code-editor > #playground-option-menu > .playground-button-wrapper > button {
+    padding: .8rem .4rem;
+  }
+
+  #interactive-playground #interactive-code-editor > #playground-option-menu p, #interactive-playground #interactive-code-editor > #playground-option-menu button {
+    white-space: nowrap;
+  }
+
+  #interactive-playground #interactive-code-editor > #playground-option-menu > #text-saving-state {
+    visibility: hidden;
+    display: none;
+  }
+
+  #interactive-playground #interactive-code-editor > #playground-option-menu > #version-selection > #version-selector-root-button-wrapper {
+    height: 3rem;
+    font-size: .9rem;
+  }
+
+  #interactive-playground #interactive-code-editor > #playground-option-menu > #version-selection > #version-selector-root-button-wrapper > button {
+    word-break: keep-all;
+    max-width: 10rem;
+    padding: .95rem .6rem .8rem;
+  }
+
+  #interactive-playground #interactive-code-editor > #playground-option-menu > #version-selection > #version-selector-root-button-wrapper > button > span {
+    direction: rtl;
+    white-space: nowrap;
+    display: inline-block;
+    position: relative;
+    top: 0;
+    left: 0;
+    overflow: scroll hidden;
+  }
+
+  #interactive-playground #interactive-code-editor > #playground-option-menu > #version-selection > #version-selector-root-button-wrapper > button > span::-webkit-scrollbar {
+    display: none;
+  }
+
+  #interactive-playground #interactive-code-editor > #playground-option-menu > #version-selection > #version-selector-root-button-wrapper > button > span {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  #interactive-playground #interactive-code-editor > #code-editor {
+    flex-grow: 1;
+    position: relative;
+  }
+
+  #interactive-playground #interactive-code-editor > #code-editor #code-editor-textarea, #interactive-playground #interactive-code-editor > #code-editor #code-editor-highlighting-field {
+    width: calc(100vw - 4rem);
+    min-width: calc(100vw - 4rem);
+    max-width: calc(100vw - 4rem);
+    height: 40vh;
+  }
+
+  #interactive-playground #interactive-code-editor > #code-editor #phone-text-saving-state {
+    visibility: visible;
+    opacity: 1;
+    z-index: 2;
+    background-color: #fff;
+    border-radius: 5px;
+    flex-direction: row;
+    place-content: center;
+    margin: 0;
+    padding: .25rem .5rem;
+    display: flex;
+    position: absolute;
+    top: 80%;
+    right: 10%;
+    box-shadow: 0 0 5px #0000001a;
+  }
+
+  #interactive-playground #interactive-code-editor > #code-editor #phone-text-saving-state.fade-out {
+    animation: .75s forwards fade-out;
+  }
+
+  @keyframes fade-out {
+    0% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+    }
+  }
+
+  #interactive-playground #shell-sidebar {
+    width: 100vw;
+    min-width: 100vw;
+    max-width: 100vw;
+    height: calc(40vh + 2px);
+    min-height: calc(40vh + 2px);
+    max-height: calc(40vh + 2px);
+  }
+
+  #interactive-playground #shell-sidebar > #shell-menu {
+    border-top: 2px solid #f0f0f0;
+    height: 10vh;
+    max-height: 3.5rem;
+  }
+
+  #interactive-playground #shell-sidebar > #shell-output #shell-sidebar-highlight-field {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    overflow: scroll;
+  }
+
+  #interactive-playground #shell-sidebar > #shell-output #shell-sidebar-highlight-field > #shell-sidebar-highlight-field-content {
+    overflow: unset;
+    max-width: calc(100vw - 2rem);
+    height: calc(30vh - 2rem);
+    min-height: calc(30vh - 2rem);
+    max-height: calc(30vh - 2rem);
+    margin: 0;
+    padding: 1rem;
+  }
+}
+
+/*# sourceMappingURL=playground.f5ccb89a.css.map */

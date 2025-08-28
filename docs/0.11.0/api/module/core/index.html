@@ -1,0 +1,3384 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- isDocsFile: true -->
+		<!-- docsVersion: 0.11.0 -->
+		<!-- latestVersion: 0.12.1 -->
+
+		<meta charset="utf-8">
+
+		<title>@kipper/core/index - Kipper Docs v0.11.0</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="manifest" href="https://kipper-lang.org/up_/site.webmanifest">
+		<link rel="apple-touch-icon" href="https://kipper-lang.org/kipper-icon.4fb9d618.png">
+		<link rel="shortcut icon" type="image/ico" href="https://kipper-lang.org/favicon.dcdc2d88.ico">
+
+		<!-- Loading the prism highlighting style-sheet -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.f4d6a214.css">
+
+		<!-- Font Awesome Icons -->
+		<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+		<!-- Loading the main stylesheets -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.0b0dca04.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.244b5875.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.e24a109c.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.64273195.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.ee0d14b6.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.a30088c4.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.acde3bdd.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.4a54af2e.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.45a9510a.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.06a4d211.css">
+
+		<!-- Phone header nav bar functionality script -->
+		<script defer="" src="https://kipper-lang.org/index.f9a5285a.js"></script>
+
+		<!-- Including stylesheet for the Inter-Font -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+		<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+		<meta name="theme-color" content="#e01a4f">
+
+		<!-- Meta fields -->
+		<meta property="og:site_name" content="Kipper">
+		<meta property="og:title" content="@kipper/core/index - Kipper Docs  v0.11.0">
+		<meta property="og:description" content="">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://kipper-lang.org/docs/0.11.0/api/module/core/index.html">
+		<meta property="og:image" content="https://kipper-lang.org/img/icons/kipper-head-icon.png">
+		<meta property="og:locale" content="en_GB">
+
+		<!-- Load in the entire locale object -->
+		<script>var locale = {
+    name: "en-US",
+    values: {
+        pages: {
+            homepage: {
+                title: "Welcome to Kipper!",
+                description: "The new customisable and easy to use type-safe language for the web and Node.js!"
+            },
+            downloads: {
+                title: "Downloads",
+                description: "Download the latest version of Kipper for your platform."
+            },
+            docs: {
+                title: "Documentation",
+                description: "Learn how to use Kipper with our comprehensive documentation."
+            },
+            playground: {
+                title: "Playground",
+                description: "Try out Kipper in our online playground."
+            },
+            changelog: {
+                title: "Changelog",
+                description: "View the latest changes to Kipper."
+            }
+        },
+        homepage: {
+            welcome: "Welcome to Kipper!",
+            description: "The new customisable and easy to use type-safe language for the web and Node.js!",
+            "play-button": "Try our Playground",
+            "docs-button": "View the Docs"
+        },
+        "nav-bar": {
+            downloads: "Downloads",
+            docs: "Docs",
+            playground: "Playground",
+            changelog: "Changelog"
+        },
+        playground: {
+            buttons: {
+                run: "Run",
+                stop: "Stop",
+                copy: "Copy",
+                clear: "Clear",
+                console: "Console",
+                compiler: "Compiler"
+            },
+            "save-state": {
+                saving: "Saving...",
+                saved: "Saved!",
+                loaded: "Loaded :)"
+            },
+            actions: {
+                cleared: "Cleared!",
+                copied: "Copied!"
+            }
+        },
+        footer: {
+            "supported-by": "Developed at:",
+            list: {
+                releases: "Releases",
+                github: "GitHub",
+                security: "Security",
+                issues: "Issue Tracker",
+                license: "License"
+            },
+            license: "Kipper is licensed under the GPL-3.0-or-later license."
+        }
+    }
+};
+window.locale = locale;
+var localeKey = "locale";
+window.localeKey = localeKey;
+let storedLocale = localStorage.getItem(localeKey);
+if (storedLocale === null) localStorage.setItem(localeKey, locale.name);
+// In case a site was loaded with a different locale than the one in the locale storage, then we redirect to
+// the correct locale
+if (!!storedLocale && storedLocale !== locale.name && !window.location.pathname.includes(`/${storedLocale}/`) && !window.location.pathname.includes("/docs/")) {
+    if (window.location.pathname.includes("/" + locale.name + "/")) window.location.pathname = window.location.pathname.replace(`/${locale.name}/`, `/${storedLocale}/`);
+    else window.location.pathname = `/${storedLocale}${window.location.pathname}`;
+}
+
+</script>
+
+		<link rel="stylesheet" href="https://kipper-lang.org/docs/index.9b1a8e07.css">
+	</head>
+	<body>
+		<script defer="" src="https://kipper-lang.org/index.ab8b3880.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.c645b044.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.27bd5b50.js"></script>
+
+		<!-- Show Error if JS is disabled or blocked -->
+		<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our site!</noscript>
+
+		<!-- Docs specific scripts -->
+		<script defer="" src="https://kipper-lang.org/docs/index.8234afb6.js"></script>
+
+		<div id="main-frame">
+			<div id="actual-content">
+				<!-- The top element: menu and search bar -->
+
+				<header id="primary-page-header" class="page-header">
+					<nav id="header-nav-bar">
+						<ul id="std-header-primary-content">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/index.html">
+									<script defer="">(()=>{
+    const link = document.querySelector(".kipper-version-and-logo .underline-button.kipper-logo-identifier");
+    const localeName = localStorage.getItem(window.localeKey);
+    const href = link.getAttribute("href");
+    if (!href.includes(localeName)) link.setAttribute("href", `/${localeName}${href}`);
+})();
+
+</script>
+									<h2>Kipper</h2>
+								</a>
+								<a id="version-identifier" href="https://github.com/Kipper-Lang/Kipper/releases/tag/v0.12.1">
+									<small>v0.12.1</small>
+								</a>
+							</li>
+
+							<!-- Main navigation links -->
+
+							<li>
+								<a href="https://kipper-lang.org/downloads.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Downloads</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Docs</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Playground</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/changelog.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Changelog</h4>
+								</a>
+							</li>
+
+							<script defer="">function changeHrefLocaleIfNecessary(links) {
+    const localeName = localStorage.getItem(window.localeKey);
+    for (const link of links){
+        // Insert locale name into the URL and replace the domain if it's included in the URL
+        const href = link.getAttribute("href").replace(window.location.origin, "").replace(`${window.location.protocol}//`, "");
+        if (!href.includes(localeName) && !href.includes("docs")) link.setAttribute("href", `/${localeName}${href}`);
+    }
+}
+(()=>{
+    const deskLinks = document.querySelectorAll("#phone-header-nav-bar-menu li .top-nav-menu-item");
+    const phoneLinks = document.querySelectorAll("#std-header-primary-content li .top-nav-menu-item");
+    changeHrefLocaleIfNecessary(deskLinks);
+    changeHrefLocaleIfNecessary(phoneLinks);
+})();
+
+</script>
+						</ul>
+						<div class="search-bar-wrapper">
+							<ul class="no-style-list">
+								<li class="search-icon-wrapper">
+									<i class="search-icon fa-solid fa-magnifying-glass"></i>
+								</li>
+								<li id="std-search-bar" class="search-bar">
+									<label for="std-search-bar-input"></label>
+									<input id="std-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<!-- Per default invisible phone nav bar, which is shown on smaller screens -->
+					<nav id="phone-header-nav-bar">
+						<ul id="phone-header-primary-content" class="no-style-list">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/index.html">
+									<script defer="">(()=>{
+    const link = document.querySelector(".kipper-version-and-logo .underline-button.kipper-logo-identifier");
+    const localeName = localStorage.getItem(window.localeKey);
+    const href = link.getAttribute("href");
+    if (!href.includes(localeName)) link.setAttribute("href", `/${localeName}${href}`);
+})();
+
+</script>
+									<h2>Kipper</h2>
+								</a>
+								<a id="version-identifier" href="https://github.com/Kipper-Lang/Kipper/releases/tag/v0.12.1">
+									<small>v0.12.1</small>
+								</a>
+							</li>
+
+							<!--
+        Unlike the standard nav, the links will be not shown per default and there will be a dropdown menu.
+        Additionally, the search bar is shown in the dropdown menu.
+        -->
+							<li class="phone-header-nav-bar-menu-toggle">
+								<i class="fa-solid fa-bars"></i>
+							</li>
+						</ul>
+
+						<!-- Dropdown menu -->
+						<ul id="phone-header-nav-bar-menu" class="no-style-list">
+							<li>
+								<ul id="phone-header-dropdown-urls" class="no-style-list">
+									<!-- Main navigation links - 'pages' is a global variable added by the parent 'header-nav-bar.ejs' -->
+
+									<li>
+										<a href="https://kipper-lang.org/downloads.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Downloads</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Docs</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Playground</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/changelog.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Changelog</h4>
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<div class="search-bar-wrapper">
+									<ul class="no-style-list">
+										<li class="search-icon-wrapper">
+											<i class="search-icon fa-solid fa-magnifying-glass"></i>
+										</li>
+										<li id="phone-search-bar" class="search-bar">
+											<label for="phone-search-bar-input"></label>
+											<input id="phone-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+										</li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</nav>
+
+					<div id="header-description-content" class="text-page-content-container"></div>
+				</header>
+
+				<!-- Main Content, where the text is located and the items unique to this site are defined -->
+				<div class="flex-parent-container flex-fill-to-parent">
+					<ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
+						<li id="docs-sidebar-nav-wrapper">
+							<nav id="docs-sidebar-nav">
+								<!-- Only visible on small screens to enhance navigability -->
+								<!-- Phone Path Nav - To not show the entire sidebar on phones and simplify the display -->
+								<nav class="phone-docs-nav">
+									<!-- Class as it appears twice. Here and in the nav sidebar -->
+									<ul class="no-style-list">
+										<li class="phone-docs-nav-bar-menu-toggle"><i class="fa-solid fa-bars"></i></li>
+										<li>
+											<ul class="phone-docs-nav-path">
+												<li>
+													<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/0.11.0/index.html">
+														0.11.0
+													</a>
+													<span> /</span>
+												</li>
+
+												<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/index.html">
+														Kipper API
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/module/index.html">
+														Module
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/module/core/index.html">
+														@kipper/core
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/module/core/index.html">
+														index
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+
+								<div id="docs-sidebar-std-nav">
+									<!-- Standard sidebar nav visible on all screen sizes -->
+									<div id="docs-sidebar-nav-head">
+										<h6><a class="docs-page-header-path-item" href="https://kipper-lang.org/index.html">Kipper Docs</a></h6>
+										<div id="docs-version-selection">
+											<div id="docs-version-selector-root-button-wrapper">
+												<button>
+													<span class="h6">
+														<span>0.11.0</span>
+														<i class="fa-solid fa-xs fa-caret-down"></i>
+													</span>
+												</button>
+											</div>
+											<ul id="docs-versions-dropdown" class="no-style-list flex-column">
+												<li id="docs-version-selector-next" class="docs-version-selector-button-wrapper" data-version="next">
+													<a href="https://kipper-lang.org/docs/next/api/module/core/index.html">next</a>
+												</li>
+
+												<li id="docs-version-selector-latest" class="docs-version-selector-button-wrapper" data-version="latest">
+													<a href="https://kipper-lang.org/docs/latest/api/module/core/index.html">latest</a>
+												</li>
+
+												<li id="docs-version-selector-0.11.0" class="docs-version-selector-button-wrapper" data-version="0.11.0">
+													<a href="https://kipper-lang.org/docs/0.11.0/api/module/core/index.html">0.11.0</a>
+												</li>
+
+												<li id="docs-version-selector-0.10.4" class="docs-version-selector-button-wrapper" data-version="0.10.4">
+													<a href="https://kipper-lang.org/docs/0.10.4/index.html">0.10.4</a>
+												</li>
+
+												<li id="docs-version-selector-0.9.2" class="docs-version-selector-button-wrapper" data-version="0.9.2">
+													<a href="https://kipper-lang.org/docs/0.9.2/index.html">0.9.2</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<ul class="docs-sidebar-nav-list no-style-list flex-column">
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/0.11.0/index.html">Overview</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/0.11.0/quickstart.html">Quickstart</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/0.11.0/goals-and-roadmap.html">Goals for Kipper</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/0.11.0/supported-platforms.html">Supported platforms</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/0.11.0/usage-examples.html">Usage Examples</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Kipper API</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+												<!-- core, module, api -->
+												<!-- api -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/api/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- api -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/api/compiler-setup.html">Compiler Setup</a>
+													</p>
+												</li>
+
+												<li>
+													<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+														<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Module</span></button>
+													</p>
+													<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+														<!-- core, module, api -->
+														<!-- module, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/0.11.0/api/module/index.html">Overview</a>
+															</p>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+																<button><i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/core</span></button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header">
+																		<a href="https://kipper-lang.org/docs/0.11.0/api/module/core/index.html">index</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/0.11.0/api/module/core/compiler.html">compiler</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/0.11.0/api/module/core/errors.html">errors</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/0.11.0/api/module/core/logger.html">logger</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/0.11.0/api/module/core/utils.html">utils</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button><i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/config</span></button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- config, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/0.11.0/api/module/config/index.html">config</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button>
+																	<i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/target-js</span>
+																</button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- target-js, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/0.11.0/api/module/target-js/index.html">index</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button>
+																	<i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/target-ts</span>
+																</button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- target-ts, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/0.11.0/api/module/target-ts/index.html">index</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+													</ul>
+												</li>
+
+												<li>
+													<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+														<button><i class="fa-solid fa-xs fa-caret-down"></i><span>CLI</span></button>
+													</p>
+													<ul class="docs-sidebar-nav-list no-style-list flex-column">
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/0.11.0/api/cli/index.html">Overview</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/0.11.0/api/cli/new.html">new</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/0.11.0/api/cli/run.html">run</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/0.11.0/api/cli/compile.html">compile</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/0.11.0/api/cli/help.html">help</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/0.11.0/api/cli/version.html">version</a>
+															</p>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/0.11.0/variables.html">Variables</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Datatypes</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/datatypes/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/datatypes/str-type.html">String Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/datatypes/num-type.html">Number Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/datatypes/bool-type.html">Boolean Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/datatypes/void-type.html">Void Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/datatypes/null-type.html">Null Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/datatypes/undefined-type.html">Undefined Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/datatypes/array-type.html">Array Type</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Expressions</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/arithmetic-expression.html">Arithmetic Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/assignment-expression.html">Assignment Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/conditional-expression.html">Conditional Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/logical-expression.html">Logical Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/bitwise-expression.html">Bitwise Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/relational-expression.html">Relational Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/convert-expression.html">Convert Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/f-string-expression.html">F-String Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/member-access-expression.html">Member Access Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/expressions/function-call-expression.html">Function Call Expression</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Statements</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/statements/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/statements/expression-statement.html">Expression Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/statements/if-statement.html">If Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/statements/while-loop.html">While Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/statements/do-while-loop.html">Do-While Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/statements/for-loop.html">For Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/statements/compound-statement.html">Compound Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/0.11.0/statements/jump-statement.html">Jump Statement</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/0.11.0/functions.html">Functions</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/0.11.0/comments.html">Comments</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/0.11.0/built-in-functions.html">Built-in Functions</a>
+											</p>
+										</li>
+									</ul>
+								</div>
+							</nav>
+						</li>
+						<li id="docs-page-content-wrapper">
+							<!-- Phone-specific navigation bar, for the top of the page -->
+							<!-- Phone Path Nav - To not show the entire sidebar on phones and simplify the display -->
+							<nav class="phone-docs-nav">
+								<!-- Class as it appears twice. Here and in the nav sidebar -->
+								<ul class="no-style-list">
+									<li class="phone-docs-nav-bar-menu-toggle"><i class="fa-solid fa-bars"></i></li>
+									<li>
+										<ul class="phone-docs-nav-path">
+											<li>
+												<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/0.11.0/index.html">
+													0.11.0
+												</a>
+												<span> /</span>
+											</li>
+
+											<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/index.html">
+													Kipper API
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/module/index.html">
+													Module
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/module/core/index.html">
+													@kipper/core
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/module/core/index.html">
+													index
+												</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</nav>
+
+							<section id="docs-content" class="shadowed-box">
+								<nav id="docs-page-header">
+									<ul id="docs-nav-current-page-path" class="flex-row no-style-list">
+										<li>
+											<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/0.11.0/index.html">
+												0.11.0
+											</a>
+											<span> /</span>
+										</li>
+
+										<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/index.html">
+												Kipper API
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/module/index.html">
+												Module
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/module/core/index.html">
+												@kipper/core
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/0.11.0/api/module/core/index.html">
+												index
+											</a>
+										</li>
+									</ul>
+									<a id="edit-page-on-github" href="https://github.com/Kipper-Lang/Kipper/edit/docs/src/docs/0.11.0/api/module/core/index.md" title="Edit this page on GitHub">
+										<i class="fa-brands fa-github"></i>
+										<p>Edit page</p>
+									</a>
+								</nav>
+								<article class="markdown-content">
+									<h1 id="kippercore">@kipper/core</h1>
+<h2 id="table-of-contents">Table of contents</h2>
+<h3 id="references">References</h3>
+<ul>
+<li><a href="index.html#astarithmeticexpressionkind">ASTArithmeticExpressionKind</a></li>
+<li><a href="index.html#astbitwiseexpressionkind">ASTBitwiseExpressionKind</a></li>
+<li><a href="index.html#astcomparativeexpressionkind">ASTComparativeExpressionKind</a></li>
+<li><a href="index.html#astdeclarationkind">ASTDeclarationKind</a></li>
+<li><a href="index.html#astdeclarationrulename">ASTDeclarationRuleName</a></li>
+<li><a href="index.html#astexpressionkind">ASTExpressionKind</a></li>
+<li><a href="index.html#astexpressionrulename">ASTExpressionRuleName</a></li>
+<li><a href="index.html#astfactoryerror">ASTFactoryError</a></li>
+<li><a href="index.html#astkind">ASTKind</a></li>
+<li><a href="index.html#astlogicalexpressionkind">ASTLogicalExpressionKind</a></li>
+<li><a href="index.html#astnodefactory">ASTNodeFactory</a></li>
+<li><a href="index.html#astnodemapper">ASTNodeMapper</a></li>
+<li><a href="index.html#astnodeparsercontext">ASTNodeParserContext</a></li>
+<li><a href="index.html#astpostfixexpressionkind">ASTPostfixExpressionKind</a></li>
+<li><a href="index.html#astprimaryexpressionkind">ASTPrimaryExpressionKind</a></li>
+<li><a href="index.html#aststatementkind">ASTStatementKind</a></li>
+<li><a href="index.html#aststatementrulename">ASTStatementRuleName</a></li>
+<li><a href="index.html#asttypespecifierexpressionkind">ASTTypeSpecifierExpressionKind</a></li>
+<li><a href="index.html#astunaryexpressionkind">ASTUnaryExpressionKind</a></li>
+<li><a href="index.html#actualadditiveexpressioncontext">ActualAdditiveExpressionContext</a></li>
+<li><a href="index.html#actualassignmentexpressioncontext">ActualAssignmentExpressionContext</a></li>
+<li><a href="index.html#actualbitwiseandexpressioncontext">ActualBitwiseAndExpressionContext</a></li>
+<li><a href="index.html#actualbitwiseorexpressioncontext">ActualBitwiseOrExpressionContext</a></li>
+<li><a href="index.html#actualbitwiseshiftexpressioncontext">ActualBitwiseShiftExpressionContext</a></li>
+<li><a href="index.html#actualbitwisexorexpressioncontext">ActualBitwiseXorExpressionContext</a></li>
+<li><a href="index.html#actualcastorconvertexpressioncontext">ActualCastOrConvertExpressionContext</a></li>
+<li><a href="index.html#actualconditionalexpressioncontext">ActualConditionalExpressionContext</a></li>
+<li><a href="index.html#actualequalityexpressioncontext">ActualEqualityExpressionContext</a></li>
+<li><a href="index.html#actuallogicalandexpressioncontext">ActualLogicalAndExpressionContext</a></li>
+<li><a href="index.html#actuallogicalorexpressioncontext">ActualLogicalOrExpressionContext</a></li>
+<li><a href="index.html#actualmultiplicativeexpressioncontext">ActualMultiplicativeExpressionContext</a></li>
+<li><a href="index.html#actualrelationalexpressioncontext">ActualRelationalExpressionContext</a></li>
+<li><a href="index.html#additiveexpression">AdditiveExpression</a></li>
+<li><a href="index.html#additiveexpressioncontext">AdditiveExpressionContext</a></li>
+<li><a href="index.html#additiveexpressionsemantics">AdditiveExpressionSemantics</a></li>
+<li><a href="index.html#additiveexpressiontypesemantics">AdditiveExpressionTypeSemantics</a></li>
+<li><a href="index.html#analysableastnode">AnalysableASTNode</a></li>
+<li><a href="index.html#analysablenodechild">AnalysableNodeChild</a></li>
+<li><a href="index.html#analysablenodeparent">AnalysableNodeParent</a></li>
+<li><a href="index.html#argumenterror">ArgumentError</a></li>
+<li><a href="index.html#argumentexpressionlistcontext">ArgumentExpressionListContext</a></li>
+<li><a href="index.html#argumenttypeerror">ArgumentTypeError</a></li>
+<li><a href="index.html#arithmeticexpression">ArithmeticExpression</a></li>
+<li><a href="index.html#arithmeticexpressionsemantics">ArithmeticExpressionSemantics</a></li>
+<li><a href="index.html#arithmeticexpressiontypesemantics">ArithmeticExpressionTypeSemantics</a></li>
+<li><a href="index.html#arithmeticoperationtypeerror">ArithmeticOperationTypeError</a></li>
+<li><a href="index.html#arrayprimaryexpression">ArrayPrimaryExpression</a></li>
+<li><a href="index.html#arrayprimaryexpressioncontext">ArrayPrimaryExpressionContext</a></li>
+<li><a href="index.html#arrayprimaryexpressionsemantics">ArrayPrimaryExpressionSemantics</a></li>
+<li><a href="index.html#arrayprimaryexpressiontypesemantics">ArrayPrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#assignmentexpression">AssignmentExpression</a></li>
+<li><a href="index.html#assignmentexpressioncontext">AssignmentExpressionContext</a></li>
+<li><a href="index.html#assignmentexpressionsemantics">AssignmentExpressionSemantics</a></li>
+<li><a href="index.html#assignmentexpressiontypesemantics">AssignmentExpressionTypeSemantics</a></li>
+<li><a href="index.html#assignmentoperatorcontext">AssignmentOperatorContext</a></li>
+<li><a href="index.html#assignmenttypeerror">AssignmentTypeError</a></li>
+<li><a href="index.html#bitwiseandexpression">BitwiseAndExpression</a></li>
+<li><a href="index.html#bitwiseandexpressioncontext">BitwiseAndExpressionContext</a></li>
+<li><a href="index.html#bitwiseandexpressionsemantics">BitwiseAndExpressionSemantics</a></li>
+<li><a href="index.html#bitwiseandexpressiontypesemantics">BitwiseAndExpressionTypeSemantics</a></li>
+<li><a href="index.html#bitwiseexpression">BitwiseExpression</a></li>
+<li><a href="index.html#bitwiseexpressionsemantics">BitwiseExpressionSemantics</a></li>
+<li><a href="index.html#bitwiseexpressiontypesemantics">BitwiseExpressionTypeSemantics</a></li>
+<li><a href="index.html#bitwiseoperationtypeerror">BitwiseOperationTypeError</a></li>
+<li><a href="index.html#bitwiseorexpression">BitwiseOrExpression</a></li>
+<li><a href="index.html#bitwiseorexpressioncontext">BitwiseOrExpressionContext</a></li>
+<li><a href="index.html#bitwiseorexpressionsemantics">BitwiseOrExpressionSemantics</a></li>
+<li><a href="index.html#bitwiseorexpressiontypesemantics">BitwiseOrExpressionTypeSemantics</a></li>
+<li><a href="index.html#bitwiseshiftexpression">BitwiseShiftExpression</a></li>
+<li><a href="index.html#bitwiseshiftexpressioncontext">BitwiseShiftExpressionContext</a></li>
+<li><a href="index.html#bitwiseshiftexpressionsemantics">BitwiseShiftExpressionSemantics</a></li>
+<li><a href="index.html#bitwiseshiftexpressiontypesemantics">BitwiseShiftExpressionTypeSemantics</a></li>
+<li><a href="index.html#bitwiseshiftoperatorscontext">BitwiseShiftOperatorsContext</a></li>
+<li><a href="index.html#bitwisexorexpression">BitwiseXorExpression</a></li>
+<li><a href="index.html#bitwisexorexpressioncontext">BitwiseXorExpressionContext</a></li>
+<li><a href="index.html#bitwisexorexpressionsemantics">BitwiseXorExpressionSemantics</a></li>
+<li><a href="index.html#bitwisexorexpressiontypesemantics">BitwiseXorExpressionTypeSemantics</a></li>
+<li><a href="index.html#blockitemcontext">BlockItemContext</a></li>
+<li><a href="index.html#blockitemlistcontext">BlockItemListContext</a></li>
+<li><a href="index.html#boolprimaryexpression">BoolPrimaryExpression</a></li>
+<li><a href="index.html#boolprimaryexpressioncontext">BoolPrimaryExpressionContext</a></li>
+<li><a href="index.html#boolprimaryexpressionsemantics">BoolPrimaryExpressionSemantics</a></li>
+<li><a href="index.html#boolprimaryexpressiontypesemantics">BoolPrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#bracketnotationcontext">BracketNotationContext</a></li>
+<li><a href="index.html#bracketnotationmemberaccessexpressioncontext">BracketNotationMemberAccessExpressionContext</a></li>
+<li><a href="index.html#builtinfunction">BuiltInFunction</a></li>
+<li><a href="index.html#builtinfunctionargument">BuiltInFunctionArgument</a></li>
+<li><a href="index.html#builtinorinternalgeneratorfunctionnotfounderror">BuiltInOrInternalGeneratorFunctionNotFoundError</a></li>
+<li><a href="index.html#builtinoverwriteerror">BuiltInOverwriteError</a></li>
+<li><a href="index.html#builtinvariable">BuiltInVariable</a></li>
+<li><a href="index.html#comment">COMMENT</a></li>
+<li><a href="index.html#castorconvertexpression">CastOrConvertExpression</a></li>
+<li><a href="index.html#castorconvertexpressioncontext">CastOrConvertExpressionContext</a></li>
+<li><a href="index.html#castorconvertexpressionsemantics">CastOrConvertExpressionSemantics</a></li>
+<li><a href="index.html#castorconvertexpressiontypesemantics">CastOrConvertExpressionTypeSemantics</a></li>
+<li><a href="index.html#checkedtype">CheckedType</a></li>
+<li><a href="index.html#comparativeexpression">ComparativeExpression</a></li>
+<li><a href="index.html#comparativeexpressionsemantics">ComparativeExpressionSemantics</a></li>
+<li><a href="index.html#comparativeexpressiontypesemantics">ComparativeExpressionTypeSemantics</a></li>
+<li><a href="index.html#compilableastnode">CompilableASTNode</a></li>
+<li><a href="index.html#compilablenodechild">CompilableNodeChild</a></li>
+<li><a href="index.html#compilablenodeparent">CompilableNodeParent</a></li>
+<li><a href="index.html#compilationunitcontext">CompilationUnitContext</a></li>
+<li><a href="index.html#compileconfig">CompileConfig</a></li>
+<li><a href="index.html#compoundstatement">CompoundStatement</a></li>
+<li><a href="index.html#compoundstatementcontext">CompoundStatementContext</a></li>
+<li><a href="index.html#compoundstatementsemantics">CompoundStatementSemantics</a></li>
+<li><a href="index.html#compoundstatementtypesemantics">CompoundStatementTypeSemantics</a></li>
+<li><a href="index.html#computedprimaryexpressioncontext">ComputedPrimaryExpressionContext</a></li>
+<li><a href="index.html#conditionalexpression">ConditionalExpression</a></li>
+<li><a href="index.html#conditionalexpressioncontext">ConditionalExpressionContext</a></li>
+<li><a href="index.html#conditionalexpressionsemantics">ConditionalExpressionSemantics</a></li>
+<li><a href="index.html#conditionalexpressiontypesemantics">ConditionalExpressionTypeSemantics</a></li>
+<li><a href="index.html#constructableastdeclaration">ConstructableASTDeclaration</a></li>
+<li><a href="index.html#constructableastdeclarationclass">ConstructableASTDeclarationClass</a></li>
+<li><a href="index.html#constructableastexpression">ConstructableASTExpression</a></li>
+<li><a href="index.html#constructableastexpressionclass">ConstructableASTExpressionClass</a></li>
+<li><a href="index.html#constructableastkind">ConstructableASTKind</a></li>
+<li><a href="index.html#constructableastnode">ConstructableASTNode</a></li>
+<li><a href="index.html#constructableastnodeclass">ConstructableASTNodeClass</a></li>
+<li><a href="index.html#constructableastrulename">ConstructableASTRuleName</a></li>
+<li><a href="index.html#constructableaststatement">ConstructableASTStatement</a></li>
+<li><a href="index.html#constructableaststatementclass">ConstructableASTStatementClass</a></li>
+<li><a href="index.html#default_token_channel">DEFAULT_TOKEN_CHANNEL</a></li>
+<li><a href="index.html#declaration">Declaration</a></li>
+<li><a href="index.html#declarationastnodefactory">DeclarationASTNodeFactory</a></li>
+<li><a href="index.html#declarationcontext">DeclarationContext</a></li>
+<li><a href="index.html#declarationsemantics">DeclarationSemantics</a></li>
+<li><a href="index.html#declarationtypesemantics">DeclarationTypeSemantics</a></li>
+<li><a href="index.html#declaratorcontext">DeclaratorContext</a></li>
+<li><a href="index.html#directdeclaratorcontext">DirectDeclaratorContext</a></li>
+<li><a href="index.html#dowhileloopiterationstatement">DoWhileLoopIterationStatement</a></li>
+<li><a href="index.html#dowhileloopiterationstatementcontext">DoWhileLoopIterationStatementContext</a></li>
+<li><a href="index.html#dowhileloopiterationstatementsemantics">DoWhileLoopIterationStatementSemantics</a></li>
+<li><a href="index.html#dowhileloopiterationstatementtypesemantics">DoWhileLoopIterationStatementTypeSemantics</a></li>
+<li><a href="index.html#dotnotationcontext">DotNotationContext</a></li>
+<li><a href="index.html#dotnotationmemberaccessexpressioncontext">DotNotationMemberAccessExpressionContext</a></li>
+<li><a href="index.html#equalityexpression">EqualityExpression</a></li>
+<li><a href="index.html#equalityexpressioncontext">EqualityExpressionContext</a></li>
+<li><a href="index.html#equalityexpressionsemantics">EqualityExpressionSemantics</a></li>
+<li><a href="index.html#equalityexpressiontypesemantics">EqualityExpressionTypeSemantics</a></li>
+<li><a href="index.html#evaluatedcompileconfig">EvaluatedCompileConfig</a></li>
+<li><a href="index.html#explicitcallfunctioncallexpressioncontext">ExplicitCallFunctionCallExpressionContext</a></li>
+<li><a href="index.html#expression">Expression</a></li>
+<li><a href="index.html#expressionastnodefactory">ExpressionASTNodeFactory</a></li>
+<li><a href="index.html#expressioncontext">ExpressionContext</a></li>
+<li><a href="index.html#expressionnotcallableerror">ExpressionNotCallableError</a></li>
+<li><a href="index.html#expressionsemantics">ExpressionSemantics</a></li>
+<li><a href="index.html#expressionstatement">ExpressionStatement</a></li>
+<li><a href="index.html#expressionstatementcontext">ExpressionStatementContext</a></li>
+<li><a href="index.html#expressionstatementsemantics">ExpressionStatementSemantics</a></li>
+<li><a href="index.html#expressionstatementtypesemantics">ExpressionStatementTypeSemantics</a></li>
+<li><a href="index.html#expressiontypesemantics">ExpressionTypeSemantics</a></li>
+<li><a href="index.html#externalblockitemcontext">ExternalBlockItemContext</a></li>
+<li><a href="index.html#externalitemcontext">ExternalItemContext</a></li>
+<li><a href="index.html#fstringdoublequoteatomcontext">FStringDoubleQuoteAtomContext</a></li>
+<li><a href="index.html#fstringprimaryexpression">FStringPrimaryExpression</a></li>
+<li><a href="index.html#fstringprimaryexpressioncontext">FStringPrimaryExpressionContext</a></li>
+<li><a href="index.html#fstringprimaryexpressionsemantics">FStringPrimaryExpressionSemantics</a></li>
+<li><a href="index.html#fstringprimaryexpressiontypesemantics">FStringPrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#fstringsinglequoteatomcontext">FStringSingleQuoteAtomContext</a></li>
+<li><a href="index.html#forloopiterationstatement">ForLoopIterationStatement</a></li>
+<li><a href="index.html#forloopiterationstatementcontext">ForLoopIterationStatementContext</a></li>
+<li><a href="index.html#forloopstatementsemantics">ForLoopStatementSemantics</a></li>
+<li><a href="index.html#forloopstatementtypesemantics">ForLoopStatementTypeSemantics</a></li>
+<li><a href="index.html#functioncallexpression">FunctionCallExpression</a></li>
+<li><a href="index.html#functioncallexpressioncontext">FunctionCallExpressionContext</a></li>
+<li><a href="index.html#functioncallexpressionsemantics">FunctionCallExpressionSemantics</a></li>
+<li><a href="index.html#functioncallexpressiontypesemantics">FunctionCallExpressionTypeSemantics</a></li>
+<li><a href="index.html#functiondeclaration">FunctionDeclaration</a></li>
+<li><a href="index.html#functiondeclarationcontext">FunctionDeclarationContext</a></li>
+<li><a href="index.html#functiondeclarationsemantics">FunctionDeclarationSemantics</a></li>
+<li><a href="index.html#functiondeclarationtypesemantics">FunctionDeclarationTypeSemantics</a></li>
+<li><a href="index.html#functionscope">FunctionScope</a></li>
+<li><a href="index.html#generictypespecifierexpression">GenericTypeSpecifierExpression</a></li>
+<li><a href="index.html#generictypespecifierexpressioncontext">GenericTypeSpecifierExpressionContext</a></li>
+<li><a href="index.html#generictypespecifierexpressionsemantics">GenericTypeSpecifierExpressionSemantics</a></li>
+<li><a href="index.html#generictypespecifierexpressiontypesemantics">GenericTypeSpecifierExpressionTypeSemantics</a></li>
+<li><a href="index.html#globalscope">GlobalScope</a></li>
+<li><a href="index.html#hidden">HIDDEN</a></li>
+<li><a href="index.html#identifieralreadyusedbyfunctionerror">IdentifierAlreadyUsedByFunctionError</a></li>
+<li><a href="index.html#identifieralreadyusedbyparametererror">IdentifierAlreadyUsedByParameterError</a></li>
+<li><a href="index.html#identifieralreadyusedbyvariableerror">IdentifierAlreadyUsedByVariableError</a></li>
+<li><a href="index.html#identifiercontext">IdentifierContext</a></li>
+<li><a href="index.html#identifiererror">IdentifierError</a></li>
+<li><a href="index.html#identifierorstringprimaryexpressioncontext">IdentifierOrStringPrimaryExpressionContext</a></li>
+<li><a href="index.html#identifierprimaryexpression">IdentifierPrimaryExpression</a></li>
+<li><a href="index.html#identifierprimaryexpressioncontext">IdentifierPrimaryExpressionContext</a></li>
+<li><a href="index.html#identifierprimaryexpressionsemantics">IdentifierPrimaryExpressionSemantics</a></li>
+<li><a href="index.html#identifierprimaryexpressiontypesemantics">IdentifierPrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#identifiertypespecifierexpression">IdentifierTypeSpecifierExpression</a></li>
+<li><a href="index.html#identifiertypespecifierexpressioncontext">IdentifierTypeSpecifierExpressionContext</a></li>
+<li><a href="index.html#identifiertypespecifierexpressionsemantics">IdentifierTypeSpecifierExpressionSemantics</a></li>
+<li><a href="index.html#identifiertypespecifierexpressiontypesemantics">IdentifierTypeSpecifierExpressionTypeSemantics</a></li>
+<li><a href="index.html#ifstatement">IfStatement</a></li>
+<li><a href="index.html#ifstatementcontext">IfStatementContext</a></li>
+<li><a href="index.html#ifstatementsemantics">IfStatementSemantics</a></li>
+<li><a href="index.html#ifstatementtypesemantics">IfStatementTypeSemantics</a></li>
+<li><a href="index.html#incompletereturnsincodepathserror">IncompleteReturnsInCodePathsError</a></li>
+<li><a href="index.html#incrementordecrementoperatorcontext">IncrementOrDecrementOperatorContext</a></li>
+<li><a href="index.html#incrementordecrementpostfixexpression">IncrementOrDecrementPostfixExpression</a></li>
+<li><a href="index.html#incrementordecrementpostfixexpressioncontext">IncrementOrDecrementPostfixExpressionContext</a></li>
+<li><a href="index.html#incrementordecrementpostfixexpressionsemantics">IncrementOrDecrementPostfixExpressionSemantics</a></li>
+<li><a href="index.html#incrementordecrementpostfixexpressiontypesemantics">IncrementOrDecrementPostfixExpressionTypeSemantics</a></li>
+<li><a href="index.html#incrementordecrementunaryexpression">IncrementOrDecrementUnaryExpression</a></li>
+<li><a href="index.html#incrementordecrementunaryexpressioncontext">IncrementOrDecrementUnaryExpressionContext</a></li>
+<li><a href="index.html#incrementordecrementunaryexpressionsemantics">IncrementOrDecrementUnaryExpressionSemantics</a></li>
+<li><a href="index.html#incrementordecrementunarytypesemantics">IncrementOrDecrementUnaryTypeSemantics</a></li>
+<li><a href="index.html#initdeclaratorcontext">InitDeclaratorContext</a></li>
+<li><a href="index.html#initializercontext">InitializerContext</a></li>
+<li><a href="index.html#internalfunction">InternalFunction</a></li>
+<li><a href="index.html#internalfunctionargument">InternalFunctionArgument</a></li>
+<li><a href="index.html#internalreference">InternalReference</a></li>
+<li><a href="index.html#invalidamountofargumentserror">InvalidAmountOfArgumentsError</a></li>
+<li><a href="index.html#invalidassignmenterror">InvalidAssignmentError</a></li>
+<li><a href="index.html#invalidconversiontypeerror">InvalidConversionTypeError</a></li>
+<li><a href="index.html#invalidglobalerror">InvalidGlobalError</a></li>
+<li><a href="index.html#invalidjumpstatementerror">InvalidJumpStatementError</a></li>
+<li><a href="index.html#invalidkeytypeerror">InvalidKeyTypeError</a></li>
+<li><a href="index.html#invalidrelationalcomparisontypeerror">InvalidRelationalComparisonTypeError</a></li>
+<li><a href="index.html#invalidreturnstatementerror">InvalidReturnStatementError</a></li>
+<li><a href="index.html#invalidunaryexpressionoperanderror">InvalidUnaryExpressionOperandError</a></li>
+<li><a href="index.html#invalidunaryexpressiontypeerror">InvalidUnaryExpressionTypeError</a></li>
+<li><a href="index.html#iterationstatement">IterationStatement</a></li>
+<li><a href="index.html#iterationstatementcontext">IterationStatementContext</a></li>
+<li><a href="index.html#iterationstatementsemantics">IterationStatementSemantics</a></li>
+<li><a href="index.html#iterationstatementtypesemantics">IterationStatementTypeSemantics</a></li>
+<li><a href="index.html#jmpstatementtype">JmpStatementType</a></li>
+<li><a href="index.html#jumpstatement">JumpStatement</a></li>
+<li><a href="index.html#jumpstatementcontext">JumpStatementContext</a></li>
+<li><a href="index.html#jumpstatementsemantics">JumpStatementSemantics</a></li>
+<li><a href="index.html#jumpstatementtypesemantics">JumpStatementTypeSemantics</a></li>
+<li><a href="index.html#kindparserulemapping">KindParseRuleMapping</a></li>
+<li><a href="index.html#kipperadditiveoperator">KipperAdditiveOperator</a></li>
+<li><a href="index.html#kipperarg">KipperArg</a></li>
+<li><a href="index.html#kipperarithmeticassignoperator">KipperArithmeticAssignOperator</a></li>
+<li><a href="index.html#kipperarithmeticoperator">KipperArithmeticOperator</a></li>
+<li><a href="index.html#kipperassignoperator">KipperAssignOperator</a></li>
+<li><a href="index.html#kipperbitwiseandoperator">KipperBitwiseAndOperator</a></li>
+<li><a href="index.html#kipperbitwisenotoperator">KipperBitwiseNotOperator</a></li>
+<li><a href="index.html#kipperbitwiseoperator">KipperBitwiseOperator</a></li>
+<li><a href="index.html#kipperbitwiseoroperator">KipperBitwiseOrOperator</a></li>
+<li><a href="index.html#kipperbitwiseshiftoperator">KipperBitwiseShiftOperator</a></li>
+<li><a href="index.html#kipperbitwisexoroperator">KipperBitwiseXorOperator</a></li>
+<li><a href="index.html#kipperbooltype">KipperBoolType</a></li>
+<li><a href="index.html#kipperbooltypeliterals">KipperBoolTypeLiterals</a></li>
+<li><a href="index.html#kippercomparativeoperator">KipperComparativeOperator</a></li>
+<li><a href="index.html#kippercompilabletype">KipperCompilableType</a></li>
+<li><a href="index.html#kippercompileresult">KipperCompileResult</a></li>
+<li><a href="index.html#kippercompiletarget">KipperCompileTarget</a></li>
+<li><a href="index.html#kippercompiler">KipperCompiler</a></li>
+<li><a href="index.html#kipperconfigerror">KipperConfigError</a></li>
+<li><a href="index.html#kipperequalassignoperator">KipperEqualAssignOperator</a></li>
+<li><a href="index.html#kipperequalityoperator">KipperEqualityOperator</a></li>
+<li><a href="index.html#kippererror">KipperError</a></li>
+<li><a href="index.html#kippererrortype">KipperErrorType</a></li>
+<li><a href="index.html#kipperfileastgenerator">KipperFileASTGenerator</a></li>
+<li><a href="index.html#kipperfilestream">KipperFileStream</a></li>
+<li><a href="index.html#kipperfunctype">KipperFuncType</a></li>
+<li><a href="index.html#kipperfunction">KipperFunction</a></li>
+<li><a href="index.html#kipperincrementordecrementoperator">KipperIncrementOrDecrementOperator</a></li>
+<li><a href="index.html#kipperinternalerror">KipperInternalError</a></li>
+<li><a href="index.html#kipperlexer">KipperLexer</a></li>
+<li><a href="index.html#kipperlisttype">KipperListType</a></li>
+<li><a href="index.html#kipperlogger">KipperLogger</a></li>
+<li><a href="index.html#kipperlogicalandoperator">KipperLogicalAndOperator</a></li>
+<li><a href="index.html#kipperlogicaloperator">KipperLogicalOperator</a></li>
+<li><a href="index.html#kipperlogicaloroperator">KipperLogicalOrOperator</a></li>
+<li><a href="index.html#kippermetatype">KipperMetaType</a></li>
+<li><a href="index.html#kipperminusoperator">KipperMinusOperator</a></li>
+<li><a href="index.html#kippermultiplicativeoperator">KipperMultiplicativeOperator</a></li>
+<li><a href="index.html#kippernegateoperator">KipperNegateOperator</a></li>
+<li><a href="index.html#kippernotimplementederror">KipperNotImplementedError</a></li>
+<li><a href="index.html#kippernulltype">KipperNullType</a></li>
+<li><a href="index.html#kippernumtype">KipperNumType</a></li>
+<li><a href="index.html#kipperoptimiser">KipperOptimiser</a></li>
+<li><a href="index.html#kipperparam">KipperParam</a></li>
+<li><a href="index.html#kipperparser">KipperParser</a></li>
+<li><a href="index.html#kipperparserlistener">KipperParserListener</a></li>
+<li><a href="index.html#kipperparserrulecontext">KipperParserRuleContext</a></li>
+<li><a href="index.html#kipperparservisitor">KipperParserVisitor</a></li>
+<li><a href="index.html#kipperplusoperator">KipperPlusOperator</a></li>
+<li><a href="index.html#kipperprimitivetype">KipperPrimitiveType</a></li>
+<li><a href="index.html#kipperprogramcontext">KipperProgramContext</a></li>
+<li><a href="index.html#kipperreferenceable">KipperReferenceable</a></li>
+<li><a href="index.html#kipperreferenceablefunction">KipperReferenceableFunction</a></li>
+<li><a href="index.html#kipperrelationaloperator">KipperRelationalOperator</a></li>
+<li><a href="index.html#kippersemanticchecker">KipperSemanticChecker</a></li>
+<li><a href="index.html#kippersemanticerrorhandler">KipperSemanticErrorHandler</a></li>
+<li><a href="index.html#kippersemanticsasserter">KipperSemanticsAsserter</a></li>
+<li><a href="index.html#kippersignoperator">KipperSignOperator</a></li>
+<li><a href="index.html#kipperstoragetype">KipperStorageType</a></li>
+<li><a href="index.html#kipperstrtype">KipperStrType</a></li>
+<li><a href="index.html#kippersyntaxerror">KipperSyntaxError</a></li>
+<li><a href="index.html#kippertargetbuiltingenerator">KipperTargetBuiltInGenerator</a></li>
+<li><a href="index.html#kippertargetcodegenerator">KipperTargetCodeGenerator</a></li>
+<li><a href="index.html#kippertargetsemanticanalyser">KipperTargetSemanticAnalyser</a></li>
+<li><a href="index.html#kippertype">KipperType</a></li>
+<li><a href="index.html#kippertypechecker">KipperTypeChecker</a></li>
+<li><a href="index.html#kipperunarymodifieroperator">KipperUnaryModifierOperator</a></li>
+<li><a href="index.html#kipperunaryoperator">KipperUnaryOperator</a></li>
+<li><a href="index.html#kipperundefinedtype">KipperUndefinedType</a></li>
+<li><a href="index.html#kippervariable">KipperVariable</a></li>
+<li><a href="index.html#kippervoidtype">KipperVoidType</a></li>
+<li><a href="index.html#lambdaexpression">LambdaExpression</a></li>
+<li><a href="index.html#lambdaexpressioncontext">LambdaExpressionContext</a></li>
+<li><a href="index.html#lambdaexpressionsemantics">LambdaExpressionSemantics</a></li>
+<li><a href="index.html#lambdaexpressiontypesemantics">LambdaExpressionTypeSemantics</a></li>
+<li><a href="index.html#lexerorparsersyntaxerror">LexerOrParserSyntaxError</a></li>
+<li><a href="index.html#lexerparserdata">LexerParserData</a></li>
+<li><a href="index.html#localscope">LocalScope</a></li>
+<li><a href="index.html#loglevel">LogLevel</a></li>
+<li><a href="index.html#logicalandexpression">LogicalAndExpression</a></li>
+<li><a href="index.html#logicalandexpressioncontext">LogicalAndExpressionContext</a></li>
+<li><a href="index.html#logicalandexpressionsemantics">LogicalAndExpressionSemantics</a></li>
+<li><a href="index.html#logicalandexpressiontypesemantics">LogicalAndExpressionTypeSemantics</a></li>
+<li><a href="index.html#logicalexpression">LogicalExpression</a></li>
+<li><a href="index.html#logicalexpressionsemantics">LogicalExpressionSemantics</a></li>
+<li><a href="index.html#logicalexpressiontypesemantics">LogicalExpressionTypeSemantics</a></li>
+<li><a href="index.html#logicalorexpression">LogicalOrExpression</a></li>
+<li><a href="index.html#logicalorexpressioncontext">LogicalOrExpressionContext</a></li>
+<li><a href="index.html#logicalorexpressionsemantics">LogicalOrExpressionSemantics</a></li>
+<li><a href="index.html#logicalorexpressiontypesemantics">LogicalOrExpressionTypeSemantics</a></li>
+<li><a href="index.html#memberaccessexpression">MemberAccessExpression</a></li>
+<li><a href="index.html#memberaccessexpressioncontext">MemberAccessExpressionContext</a></li>
+<li><a href="index.html#memberaccessexpressionsemantics">MemberAccessExpressionSemantics</a></li>
+<li><a href="index.html#memberaccessexpressiontypesemantics">MemberAccessExpressionTypeSemantics</a></li>
+<li><a href="index.html#missingfunctionbodyerror">MissingFunctionBodyError</a></li>
+<li><a href="index.html#missingrequiredsemanticdataerror">MissingRequiredSemanticDataError</a></li>
+<li><a href="index.html#multiplicativeexpression">MultiplicativeExpression</a></li>
+<li><a href="index.html#multiplicativeexpressioncontext">MultiplicativeExpressionContext</a></li>
+<li><a href="index.html#multiplicativeexpressionsemantics">MultiplicativeExpressionSemantics</a></li>
+<li><a href="index.html#multiplicativetypesemantics">MultiplicativeTypeSemantics</a></li>
+<li><a href="index.html#nosemantics">NoSemantics</a></li>
+<li><a href="index.html#notypesemantics">NoTypeSemantics</a></li>
+<li><a href="index.html#numberprimaryexpression">NumberPrimaryExpression</a></li>
+<li><a href="index.html#numberprimaryexpressioncontext">NumberPrimaryExpressionContext</a></li>
+<li><a href="index.html#numberprimaryexpressionsemantics">NumberPrimaryExpressionSemantics</a></li>
+<li><a href="index.html#numberprimaryexpressiontypesemantics">NumberPrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#objectprimaryexpression">ObjectPrimaryExpression</a></li>
+<li><a href="index.html#objectprimaryexpressioncontext">ObjectPrimaryExpressionContext</a></li>
+<li><a href="index.html#objectprimaryexpressionsemantics">ObjectPrimaryExpressionSemantics</a></li>
+<li><a href="index.html#objectprimaryexpressiontypesemantics">ObjectPrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#objectproperty">ObjectProperty</a></li>
+<li><a href="index.html#objectpropertycontext">ObjectPropertyContext</a></li>
+<li><a href="index.html#objectpropertysemantics">ObjectPropertySemantics</a></li>
+<li><a href="index.html#objectpropertytypesemantics">ObjectPropertyTypeSemantics</a></li>
+<li><a href="index.html#operatormodifiedunaryexpression">OperatorModifiedUnaryExpression</a></li>
+<li><a href="index.html#operatormodifiedunaryexpressioncontext">OperatorModifiedUnaryExpressionContext</a></li>
+<li><a href="index.html#operatormodifiedunaryexpressionsemantics">OperatorModifiedUnaryExpressionSemantics</a></li>
+<li><a href="index.html#operatormodifiedunarytypesemantics">OperatorModifiedUnaryTypeSemantics</a></li>
+<li><a href="index.html#optimisationoptions">OptimisationOptions</a></li>
+<li><a href="index.html#pragma">PRAGMA</a></li>
+<li><a href="index.html#parameterdeclaration">ParameterDeclaration</a></li>
+<li><a href="index.html#parameterdeclarationcontext">ParameterDeclarationContext</a></li>
+<li><a href="index.html#parameterdeclarationsemantics">ParameterDeclarationSemantics</a></li>
+<li><a href="index.html#parameterdeclarationtypesemantics">ParameterDeclarationTypeSemantics</a></li>
+<li><a href="index.html#parameterlistcontext">ParameterListContext</a></li>
+<li><a href="index.html#parserulekindmapping">ParseRuleKindMapping</a></li>
+<li><a href="index.html#parserastnode">ParserASTNode</a></li>
+<li><a href="index.html#parserarithmeticexpressioncontext">ParserArithmeticExpressionContext</a></li>
+<li><a href="index.html#parserarithmeticexpressionrulename">ParserArithmeticExpressionRuleName</a></li>
+<li><a href="index.html#parserbitwiseexpressioncontext">ParserBitwiseExpressionContext</a></li>
+<li><a href="index.html#parserbitwiseexpressionrulename">ParserBitwiseExpressionRuleName</a></li>
+<li><a href="index.html#parsercomparativeexpressioncontext">ParserComparativeExpressionContext</a></li>
+<li><a href="index.html#parsercomparativeexpressionrulename">ParserComparativeExpressionRuleName</a></li>
+<li><a href="index.html#parserdeclarationcontext">ParserDeclarationContext</a></li>
+<li><a href="index.html#parserexpressioncontext">ParserExpressionContext</a></li>
+<li><a href="index.html#parseriterationstatementcontext">ParserIterationStatementContext</a></li>
+<li><a href="index.html#parseriterationstatementkind">ParserIterationStatementKind</a></li>
+<li><a href="index.html#parseriterationstatementrulename">ParserIterationStatementRuleName</a></li>
+<li><a href="index.html#parserlogicalexpressioncontext">ParserLogicalExpressionContext</a></li>
+<li><a href="index.html#parserlogicalexpressionrulename">ParserLogicalExpressionRuleName</a></li>
+<li><a href="index.html#parserpostfixexpressioncontext">ParserPostfixExpressionContext</a></li>
+<li><a href="index.html#parserpostfixexpressionrulename">ParserPostfixExpressionRuleName</a></li>
+<li><a href="index.html#parserprimaryexpressioncontext">ParserPrimaryExpressionContext</a></li>
+<li><a href="index.html#parserprimaryexpressionrulename">ParserPrimaryExpressionRuleName</a></li>
+<li><a href="index.html#parserstatementcontext">ParserStatementContext</a></li>
+<li><a href="index.html#parsertypespecifierexpressioncontext">ParserTypeSpecifierExpressionContext</a></li>
+<li><a href="index.html#parsertypespecifierexpressionrulename">ParserTypeSpecifierExpressionRuleName</a></li>
+<li><a href="index.html#parserunaryexpressioncontext">ParserUnaryExpressionContext</a></li>
+<li><a href="index.html#parserunaryexpressionrulename">ParserUnaryExpressionRuleName</a></li>
+<li><a href="index.html#passonadditiveexpressioncontext">PassOnAdditiveExpressionContext</a></li>
+<li><a href="index.html#passonassignmentexpressioncontext">PassOnAssignmentExpressionContext</a></li>
+<li><a href="index.html#passonbitwiseandexpressioncontext">PassOnBitwiseAndExpressionContext</a></li>
+<li><a href="index.html#passonbitwiseorexpressioncontext">PassOnBitwiseOrExpressionContext</a></li>
+<li><a href="index.html#passonbitwiseshiftexpressioncontext">PassOnBitwiseShiftExpressionContext</a></li>
+<li><a href="index.html#passonbitwisexorexpressioncontext">PassOnBitwiseXorExpressionContext</a></li>
+<li><a href="index.html#passoncastorconvertexpressioncontext">PassOnCastOrConvertExpressionContext</a></li>
+<li><a href="index.html#passonconditionalexpressioncontext">PassOnConditionalExpressionContext</a></li>
+<li><a href="index.html#passonequalityexpressioncontext">PassOnEqualityExpressionContext</a></li>
+<li><a href="index.html#passonlogicalandexpressioncontext">PassOnLogicalAndExpressionContext</a></li>
+<li><a href="index.html#passonlogicalorexpressioncontext">PassOnLogicalOrExpressionContext</a></li>
+<li><a href="index.html#passonmultiplicativeexpressioncontext">PassOnMultiplicativeExpressionContext</a></li>
+<li><a href="index.html#passonrelationalexpressioncontext">PassOnRelationalExpressionContext</a></li>
+<li><a href="index.html#passoncomputedprimaryexpressioncontext">PassOncomputedPrimaryExpressionContext</a></li>
+<li><a href="index.html#postfixexpression">PostfixExpression</a></li>
+<li><a href="index.html#postfixexpressioncontext">PostfixExpressionContext</a></li>
+<li><a href="index.html#postfixexpressionsemantics">PostfixExpressionSemantics</a></li>
+<li><a href="index.html#postfixexpressiontypesemantics">PostfixExpressionTypeSemantics</a></li>
+<li><a href="index.html#primaryexpression">PrimaryExpression</a></li>
+<li><a href="index.html#primaryexpressioncontext">PrimaryExpressionContext</a></li>
+<li><a href="index.html#primaryexpressionsemantics">PrimaryExpressionSemantics</a></li>
+<li><a href="index.html#primaryexpressiontypesemantics">PrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#readonlywritetypeerror">ReadOnlyWriteTypeError</a></li>
+<li><a href="index.html#reference">Reference</a></li>
+<li><a href="index.html#relationalexpression">RelationalExpression</a></li>
+<li><a href="index.html#relationalexpressioncontext">RelationalExpressionContext</a></li>
+<li><a href="index.html#relationalexpressionsemantics">RelationalExpressionSemantics</a></li>
+<li><a href="index.html#relationalexpressiontypesemantics">RelationalExpressionTypeSemantics</a></li>
+<li><a href="index.html#reservedidentifieroverwriteerror">ReservedIdentifierOverwriteError</a></li>
+<li><a href="index.html#returnstatement">ReturnStatement</a></li>
+<li><a href="index.html#returnstatementcontext">ReturnStatementContext</a></li>
+<li><a href="index.html#returnstatementsemantics">ReturnStatementSemantics</a></li>
+<li><a href="index.html#returnstatementtypesemantics">ReturnStatementTypeSemantics</a></li>
+<li><a href="index.html#rootastnode">RootASTNode</a></li>
+<li><a href="index.html#scope">Scope</a></li>
+<li><a href="index.html#scopedeclaration">ScopeDeclaration</a></li>
+<li><a href="index.html#scopefunctiondeclaration">ScopeFunctionDeclaration</a></li>
+<li><a href="index.html#scopenode">ScopeNode</a></li>
+<li><a href="index.html#scopeparameterdeclaration">ScopeParameterDeclaration</a></li>
+<li><a href="index.html#scopevariabledeclaration">ScopeVariableDeclaration</a></li>
+<li><a href="index.html#selectionstatementcontext">SelectionStatementContext</a></li>
+<li><a href="index.html#semanticdata">SemanticData</a></li>
+<li><a href="index.html#slicenotationcontext">SliceNotationContext</a></li>
+<li><a href="index.html#slicenotationmemberaccessexpressioncontext">SliceNotationMemberAccessExpressionContext</a></li>
+<li><a href="index.html#statement">Statement</a></li>
+<li><a href="index.html#statementastnodefactory">StatementASTNodeFactory</a></li>
+<li><a href="index.html#statementcontext">StatementContext</a></li>
+<li><a href="index.html#storagetypespecifiercontext">StorageTypeSpecifierContext</a></li>
+<li><a href="index.html#stringprimaryexpression">StringPrimaryExpression</a></li>
+<li><a href="index.html#stringprimaryexpressioncontext">StringPrimaryExpressionContext</a></li>
+<li><a href="index.html#stringprimaryexpressionsemantics">StringPrimaryExpressionSemantics</a></li>
+<li><a href="index.html#stringprimaryexpressiontypesemantics">StringPrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#switchlabeledstatementcontext">SwitchLabeledStatementContext</a></li>
+<li><a href="index.html#switchstatement">SwitchStatement</a></li>
+<li><a href="index.html#switchstatementcontext">SwitchStatementContext</a></li>
+<li><a href="index.html#switchstatementsemantics">SwitchStatementSemantics</a></li>
+<li><a href="index.html#switchstatementtypesemantics">SwitchStatementTypeSemantics</a></li>
+<li><a href="index.html#symboltable">SymbolTable</a></li>
+<li><a href="index.html#tangledprimaryexpression">TangledPrimaryExpression</a></li>
+<li><a href="index.html#tangledprimaryexpressioncontext">TangledPrimaryExpressionContext</a></li>
+<li><a href="index.html#tangledprimaryexpressionsemantics">TangledPrimaryExpressionSemantics</a></li>
+<li><a href="index.html#tangledprimaryexpressiontypesemantics">TangledPrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#targetastnodecodegenerator">TargetASTNodeCodeGenerator</a></li>
+<li><a href="index.html#targetastnodesemanticanalyser">TargetASTNodeSemanticAnalyser</a></li>
+<li><a href="index.html#targetanalysablenode">TargetAnalysableNode</a></li>
+<li><a href="index.html#targetcompilablenode">TargetCompilableNode</a></li>
+<li><a href="index.html#targetsetupcodegenerator">TargetSetUpCodeGenerator</a></li>
+<li><a href="index.html#targetwrapupcodegenerator">TargetWrapUpCodeGenerator</a></li>
+<li><a href="index.html#tracebackmetadata">TracebackMetadata</a></li>
+<li><a href="index.html#translatedcodeline">TranslatedCodeLine</a></li>
+<li><a href="index.html#translatedcodetoken">TranslatedCodeToken</a></li>
+<li><a href="index.html#translatedexpression">TranslatedExpression</a></li>
+<li><a href="index.html#translationunitcontext">TranslationUnitContext</a></li>
+<li><a href="index.html#type">Type</a></li>
+<li><a href="index.html#typedata">TypeData</a></li>
+<li><a href="index.html#typeerror">TypeError</a></li>
+<li><a href="index.html#typenotcompilableerror">TypeNotCompilableError</a></li>
+<li><a href="index.html#typespecifierexpression">TypeSpecifierExpression</a></li>
+<li><a href="index.html#typespecifierexpressioncontext">TypeSpecifierExpressionContext</a></li>
+<li><a href="index.html#typespecifierexpressionsemantics">TypeSpecifierExpressionSemantics</a></li>
+<li><a href="index.html#typespecifierexpressiontypesemantics">TypeSpecifierExpressionTypeSemantics</a></li>
+<li><a href="index.html#typespecifieridentifiercontext">TypeSpecifierIdentifierContext</a></li>
+<li><a href="index.html#typeoftypespecifierexpression">TypeofTypeSpecifierExpression</a></li>
+<li><a href="index.html#typeoftypespecifierexpressioncontext">TypeofTypeSpecifierExpressionContext</a></li>
+<li><a href="index.html#typeoftypespecifierexpressionsemantics">TypeofTypeSpecifierExpressionSemantics</a></li>
+<li><a href="index.html#typeoftypespecifierexpressiontypesemantics">TypeofTypeSpecifierExpressionTypeSemantics</a></li>
+<li><a href="index.html#unabletodeterminesemanticdataerror">UnableToDetermineSemanticDataError</a></li>
+<li><a href="index.html#unabletogetinnerscopeerror">UnableToGetInnerScopeError</a></li>
+<li><a href="index.html#unaryexpression">UnaryExpression</a></li>
+<li><a href="index.html#unaryexpressioncontext">UnaryExpressionContext</a></li>
+<li><a href="index.html#unaryexpressionsemantics">UnaryExpressionSemantics</a></li>
+<li><a href="index.html#unaryexpressiontypesemantics">UnaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#unaryoperatorcontext">UnaryOperatorContext</a></li>
+<li><a href="index.html#uncheckedtype">UncheckedType</a></li>
+<li><a href="index.html#undefinedconstanterror">UndefinedConstantError</a></li>
+<li><a href="index.html#undefinedcustomtype">UndefinedCustomType</a></li>
+<li><a href="index.html#undefineddeclarationctxerror">UndefinedDeclarationCtxError</a></li>
+<li><a href="index.html#undefinedreferenceerror">UndefinedReferenceError</a></li>
+<li><a href="index.html#undefinedsemanticserror">UndefinedSemanticsError</a></li>
+<li><a href="index.html#unknownreferenceerror">UnknownReferenceError</a></li>
+<li><a href="index.html#unknowntypeerror">UnknownTypeError</a></li>
+<li><a href="index.html#valuenotindexabletypeerror">ValueNotIndexableTypeError</a></li>
+<li><a href="index.html#variabledeclaration">VariableDeclaration</a></li>
+<li><a href="index.html#variabledeclarationcontext">VariableDeclarationContext</a></li>
+<li><a href="index.html#variabledeclarationsemantics">VariableDeclarationSemantics</a></li>
+<li><a href="index.html#variabledeclarationtypesemantics">VariableDeclarationTypeSemantics</a></li>
+<li><a href="index.html#voidornullorundefinedprimaryexpression">VoidOrNullOrUndefinedPrimaryExpression</a></li>
+<li><a href="index.html#voidornullorundefinedprimaryexpressioncontext">VoidOrNullOrUndefinedPrimaryExpressionContext</a></li>
+<li><a href="index.html#voidornullorundefinedprimaryexpressionsemantics">VoidOrNullOrUndefinedPrimaryExpressionSemantics</a></li>
+<li><a href="index.html#voidornullorundefinedprimaryexpressiontypesemantics">VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics</a></li>
+<li><a href="index.html#whileloopiterationstatement">WhileLoopIterationStatement</a></li>
+<li><a href="index.html#whileloopiterationstatementcontext">WhileLoopIterationStatementContext</a></li>
+<li><a href="index.html#whileloopstatementsemantics">WhileLoopStatementSemantics</a></li>
+<li><a href="index.html#whileloopstatementtypesemantics">WhileLoopStatementTypeSemantics</a></li>
+<li><a href="index.html#codegenerator">codeGenerator</a></li>
+<li><a href="index.html#defaultoptimisationoptions">defaultOptimisationOptions</a></li>
+<li><a href="index.html#getconversionfunctionidentifier">getConversionFunctionIdentifier</a></li>
+<li><a href="index.html#getloglevelstring">getLogLevelString</a></li>
+<li><a href="index.html#getnaturalorzero">getNaturalOrZero</a></li>
+<li><a href="index.html#getparserulesource">getParseRuleSource</a></li>
+<li><a href="index.html#getparsetreesource">getParseTreeSource</a></li>
+<li><a href="index.html#gettokenintervalsource">getTokenIntervalSource</a></li>
+<li><a href="index.html#gettokensource">getTokenSource</a></li>
+<li><a href="index.html#handlesemanticerror">handleSemanticError</a></li>
+<li><a href="index.html#inversemap">inverseMap</a></li>
+<li><a href="index.html#isbrowser">isBrowser</a></li>
+<li><a href="index.html#kipperadditiveoperators">kipperAdditiveOperators</a></li>
+<li><a href="index.html#kipperarithmeticassignoperators">kipperArithmeticAssignOperators</a></li>
+<li><a href="index.html#kipperarithmeticoperators">kipperArithmeticOperators</a></li>
+<li><a href="index.html#kipperassignoperators">kipperAssignOperators</a></li>
+<li><a href="index.html#kipperbitwiseandoperator-1">kipperBitwiseAndOperator</a></li>
+<li><a href="index.html#kipperbitwisenotoperator-1">kipperBitwiseNotOperator</a></li>
+<li><a href="index.html#kipperbitwiseoroperator-1">kipperBitwiseOrOperator</a></li>
+<li><a href="index.html#kipperbitwiseshiftoperators">kipperBitwiseShiftOperators</a></li>
+<li><a href="index.html#kipperbitwisexoroperator-1">kipperBitwiseXorOperator</a></li>
+<li><a href="index.html#kipperbooltype-1">kipperBoolType</a></li>
+<li><a href="index.html#kippercomparativeoperators">kipperComparativeOperators</a></li>
+<li><a href="index.html#kippercompilabletypes">kipperCompilableTypes</a></li>
+<li><a href="index.html#kipperequalassignoperator-1">kipperEqualAssignOperator</a></li>
+<li><a href="index.html#kipperequalityoperators">kipperEqualityOperators</a></li>
+<li><a href="index.html#kipperfunctype-1">kipperFuncType</a></li>
+<li><a href="index.html#kipperincrementordecrementoperators">kipperIncrementOrDecrementOperators</a></li>
+<li><a href="index.html#kipperinternalbuiltinfunctions">kipperInternalBuiltInFunctions</a></li>
+<li><a href="index.html#kipperlisttype-1">kipperListType</a></li>
+<li><a href="index.html#kipperlogicalandoperator-1">kipperLogicalAndOperator</a></li>
+<li><a href="index.html#kipperlogicaloperator-1">kipperLogicalOperator</a></li>
+<li><a href="index.html#kipperlogicaloroperator-1">kipperLogicalOrOperator</a></li>
+<li><a href="index.html#kippermetatype-1">kipperMetaType</a></li>
+<li><a href="index.html#kipperminusoperator-1">kipperMinusOperator</a></li>
+<li><a href="index.html#kippermultiplicativeoperators">kipperMultiplicativeOperators</a></li>
+<li><a href="index.html#kippernegateoperator-1">kipperNegateOperator</a></li>
+<li><a href="index.html#kippernulltype-1">kipperNullType</a></li>
+<li><a href="index.html#kippernumtype-1">kipperNumType</a></li>
+<li><a href="index.html#kipperplusoperator-1">kipperPlusOperator</a></li>
+<li><a href="index.html#kipperprimitivetypes">kipperPrimitiveTypes</a></li>
+<li><a href="index.html#kipperrelationaloperators">kipperRelationalOperators</a></li>
+<li><a href="index.html#kipperruntimebuiltinfunctions">kipperRuntimeBuiltInFunctions</a></li>
+<li><a href="index.html#kipperruntimebuiltinvariables">kipperRuntimeBuiltInVariables</a></li>
+<li><a href="index.html#kippersignoperators">kipperSignOperators</a></li>
+<li><a href="index.html#kipperstoragetypes">kipperStorageTypes</a></li>
+<li><a href="index.html#kipperstrtype-1">kipperStrType</a></li>
+<li><a href="index.html#kippersupportedconversions">kipperSupportedConversions</a></li>
+<li><a href="index.html#kipperunarymodifieroperators">kipperUnaryModifierOperators</a></li>
+<li><a href="index.html#kipperunaryoperators">kipperUnaryOperators</a></li>
+<li><a href="index.html#kipperundefinedtype-1">kipperUndefinedType</a></li>
+<li><a href="index.html#kippervoidtype-1">kipperVoidType</a></li>
+<li><a href="index.html#replaceobjkeys">replaceObjKeys</a></li>
+<li><a href="index.html#shouldrecoverfromerror">shouldRecoverFromError</a></li>
+<li><a href="index.html#titlecase">titleCase</a></li>
+</ul>
+<h3 id="namespaces">Namespaces</h3>
+<ul>
+<li><a href="compiler.html">compiler</a></li>
+<li><a href="errors.html">errors</a></li>
+<li><a href="logger.html">logger</a></li>
+<li><a href="utils.html">utils</a></li>
+</ul>
+<h3 id="classes">Classes</h3>
+<ul>
+<li><a href="classes/KipperAntlrErrorListener.html">KipperAntlrErrorListener</a></li>
+<li><a href="classes/KipperWarning.html">KipperWarning</a></li>
+<li><a href="classes/UselessExpressionStatementWarning.html">UselessExpressionStatementWarning</a></li>
+</ul>
+<h3 id="variables">Variables</h3>
+<ul>
+<li><a href="index.html#author">author</a></li>
+<li><a href="index.html#github">github</a></li>
+<li><a href="index.html#license">license</a></li>
+<li><a href="index.html#name">name</a></li>
+<li><a href="index.html#version">version</a></li>
+</ul>
+<h2 id="references-1">References</h2>
+<h3 id="astarithmeticexpressionkind">ASTArithmeticExpressionKind</h3>
+<p>Re-exports <a href="compiler.html#astarithmeticexpressionkind">ASTArithmeticExpressionKind</a></p>
+<hr>
+<h3 id="astbitwiseexpressionkind">ASTBitwiseExpressionKind</h3>
+<p>Re-exports <a href="compiler.html#astbitwiseexpressionkind">ASTBitwiseExpressionKind</a></p>
+<hr>
+<h3 id="astcomparativeexpressionkind">ASTComparativeExpressionKind</h3>
+<p>Re-exports <a href="compiler.html#astcomparativeexpressionkind">ASTComparativeExpressionKind</a></p>
+<hr>
+<h3 id="astdeclarationkind">ASTDeclarationKind</h3>
+<p>Re-exports <a href="compiler.html#astdeclarationkind">ASTDeclarationKind</a></p>
+<hr>
+<h3 id="astdeclarationrulename">ASTDeclarationRuleName</h3>
+<p>Re-exports <a href="compiler.html#astdeclarationrulename">ASTDeclarationRuleName</a></p>
+<hr>
+<h3 id="astexpressionkind">ASTExpressionKind</h3>
+<p>Re-exports <a href="compiler.html#astexpressionkind">ASTExpressionKind</a></p>
+<hr>
+<h3 id="astexpressionrulename">ASTExpressionRuleName</h3>
+<p>Re-exports <a href="compiler.html#astexpressionrulename">ASTExpressionRuleName</a></p>
+<hr>
+<h3 id="astfactoryerror">ASTFactoryError</h3>
+<p>Re-exports <a href="classes/errors.ASTFactoryError.html">ASTFactoryError</a></p>
+<hr>
+<h3 id="astkind">ASTKind</h3>
+<p>Re-exports <a href="compiler.html#astkind">ASTKind</a></p>
+<hr>
+<h3 id="astlogicalexpressionkind">ASTLogicalExpressionKind</h3>
+<p>Re-exports <a href="compiler.html#astlogicalexpressionkind">ASTLogicalExpressionKind</a></p>
+<hr>
+<h3 id="astnodefactory">ASTNodeFactory</h3>
+<p>Re-exports <a href="classes/compiler.ASTNodeFactory.html">ASTNodeFactory</a></p>
+<hr>
+<h3 id="astnodemapper">ASTNodeMapper</h3>
+<p>Re-exports <a href="classes/compiler.ASTNodeMapper.html">ASTNodeMapper</a></p>
+<hr>
+<h3 id="astnodeparsercontext">ASTNodeParserContext</h3>
+<p>Re-exports <a href="compiler.html#astnodeparsercontext">ASTNodeParserContext</a></p>
+<hr>
+<h3 id="astpostfixexpressionkind">ASTPostfixExpressionKind</h3>
+<p>Re-exports <a href="compiler.html#astpostfixexpressionkind">ASTPostfixExpressionKind</a></p>
+<hr>
+<h3 id="astprimaryexpressionkind">ASTPrimaryExpressionKind</h3>
+<p>Re-exports <a href="compiler.html#astprimaryexpressionkind">ASTPrimaryExpressionKind</a></p>
+<hr>
+<h3 id="aststatementkind">ASTStatementKind</h3>
+<p>Re-exports <a href="compiler.html#aststatementkind">ASTStatementKind</a></p>
+<hr>
+<h3 id="aststatementrulename">ASTStatementRuleName</h3>
+<p>Re-exports <a href="compiler.html#aststatementrulename">ASTStatementRuleName</a></p>
+<hr>
+<h3 id="asttypespecifierexpressionkind">ASTTypeSpecifierExpressionKind</h3>
+<p>Re-exports <a href="compiler.html#asttypespecifierexpressionkind">ASTTypeSpecifierExpressionKind</a></p>
+<hr>
+<h3 id="astunaryexpressionkind">ASTUnaryExpressionKind</h3>
+<p>Re-exports <a href="compiler.html#astunaryexpressionkind">ASTUnaryExpressionKind</a></p>
+<hr>
+<h3 id="actualadditiveexpressioncontext">ActualAdditiveExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualAdditiveExpressionContext.html">ActualAdditiveExpressionContext</a></p>
+<hr>
+<h3 id="actualassignmentexpressioncontext">ActualAssignmentExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualAssignmentExpressionContext.html">ActualAssignmentExpressionContext</a></p>
+<hr>
+<h3 id="actualbitwiseandexpressioncontext">ActualBitwiseAndExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualBitwiseAndExpressionContext.html">ActualBitwiseAndExpressionContext</a></p>
+<hr>
+<h3 id="actualbitwiseorexpressioncontext">ActualBitwiseOrExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualBitwiseOrExpressionContext.html">ActualBitwiseOrExpressionContext</a></p>
+<hr>
+<h3 id="actualbitwiseshiftexpressioncontext">ActualBitwiseShiftExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualBitwiseShiftExpressionContext.html">ActualBitwiseShiftExpressionContext</a></p>
+<hr>
+<h3 id="actualbitwisexorexpressioncontext">ActualBitwiseXorExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualBitwiseXorExpressionContext.html">ActualBitwiseXorExpressionContext</a></p>
+<hr>
+<h3 id="actualcastorconvertexpressioncontext">ActualCastOrConvertExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualCastOrConvertExpressionContext.html">ActualCastOrConvertExpressionContext</a></p>
+<hr>
+<h3 id="actualconditionalexpressioncontext">ActualConditionalExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualConditionalExpressionContext.html">ActualConditionalExpressionContext</a></p>
+<hr>
+<h3 id="actualequalityexpressioncontext">ActualEqualityExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualEqualityExpressionContext.html">ActualEqualityExpressionContext</a></p>
+<hr>
+<h3 id="actuallogicalandexpressioncontext">ActualLogicalAndExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualLogicalAndExpressionContext.html">ActualLogicalAndExpressionContext</a></p>
+<hr>
+<h3 id="actuallogicalorexpressioncontext">ActualLogicalOrExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualLogicalOrExpressionContext.html">ActualLogicalOrExpressionContext</a></p>
+<hr>
+<h3 id="actualmultiplicativeexpressioncontext">ActualMultiplicativeExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualMultiplicativeExpressionContext.html">ActualMultiplicativeExpressionContext</a></p>
+<hr>
+<h3 id="actualrelationalexpressioncontext">ActualRelationalExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ActualRelationalExpressionContext.html">ActualRelationalExpressionContext</a></p>
+<hr>
+<h3 id="additiveexpression">AdditiveExpression</h3>
+<p>Re-exports <a href="classes/compiler.AdditiveExpression.html">AdditiveExpression</a></p>
+<hr>
+<h3 id="additiveexpressioncontext">AdditiveExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.AdditiveExpressionContext.html">AdditiveExpressionContext</a></p>
+<hr>
+<h3 id="additiveexpressionsemantics">AdditiveExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.AdditiveExpressionSemantics.html">AdditiveExpressionSemantics</a></p>
+<hr>
+<h3 id="additiveexpressiontypesemantics">AdditiveExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.AdditiveExpressionTypeSemantics.html">AdditiveExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="analysableastnode">AnalysableASTNode</h3>
+<p>Re-exports <a href="classes/compiler.AnalysableASTNode.html">AnalysableASTNode</a></p>
+<hr>
+<h3 id="analysablenodechild">AnalysableNodeChild</h3>
+<p>Re-exports <a href="compiler.html#analysablenodechild">AnalysableNodeChild</a></p>
+<hr>
+<h3 id="analysablenodeparent">AnalysableNodeParent</h3>
+<p>Re-exports <a href="compiler.html#analysablenodeparent">AnalysableNodeParent</a></p>
+<hr>
+<h3 id="argumenterror">ArgumentError</h3>
+<p>Re-exports <a href="classes/errors.ArgumentError.html">ArgumentError</a></p>
+<hr>
+<h3 id="argumentexpressionlistcontext">ArgumentExpressionListContext</h3>
+<p>Re-exports <a href="classes/compiler.ArgumentExpressionListContext.html">ArgumentExpressionListContext</a></p>
+<hr>
+<h3 id="argumenttypeerror">ArgumentTypeError</h3>
+<p>Re-exports <a href="classes/errors.ArgumentTypeError.html">ArgumentTypeError</a></p>
+<hr>
+<h3 id="arithmeticexpression">ArithmeticExpression</h3>
+<p>Re-exports <a href="classes/compiler.ArithmeticExpression.html">ArithmeticExpression</a></p>
+<hr>
+<h3 id="arithmeticexpressionsemantics">ArithmeticExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ArithmeticExpressionSemantics.html">ArithmeticExpressionSemantics</a></p>
+<hr>
+<h3 id="arithmeticexpressiontypesemantics">ArithmeticExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ArithmeticExpressionTypeSemantics.html">ArithmeticExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="arithmeticoperationtypeerror">ArithmeticOperationTypeError</h3>
+<p>Re-exports <a href="classes/errors.ArithmeticOperationTypeError.html">ArithmeticOperationTypeError</a></p>
+<hr>
+<h3 id="arrayprimaryexpression">ArrayPrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.ArrayPrimaryExpression.html">ArrayPrimaryExpression</a></p>
+<hr>
+<h3 id="arrayprimaryexpressioncontext">ArrayPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ArrayPrimaryExpressionContext.html">ArrayPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="arrayprimaryexpressionsemantics">ArrayPrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ArrayPrimaryExpressionSemantics.html">ArrayPrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="arrayprimaryexpressiontypesemantics">ArrayPrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ArrayPrimaryExpressionTypeSemantics.html">ArrayPrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="assignmentexpression">AssignmentExpression</h3>
+<p>Re-exports <a href="classes/compiler.AssignmentExpression.html">AssignmentExpression</a></p>
+<hr>
+<h3 id="assignmentexpressioncontext">AssignmentExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.AssignmentExpressionContext.html">AssignmentExpressionContext</a></p>
+<hr>
+<h3 id="assignmentexpressionsemantics">AssignmentExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.AssignmentExpressionSemantics.html">AssignmentExpressionSemantics</a></p>
+<hr>
+<h3 id="assignmentexpressiontypesemantics">AssignmentExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.AssignmentExpressionTypeSemantics.html">AssignmentExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="assignmentoperatorcontext">AssignmentOperatorContext</h3>
+<p>Re-exports <a href="classes/compiler.AssignmentOperatorContext.html">AssignmentOperatorContext</a></p>
+<hr>
+<h3 id="assignmenttypeerror">AssignmentTypeError</h3>
+<p>Re-exports <a href="classes/errors.AssignmentTypeError.html">AssignmentTypeError</a></p>
+<hr>
+<h3 id="bitwiseandexpression">BitwiseAndExpression</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseAndExpression.html">BitwiseAndExpression</a></p>
+<hr>
+<h3 id="bitwiseandexpressioncontext">BitwiseAndExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseAndExpressionContext.html">BitwiseAndExpressionContext</a></p>
+<hr>
+<h3 id="bitwiseandexpressionsemantics">BitwiseAndExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseAndExpressionSemantics.html">BitwiseAndExpressionSemantics</a></p>
+<hr>
+<h3 id="bitwiseandexpressiontypesemantics">BitwiseAndExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseAndExpressionTypeSemantics.html">BitwiseAndExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="bitwiseexpression">BitwiseExpression</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseExpression.html">BitwiseExpression</a></p>
+<hr>
+<h3 id="bitwiseexpressionsemantics">BitwiseExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseExpressionSemantics.html">BitwiseExpressionSemantics</a></p>
+<hr>
+<h3 id="bitwiseexpressiontypesemantics">BitwiseExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseExpressionTypeSemantics.html">BitwiseExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="bitwiseoperationtypeerror">BitwiseOperationTypeError</h3>
+<p>Re-exports <a href="classes/errors.BitwiseOperationTypeError.html">BitwiseOperationTypeError</a></p>
+<hr>
+<h3 id="bitwiseorexpression">BitwiseOrExpression</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseOrExpression.html">BitwiseOrExpression</a></p>
+<hr>
+<h3 id="bitwiseorexpressioncontext">BitwiseOrExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseOrExpressionContext.html">BitwiseOrExpressionContext</a></p>
+<hr>
+<h3 id="bitwiseorexpressionsemantics">BitwiseOrExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseOrExpressionSemantics.html">BitwiseOrExpressionSemantics</a></p>
+<hr>
+<h3 id="bitwiseorexpressiontypesemantics">BitwiseOrExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseOrExpressionTypeSemantics.html">BitwiseOrExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="bitwiseshiftexpression">BitwiseShiftExpression</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseShiftExpression.html">BitwiseShiftExpression</a></p>
+<hr>
+<h3 id="bitwiseshiftexpressioncontext">BitwiseShiftExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseShiftExpressionContext.html">BitwiseShiftExpressionContext</a></p>
+<hr>
+<h3 id="bitwiseshiftexpressionsemantics">BitwiseShiftExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseShiftExpressionSemantics.html">BitwiseShiftExpressionSemantics</a></p>
+<hr>
+<h3 id="bitwiseshiftexpressiontypesemantics">BitwiseShiftExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseShiftExpressionTypeSemantics.html">BitwiseShiftExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="bitwiseshiftoperatorscontext">BitwiseShiftOperatorsContext</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseShiftOperatorsContext.html">BitwiseShiftOperatorsContext</a></p>
+<hr>
+<h3 id="bitwisexorexpression">BitwiseXorExpression</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseXorExpression.html">BitwiseXorExpression</a></p>
+<hr>
+<h3 id="bitwisexorexpressioncontext">BitwiseXorExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.BitwiseXorExpressionContext.html">BitwiseXorExpressionContext</a></p>
+<hr>
+<h3 id="bitwisexorexpressionsemantics">BitwiseXorExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseXorExpressionSemantics.html">BitwiseXorExpressionSemantics</a></p>
+<hr>
+<h3 id="bitwisexorexpressiontypesemantics">BitwiseXorExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BitwiseXorExpressionTypeSemantics.html">BitwiseXorExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="blockitemcontext">BlockItemContext</h3>
+<p>Re-exports <a href="classes/compiler.BlockItemContext.html">BlockItemContext</a></p>
+<hr>
+<h3 id="blockitemlistcontext">BlockItemListContext</h3>
+<p>Re-exports <a href="classes/compiler.BlockItemListContext.html">BlockItemListContext</a></p>
+<hr>
+<h3 id="boolprimaryexpression">BoolPrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.BoolPrimaryExpression.html">BoolPrimaryExpression</a></p>
+<hr>
+<h3 id="boolprimaryexpressioncontext">BoolPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.BoolPrimaryExpressionContext.html">BoolPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="boolprimaryexpressionsemantics">BoolPrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BoolPrimaryExpressionSemantics.html">BoolPrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="boolprimaryexpressiontypesemantics">BoolPrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.BoolPrimaryExpressionTypeSemantics.html">BoolPrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="bracketnotationcontext">BracketNotationContext</h3>
+<p>Re-exports <a href="classes/compiler.BracketNotationContext.html">BracketNotationContext</a></p>
+<hr>
+<h3 id="bracketnotationmemberaccessexpressioncontext">BracketNotationMemberAccessExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.BracketNotationMemberAccessExpressionContext.html">BracketNotationMemberAccessExpressionContext</a></p>
+<hr>
+<h3 id="builtinfunction">BuiltInFunction</h3>
+<p>Re-exports <a href="interfaces/compiler.BuiltInFunction.html">BuiltInFunction</a></p>
+<hr>
+<h3 id="builtinfunctionargument">BuiltInFunctionArgument</h3>
+<p>Re-exports <a href="interfaces/compiler.BuiltInFunctionArgument.html">BuiltInFunctionArgument</a></p>
+<hr>
+<h3 id="builtinorinternalgeneratorfunctionnotfounderror">BuiltInOrInternalGeneratorFunctionNotFoundError</h3>
+<p>Re-exports <a href="classes/errors.BuiltInOrInternalGeneratorFunctionNotFoundError.html">BuiltInOrInternalGeneratorFunctionNotFoundError</a></p>
+<hr>
+<h3 id="builtinoverwriteerror">BuiltInOverwriteError</h3>
+<p>Re-exports <a href="classes/errors.BuiltInOverwriteError.html">BuiltInOverwriteError</a></p>
+<hr>
+<h3 id="builtinvariable">BuiltInVariable</h3>
+<p>Re-exports <a href="interfaces/compiler.BuiltInVariable.html">BuiltInVariable</a></p>
+<hr>
+<h3 id="comment">COMMENT</h3>
+<p>Re-exports <a href="compiler.html#comment">COMMENT</a></p>
+<hr>
+<h3 id="castorconvertexpression">CastOrConvertExpression</h3>
+<p>Re-exports <a href="classes/compiler.CastOrConvertExpression.html">CastOrConvertExpression</a></p>
+<hr>
+<h3 id="castorconvertexpressioncontext">CastOrConvertExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.CastOrConvertExpressionContext.html">CastOrConvertExpressionContext</a></p>
+<hr>
+<h3 id="castorconvertexpressionsemantics">CastOrConvertExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.CastOrConvertExpressionSemantics.html">CastOrConvertExpressionSemantics</a></p>
+<hr>
+<h3 id="castorconvertexpressiontypesemantics">CastOrConvertExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.CastOrConvertExpressionTypeSemantics.html">CastOrConvertExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="checkedtype">CheckedType</h3>
+<p>Re-exports <a href="classes/compiler.CheckedType.html">CheckedType</a></p>
+<hr>
+<h3 id="comparativeexpression">ComparativeExpression</h3>
+<p>Re-exports <a href="classes/compiler.ComparativeExpression.html">ComparativeExpression</a></p>
+<hr>
+<h3 id="comparativeexpressionsemantics">ComparativeExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ComparativeExpressionSemantics.html">ComparativeExpressionSemantics</a></p>
+<hr>
+<h3 id="comparativeexpressiontypesemantics">ComparativeExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ComparativeExpressionTypeSemantics.html">ComparativeExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="compilableastnode">CompilableASTNode</h3>
+<p>Re-exports <a href="classes/compiler.CompilableASTNode.html">CompilableASTNode</a></p>
+<hr>
+<h3 id="compilablenodechild">CompilableNodeChild</h3>
+<p>Re-exports <a href="compiler.html#compilablenodechild">CompilableNodeChild</a></p>
+<hr>
+<h3 id="compilablenodeparent">CompilableNodeParent</h3>
+<p>Re-exports <a href="compiler.html#compilablenodeparent">CompilableNodeParent</a></p>
+<hr>
+<h3 id="compilationunitcontext">CompilationUnitContext</h3>
+<p>Re-exports <a href="classes/compiler.CompilationUnitContext.html">CompilationUnitContext</a></p>
+<hr>
+<h3 id="compileconfig">CompileConfig</h3>
+<p>Re-exports <a href="interfaces/compiler.CompileConfig.html">CompileConfig</a></p>
+<hr>
+<h3 id="compoundstatement">CompoundStatement</h3>
+<p>Re-exports <a href="classes/compiler.CompoundStatement.html">CompoundStatement</a></p>
+<hr>
+<h3 id="compoundstatementcontext">CompoundStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.CompoundStatementContext.html">CompoundStatementContext</a></p>
+<hr>
+<h3 id="compoundstatementsemantics">CompoundStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.CompoundStatementSemantics.html">CompoundStatementSemantics</a></p>
+<hr>
+<h3 id="compoundstatementtypesemantics">CompoundStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.CompoundStatementTypeSemantics.html">CompoundStatementTypeSemantics</a></p>
+<hr>
+<h3 id="computedprimaryexpressioncontext">ComputedPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ComputedPrimaryExpressionContext.html">ComputedPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="conditionalexpression">ConditionalExpression</h3>
+<p>Re-exports <a href="classes/compiler.ConditionalExpression.html">ConditionalExpression</a></p>
+<hr>
+<h3 id="conditionalexpressioncontext">ConditionalExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ConditionalExpressionContext.html">ConditionalExpressionContext</a></p>
+<hr>
+<h3 id="conditionalexpressionsemantics">ConditionalExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ConditionalExpressionSemantics.html">ConditionalExpressionSemantics</a></p>
+<hr>
+<h3 id="conditionalexpressiontypesemantics">ConditionalExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ConditionalExpressionTypeSemantics.html">ConditionalExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="constructableastdeclaration">ConstructableASTDeclaration</h3>
+<p>Re-exports <a href="compiler.html#constructableastdeclaration">ConstructableASTDeclaration</a></p>
+<hr>
+<h3 id="constructableastdeclarationclass">ConstructableASTDeclarationClass</h3>
+<p>Re-exports <a href="compiler.html#constructableastdeclarationclass">ConstructableASTDeclarationClass</a></p>
+<hr>
+<h3 id="constructableastexpression">ConstructableASTExpression</h3>
+<p>Re-exports <a href="compiler.html#constructableastexpression">ConstructableASTExpression</a></p>
+<hr>
+<h3 id="constructableastexpressionclass">ConstructableASTExpressionClass</h3>
+<p>Re-exports <a href="compiler.html#constructableastexpressionclass">ConstructableASTExpressionClass</a></p>
+<hr>
+<h3 id="constructableastkind">ConstructableASTKind</h3>
+<p>Re-exports <a href="compiler.html#constructableastkind">ConstructableASTKind</a></p>
+<hr>
+<h3 id="constructableastnode">ConstructableASTNode</h3>
+<p>Re-exports <a href="compiler.html#constructableastnode">ConstructableASTNode</a></p>
+<hr>
+<h3 id="constructableastnodeclass">ConstructableASTNodeClass</h3>
+<p>Re-exports <a href="compiler.html#constructableastnodeclass">ConstructableASTNodeClass</a></p>
+<hr>
+<h3 id="constructableastrulename">ConstructableASTRuleName</h3>
+<p>Re-exports <a href="compiler.html#constructableastrulename">ConstructableASTRuleName</a></p>
+<hr>
+<h3 id="constructableaststatement">ConstructableASTStatement</h3>
+<p>Re-exports <a href="compiler.html#constructableaststatement">ConstructableASTStatement</a></p>
+<hr>
+<h3 id="constructableaststatementclass">ConstructableASTStatementClass</h3>
+<p>Re-exports <a href="compiler.html#constructableaststatementclass">ConstructableASTStatementClass</a></p>
+<hr>
+<h3 id="default_token_channel">DEFAULT_TOKEN_CHANNEL</h3>
+<p>Re-exports <a href="compiler.html#default_token_channel">DEFAULT_TOKEN_CHANNEL</a></p>
+<hr>
+<h3 id="declaration">Declaration</h3>
+<p>Re-exports <a href="classes/compiler.Declaration.html">Declaration</a></p>
+<hr>
+<h3 id="declarationastnodefactory">DeclarationASTNodeFactory</h3>
+<p>Re-exports <a href="classes/compiler.DeclarationASTNodeFactory.html">DeclarationASTNodeFactory</a></p>
+<hr>
+<h3 id="declarationcontext">DeclarationContext</h3>
+<p>Re-exports <a href="classes/compiler.DeclarationContext.html">DeclarationContext</a></p>
+<hr>
+<h3 id="declarationsemantics">DeclarationSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.DeclarationSemantics.html">DeclarationSemantics</a></p>
+<hr>
+<h3 id="declarationtypesemantics">DeclarationTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.DeclarationTypeSemantics.html">DeclarationTypeSemantics</a></p>
+<hr>
+<h3 id="declaratorcontext">DeclaratorContext</h3>
+<p>Re-exports <a href="classes/compiler.DeclaratorContext.html">DeclaratorContext</a></p>
+<hr>
+<h3 id="directdeclaratorcontext">DirectDeclaratorContext</h3>
+<p>Re-exports <a href="classes/compiler.DirectDeclaratorContext.html">DirectDeclaratorContext</a></p>
+<hr>
+<h3 id="dowhileloopiterationstatement">DoWhileLoopIterationStatement</h3>
+<p>Re-exports <a href="classes/compiler.DoWhileLoopIterationStatement.html">DoWhileLoopIterationStatement</a></p>
+<hr>
+<h3 id="dowhileloopiterationstatementcontext">DoWhileLoopIterationStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.DoWhileLoopIterationStatementContext.html">DoWhileLoopIterationStatementContext</a></p>
+<hr>
+<h3 id="dowhileloopiterationstatementsemantics">DoWhileLoopIterationStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.DoWhileLoopIterationStatementSemantics.html">DoWhileLoopIterationStatementSemantics</a></p>
+<hr>
+<h3 id="dowhileloopiterationstatementtypesemantics">DoWhileLoopIterationStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.DoWhileLoopIterationStatementTypeSemantics.html">DoWhileLoopIterationStatementTypeSemantics</a></p>
+<hr>
+<h3 id="dotnotationcontext">DotNotationContext</h3>
+<p>Re-exports <a href="classes/compiler.DotNotationContext.html">DotNotationContext</a></p>
+<hr>
+<h3 id="dotnotationmemberaccessexpressioncontext">DotNotationMemberAccessExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.DotNotationMemberAccessExpressionContext.html">DotNotationMemberAccessExpressionContext</a></p>
+<hr>
+<h3 id="equalityexpression">EqualityExpression</h3>
+<p>Re-exports <a href="classes/compiler.EqualityExpression.html">EqualityExpression</a></p>
+<hr>
+<h3 id="equalityexpressioncontext">EqualityExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.EqualityExpressionContext.html">EqualityExpressionContext</a></p>
+<hr>
+<h3 id="equalityexpressionsemantics">EqualityExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.EqualityExpressionSemantics.html">EqualityExpressionSemantics</a></p>
+<hr>
+<h3 id="equalityexpressiontypesemantics">EqualityExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.EqualityExpressionTypeSemantics.html">EqualityExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="evaluatedcompileconfig">EvaluatedCompileConfig</h3>
+<p>Re-exports <a href="classes/compiler.EvaluatedCompileConfig.html">EvaluatedCompileConfig</a></p>
+<hr>
+<h3 id="explicitcallfunctioncallexpressioncontext">ExplicitCallFunctionCallExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ExplicitCallFunctionCallExpressionContext.html">ExplicitCallFunctionCallExpressionContext</a></p>
+<hr>
+<h3 id="expression">Expression</h3>
+<p>Re-exports <a href="classes/compiler.Expression.html">Expression</a></p>
+<hr>
+<h3 id="expressionastnodefactory">ExpressionASTNodeFactory</h3>
+<p>Re-exports <a href="classes/compiler.ExpressionASTNodeFactory.html">ExpressionASTNodeFactory</a></p>
+<hr>
+<h3 id="expressioncontext">ExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ExpressionContext.html">ExpressionContext</a></p>
+<hr>
+<h3 id="expressionnotcallableerror">ExpressionNotCallableError</h3>
+<p>Re-exports <a href="classes/errors.ExpressionNotCallableError.html">ExpressionNotCallableError</a></p>
+<hr>
+<h3 id="expressionsemantics">ExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ExpressionSemantics.html">ExpressionSemantics</a></p>
+<hr>
+<h3 id="expressionstatement">ExpressionStatement</h3>
+<p>Re-exports <a href="classes/compiler.ExpressionStatement.html">ExpressionStatement</a></p>
+<hr>
+<h3 id="expressionstatementcontext">ExpressionStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.ExpressionStatementContext.html">ExpressionStatementContext</a></p>
+<hr>
+<h3 id="expressionstatementsemantics">ExpressionStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ExpressionStatementSemantics.html">ExpressionStatementSemantics</a></p>
+<hr>
+<h3 id="expressionstatementtypesemantics">ExpressionStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ExpressionStatementTypeSemantics.html">ExpressionStatementTypeSemantics</a></p>
+<hr>
+<h3 id="expressiontypesemantics">ExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ExpressionTypeSemantics.html">ExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="externalblockitemcontext">ExternalBlockItemContext</h3>
+<p>Re-exports <a href="classes/compiler.ExternalBlockItemContext.html">ExternalBlockItemContext</a></p>
+<hr>
+<h3 id="externalitemcontext">ExternalItemContext</h3>
+<p>Re-exports <a href="classes/compiler.ExternalItemContext.html">ExternalItemContext</a></p>
+<hr>
+<h3 id="fstringdoublequoteatomcontext">FStringDoubleQuoteAtomContext</h3>
+<p>Re-exports <a href="classes/compiler.FStringDoubleQuoteAtomContext.html">FStringDoubleQuoteAtomContext</a></p>
+<hr>
+<h3 id="fstringprimaryexpression">FStringPrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.FStringPrimaryExpression.html">FStringPrimaryExpression</a></p>
+<hr>
+<h3 id="fstringprimaryexpressioncontext">FStringPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.FStringPrimaryExpressionContext.html">FStringPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="fstringprimaryexpressionsemantics">FStringPrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.FStringPrimaryExpressionSemantics.html">FStringPrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="fstringprimaryexpressiontypesemantics">FStringPrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.FStringPrimaryExpressionTypeSemantics.html">FStringPrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="fstringsinglequoteatomcontext">FStringSingleQuoteAtomContext</h3>
+<p>Re-exports <a href="classes/compiler.FStringSingleQuoteAtomContext.html">FStringSingleQuoteAtomContext</a></p>
+<hr>
+<h3 id="forloopiterationstatement">ForLoopIterationStatement</h3>
+<p>Re-exports <a href="classes/compiler.ForLoopIterationStatement.html">ForLoopIterationStatement</a></p>
+<hr>
+<h3 id="forloopiterationstatementcontext">ForLoopIterationStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.ForLoopIterationStatementContext.html">ForLoopIterationStatementContext</a></p>
+<hr>
+<h3 id="forloopstatementsemantics">ForLoopStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ForLoopStatementSemantics.html">ForLoopStatementSemantics</a></p>
+<hr>
+<h3 id="forloopstatementtypesemantics">ForLoopStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ForLoopStatementTypeSemantics.html">ForLoopStatementTypeSemantics</a></p>
+<hr>
+<h3 id="functioncallexpression">FunctionCallExpression</h3>
+<p>Re-exports <a href="classes/compiler.FunctionCallExpression.html">FunctionCallExpression</a></p>
+<hr>
+<h3 id="functioncallexpressioncontext">FunctionCallExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.FunctionCallExpressionContext.html">FunctionCallExpressionContext</a></p>
+<hr>
+<h3 id="functioncallexpressionsemantics">FunctionCallExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.FunctionCallExpressionSemantics.html">FunctionCallExpressionSemantics</a></p>
+<hr>
+<h3 id="functioncallexpressiontypesemantics">FunctionCallExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.FunctionCallExpressionTypeSemantics.html">FunctionCallExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="functiondeclaration">FunctionDeclaration</h3>
+<p>Re-exports <a href="classes/compiler.FunctionDeclaration.html">FunctionDeclaration</a></p>
+<hr>
+<h3 id="functiondeclarationcontext">FunctionDeclarationContext</h3>
+<p>Re-exports <a href="classes/compiler.FunctionDeclarationContext.html">FunctionDeclarationContext</a></p>
+<hr>
+<h3 id="functiondeclarationsemantics">FunctionDeclarationSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.FunctionDeclarationSemantics.html">FunctionDeclarationSemantics</a></p>
+<hr>
+<h3 id="functiondeclarationtypesemantics">FunctionDeclarationTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.FunctionDeclarationTypeSemantics.html">FunctionDeclarationTypeSemantics</a></p>
+<hr>
+<h3 id="functionscope">FunctionScope</h3>
+<p>Re-exports <a href="classes/compiler.FunctionScope.html">FunctionScope</a></p>
+<hr>
+<h3 id="generictypespecifierexpression">GenericTypeSpecifierExpression</h3>
+<p>Re-exports <a href="classes/compiler.GenericTypeSpecifierExpression.html">GenericTypeSpecifierExpression</a></p>
+<hr>
+<h3 id="generictypespecifierexpressioncontext">GenericTypeSpecifierExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.GenericTypeSpecifierExpressionContext.html">GenericTypeSpecifierExpressionContext</a></p>
+<hr>
+<h3 id="generictypespecifierexpressionsemantics">GenericTypeSpecifierExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.GenericTypeSpecifierExpressionSemantics.html">GenericTypeSpecifierExpressionSemantics</a></p>
+<hr>
+<h3 id="generictypespecifierexpressiontypesemantics">GenericTypeSpecifierExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.GenericTypeSpecifierExpressionTypeSemantics.html">GenericTypeSpecifierExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="globalscope">GlobalScope</h3>
+<p>Re-exports <a href="classes/compiler.GlobalScope.html">GlobalScope</a></p>
+<hr>
+<h3 id="hidden">HIDDEN</h3>
+<p>Re-exports <a href="compiler.html#hidden">HIDDEN</a></p>
+<hr>
+<h3 id="identifieralreadyusedbyfunctionerror">IdentifierAlreadyUsedByFunctionError</h3>
+<p>Re-exports <a href="classes/errors.IdentifierAlreadyUsedByFunctionError.html">IdentifierAlreadyUsedByFunctionError</a></p>
+<hr>
+<h3 id="identifieralreadyusedbyparametererror">IdentifierAlreadyUsedByParameterError</h3>
+<p>Re-exports <a href="classes/errors.IdentifierAlreadyUsedByParameterError.html">IdentifierAlreadyUsedByParameterError</a></p>
+<hr>
+<h3 id="identifieralreadyusedbyvariableerror">IdentifierAlreadyUsedByVariableError</h3>
+<p>Re-exports <a href="classes/errors.IdentifierAlreadyUsedByVariableError.html">IdentifierAlreadyUsedByVariableError</a></p>
+<hr>
+<h3 id="identifiercontext">IdentifierContext</h3>
+<p>Re-exports <a href="classes/compiler.IdentifierContext.html">IdentifierContext</a></p>
+<hr>
+<h3 id="identifiererror">IdentifierError</h3>
+<p>Re-exports <a href="classes/errors.IdentifierError.html">IdentifierError</a></p>
+<hr>
+<h3 id="identifierorstringprimaryexpressioncontext">IdentifierOrStringPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.IdentifierOrStringPrimaryExpressionContext.html">IdentifierOrStringPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="identifierprimaryexpression">IdentifierPrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.IdentifierPrimaryExpression.html">IdentifierPrimaryExpression</a></p>
+<hr>
+<h3 id="identifierprimaryexpressioncontext">IdentifierPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.IdentifierPrimaryExpressionContext.html">IdentifierPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="identifierprimaryexpressionsemantics">IdentifierPrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IdentifierPrimaryExpressionSemantics.html">IdentifierPrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="identifierprimaryexpressiontypesemantics">IdentifierPrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IdentifierPrimaryExpressionTypeSemantics.html">IdentifierPrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="identifiertypespecifierexpression">IdentifierTypeSpecifierExpression</h3>
+<p>Re-exports <a href="classes/compiler.IdentifierTypeSpecifierExpression.html">IdentifierTypeSpecifierExpression</a></p>
+<hr>
+<h3 id="identifiertypespecifierexpressioncontext">IdentifierTypeSpecifierExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.IdentifierTypeSpecifierExpressionContext.html">IdentifierTypeSpecifierExpressionContext</a></p>
+<hr>
+<h3 id="identifiertypespecifierexpressionsemantics">IdentifierTypeSpecifierExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IdentifierTypeSpecifierExpressionSemantics.html">IdentifierTypeSpecifierExpressionSemantics</a></p>
+<hr>
+<h3 id="identifiertypespecifierexpressiontypesemantics">IdentifierTypeSpecifierExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IdentifierTypeSpecifierExpressionTypeSemantics.html">IdentifierTypeSpecifierExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="ifstatement">IfStatement</h3>
+<p>Re-exports <a href="classes/compiler.IfStatement.html">IfStatement</a></p>
+<hr>
+<h3 id="ifstatementcontext">IfStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.IfStatementContext.html">IfStatementContext</a></p>
+<hr>
+<h3 id="ifstatementsemantics">IfStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IfStatementSemantics.html">IfStatementSemantics</a></p>
+<hr>
+<h3 id="ifstatementtypesemantics">IfStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IfStatementTypeSemantics.html">IfStatementTypeSemantics</a></p>
+<hr>
+<h3 id="incompletereturnsincodepathserror">IncompleteReturnsInCodePathsError</h3>
+<p>Re-exports <a href="classes/errors.IncompleteReturnsInCodePathsError.html">IncompleteReturnsInCodePathsError</a></p>
+<hr>
+<h3 id="incrementordecrementoperatorcontext">IncrementOrDecrementOperatorContext</h3>
+<p>Re-exports <a href="classes/compiler.IncrementOrDecrementOperatorContext.html">IncrementOrDecrementOperatorContext</a></p>
+<hr>
+<h3 id="incrementordecrementpostfixexpression">IncrementOrDecrementPostfixExpression</h3>
+<p>Re-exports <a href="classes/compiler.IncrementOrDecrementPostfixExpression.html">IncrementOrDecrementPostfixExpression</a></p>
+<hr>
+<h3 id="incrementordecrementpostfixexpressioncontext">IncrementOrDecrementPostfixExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.IncrementOrDecrementPostfixExpressionContext.html">IncrementOrDecrementPostfixExpressionContext</a></p>
+<hr>
+<h3 id="incrementordecrementpostfixexpressionsemantics">IncrementOrDecrementPostfixExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IncrementOrDecrementPostfixExpressionSemantics.html">IncrementOrDecrementPostfixExpressionSemantics</a></p>
+<hr>
+<h3 id="incrementordecrementpostfixexpressiontypesemantics">IncrementOrDecrementPostfixExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IncrementOrDecrementPostfixExpressionTypeSemantics.html">IncrementOrDecrementPostfixExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="incrementordecrementunaryexpression">IncrementOrDecrementUnaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.IncrementOrDecrementUnaryExpression.html">IncrementOrDecrementUnaryExpression</a></p>
+<hr>
+<h3 id="incrementordecrementunaryexpressioncontext">IncrementOrDecrementUnaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.IncrementOrDecrementUnaryExpressionContext.html">IncrementOrDecrementUnaryExpressionContext</a></p>
+<hr>
+<h3 id="incrementordecrementunaryexpressionsemantics">IncrementOrDecrementUnaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IncrementOrDecrementUnaryExpressionSemantics.html">IncrementOrDecrementUnaryExpressionSemantics</a></p>
+<hr>
+<h3 id="incrementordecrementunarytypesemantics">IncrementOrDecrementUnaryTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IncrementOrDecrementUnaryTypeSemantics.html">IncrementOrDecrementUnaryTypeSemantics</a></p>
+<hr>
+<h3 id="initdeclaratorcontext">InitDeclaratorContext</h3>
+<p>Re-exports <a href="classes/compiler.InitDeclaratorContext.html">InitDeclaratorContext</a></p>
+<hr>
+<h3 id="initializercontext">InitializerContext</h3>
+<p>Re-exports <a href="classes/compiler.InitializerContext.html">InitializerContext</a></p>
+<hr>
+<h3 id="internalfunction">InternalFunction</h3>
+<p>Re-exports <a href="interfaces/compiler.InternalFunction.html">InternalFunction</a></p>
+<hr>
+<h3 id="internalfunctionargument">InternalFunctionArgument</h3>
+<p>Re-exports <a href="interfaces/compiler.InternalFunctionArgument.html">InternalFunctionArgument</a></p>
+<hr>
+<h3 id="internalreference">InternalReference</h3>
+<p>Re-exports <a href="interfaces/compiler.InternalReference.html">InternalReference</a></p>
+<hr>
+<h3 id="invalidamountofargumentserror">InvalidAmountOfArgumentsError</h3>
+<p>Re-exports <a href="classes/errors.InvalidAmountOfArgumentsError.html">InvalidAmountOfArgumentsError</a></p>
+<hr>
+<h3 id="invalidassignmenterror">InvalidAssignmentError</h3>
+<p>Re-exports <a href="classes/errors.InvalidAssignmentError.html">InvalidAssignmentError</a></p>
+<hr>
+<h3 id="invalidconversiontypeerror">InvalidConversionTypeError</h3>
+<p>Re-exports <a href="classes/errors.InvalidConversionTypeError.html">InvalidConversionTypeError</a></p>
+<hr>
+<h3 id="invalidglobalerror">InvalidGlobalError</h3>
+<p>Re-exports <a href="classes/errors.InvalidGlobalError.html">InvalidGlobalError</a></p>
+<hr>
+<h3 id="invalidjumpstatementerror">InvalidJumpStatementError</h3>
+<p>Re-exports <a href="classes/errors.InvalidJumpStatementError.html">InvalidJumpStatementError</a></p>
+<hr>
+<h3 id="invalidkeytypeerror">InvalidKeyTypeError</h3>
+<p>Re-exports <a href="classes/errors.InvalidKeyTypeError.html">InvalidKeyTypeError</a></p>
+<hr>
+<h3 id="invalidrelationalcomparisontypeerror">InvalidRelationalComparisonTypeError</h3>
+<p>Re-exports <a href="classes/errors.InvalidRelationalComparisonTypeError.html">InvalidRelationalComparisonTypeError</a></p>
+<hr>
+<h3 id="invalidreturnstatementerror">InvalidReturnStatementError</h3>
+<p>Re-exports <a href="classes/errors.InvalidReturnStatementError.html">InvalidReturnStatementError</a></p>
+<hr>
+<h3 id="invalidunaryexpressionoperanderror">InvalidUnaryExpressionOperandError</h3>
+<p>Re-exports <a href="classes/errors.InvalidUnaryExpressionOperandError.html">InvalidUnaryExpressionOperandError</a></p>
+<hr>
+<h3 id="invalidunaryexpressiontypeerror">InvalidUnaryExpressionTypeError</h3>
+<p>Re-exports <a href="classes/errors.InvalidUnaryExpressionTypeError.html">InvalidUnaryExpressionTypeError</a></p>
+<hr>
+<h3 id="iterationstatement">IterationStatement</h3>
+<p>Re-exports <a href="classes/compiler.IterationStatement.html">IterationStatement</a></p>
+<hr>
+<h3 id="iterationstatementcontext">IterationStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.IterationStatementContext.html">IterationStatementContext</a></p>
+<hr>
+<h3 id="iterationstatementsemantics">IterationStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IterationStatementSemantics.html">IterationStatementSemantics</a></p>
+<hr>
+<h3 id="iterationstatementtypesemantics">IterationStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.IterationStatementTypeSemantics.html">IterationStatementTypeSemantics</a></p>
+<hr>
+<h3 id="jmpstatementtype">JmpStatementType</h3>
+<p>Re-exports <a href="compiler.html#jmpstatementtype">JmpStatementType</a></p>
+<hr>
+<h3 id="jumpstatement">JumpStatement</h3>
+<p>Re-exports <a href="classes/compiler.JumpStatement.html">JumpStatement</a></p>
+<hr>
+<h3 id="jumpstatementcontext">JumpStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.JumpStatementContext.html">JumpStatementContext</a></p>
+<hr>
+<h3 id="jumpstatementsemantics">JumpStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.JumpStatementSemantics.html">JumpStatementSemantics</a></p>
+<hr>
+<h3 id="jumpstatementtypesemantics">JumpStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.JumpStatementTypeSemantics.html">JumpStatementTypeSemantics</a></p>
+<hr>
+<h3 id="kindparserulemapping">KindParseRuleMapping</h3>
+<p>Re-exports <a href="compiler.html#kindparserulemapping">KindParseRuleMapping</a></p>
+<hr>
+<h3 id="kipperadditiveoperator">KipperAdditiveOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperadditiveoperator">KipperAdditiveOperator</a></p>
+<hr>
+<h3 id="kipperarg">KipperArg</h3>
+<p>Re-exports <a href="compiler.html#kipperarg">KipperArg</a></p>
+<hr>
+<h3 id="kipperarithmeticassignoperator">KipperArithmeticAssignOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperarithmeticassignoperator">KipperArithmeticAssignOperator</a></p>
+<hr>
+<h3 id="kipperarithmeticoperator">KipperArithmeticOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperarithmeticoperator">KipperArithmeticOperator</a></p>
+<hr>
+<h3 id="kipperassignoperator">KipperAssignOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperassignoperator">KipperAssignOperator</a></p>
+<hr>
+<h3 id="kipperbitwiseandoperator">KipperBitwiseAndOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwiseandoperator">KipperBitwiseAndOperator</a></p>
+<hr>
+<h3 id="kipperbitwisenotoperator">KipperBitwiseNotOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwisenotoperator">KipperBitwiseNotOperator</a></p>
+<hr>
+<h3 id="kipperbitwiseoperator">KipperBitwiseOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwiseoperator">KipperBitwiseOperator</a></p>
+<hr>
+<h3 id="kipperbitwiseoroperator">KipperBitwiseOrOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwiseoroperator">KipperBitwiseOrOperator</a></p>
+<hr>
+<h3 id="kipperbitwiseshiftoperator">KipperBitwiseShiftOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwiseshiftoperator">KipperBitwiseShiftOperator</a></p>
+<hr>
+<h3 id="kipperbitwisexoroperator">KipperBitwiseXorOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwisexoroperator">KipperBitwiseXorOperator</a></p>
+<hr>
+<h3 id="kipperbooltype">KipperBoolType</h3>
+<p>Re-exports <a href="compiler.html#kipperbooltype">KipperBoolType</a></p>
+<hr>
+<h3 id="kipperbooltypeliterals">KipperBoolTypeLiterals</h3>
+<p>Re-exports <a href="compiler.html#kipperbooltypeliterals">KipperBoolTypeLiterals</a></p>
+<hr>
+<h3 id="kippercomparativeoperator">KipperComparativeOperator</h3>
+<p>Re-exports <a href="compiler.html#kippercomparativeoperator">KipperComparativeOperator</a></p>
+<hr>
+<h3 id="kippercompilabletype">KipperCompilableType</h3>
+<p>Re-exports <a href="compiler.html#kippercompilabletype">KipperCompilableType</a></p>
+<hr>
+<h3 id="kippercompileresult">KipperCompileResult</h3>
+<p>Re-exports <a href="classes/compiler.KipperCompileResult.html">KipperCompileResult</a></p>
+<hr>
+<h3 id="kippercompiletarget">KipperCompileTarget</h3>
+<p>Re-exports <a href="classes/compiler.KipperCompileTarget.html">KipperCompileTarget</a></p>
+<hr>
+<h3 id="kippercompiler">KipperCompiler</h3>
+<p>Re-exports <a href="classes/compiler.KipperCompiler.html">KipperCompiler</a></p>
+<hr>
+<h3 id="kipperconfigerror">KipperConfigError</h3>
+<p>Re-exports <a href="classes/errors.KipperConfigError.html">KipperConfigError</a></p>
+<hr>
+<h3 id="kipperequalassignoperator">KipperEqualAssignOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperequalassignoperator">KipperEqualAssignOperator</a></p>
+<hr>
+<h3 id="kipperequalityoperator">KipperEqualityOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperequalityoperator">KipperEqualityOperator</a></p>
+<hr>
+<h3 id="kippererror">KipperError</h3>
+<p>Re-exports <a href="classes/errors.KipperError.html">KipperError</a></p>
+<hr>
+<h3 id="kippererrortype">KipperErrorType</h3>
+<p>Re-exports <a href="compiler.html#kippererrortype">KipperErrorType</a></p>
+<hr>
+<h3 id="kipperfileastgenerator">KipperFileASTGenerator</h3>
+<p>Re-exports <a href="classes/compiler.KipperFileASTGenerator.html">KipperFileASTGenerator</a></p>
+<hr>
+<h3 id="kipperfilestream">KipperFileStream</h3>
+<p>Re-exports <a href="classes/compiler.KipperFileStream.html">KipperFileStream</a></p>
+<hr>
+<h3 id="kipperfunctype">KipperFuncType</h3>
+<p>Re-exports <a href="compiler.html#kipperfunctype">KipperFuncType</a></p>
+<hr>
+<h3 id="kipperfunction">KipperFunction</h3>
+<p>Re-exports <a href="compiler.html#kipperfunction">KipperFunction</a></p>
+<hr>
+<h3 id="kipperincrementordecrementoperator">KipperIncrementOrDecrementOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperincrementordecrementoperator">KipperIncrementOrDecrementOperator</a></p>
+<hr>
+<h3 id="kipperinternalerror">KipperInternalError</h3>
+<p>Re-exports <a href="classes/errors.KipperInternalError.html">KipperInternalError</a></p>
+<hr>
+<h3 id="kipperlexer">KipperLexer</h3>
+<p>Re-exports <a href="classes/compiler.KipperLexer.html">KipperLexer</a></p>
+<hr>
+<h3 id="kipperlisttype">KipperListType</h3>
+<p>Re-exports <a href="compiler.html#kipperlisttype">KipperListType</a></p>
+<hr>
+<h3 id="kipperlogger">KipperLogger</h3>
+<p>Re-exports <a href="classes/logger.KipperLogger.html">KipperLogger</a></p>
+<hr>
+<h3 id="kipperlogicalandoperator">KipperLogicalAndOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperlogicalandoperator">KipperLogicalAndOperator</a></p>
+<hr>
+<h3 id="kipperlogicaloperator">KipperLogicalOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperlogicaloperator">KipperLogicalOperator</a></p>
+<hr>
+<h3 id="kipperlogicaloroperator">KipperLogicalOrOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperlogicaloroperator">KipperLogicalOrOperator</a></p>
+<hr>
+<h3 id="kippermetatype">KipperMetaType</h3>
+<p>Re-exports <a href="compiler.html#kippermetatype">KipperMetaType</a></p>
+<hr>
+<h3 id="kipperminusoperator">KipperMinusOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperminusoperator">KipperMinusOperator</a></p>
+<hr>
+<h3 id="kippermultiplicativeoperator">KipperMultiplicativeOperator</h3>
+<p>Re-exports <a href="compiler.html#kippermultiplicativeoperator">KipperMultiplicativeOperator</a></p>
+<hr>
+<h3 id="kippernegateoperator">KipperNegateOperator</h3>
+<p>Re-exports <a href="compiler.html#kippernegateoperator">KipperNegateOperator</a></p>
+<hr>
+<h3 id="kippernotimplementederror">KipperNotImplementedError</h3>
+<p>Re-exports <a href="classes/errors.KipperNotImplementedError.html">KipperNotImplementedError</a></p>
+<hr>
+<h3 id="kippernulltype">KipperNullType</h3>
+<p>Re-exports <a href="compiler.html#kippernulltype">KipperNullType</a></p>
+<hr>
+<h3 id="kippernumtype">KipperNumType</h3>
+<p>Re-exports <a href="compiler.html#kippernumtype">KipperNumType</a></p>
+<hr>
+<h3 id="kipperoptimiser">KipperOptimiser</h3>
+<p>Re-exports <a href="classes/compiler.KipperOptimiser.html">KipperOptimiser</a></p>
+<hr>
+<h3 id="kipperparam">KipperParam</h3>
+<p>Re-exports <a href="compiler.html#kipperparam">KipperParam</a></p>
+<hr>
+<h3 id="kipperparser">KipperParser</h3>
+<p>Re-exports <a href="classes/compiler.KipperParser.html">KipperParser</a></p>
+<hr>
+<h3 id="kipperparserlistener">KipperParserListener</h3>
+<p>Re-exports <a href="interfaces/compiler.KipperParserListener.html">KipperParserListener</a></p>
+<hr>
+<h3 id="kipperparserrulecontext">KipperParserRuleContext</h3>
+<p>Re-exports <a href="classes/compiler.KipperParserRuleContext.html">KipperParserRuleContext</a></p>
+<hr>
+<h3 id="kipperparservisitor">KipperParserVisitor</h3>
+<p>Re-exports <a href="interfaces/compiler.KipperParserVisitor.html">KipperParserVisitor</a></p>
+<hr>
+<h3 id="kipperplusoperator">KipperPlusOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperplusoperator">KipperPlusOperator</a></p>
+<hr>
+<h3 id="kipperprimitivetype">KipperPrimitiveType</h3>
+<p>Re-exports <a href="compiler.html#kipperprimitivetype">KipperPrimitiveType</a></p>
+<hr>
+<h3 id="kipperprogramcontext">KipperProgramContext</h3>
+<p>Re-exports <a href="classes/compiler.KipperProgramContext.html">KipperProgramContext</a></p>
+<hr>
+<h3 id="kipperreferenceable">KipperReferenceable</h3>
+<p>Re-exports <a href="compiler.html#kipperreferenceable">KipperReferenceable</a></p>
+<hr>
+<h3 id="kipperreferenceablefunction">KipperReferenceableFunction</h3>
+<p>Re-exports <a href="compiler.html#kipperreferenceablefunction">KipperReferenceableFunction</a></p>
+<hr>
+<h3 id="kipperrelationaloperator">KipperRelationalOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperrelationaloperator">KipperRelationalOperator</a></p>
+<hr>
+<h3 id="kippersemanticchecker">KipperSemanticChecker</h3>
+<p>Re-exports <a href="classes/compiler.KipperSemanticChecker.html">KipperSemanticChecker</a></p>
+<hr>
+<h3 id="kippersemanticerrorhandler">KipperSemanticErrorHandler</h3>
+<p>Re-exports <a href="classes/compiler.KipperSemanticErrorHandler.html">KipperSemanticErrorHandler</a></p>
+<hr>
+<h3 id="kippersemanticsasserter">KipperSemanticsAsserter</h3>
+<p>Re-exports <a href="classes/compiler.KipperSemanticsAsserter.html">KipperSemanticsAsserter</a></p>
+<hr>
+<h3 id="kippersignoperator">KipperSignOperator</h3>
+<p>Re-exports <a href="compiler.html#kippersignoperator">KipperSignOperator</a></p>
+<hr>
+<h3 id="kipperstoragetype">KipperStorageType</h3>
+<p>Re-exports <a href="compiler.html#kipperstoragetype">KipperStorageType</a></p>
+<hr>
+<h3 id="kipperstrtype">KipperStrType</h3>
+<p>Re-exports <a href="compiler.html#kipperstrtype">KipperStrType</a></p>
+<hr>
+<h3 id="kippersyntaxerror">KipperSyntaxError</h3>
+<p>Re-exports <a href="classes/errors.KipperSyntaxError.html">KipperSyntaxError</a></p>
+<hr>
+<h3 id="kippertargetbuiltingenerator">KipperTargetBuiltInGenerator</h3>
+<p>Re-exports <a href="classes/compiler.KipperTargetBuiltInGenerator.html">KipperTargetBuiltInGenerator</a></p>
+<hr>
+<h3 id="kippertargetcodegenerator">KipperTargetCodeGenerator</h3>
+<p>Re-exports <a href="classes/compiler.KipperTargetCodeGenerator.html">KipperTargetCodeGenerator</a></p>
+<hr>
+<h3 id="kippertargetsemanticanalyser">KipperTargetSemanticAnalyser</h3>
+<p>Re-exports <a href="classes/compiler.KipperTargetSemanticAnalyser.html">KipperTargetSemanticAnalyser</a></p>
+<hr>
+<h3 id="kippertype">KipperType</h3>
+<p>Re-exports <a href="compiler.html#kippertype">KipperType</a></p>
+<hr>
+<h3 id="kippertypechecker">KipperTypeChecker</h3>
+<p>Re-exports <a href="classes/compiler.KipperTypeChecker.html">KipperTypeChecker</a></p>
+<hr>
+<h3 id="kipperunarymodifieroperator">KipperUnaryModifierOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperunarymodifieroperator">KipperUnaryModifierOperator</a></p>
+<hr>
+<h3 id="kipperunaryoperator">KipperUnaryOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperunaryoperator">KipperUnaryOperator</a></p>
+<hr>
+<h3 id="kipperundefinedtype">KipperUndefinedType</h3>
+<p>Re-exports <a href="compiler.html#kipperundefinedtype">KipperUndefinedType</a></p>
+<hr>
+<h3 id="kippervariable">KipperVariable</h3>
+<p>Re-exports <a href="compiler.html#kippervariable">KipperVariable</a></p>
+<hr>
+<h3 id="kippervoidtype">KipperVoidType</h3>
+<p>Re-exports <a href="compiler.html#kippervoidtype">KipperVoidType</a></p>
+<hr>
+<h3 id="lambdaexpression">LambdaExpression</h3>
+<p>Re-exports <a href="classes/compiler.LambdaExpression.html">LambdaExpression</a></p>
+<hr>
+<h3 id="lambdaexpressioncontext">LambdaExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.LambdaExpressionContext.html">LambdaExpressionContext</a></p>
+<hr>
+<h3 id="lambdaexpressionsemantics">LambdaExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.LambdaExpressionSemantics.html">LambdaExpressionSemantics</a></p>
+<hr>
+<h3 id="lambdaexpressiontypesemantics">LambdaExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.LambdaExpressionTypeSemantics.html">LambdaExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="lexerorparsersyntaxerror">LexerOrParserSyntaxError</h3>
+<p>Re-exports <a href="classes/errors.LexerOrParserSyntaxError.html">LexerOrParserSyntaxError</a></p>
+<hr>
+<h3 id="lexerparserdata">LexerParserData</h3>
+<p>Re-exports <a href="interfaces/compiler.LexerParserData.html">LexerParserData</a></p>
+<hr>
+<h3 id="localscope">LocalScope</h3>
+<p>Re-exports <a href="classes/compiler.LocalScope.html">LocalScope</a></p>
+<hr>
+<h3 id="loglevel">LogLevel</h3>
+<p>Re-exports <a href="enums/logger.LogLevel.html">LogLevel</a></p>
+<hr>
+<h3 id="logicalandexpression">LogicalAndExpression</h3>
+<p>Re-exports <a href="classes/compiler.LogicalAndExpression.html">LogicalAndExpression</a></p>
+<hr>
+<h3 id="logicalandexpressioncontext">LogicalAndExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.LogicalAndExpressionContext.html">LogicalAndExpressionContext</a></p>
+<hr>
+<h3 id="logicalandexpressionsemantics">LogicalAndExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.LogicalAndExpressionSemantics.html">LogicalAndExpressionSemantics</a></p>
+<hr>
+<h3 id="logicalandexpressiontypesemantics">LogicalAndExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.LogicalAndExpressionTypeSemantics.html">LogicalAndExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="logicalexpression">LogicalExpression</h3>
+<p>Re-exports <a href="classes/compiler.LogicalExpression.html">LogicalExpression</a></p>
+<hr>
+<h3 id="logicalexpressionsemantics">LogicalExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.LogicalExpressionSemantics.html">LogicalExpressionSemantics</a></p>
+<hr>
+<h3 id="logicalexpressiontypesemantics">LogicalExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.LogicalExpressionTypeSemantics.html">LogicalExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="logicalorexpression">LogicalOrExpression</h3>
+<p>Re-exports <a href="classes/compiler.LogicalOrExpression.html">LogicalOrExpression</a></p>
+<hr>
+<h3 id="logicalorexpressioncontext">LogicalOrExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.LogicalOrExpressionContext.html">LogicalOrExpressionContext</a></p>
+<hr>
+<h3 id="logicalorexpressionsemantics">LogicalOrExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.LogicalOrExpressionSemantics.html">LogicalOrExpressionSemantics</a></p>
+<hr>
+<h3 id="logicalorexpressiontypesemantics">LogicalOrExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.LogicalOrExpressionTypeSemantics.html">LogicalOrExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="memberaccessexpression">MemberAccessExpression</h3>
+<p>Re-exports <a href="classes/compiler.MemberAccessExpression.html">MemberAccessExpression</a></p>
+<hr>
+<h3 id="memberaccessexpressioncontext">MemberAccessExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#memberaccessexpressioncontext">MemberAccessExpressionContext</a></p>
+<hr>
+<h3 id="memberaccessexpressionsemantics">MemberAccessExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.MemberAccessExpressionSemantics.html">MemberAccessExpressionSemantics</a></p>
+<hr>
+<h3 id="memberaccessexpressiontypesemantics">MemberAccessExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.MemberAccessExpressionTypeSemantics.html">MemberAccessExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="missingfunctionbodyerror">MissingFunctionBodyError</h3>
+<p>Re-exports <a href="classes/errors.MissingFunctionBodyError.html">MissingFunctionBodyError</a></p>
+<hr>
+<h3 id="missingrequiredsemanticdataerror">MissingRequiredSemanticDataError</h3>
+<p>Re-exports <a href="classes/errors.MissingRequiredSemanticDataError.html">MissingRequiredSemanticDataError</a></p>
+<hr>
+<h3 id="multiplicativeexpression">MultiplicativeExpression</h3>
+<p>Re-exports <a href="classes/compiler.MultiplicativeExpression.html">MultiplicativeExpression</a></p>
+<hr>
+<h3 id="multiplicativeexpressioncontext">MultiplicativeExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.MultiplicativeExpressionContext.html">MultiplicativeExpressionContext</a></p>
+<hr>
+<h3 id="multiplicativeexpressionsemantics">MultiplicativeExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.MultiplicativeExpressionSemantics.html">MultiplicativeExpressionSemantics</a></p>
+<hr>
+<h3 id="multiplicativetypesemantics">MultiplicativeTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.MultiplicativeTypeSemantics.html">MultiplicativeTypeSemantics</a></p>
+<hr>
+<h3 id="nosemantics">NoSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.NoSemantics.html">NoSemantics</a></p>
+<hr>
+<h3 id="notypesemantics">NoTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.NoTypeSemantics.html">NoTypeSemantics</a></p>
+<hr>
+<h3 id="numberprimaryexpression">NumberPrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.NumberPrimaryExpression.html">NumberPrimaryExpression</a></p>
+<hr>
+<h3 id="numberprimaryexpressioncontext">NumberPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.NumberPrimaryExpressionContext.html">NumberPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="numberprimaryexpressionsemantics">NumberPrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.NumberPrimaryExpressionSemantics.html">NumberPrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="numberprimaryexpressiontypesemantics">NumberPrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.NumberPrimaryExpressionTypeSemantics.html">NumberPrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="objectprimaryexpression">ObjectPrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.ObjectPrimaryExpression.html">ObjectPrimaryExpression</a></p>
+<hr>
+<h3 id="objectprimaryexpressioncontext">ObjectPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.ObjectPrimaryExpressionContext.html">ObjectPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="objectprimaryexpressionsemantics">ObjectPrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ObjectPrimaryExpressionSemantics.html">ObjectPrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="objectprimaryexpressiontypesemantics">ObjectPrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ObjectPrimaryExpressionTypeSemantics.html">ObjectPrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="objectproperty">ObjectProperty</h3>
+<p>Re-exports <a href="classes/compiler.ObjectProperty.html">ObjectProperty</a></p>
+<hr>
+<h3 id="objectpropertycontext">ObjectPropertyContext</h3>
+<p>Re-exports <a href="classes/compiler.ObjectPropertyContext.html">ObjectPropertyContext</a></p>
+<hr>
+<h3 id="objectpropertysemantics">ObjectPropertySemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ObjectPropertySemantics.html">ObjectPropertySemantics</a></p>
+<hr>
+<h3 id="objectpropertytypesemantics">ObjectPropertyTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ObjectPropertyTypeSemantics.html">ObjectPropertyTypeSemantics</a></p>
+<hr>
+<h3 id="operatormodifiedunaryexpression">OperatorModifiedUnaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.OperatorModifiedUnaryExpression.html">OperatorModifiedUnaryExpression</a></p>
+<hr>
+<h3 id="operatormodifiedunaryexpressioncontext">OperatorModifiedUnaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.OperatorModifiedUnaryExpressionContext.html">OperatorModifiedUnaryExpressionContext</a></p>
+<hr>
+<h3 id="operatormodifiedunaryexpressionsemantics">OperatorModifiedUnaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.OperatorModifiedUnaryExpressionSemantics.html">OperatorModifiedUnaryExpressionSemantics</a></p>
+<hr>
+<h3 id="operatormodifiedunarytypesemantics">OperatorModifiedUnaryTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.OperatorModifiedUnaryTypeSemantics.html">OperatorModifiedUnaryTypeSemantics</a></p>
+<hr>
+<h3 id="optimisationoptions">OptimisationOptions</h3>
+<p>Re-exports <a href="interfaces/compiler.OptimisationOptions.html">OptimisationOptions</a></p>
+<hr>
+<h3 id="pragma">PRAGMA</h3>
+<p>Re-exports <a href="compiler.html#pragma">PRAGMA</a></p>
+<hr>
+<h3 id="parameterdeclaration">ParameterDeclaration</h3>
+<p>Re-exports <a href="classes/compiler.ParameterDeclaration.html">ParameterDeclaration</a></p>
+<hr>
+<h3 id="parameterdeclarationcontext">ParameterDeclarationContext</h3>
+<p>Re-exports <a href="classes/compiler.ParameterDeclarationContext.html">ParameterDeclarationContext</a></p>
+<hr>
+<h3 id="parameterdeclarationsemantics">ParameterDeclarationSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ParameterDeclarationSemantics.html">ParameterDeclarationSemantics</a></p>
+<hr>
+<h3 id="parameterdeclarationtypesemantics">ParameterDeclarationTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ParameterDeclarationTypeSemantics.html">ParameterDeclarationTypeSemantics</a></p>
+<hr>
+<h3 id="parameterlistcontext">ParameterListContext</h3>
+<p>Re-exports <a href="classes/compiler.ParameterListContext.html">ParameterListContext</a></p>
+<hr>
+<h3 id="parserulekindmapping">ParseRuleKindMapping</h3>
+<p>Re-exports <a href="compiler.html#parserulekindmapping">ParseRuleKindMapping</a></p>
+<hr>
+<h3 id="parserastnode">ParserASTNode</h3>
+<p>Re-exports <a href="classes/compiler.ParserASTNode.html">ParserASTNode</a></p>
+<hr>
+<h3 id="parserarithmeticexpressioncontext">ParserArithmeticExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#parserarithmeticexpressioncontext">ParserArithmeticExpressionContext</a></p>
+<hr>
+<h3 id="parserarithmeticexpressionrulename">ParserArithmeticExpressionRuleName</h3>
+<p>Re-exports <a href="compiler.html#parserarithmeticexpressionrulename">ParserArithmeticExpressionRuleName</a></p>
+<hr>
+<h3 id="parserbitwiseexpressioncontext">ParserBitwiseExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#parserbitwiseexpressioncontext">ParserBitwiseExpressionContext</a></p>
+<hr>
+<h3 id="parserbitwiseexpressionrulename">ParserBitwiseExpressionRuleName</h3>
+<p>Re-exports <a href="compiler.html#parserbitwiseexpressionrulename">ParserBitwiseExpressionRuleName</a></p>
+<hr>
+<h3 id="parsercomparativeexpressioncontext">ParserComparativeExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#parsercomparativeexpressioncontext">ParserComparativeExpressionContext</a></p>
+<hr>
+<h3 id="parsercomparativeexpressionrulename">ParserComparativeExpressionRuleName</h3>
+<p>Re-exports <a href="compiler.html#parsercomparativeexpressionrulename">ParserComparativeExpressionRuleName</a></p>
+<hr>
+<h3 id="parserdeclarationcontext">ParserDeclarationContext</h3>
+<p>Re-exports <a href="compiler.html#parserdeclarationcontext">ParserDeclarationContext</a></p>
+<hr>
+<h3 id="parserexpressioncontext">ParserExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#parserexpressioncontext">ParserExpressionContext</a></p>
+<hr>
+<h3 id="parseriterationstatementcontext">ParserIterationStatementContext</h3>
+<p>Re-exports <a href="compiler.html#parseriterationstatementcontext">ParserIterationStatementContext</a></p>
+<hr>
+<h3 id="parseriterationstatementkind">ParserIterationStatementKind</h3>
+<p>Re-exports <a href="compiler.html#parseriterationstatementkind">ParserIterationStatementKind</a></p>
+<hr>
+<h3 id="parseriterationstatementrulename">ParserIterationStatementRuleName</h3>
+<p>Re-exports <a href="compiler.html#parseriterationstatementrulename">ParserIterationStatementRuleName</a></p>
+<hr>
+<h3 id="parserlogicalexpressioncontext">ParserLogicalExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#parserlogicalexpressioncontext">ParserLogicalExpressionContext</a></p>
+<hr>
+<h3 id="parserlogicalexpressionrulename">ParserLogicalExpressionRuleName</h3>
+<p>Re-exports <a href="compiler.html#parserlogicalexpressionrulename">ParserLogicalExpressionRuleName</a></p>
+<hr>
+<h3 id="parserpostfixexpressioncontext">ParserPostfixExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#parserpostfixexpressioncontext">ParserPostfixExpressionContext</a></p>
+<hr>
+<h3 id="parserpostfixexpressionrulename">ParserPostfixExpressionRuleName</h3>
+<p>Re-exports <a href="compiler.html#parserpostfixexpressionrulename">ParserPostfixExpressionRuleName</a></p>
+<hr>
+<h3 id="parserprimaryexpressioncontext">ParserPrimaryExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#parserprimaryexpressioncontext">ParserPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="parserprimaryexpressionrulename">ParserPrimaryExpressionRuleName</h3>
+<p>Re-exports <a href="compiler.html#parserprimaryexpressionrulename">ParserPrimaryExpressionRuleName</a></p>
+<hr>
+<h3 id="parserstatementcontext">ParserStatementContext</h3>
+<p>Re-exports <a href="compiler.html#parserstatementcontext">ParserStatementContext</a></p>
+<hr>
+<h3 id="parsertypespecifierexpressioncontext">ParserTypeSpecifierExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#parsertypespecifierexpressioncontext">ParserTypeSpecifierExpressionContext</a></p>
+<hr>
+<h3 id="parsertypespecifierexpressionrulename">ParserTypeSpecifierExpressionRuleName</h3>
+<p>Re-exports <a href="compiler.html#parsertypespecifierexpressionrulename">ParserTypeSpecifierExpressionRuleName</a></p>
+<hr>
+<h3 id="parserunaryexpressioncontext">ParserUnaryExpressionContext</h3>
+<p>Re-exports <a href="compiler.html#parserunaryexpressioncontext">ParserUnaryExpressionContext</a></p>
+<hr>
+<h3 id="parserunaryexpressionrulename">ParserUnaryExpressionRuleName</h3>
+<p>Re-exports <a href="compiler.html#parserunaryexpressionrulename">ParserUnaryExpressionRuleName</a></p>
+<hr>
+<h3 id="passonadditiveexpressioncontext">PassOnAdditiveExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnAdditiveExpressionContext.html">PassOnAdditiveExpressionContext</a></p>
+<hr>
+<h3 id="passonassignmentexpressioncontext">PassOnAssignmentExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnAssignmentExpressionContext.html">PassOnAssignmentExpressionContext</a></p>
+<hr>
+<h3 id="passonbitwiseandexpressioncontext">PassOnBitwiseAndExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnBitwiseAndExpressionContext.html">PassOnBitwiseAndExpressionContext</a></p>
+<hr>
+<h3 id="passonbitwiseorexpressioncontext">PassOnBitwiseOrExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnBitwiseOrExpressionContext.html">PassOnBitwiseOrExpressionContext</a></p>
+<hr>
+<h3 id="passonbitwiseshiftexpressioncontext">PassOnBitwiseShiftExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnBitwiseShiftExpressionContext.html">PassOnBitwiseShiftExpressionContext</a></p>
+<hr>
+<h3 id="passonbitwisexorexpressioncontext">PassOnBitwiseXorExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnBitwiseXorExpressionContext.html">PassOnBitwiseXorExpressionContext</a></p>
+<hr>
+<h3 id="passoncastorconvertexpressioncontext">PassOnCastOrConvertExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnCastOrConvertExpressionContext.html">PassOnCastOrConvertExpressionContext</a></p>
+<hr>
+<h3 id="passonconditionalexpressioncontext">PassOnConditionalExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnConditionalExpressionContext.html">PassOnConditionalExpressionContext</a></p>
+<hr>
+<h3 id="passonequalityexpressioncontext">PassOnEqualityExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnEqualityExpressionContext.html">PassOnEqualityExpressionContext</a></p>
+<hr>
+<h3 id="passonlogicalandexpressioncontext">PassOnLogicalAndExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnLogicalAndExpressionContext.html">PassOnLogicalAndExpressionContext</a></p>
+<hr>
+<h3 id="passonlogicalorexpressioncontext">PassOnLogicalOrExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnLogicalOrExpressionContext.html">PassOnLogicalOrExpressionContext</a></p>
+<hr>
+<h3 id="passonmultiplicativeexpressioncontext">PassOnMultiplicativeExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnMultiplicativeExpressionContext.html">PassOnMultiplicativeExpressionContext</a></p>
+<hr>
+<h3 id="passonrelationalexpressioncontext">PassOnRelationalExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOnRelationalExpressionContext.html">PassOnRelationalExpressionContext</a></p>
+<hr>
+<h3 id="passoncomputedprimaryexpressioncontext">PassOncomputedPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PassOncomputedPrimaryExpressionContext.html">PassOncomputedPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="postfixexpression">PostfixExpression</h3>
+<p>Re-exports <a href="classes/compiler.PostfixExpression.html">PostfixExpression</a></p>
+<hr>
+<h3 id="postfixexpressioncontext">PostfixExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PostfixExpressionContext.html">PostfixExpressionContext</a></p>
+<hr>
+<h3 id="postfixexpressionsemantics">PostfixExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.PostfixExpressionSemantics.html">PostfixExpressionSemantics</a></p>
+<hr>
+<h3 id="postfixexpressiontypesemantics">PostfixExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.PostfixExpressionTypeSemantics.html">PostfixExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="primaryexpression">PrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.PrimaryExpression.html">PrimaryExpression</a></p>
+<hr>
+<h3 id="primaryexpressioncontext">PrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.PrimaryExpressionContext.html">PrimaryExpressionContext</a></p>
+<hr>
+<h3 id="primaryexpressionsemantics">PrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.PrimaryExpressionSemantics.html">PrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="primaryexpressiontypesemantics">PrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.PrimaryExpressionTypeSemantics.html">PrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="readonlywritetypeerror">ReadOnlyWriteTypeError</h3>
+<p>Re-exports <a href="classes/errors.ReadOnlyWriteTypeError.html">ReadOnlyWriteTypeError</a></p>
+<hr>
+<h3 id="reference">Reference</h3>
+<p>Re-exports <a href="interfaces/compiler.Reference.html">Reference</a></p>
+<hr>
+<h3 id="relationalexpression">RelationalExpression</h3>
+<p>Re-exports <a href="classes/compiler.RelationalExpression.html">RelationalExpression</a></p>
+<hr>
+<h3 id="relationalexpressioncontext">RelationalExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.RelationalExpressionContext.html">RelationalExpressionContext</a></p>
+<hr>
+<h3 id="relationalexpressionsemantics">RelationalExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.RelationalExpressionSemantics.html">RelationalExpressionSemantics</a></p>
+<hr>
+<h3 id="relationalexpressiontypesemantics">RelationalExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.RelationalExpressionTypeSemantics.html">RelationalExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="reservedidentifieroverwriteerror">ReservedIdentifierOverwriteError</h3>
+<p>Re-exports <a href="classes/errors.ReservedIdentifierOverwriteError.html">ReservedIdentifierOverwriteError</a></p>
+<hr>
+<h3 id="returnstatement">ReturnStatement</h3>
+<p>Re-exports <a href="classes/compiler.ReturnStatement.html">ReturnStatement</a></p>
+<hr>
+<h3 id="returnstatementcontext">ReturnStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.ReturnStatementContext.html">ReturnStatementContext</a></p>
+<hr>
+<h3 id="returnstatementsemantics">ReturnStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ReturnStatementSemantics.html">ReturnStatementSemantics</a></p>
+<hr>
+<h3 id="returnstatementtypesemantics">ReturnStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.ReturnStatementTypeSemantics.html">ReturnStatementTypeSemantics</a></p>
+<hr>
+<h3 id="rootastnode">RootASTNode</h3>
+<p>Re-exports <a href="classes/compiler.RootASTNode.html">RootASTNode</a></p>
+<hr>
+<h3 id="scope">Scope</h3>
+<p>Re-exports <a href="classes/compiler.Scope.html">Scope</a></p>
+<hr>
+<h3 id="scopedeclaration">ScopeDeclaration</h3>
+<p>Re-exports <a href="classes/compiler.ScopeDeclaration.html">ScopeDeclaration</a></p>
+<hr>
+<h3 id="scopefunctiondeclaration">ScopeFunctionDeclaration</h3>
+<p>Re-exports <a href="classes/compiler.ScopeFunctionDeclaration.html">ScopeFunctionDeclaration</a></p>
+<hr>
+<h3 id="scopenode">ScopeNode</h3>
+<p>Re-exports <a href="interfaces/compiler.ScopeNode.html">ScopeNode</a></p>
+<hr>
+<h3 id="scopeparameterdeclaration">ScopeParameterDeclaration</h3>
+<p>Re-exports <a href="classes/compiler.ScopeParameterDeclaration.html">ScopeParameterDeclaration</a></p>
+<hr>
+<h3 id="scopevariabledeclaration">ScopeVariableDeclaration</h3>
+<p>Re-exports <a href="classes/compiler.ScopeVariableDeclaration.html">ScopeVariableDeclaration</a></p>
+<hr>
+<h3 id="selectionstatementcontext">SelectionStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.SelectionStatementContext.html">SelectionStatementContext</a></p>
+<hr>
+<h3 id="semanticdata">SemanticData</h3>
+<p>Re-exports <a href="compiler.html#semanticdata">SemanticData</a></p>
+<hr>
+<h3 id="slicenotationcontext">SliceNotationContext</h3>
+<p>Re-exports <a href="classes/compiler.SliceNotationContext.html">SliceNotationContext</a></p>
+<hr>
+<h3 id="slicenotationmemberaccessexpressioncontext">SliceNotationMemberAccessExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.SliceNotationMemberAccessExpressionContext.html">SliceNotationMemberAccessExpressionContext</a></p>
+<hr>
+<h3 id="statement">Statement</h3>
+<p>Re-exports <a href="classes/compiler.Statement.html">Statement</a></p>
+<hr>
+<h3 id="statementastnodefactory">StatementASTNodeFactory</h3>
+<p>Re-exports <a href="classes/compiler.StatementASTNodeFactory.html">StatementASTNodeFactory</a></p>
+<hr>
+<h3 id="statementcontext">StatementContext</h3>
+<p>Re-exports <a href="classes/compiler.StatementContext.html">StatementContext</a></p>
+<hr>
+<h3 id="storagetypespecifiercontext">StorageTypeSpecifierContext</h3>
+<p>Re-exports <a href="classes/compiler.StorageTypeSpecifierContext.html">StorageTypeSpecifierContext</a></p>
+<hr>
+<h3 id="stringprimaryexpression">StringPrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.StringPrimaryExpression.html">StringPrimaryExpression</a></p>
+<hr>
+<h3 id="stringprimaryexpressioncontext">StringPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.StringPrimaryExpressionContext.html">StringPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="stringprimaryexpressionsemantics">StringPrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.StringPrimaryExpressionSemantics.html">StringPrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="stringprimaryexpressiontypesemantics">StringPrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.StringPrimaryExpressionTypeSemantics.html">StringPrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="switchlabeledstatementcontext">SwitchLabeledStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.SwitchLabeledStatementContext.html">SwitchLabeledStatementContext</a></p>
+<hr>
+<h3 id="switchstatement">SwitchStatement</h3>
+<p>Re-exports <a href="classes/compiler.SwitchStatement.html">SwitchStatement</a></p>
+<hr>
+<h3 id="switchstatementcontext">SwitchStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.SwitchStatementContext.html">SwitchStatementContext</a></p>
+<hr>
+<h3 id="switchstatementsemantics">SwitchStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.SwitchStatementSemantics.html">SwitchStatementSemantics</a></p>
+<hr>
+<h3 id="switchstatementtypesemantics">SwitchStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.SwitchStatementTypeSemantics.html">SwitchStatementTypeSemantics</a></p>
+<hr>
+<h3 id="symboltable">SymbolTable</h3>
+<p>Re-exports <a href="interfaces/compiler.SymbolTable.html">SymbolTable</a></p>
+<hr>
+<h3 id="tangledprimaryexpression">TangledPrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.TangledPrimaryExpression.html">TangledPrimaryExpression</a></p>
+<hr>
+<h3 id="tangledprimaryexpressioncontext">TangledPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.TangledPrimaryExpressionContext.html">TangledPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="tangledprimaryexpressionsemantics">TangledPrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.TangledPrimaryExpressionSemantics.html">TangledPrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="tangledprimaryexpressiontypesemantics">TangledPrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.TangledPrimaryExpressionTypeSemantics.html">TangledPrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="targetastnodecodegenerator">TargetASTNodeCodeGenerator</h3>
+<p>Re-exports <a href="compiler.html#targetastnodecodegenerator">TargetASTNodeCodeGenerator</a></p>
+<hr>
+<h3 id="targetastnodesemanticanalyser">TargetASTNodeSemanticAnalyser</h3>
+<p>Re-exports <a href="compiler.html#targetastnodesemanticanalyser">TargetASTNodeSemanticAnalyser</a></p>
+<hr>
+<h3 id="targetanalysablenode">TargetAnalysableNode</h3>
+<p>Re-exports <a href="interfaces/compiler.TargetAnalysableNode.html">TargetAnalysableNode</a></p>
+<hr>
+<h3 id="targetcompilablenode">TargetCompilableNode</h3>
+<p>Re-exports <a href="interfaces/compiler.TargetCompilableNode.html">TargetCompilableNode</a></p>
+<hr>
+<h3 id="targetsetupcodegenerator">TargetSetUpCodeGenerator</h3>
+<p>Re-exports <a href="compiler.html#targetsetupcodegenerator">TargetSetUpCodeGenerator</a></p>
+<hr>
+<h3 id="targetwrapupcodegenerator">TargetWrapUpCodeGenerator</h3>
+<p>Re-exports <a href="compiler.html#targetwrapupcodegenerator">TargetWrapUpCodeGenerator</a></p>
+<hr>
+<h3 id="tracebackmetadata">TracebackMetadata</h3>
+<p>Re-exports <a href="interfaces/errors.TracebackMetadata.html">TracebackMetadata</a></p>
+<hr>
+<h3 id="translatedcodeline">TranslatedCodeLine</h3>
+<p>Re-exports <a href="compiler.html#translatedcodeline">TranslatedCodeLine</a></p>
+<hr>
+<h3 id="translatedcodetoken">TranslatedCodeToken</h3>
+<p>Re-exports <a href="compiler.html#translatedcodetoken">TranslatedCodeToken</a></p>
+<hr>
+<h3 id="translatedexpression">TranslatedExpression</h3>
+<p>Re-exports <a href="compiler.html#translatedexpression">TranslatedExpression</a></p>
+<hr>
+<h3 id="translationunitcontext">TranslationUnitContext</h3>
+<p>Re-exports <a href="classes/compiler.TranslationUnitContext.html">TranslationUnitContext</a></p>
+<hr>
+<h3 id="type">Type</h3>
+<p>Re-exports <a href="classes/compiler.Type.html">Type</a></p>
+<hr>
+<h3 id="typedata">TypeData</h3>
+<p>Re-exports <a href="compiler.html#typedata">TypeData</a></p>
+<hr>
+<h3 id="typeerror">TypeError</h3>
+<p>Re-exports <a href="classes/errors.TypeError.html">TypeError</a></p>
+<hr>
+<h3 id="typenotcompilableerror">TypeNotCompilableError</h3>
+<p>Re-exports <a href="classes/errors.TypeNotCompilableError.html">TypeNotCompilableError</a></p>
+<hr>
+<h3 id="typespecifierexpression">TypeSpecifierExpression</h3>
+<p>Re-exports <a href="classes/compiler.TypeSpecifierExpression.html">TypeSpecifierExpression</a></p>
+<hr>
+<h3 id="typespecifierexpressioncontext">TypeSpecifierExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.TypeSpecifierExpressionContext.html">TypeSpecifierExpressionContext</a></p>
+<hr>
+<h3 id="typespecifierexpressionsemantics">TypeSpecifierExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.TypeSpecifierExpressionSemantics.html">TypeSpecifierExpressionSemantics</a></p>
+<hr>
+<h3 id="typespecifierexpressiontypesemantics">TypeSpecifierExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.TypeSpecifierExpressionTypeSemantics.html">TypeSpecifierExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="typespecifieridentifiercontext">TypeSpecifierIdentifierContext</h3>
+<p>Re-exports <a href="classes/compiler.TypeSpecifierIdentifierContext.html">TypeSpecifierIdentifierContext</a></p>
+<hr>
+<h3 id="typeoftypespecifierexpression">TypeofTypeSpecifierExpression</h3>
+<p>Re-exports <a href="classes/compiler.TypeofTypeSpecifierExpression.html">TypeofTypeSpecifierExpression</a></p>
+<hr>
+<h3 id="typeoftypespecifierexpressioncontext">TypeofTypeSpecifierExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.TypeofTypeSpecifierExpressionContext.html">TypeofTypeSpecifierExpressionContext</a></p>
+<hr>
+<h3 id="typeoftypespecifierexpressionsemantics">TypeofTypeSpecifierExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.TypeofTypeSpecifierExpressionSemantics.html">TypeofTypeSpecifierExpressionSemantics</a></p>
+<hr>
+<h3 id="typeoftypespecifierexpressiontypesemantics">TypeofTypeSpecifierExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.TypeofTypeSpecifierExpressionTypeSemantics.html">TypeofTypeSpecifierExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="unabletodeterminesemanticdataerror">UnableToDetermineSemanticDataError</h3>
+<p>Re-exports <a href="classes/errors.UnableToDetermineSemanticDataError.html">UnableToDetermineSemanticDataError</a></p>
+<hr>
+<h3 id="unabletogetinnerscopeerror">UnableToGetInnerScopeError</h3>
+<p>Re-exports <a href="classes/errors.UnableToGetInnerScopeError.html">UnableToGetInnerScopeError</a></p>
+<hr>
+<h3 id="unaryexpression">UnaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.UnaryExpression.html">UnaryExpression</a></p>
+<hr>
+<h3 id="unaryexpressioncontext">UnaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.UnaryExpressionContext.html">UnaryExpressionContext</a></p>
+<hr>
+<h3 id="unaryexpressionsemantics">UnaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.UnaryExpressionSemantics.html">UnaryExpressionSemantics</a></p>
+<hr>
+<h3 id="unaryexpressiontypesemantics">UnaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.UnaryExpressionTypeSemantics.html">UnaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="unaryoperatorcontext">UnaryOperatorContext</h3>
+<p>Re-exports <a href="classes/compiler.UnaryOperatorContext.html">UnaryOperatorContext</a></p>
+<hr>
+<h3 id="uncheckedtype">UncheckedType</h3>
+<p>Re-exports <a href="classes/compiler.UncheckedType.html">UncheckedType</a></p>
+<hr>
+<h3 id="undefinedconstanterror">UndefinedConstantError</h3>
+<p>Re-exports <a href="classes/errors.UndefinedConstantError.html">UndefinedConstantError</a></p>
+<hr>
+<h3 id="undefinedcustomtype">UndefinedCustomType</h3>
+<p>Re-exports <a href="classes/compiler.UndefinedCustomType.html">UndefinedCustomType</a></p>
+<hr>
+<h3 id="undefineddeclarationctxerror">UndefinedDeclarationCtxError</h3>
+<p>Re-exports <a href="classes/errors.UndefinedDeclarationCtxError.html">UndefinedDeclarationCtxError</a></p>
+<hr>
+<h3 id="undefinedreferenceerror">UndefinedReferenceError</h3>
+<p>Re-exports <a href="classes/errors.UndefinedReferenceError.html">UndefinedReferenceError</a></p>
+<hr>
+<h3 id="undefinedsemanticserror">UndefinedSemanticsError</h3>
+<p>Re-exports <a href="classes/errors.UndefinedSemanticsError.html">UndefinedSemanticsError</a></p>
+<hr>
+<h3 id="unknownreferenceerror">UnknownReferenceError</h3>
+<p>Re-exports <a href="classes/errors.UnknownReferenceError.html">UnknownReferenceError</a></p>
+<hr>
+<h3 id="unknowntypeerror">UnknownTypeError</h3>
+<p>Re-exports <a href="classes/errors.UnknownTypeError.html">UnknownTypeError</a></p>
+<hr>
+<h3 id="valuenotindexabletypeerror">ValueNotIndexableTypeError</h3>
+<p>Re-exports <a href="classes/errors.ValueNotIndexableTypeError.html">ValueNotIndexableTypeError</a></p>
+<hr>
+<h3 id="variabledeclaration">VariableDeclaration</h3>
+<p>Re-exports <a href="classes/compiler.VariableDeclaration.html">VariableDeclaration</a></p>
+<hr>
+<h3 id="variabledeclarationcontext">VariableDeclarationContext</h3>
+<p>Re-exports <a href="classes/compiler.VariableDeclarationContext.html">VariableDeclarationContext</a></p>
+<hr>
+<h3 id="variabledeclarationsemantics">VariableDeclarationSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.VariableDeclarationSemantics.html">VariableDeclarationSemantics</a></p>
+<hr>
+<h3 id="variabledeclarationtypesemantics">VariableDeclarationTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.VariableDeclarationTypeSemantics.html">VariableDeclarationTypeSemantics</a></p>
+<hr>
+<h3 id="voidornullorundefinedprimaryexpression">VoidOrNullOrUndefinedPrimaryExpression</h3>
+<p>Re-exports <a href="classes/compiler.VoidOrNullOrUndefinedPrimaryExpression.html">VoidOrNullOrUndefinedPrimaryExpression</a></p>
+<hr>
+<h3 id="voidornullorundefinedprimaryexpressioncontext">VoidOrNullOrUndefinedPrimaryExpressionContext</h3>
+<p>Re-exports <a href="classes/compiler.VoidOrNullOrUndefinedPrimaryExpressionContext.html">VoidOrNullOrUndefinedPrimaryExpressionContext</a></p>
+<hr>
+<h3 id="voidornullorundefinedprimaryexpressionsemantics">VoidOrNullOrUndefinedPrimaryExpressionSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.VoidOrNullOrUndefinedPrimaryExpressionSemantics.html">VoidOrNullOrUndefinedPrimaryExpressionSemantics</a></p>
+<hr>
+<h3 id="voidornullorundefinedprimaryexpressiontypesemantics">VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics.html">VoidOrNullOrUndefinedPrimaryExpressionTypeSemantics</a></p>
+<hr>
+<h3 id="whileloopiterationstatement">WhileLoopIterationStatement</h3>
+<p>Re-exports <a href="classes/compiler.WhileLoopIterationStatement.html">WhileLoopIterationStatement</a></p>
+<hr>
+<h3 id="whileloopiterationstatementcontext">WhileLoopIterationStatementContext</h3>
+<p>Re-exports <a href="classes/compiler.WhileLoopIterationStatementContext.html">WhileLoopIterationStatementContext</a></p>
+<hr>
+<h3 id="whileloopstatementsemantics">WhileLoopStatementSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.WhileLoopStatementSemantics.html">WhileLoopStatementSemantics</a></p>
+<hr>
+<h3 id="whileloopstatementtypesemantics">WhileLoopStatementTypeSemantics</h3>
+<p>Re-exports <a href="interfaces/compiler.WhileLoopStatementTypeSemantics.html">WhileLoopStatementTypeSemantics</a></p>
+<hr>
+<h3 id="codegenerator">codeGenerator</h3>
+<p>Re-exports <a href="utils.html#codegenerator">codeGenerator</a></p>
+<hr>
+<h3 id="defaultoptimisationoptions">defaultOptimisationOptions</h3>
+<p>Re-exports <a href="compiler.html#defaultoptimisationoptions">defaultOptimisationOptions</a></p>
+<hr>
+<h3 id="getconversionfunctionidentifier">getConversionFunctionIdentifier</h3>
+<p>Re-exports <a href="utils.html#getconversionfunctionidentifier">getConversionFunctionIdentifier</a></p>
+<hr>
+<h3 id="getloglevelstring">getLogLevelString</h3>
+<p>Re-exports <a href="logger.html#getloglevelstring">getLogLevelString</a></p>
+<hr>
+<h3 id="getnaturalorzero">getNaturalOrZero</h3>
+<p>Re-exports <a href="utils.html#getnaturalorzero">getNaturalOrZero</a></p>
+<hr>
+<h3 id="getparserulesource">getParseRuleSource</h3>
+<p>Re-exports <a href="utils.html#getparserulesource">getParseRuleSource</a></p>
+<hr>
+<h3 id="getparsetreesource">getParseTreeSource</h3>
+<p>Re-exports <a href="utils.html#getparsetreesource">getParseTreeSource</a></p>
+<hr>
+<h3 id="gettokenintervalsource">getTokenIntervalSource</h3>
+<p>Re-exports <a href="utils.html#gettokenintervalsource">getTokenIntervalSource</a></p>
+<hr>
+<h3 id="gettokensource">getTokenSource</h3>
+<p>Re-exports <a href="utils.html#gettokensource">getTokenSource</a></p>
+<hr>
+<h3 id="handlesemanticerror">handleSemanticError</h3>
+<p>Re-exports <a href="compiler.html#handlesemanticerror">handleSemanticError</a></p>
+<hr>
+<h3 id="inversemap">inverseMap</h3>
+<p>Re-exports <a href="utils.html#inversemap">inverseMap</a></p>
+<hr>
+<h3 id="isbrowser">isBrowser</h3>
+<p>Re-exports <a href="compiler.html#isbrowser">isBrowser</a></p>
+<hr>
+<h3 id="kipperadditiveoperators">kipperAdditiveOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperadditiveoperators">kipperAdditiveOperators</a></p>
+<hr>
+<h3 id="kipperarithmeticassignoperators">kipperArithmeticAssignOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperarithmeticassignoperators">kipperArithmeticAssignOperators</a></p>
+<hr>
+<h3 id="kipperarithmeticoperators">kipperArithmeticOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperarithmeticoperators">kipperArithmeticOperators</a></p>
+<hr>
+<h3 id="kipperassignoperators">kipperAssignOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperassignoperators">kipperAssignOperators</a></p>
+<hr>
+<h3 id="kipperbitwiseandoperator-1">kipperBitwiseAndOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwiseandoperator-1">kipperBitwiseAndOperator</a></p>
+<hr>
+<h3 id="kipperbitwisenotoperator-1">kipperBitwiseNotOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwisenotoperator-1">kipperBitwiseNotOperator</a></p>
+<hr>
+<h3 id="kipperbitwiseoroperator-1">kipperBitwiseOrOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwiseoroperator-1">kipperBitwiseOrOperator</a></p>
+<hr>
+<h3 id="kipperbitwiseshiftoperators">kipperBitwiseShiftOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwiseshiftoperators">kipperBitwiseShiftOperators</a></p>
+<hr>
+<h3 id="kipperbitwisexoroperator-1">kipperBitwiseXorOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperbitwisexoroperator-1">kipperBitwiseXorOperator</a></p>
+<hr>
+<h3 id="kipperbooltype-1">kipperBoolType</h3>
+<p>Re-exports <a href="compiler.html#kipperbooltype-1">kipperBoolType</a></p>
+<hr>
+<h3 id="kippercomparativeoperators">kipperComparativeOperators</h3>
+<p>Re-exports <a href="compiler.html#kippercomparativeoperators">kipperComparativeOperators</a></p>
+<hr>
+<h3 id="kippercompilabletypes">kipperCompilableTypes</h3>
+<p>Re-exports <a href="compiler.html#kippercompilabletypes">kipperCompilableTypes</a></p>
+<hr>
+<h3 id="kipperequalassignoperator-1">kipperEqualAssignOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperequalassignoperator-1">kipperEqualAssignOperator</a></p>
+<hr>
+<h3 id="kipperequalityoperators">kipperEqualityOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperequalityoperators">kipperEqualityOperators</a></p>
+<hr>
+<h3 id="kipperfunctype-1">kipperFuncType</h3>
+<p>Re-exports <a href="compiler.html#kipperfunctype-1">kipperFuncType</a></p>
+<hr>
+<h3 id="kipperincrementordecrementoperators">kipperIncrementOrDecrementOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperincrementordecrementoperators">kipperIncrementOrDecrementOperators</a></p>
+<hr>
+<h3 id="kipperinternalbuiltinfunctions">kipperInternalBuiltInFunctions</h3>
+<p>Re-exports <a href="compiler.html#kipperinternalbuiltinfunctions">kipperInternalBuiltInFunctions</a></p>
+<hr>
+<h3 id="kipperlisttype-1">kipperListType</h3>
+<p>Re-exports <a href="compiler.html#kipperlisttype-1">kipperListType</a></p>
+<hr>
+<h3 id="kipperlogicalandoperator-1">kipperLogicalAndOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperlogicalandoperator-1">kipperLogicalAndOperator</a></p>
+<hr>
+<h3 id="kipperlogicaloperator-1">kipperLogicalOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperlogicaloperator-1">kipperLogicalOperator</a></p>
+<hr>
+<h3 id="kipperlogicaloroperator-1">kipperLogicalOrOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperlogicaloroperator-1">kipperLogicalOrOperator</a></p>
+<hr>
+<h3 id="kippermetatype-1">kipperMetaType</h3>
+<p>Re-exports <a href="compiler.html#kippermetatype-1">kipperMetaType</a></p>
+<hr>
+<h3 id="kipperminusoperator-1">kipperMinusOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperminusoperator-1">kipperMinusOperator</a></p>
+<hr>
+<h3 id="kippermultiplicativeoperators">kipperMultiplicativeOperators</h3>
+<p>Re-exports <a href="compiler.html#kippermultiplicativeoperators">kipperMultiplicativeOperators</a></p>
+<hr>
+<h3 id="kippernegateoperator-1">kipperNegateOperator</h3>
+<p>Re-exports <a href="compiler.html#kippernegateoperator-1">kipperNegateOperator</a></p>
+<hr>
+<h3 id="kippernulltype-1">kipperNullType</h3>
+<p>Re-exports <a href="compiler.html#kippernulltype-1">kipperNullType</a></p>
+<hr>
+<h3 id="kippernumtype-1">kipperNumType</h3>
+<p>Re-exports <a href="compiler.html#kippernumtype-1">kipperNumType</a></p>
+<hr>
+<h3 id="kipperplusoperator-1">kipperPlusOperator</h3>
+<p>Re-exports <a href="compiler.html#kipperplusoperator-1">kipperPlusOperator</a></p>
+<hr>
+<h3 id="kipperprimitivetypes">kipperPrimitiveTypes</h3>
+<p>Re-exports <a href="compiler.html#kipperprimitivetypes">kipperPrimitiveTypes</a></p>
+<hr>
+<h3 id="kipperrelationaloperators">kipperRelationalOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperrelationaloperators">kipperRelationalOperators</a></p>
+<hr>
+<h3 id="kipperruntimebuiltinfunctions">kipperRuntimeBuiltInFunctions</h3>
+<p>Re-exports <a href="compiler.html#kipperruntimebuiltinfunctions">kipperRuntimeBuiltInFunctions</a></p>
+<hr>
+<h3 id="kipperruntimebuiltinvariables">kipperRuntimeBuiltInVariables</h3>
+<p>Re-exports <a href="compiler.html#kipperruntimebuiltinvariables">kipperRuntimeBuiltInVariables</a></p>
+<hr>
+<h3 id="kippersignoperators">kipperSignOperators</h3>
+<p>Re-exports <a href="compiler.html#kippersignoperators">kipperSignOperators</a></p>
+<hr>
+<h3 id="kipperstoragetypes">kipperStorageTypes</h3>
+<p>Re-exports <a href="compiler.html#kipperstoragetypes">kipperStorageTypes</a></p>
+<hr>
+<h3 id="kipperstrtype-1">kipperStrType</h3>
+<p>Re-exports <a href="compiler.html#kipperstrtype-1">kipperStrType</a></p>
+<hr>
+<h3 id="kippersupportedconversions">kipperSupportedConversions</h3>
+<p>Re-exports <a href="compiler.html#kippersupportedconversions">kipperSupportedConversions</a></p>
+<hr>
+<h3 id="kipperunarymodifieroperators">kipperUnaryModifierOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperunarymodifieroperators">kipperUnaryModifierOperators</a></p>
+<hr>
+<h3 id="kipperunaryoperators">kipperUnaryOperators</h3>
+<p>Re-exports <a href="compiler.html#kipperunaryoperators">kipperUnaryOperators</a></p>
+<hr>
+<h3 id="kipperundefinedtype-1">kipperUndefinedType</h3>
+<p>Re-exports <a href="compiler.html#kipperundefinedtype-1">kipperUndefinedType</a></p>
+<hr>
+<h3 id="kippervoidtype-1">kipperVoidType</h3>
+<p>Re-exports <a href="compiler.html#kippervoidtype-1">kipperVoidType</a></p>
+<hr>
+<h3 id="replaceobjkeys">replaceObjKeys</h3>
+<p>Re-exports <a href="utils.html#replaceobjkeys">replaceObjKeys</a></p>
+<hr>
+<h3 id="shouldrecoverfromerror">shouldRecoverFromError</h3>
+<p>Re-exports <a href="compiler.html#shouldrecoverfromerror">shouldRecoverFromError</a></p>
+<hr>
+<h3 id="titlecase">titleCase</h3>
+<p>Re-exports <a href="utils.html#titlecase">titleCase</a></p>
+<h2 id="variables-1">Variables</h2>
+<h3 id="author">author</h3>
+<p>• <code>Const</code> <strong>author</strong>: <code>"Luna Klatzer"</code></p>
+<h4 id="defined-in">Defined in</h4>
+<p>kipper/core/src/index.ts:22</p>
+<hr>
+<h3 id="github">github</h3>
+<p>• <code>Const</code> <strong>github</strong>: <code>"https://github.com/Kipper-Lang/Kipper"</code></p>
+<h4 id="defined-in-1">Defined in</h4>
+<p>kipper/core/src/index.ts:26</p>
+<hr>
+<h3 id="license">license</h3>
+<p>• <code>Const</code> <strong>license</strong>: <code>"GPL-3.0-or-later"</code></p>
+<h4 id="defined-in-2">Defined in</h4>
+<p>kipper/core/src/index.ts:24</p>
+<hr>
+<h3 id="name">name</h3>
+<p>• <code>Const</code> <strong>name</strong>: <code>"\@kipper/core"</code></p>
+<h4 id="defined-in-3">Defined in</h4>
+<p>kipper/core/src/index.ts:18</p>
+<hr>
+<h3 id="version">version</h3>
+<p>• <code>Const</code> <strong>version</strong>: <code>"0.11.0"</code></p>
+<h4 id="defined-in-4">Defined in</h4>
+<p>kipper/core/src/index.ts:20</p>
+								</article>
+							</section>
+						</li>
+					</ul>
+				</div>
+				<!-- Footer bar - contains some links and general copyright notice -->
+				<footer id="footer-bar" class="flex-parent-container flex-column">
+					<ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+						<li id="development-and-support-notice">
+							<p>Developed at:</p>
+						</li>
+						<li id="footer-logos">
+							<img id="htlleonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="">
+							<img id="jku-logo" src="https://www.jku.at/typo3conf/ext/jku_distribution/Resources/Public/Images/Footer/jku-logo-mobile-en.svg" alt="">
+						</li>
+						<li>
+							<ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/releases">Releases</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper">GitHub</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/security/policy">Security</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/issues">Issue Tracker</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE">License</a>
+									</small>
+								</li>
+							</ul>
+						</li>
+						<li id="copyright">
+							<small class="centered-text white-text">
+								Copyright © 2021-2025 Luna Klatzer, 2024-2025 Lorenz Holzbauer &amp; Fabian Baitura. <br>
+								Kipper is licensed under the GPL-3.0-or-later license.
+							</small>
+						</li>
+					</ul>
+				</footer>
+			</div>
+		</div>
+
+		<!-- Overlay for displaying search results -->
+		<div id="search-result-overlay">
+			<div class="flex-column flex-parent-container" id="search-result"></div>
+		</div>
+		<script src="https://kipper-lang.org/index.3b69bdcb.js" defer=""></script>
+	</body>
+</html>

@@ -1,0 +1,297 @@
+:root {
+  --scheme-primary: #e01a4f;
+  --scheme-primary-rgb: 224, 26, 79;
+  --scheme-dark-primary: #c71242;
+  --scheme-dark-primary-rgb: 199, 18, 66;
+  --scheme-secondary: #ffe74c;
+  --scheme-secondary-rgb: 255, 231, 76;
+  --scheme-url-blue: #002240;
+  --scheme-background-gray: #002240;
+  --scheme-shadow-gray: #ccc;
+  --scheme-shadow-gray-rgb: 204, 204, 204;
+  --scheme-gray: #f0f0f0;
+  --scheme-gray-rgb: 240, 240, 240;
+  --scheme-dark-gray: #787878;
+  --scheme-dark-gray-rgb: 120, 120, 120;
+  --scheme-white: #e9eaed;
+  --scheme-white-rgb: 233, 234, 237;
+  --scheme-dark: #1a1f36;
+  --scheme-dark-rgb: 26, 31, 54;
+  --scheme-console-blue: #1e1e3f;
+  --scheme-console-blue-rgb: 30, 30, 63;
+  --default-border-radius: .5em;
+  --default-text-margin: 2em;
+  --large-screen-size: 1200px;
+  --medium-screen-size: 920px;
+  --small-screen-size: 600px;
+  --button-dark-primary: #c71242;
+}
+
+.super-large-header {
+  align-items: center;
+  margin-bottom: .5em;
+  font-size: 2.2rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+  display: flex;
+}
+
+@media screen and (width >= 427px) {
+  .super-large-header {
+    font-size: 2.4rem;
+  }
+}
+
+@media screen and (width >= 800px) {
+  .super-large-header {
+    font-size: 3.2rem;
+  }
+}
+
+@media screen and (width >= 1400px) {
+  .super-large-header {
+    font-size: 4.5rem;
+  }
+}
+
+html {
+  font-family: Inter, Georgia, Verdana, monospace;
+}
+
+section {
+  margin: 1.6rem;
+}
+
+article {
+  margin-bottom: .8rem;
+}
+
+#docs-page-header + article > :first-child {
+  margin-top: 1rem;
+}
+
+.text-page-content-container {
+  flex-grow: 1;
+  place-content: center;
+  display: flex;
+}
+
+p + p, p + em, p + strong, p + strike, p + input, p + textarea, p + image, em + p, em + em, em + strong, em + strike, em + input, em + textarea, em + image, strong + p, strong + em, strong + strong, strong + strike, strong + input, strong + textarea, strong + image, strike + p, strike + em, strike + strong, strike + strike, strike + input, strike + textarea, strike + image, input + p, input + em, input + strong, input + strike, input + input, input + textarea, input + image, textarea + p, textarea + em, textarea + strong, textarea + strike, textarea + input, textarea + textarea, textarea + image, image + p, image + em, image + strong, image + strike, image + input, image + textarea, image + image {
+  margin: 1rem 0 0;
+}
+
+h1, .h1 {
+  align-items: center;
+  margin-bottom: .5em;
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 1.2;
+  display: block;
+}
+
+h2, .h2 {
+  align-items: center;
+  margin-bottom: .5em;
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 1.2;
+  display: block;
+}
+
+h3, .h3 {
+  align-items: center;
+  margin-bottom: .5em;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.2;
+  display: block;
+}
+
+h4, .h4 {
+  align-items: center;
+  margin-bottom: .5em;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.2;
+  display: block;
+}
+
+h5, .h5, h6, .h6 {
+  align-items: center;
+  margin-bottom: .5em;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.2;
+  display: block;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  align-items: center;
+  margin-bottom: .5em;
+  display: block;
+}
+
+div h1, section h1, article h1, li h1, .important h1, .red-highlight-text h1, div h2, section h2, article h2, li h2, .important h2, .red-highlight-text h2, div h3, section h3, article h3, li h3, .important h3, .red-highlight-text h3, div h4, section h4, article h4, li h4, .important h4, .red-highlight-text h4, div h5, section h5, article h5, li h5, .important h5, .red-highlight-text h5, div h6, section h6, article h6, li h6, .important h6, .red-highlight-text h6, div .h1, section .h1, article .h1, li .h1, .important .h1, .red-highlight-text .h1, div .h2, section .h2, article .h2, li .h2, .important .h2, .red-highlight-text .h2, div .h3, section .h3, article .h3, li .h3, .important .h3, .red-highlight-text .h3, div .h4, section .h4, article .h4, li .h4, .important .h4, .red-highlight-text .h4, div .h5, section .h5, article .h5, li .h5, .important .h5, .red-highlight-text .h5, div .h6, section .h6, article .h6, li .h6, .important .h6, .red-highlight-text .h6 {
+  margin-top: 1.2em;
+}
+
+.markdown-content div h1:first-child, .markdown-content div h2:first-child, .markdown-content div h3:first-child, .markdown-content div h4:first-child, .markdown-content div h5:first-child, .markdown-content div h6:first-child, .markdown-content div .h1:first-child, .markdown-content div .h2:first-child, .markdown-content div .h3:first-child, .markdown-content div .h4:first-child, .markdown-content div .h5:first-child, .markdown-content div .h6:first-child, .markdown-content .red-highlight-text h1:first-child, article .red-highlight-text h1:first-child, section .red-highlight-text h1:first-child, .markdown-content .important h1:first-child, article .important h1:first-child, section .important h1:first-child, .markdown-content .red-highlight-text h2:first-child, article .red-highlight-text h2:first-child, section .red-highlight-text h2:first-child, .markdown-content .important h2:first-child, article .important h2:first-child, section .important h2:first-child, .markdown-content .red-highlight-text h3:first-child, article .red-highlight-text h3:first-child, section .red-highlight-text h3:first-child, .markdown-content .important h3:first-child, article .important h3:first-child, section .important h3:first-child, .markdown-content .red-highlight-text h4:first-child, article .red-highlight-text h4:first-child, section .red-highlight-text h4:first-child, .markdown-content .important h4:first-child, article .important h4:first-child, section .important h4:first-child, .markdown-content .red-highlight-text h5:first-child, article .red-highlight-text h5:first-child, section .red-highlight-text h5:first-child, .markdown-content .important h5:first-child, article .important h5:first-child, section .important h5:first-child, .markdown-content .red-highlight-text h6:first-child, article .red-highlight-text h6:first-child, section .red-highlight-text h6:first-child, .markdown-content .important h6:first-child, article .important h6:first-child, section .important h6:first-child, .markdown-content .red-highlight-text .h1:first-child, article .red-highlight-text .h1:first-child, section .red-highlight-text .h1:first-child, .markdown-content .important .h1:first-child, article .important .h1:first-child, section .important .h1:first-child, .markdown-content .red-highlight-text .h2:first-child, article .red-highlight-text .h2:first-child, section .red-highlight-text .h2:first-child, .markdown-content .important .h2:first-child, article .important .h2:first-child, section .important .h2:first-child, .markdown-content .red-highlight-text .h3:first-child, article .red-highlight-text .h3:first-child, section .red-highlight-text .h3:first-child, .markdown-content .important .h3:first-child, article .important .h3:first-child, section .important .h3:first-child, .markdown-content .red-highlight-text .h4:first-child, article .red-highlight-text .h4:first-child, section .red-highlight-text .h4:first-child, .markdown-content .important .h4:first-child, article .important .h4:first-child, section .important .h4:first-child, .markdown-content .red-highlight-text .h5:first-child, article .red-highlight-text .h5:first-child, section .red-highlight-text .h5:first-child, .markdown-content .important .h5:first-child, article .important .h5:first-child, section .important .h5:first-child, .markdown-content .red-highlight-text .h6:first-child, article .red-highlight-text .h6:first-child, section .red-highlight-text .h6:first-child, .markdown-content .important .h6:first-child, article .important .h6:first-child, section .important .h6:first-child {
+  margin-top: 0;
+}
+
+:not(.sidebar-nav-header-list-item) > a:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button), :not(.sidebar-nav-header-list-item) > a:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button):link, :not(.sidebar-nav-header-list-item) > a:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button):active, :not(.sidebar-nav-header-list-item) > a:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button):visited {
+  color: #c71242;
+  background-color: #0000;
+  text-decoration: none;
+}
+
+:not(.sidebar-nav-header-list-item) > a:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button):hover {
+  color: #e01a4f;
+  text-decoration: underline;
+}
+
+p {
+  margin: 0;
+}
+
+.text-content {
+  max-width: 100vw;
+  margin: 2rem;
+}
+
+@media screen and (width >= 1200px) {
+  .text-content {
+    width: 66.6vw;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+  }
+}
+
+.link-on-red-background, .link-on-red-background:visited, .link-on-red-background:active {
+  text-decoration: none;
+  color: #fff !important;
+}
+
+.link-on-red-background:hover {
+  text-decoration: underline;
+  color: #fff !important;
+}
+
+.header-text-content {
+  margin-bottom: 2rem;
+}
+
+.shadowed-box {
+  border-radius: .5em;
+  box-shadow: 0 0 .5em #ccc;
+}
+
+.gray-text {
+  color: #787878;
+}
+
+.red-text {
+  color: #e01a4f;
+}
+
+.yellow-text {
+  color: #ffe74c;
+}
+
+.white-text {
+  color: #fff;
+}
+
+.black-text {
+  color: #000;
+}
+
+.centered-text {
+  text-align: center;
+}
+
+.red-highlight-text, .important {
+  color: #e01a4f;
+  border: 1px solid #e01a4f;
+  border-radius: .5em;
+  width: calc(100% - 4rem - 2px);
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  margin-right: 2em;
+  padding: 2rem;
+}
+
+.red-highlight-text a:link, .red-highlight-text a:active, .red-highlight-text a:visited, .important a:link, .important a:active, .important a:visited {
+  color: red;
+}
+
+code {
+  background-color: #f0f0f0;
+  border-radius: .5em;
+  margin-left: .2rem;
+  margin-right: .2rem;
+  padding: .2em .4em;
+  font-family: Consolas, Operator Mono, Fira code\.console-bash, Monaco, Andale Mono, Ubuntu Mono, monospace;
+  font-size: 85%;
+}
+
+h1 code, h2 code, h3 code, h4 code, h5 code, h6 code, .h1 code, .h2 code, .h3 code, .h4 code, .h5 code, .h6 code {
+  font-family: Consolas, Monaco, Andale Mono, Ubuntu Mono, Inter, monospace;
+}
+
+pre[class*="language-"] {
+  background-color: #f0f0f0;
+  border-radius: .5em;
+  margin: 1em 0;
+  padding: 1em;
+  overflow: auto;
+}
+
+pre[class*="language-"] code {
+  background: none;
+  border-radius: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.code-toolbar > .toolbar .copy-to-clipboard-button:hover {
+  cursor: pointer;
+}
+
+.language-css .token.string, .style .token.string, .token.entity, .token.operator, .token.url {
+  color: #9a6e3a !important;
+  background: none !important;
+}
+
+.green-checkmark {
+  color: green;
+  text-emphasis: none;
+}
+
+.red-checkmark {
+  color: #e01a4f;
+  text-emphasis: none;
+}
+
+@media screen and (width >= 920px) {
+  .text-content {
+    max-width: 92vw;
+  }
+}
+
+@media screen and (width <= 920px) {
+  .shadowed-box {
+    box-shadow: none;
+    border-radius: 0;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/*# sourceMappingURL=index.64273195.css.map */

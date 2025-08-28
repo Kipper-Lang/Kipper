@@ -1,0 +1,4049 @@
+<!-- Page EJS Config -->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<!-- isDocsFile: false -->
+		<!-- docsVersion:  -->
+		<!-- latestVersion: 0.12.1 -->
+
+		<meta charset="utf-8">
+
+		<title>Changelog - Kipper v0.12.1</title>
+		<meta name="description" content="View the latest changes to Kipper.">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="manifest" href="https://kipper-lang.org/up_/site.webmanifest">
+		<link rel="apple-touch-icon" href="https://kipper-lang.org/kipper-icon.4fb9d618.png">
+		<link rel="shortcut icon" type="image/ico" href="https://kipper-lang.org/favicon.dcdc2d88.ico">
+
+		<!-- Loading the prism highlighting style-sheet -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.f4d6a214.css">
+
+		<!-- Font Awesome Icons -->
+		<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+		<!-- Loading the main stylesheets -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.0b0dca04.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.244b5875.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.e24a109c.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.64273195.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.ee0d14b6.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.a30088c4.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.acde3bdd.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.4a54af2e.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.45a9510a.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.06a4d211.css">
+
+		<!-- Phone header nav bar functionality script -->
+		<script defer="" src="https://kipper-lang.org/index.f9a5285a.js"></script>
+
+		<!-- Including stylesheet for the Inter-Font -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+		<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+		<meta name="theme-color" content="#e01a4f">
+
+		<!-- Meta fields -->
+		<meta property="og:site_name" content="Kipper">
+		<meta property="og:title" content="Changelog - Kipper  v0.12.1">
+		<meta property="og:description" content="View the latest changes to Kipper.">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://kipper-lang.org/en-US/changelog.html">
+		<meta property="og:image" content="https://kipper-lang.org/img/icons/kipper-head-icon.png">
+		<meta property="og:locale" content="en_GB">
+
+		<!-- Load in the entire locale object -->
+		<script>var locale = {
+    name: "en-US",
+    values: {
+        pages: {
+            homepage: {
+                title: "Welcome to Kipper!",
+                description: "The new customisable and easy to use type-safe language for the web and Node.js!"
+            },
+            downloads: {
+                title: "Downloads",
+                description: "Download the latest version of Kipper for your platform."
+            },
+            docs: {
+                title: "Documentation",
+                description: "Learn how to use Kipper with our comprehensive documentation."
+            },
+            playground: {
+                title: "Playground",
+                description: "Try out Kipper in our online playground."
+            },
+            changelog: {
+                title: "Changelog",
+                description: "View the latest changes to Kipper."
+            }
+        },
+        homepage: {
+            welcome: "Welcome to Kipper!",
+            description: "The new customisable and easy to use type-safe language for the web and Node.js!",
+            "play-button": "Try our Playground",
+            "docs-button": "View the Docs"
+        },
+        "nav-bar": {
+            downloads: "Downloads",
+            docs: "Docs",
+            playground: "Playground",
+            changelog: "Changelog"
+        },
+        playground: {
+            buttons: {
+                run: "Run",
+                stop: "Stop",
+                copy: "Copy",
+                clear: "Clear",
+                console: "Console",
+                compiler: "Compiler"
+            },
+            "save-state": {
+                saving: "Saving...",
+                saved: "Saved!",
+                loaded: "Loaded :)"
+            },
+            actions: {
+                cleared: "Cleared!",
+                copied: "Copied!"
+            }
+        },
+        footer: {
+            "supported-by": "Developed at:",
+            list: {
+                releases: "Releases",
+                github: "GitHub",
+                security: "Security",
+                issues: "Issue Tracker",
+                license: "License"
+            },
+            license: "Kipper is licensed under the GPL-3.0-or-later license."
+        }
+    }
+};
+window.locale = locale;
+var localeKey = "locale";
+window.localeKey = localeKey;
+let storedLocale = localStorage.getItem(localeKey);
+if (storedLocale === null) localStorage.setItem(localeKey, locale.name);
+// In case a site was loaded with a different locale than the one in the locale storage, then we redirect to
+// the correct locale
+if (!!storedLocale && storedLocale !== locale.name && !window.location.pathname.includes(`/${storedLocale}/`) && !window.location.pathname.includes("/docs/")) {
+    if (window.location.pathname.includes("/" + locale.name + "/")) window.location.pathname = window.location.pathname.replace(`/${locale.name}/`, `/${storedLocale}/`);
+    else window.location.pathname = `/${storedLocale}${window.location.pathname}`;
+}
+
+</script>
+
+		<link rel="stylesheet" href="https://kipper-lang.org/changelog.fe2b1f65.css">
+	</head>
+	<body>
+		<script defer="" src="https://kipper-lang.org/index.ab8b3880.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.c645b044.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.27bd5b50.js"></script>
+
+		<!-- Show Error if JS is disabled or blocked -->
+		<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our site!</noscript>
+
+		<div id="main-frame">
+			<div id="actual-content">
+				<!-- The top element: menu and search bar -->
+
+				<header id="primary-page-header" class="page-header">
+					<nav id="header-nav-bar">
+						<ul id="std-header-primary-content">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/en-US/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/en-US/index.html">
+									<script defer="">(()=>{
+    const link = document.querySelector(".kipper-version-and-logo .underline-button.kipper-logo-identifier");
+    const localeName = localStorage.getItem(window.localeKey);
+    const href = link.getAttribute("href");
+    if (!href.includes(localeName)) link.setAttribute("href", `/${localeName}${href}`);
+})();
+
+</script>
+									<h2>Kipper</h2>
+								</a>
+								<a id="version-identifier" href="https://github.com/Kipper-Lang/Kipper/releases/tag/v0.12.1">
+									<small>v0.12.1</small>
+								</a>
+							</li>
+
+							<!-- Main navigation links -->
+
+							<li>
+								<a href="https://kipper-lang.org/en-US/downloads.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Downloads</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Docs</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/en-US/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Playground</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/en-US/changelog.html" class="underline-button top-nav-menu-item top-nav-button selected-nav-page">
+									<h4>Changelog</h4>
+								</a>
+							</li>
+
+							<script defer="">function changeHrefLocaleIfNecessary(links) {
+    const localeName = localStorage.getItem(window.localeKey);
+    for (const link of links){
+        // Insert locale name into the URL and replace the domain if it's included in the URL
+        const href = link.getAttribute("href").replace(window.location.origin, "").replace(`${window.location.protocol}//`, "");
+        if (!href.includes(localeName) && !href.includes("docs")) link.setAttribute("href", `/${localeName}${href}`);
+    }
+}
+(()=>{
+    const deskLinks = document.querySelectorAll("#phone-header-nav-bar-menu li .top-nav-menu-item");
+    const phoneLinks = document.querySelectorAll("#std-header-primary-content li .top-nav-menu-item");
+    changeHrefLocaleIfNecessary(deskLinks);
+    changeHrefLocaleIfNecessary(phoneLinks);
+})();
+
+</script>
+						</ul>
+						<div class="search-bar-wrapper">
+							<ul class="no-style-list">
+								<li class="search-icon-wrapper">
+									<i class="search-icon fa-solid fa-magnifying-glass"></i>
+								</li>
+								<li id="std-search-bar" class="search-bar">
+									<label for="std-search-bar-input"></label>
+									<input id="std-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+								</li>
+							</ul>
+						</div>
+
+						<script defer="" src="https://kipper-lang.org/index.ca8c697d.js"></script>
+						<div id="locales-menu">
+							<div id="locale-button-wrapper">
+								<img src="https://kipper-lang.org/globe.36eacf28.svg" alt="Locale globe">
+								<button id="locale-menu-root-button">en-US</button>
+							</div>
+							<ul class="locales-dropdown no-style-list flex-column">
+								<li class="locale-selector-de-AT locale-selector-button-wrapper" data-locale="de-AT" data-href="../de-AT/changelog.html">
+									<button>de-AT</button>
+									<a ignore="" href="https://kipper-lang.org/de-AT/changelog.html"></a>
+								</li>
+
+								<li class="locale-selector-en-US locale-selector-button-wrapper" data-locale="en-US" data-href="../en-US/changelog.html">
+									<button>en-US</button>
+									<a ignore="" href="https://kipper-lang.org/en-US/changelog.html"></a>
+								</li>
+
+								<li class="locale-selector-ja-JP locale-selector-button-wrapper" data-locale="ja-JP" data-href="../ja-JP/changelog.html">
+									<button>ja-JP</button>
+									<a ignore="" href="https://kipper-lang.org/ja-JP/changelog.html"></a>
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<!-- Per default invisible phone nav bar, which is shown on smaller screens -->
+					<nav id="phone-header-nav-bar">
+						<ul id="phone-header-primary-content" class="no-style-list">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/en-US/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/en-US/index.html">
+									<script defer="">(()=>{
+    const link = document.querySelector(".kipper-version-and-logo .underline-button.kipper-logo-identifier");
+    const localeName = localStorage.getItem(window.localeKey);
+    const href = link.getAttribute("href");
+    if (!href.includes(localeName)) link.setAttribute("href", `/${localeName}${href}`);
+})();
+
+</script>
+									<h2>Kipper</h2>
+								</a>
+								<a id="version-identifier" href="https://github.com/Kipper-Lang/Kipper/releases/tag/v0.12.1">
+									<small>v0.12.1</small>
+								</a>
+							</li>
+
+							<!--
+        Unlike the standard nav, the links will be not shown per default and there will be a dropdown menu.
+        Additionally, the search bar is shown in the dropdown menu.
+        -->
+							<li class="phone-header-nav-bar-menu-toggle">
+								<i class="fa-solid fa-bars"></i>
+							</li>
+						</ul>
+
+						<!-- Dropdown menu -->
+						<ul id="phone-header-nav-bar-menu" class="no-style-list">
+							<li>
+								<ul id="phone-header-dropdown-urls" class="no-style-list">
+									<!-- Main navigation links - 'pages' is a global variable added by the parent 'header-nav-bar.ejs' -->
+
+									<li>
+										<a href="https://kipper-lang.org/en-US/downloads.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Downloads</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Docs</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/en-US/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Playground</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/en-US/changelog.html" class="underline-button top-nav-menu-item top-nav-button selected-nav-page">
+											<h4>Changelog</h4>
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<div class="search-bar-wrapper">
+									<ul class="no-style-list">
+										<li class="search-icon-wrapper">
+											<i class="search-icon fa-solid fa-magnifying-glass"></i>
+										</li>
+										<li id="phone-search-bar" class="search-bar">
+											<label for="phone-search-bar-input"></label>
+											<input id="phone-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+										</li>
+									</ul>
+								</div>
+
+								<script defer="" src="https://kipper-lang.org/index.ca8c697d.js"></script>
+								<div id="locales-menu">
+									<div id="locale-button-wrapper">
+										<img src="https://kipper-lang.org/globe.36eacf28.svg" alt="Locale globe">
+										<button id="locale-menu-root-button">en-US</button>
+									</div>
+									<ul class="locales-dropdown no-style-list flex-column">
+										<li class="locale-selector-de-AT locale-selector-button-wrapper" data-locale="de-AT" data-href="../de-AT/changelog.html">
+											<button>de-AT</button>
+											<a ignore="" href="https://kipper-lang.org/de-AT/changelog.html"></a>
+										</li>
+
+										<li class="locale-selector-en-US locale-selector-button-wrapper" data-locale="en-US" data-href="../en-US/changelog.html">
+											<button>en-US</button>
+											<a ignore="" href="https://kipper-lang.org/en-US/changelog.html"></a>
+										</li>
+
+										<li class="locale-selector-ja-JP locale-selector-button-wrapper" data-locale="ja-JP" data-href="../ja-JP/changelog.html">
+											<button>ja-JP</button>
+											<a ignore="" href="https://kipper-lang.org/ja-JP/changelog.html"></a>
+										</li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</nav>
+
+					<div id="header-description-content" class="text-page-content-container">
+						<header id="page-header-wrapper">
+							<div class="header-text-content flex-parent-container flex-fill-to-parent flex-column flex-center">
+								<div id="page-header" class="white-text">
+									<h1>Changelog</h1>
+								</div>
+								<div id="page-description" class="white-text">
+									<p>View the latest changes to Kipper.</p>
+								</div>
+							</div>
+						</header>
+					</div>
+				</header>
+
+				<!-- Main Content, where the text is located and the items unique to this site are defined -->
+				<div class="text-page-content-container">
+					<div id="changelog-content" class="text-content shadowed-box">
+						<section id="changelog">
+							<script src="https://kipper-lang.org/changelog.49658a0c.js"></script>
+							<!-- Markdown will be added here -->
+							<article class="markdown-content">
+								<h1 id="kipper-compiler-changelog">Kipper Compiler Changelog</h1>
+								<p>All notable changes to this project will be documented in this file.</p>
+								<p>
+									The format is based on <a href="https://keepachangelog.com/en/1.0.0/">Keep a Changelog</a>, and this
+									project adheres to <a href="https://semver.org/spec/v2.0.0.html">Semantic Versioning</a>.
+								</p>
+								<h2 id="unreleased">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.12.1…HEAD">Unreleased</a>
+								</h2>
+								<details>
+									<summary>Show unreleased changes</summary>
+									<p>
+										Note that all changes categorised under <a href="#unreleased">Unreleased</a> are UNSTABLE changes,
+										which MAY be released in the next version. These should not be considered guaranteed changes for the
+										next release of Kipper.
+									</p>
+									<p>
+										To use development versions of Kipper download the
+										<a href="https://www.npmjs.com/package/kipper?activeTab=versions"><code>next</code> tag release</a>,
+										which will include the specified changes.
+									</p>
+									<h3 id="added">Added</h3>
+									<h3 id="changed">Changed</h3>
+									<h3 id="fixed">Fixed</h3>
+									<h3 id="deprecated">Deprecated</h3>
+									<h3 id="removed">Removed</h3>
+									<p></p>
+								</details>
+
+								<h2 id="0121---2025-02-17">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.12.0…v0.12.1">0.12.1</a> - 2025-02-17
+								</h2>
+								<h3 id="changed-1">Changed</h3>
+								<ul>
+									<li>
+										Renamed:
+										<ul>
+											<li>
+												Error <code>MismatchingArgCountBetweenFuncTypesError</code> to
+												<code>MismatchingArgCountBetweenFuncTypesTypeError</code>.
+											</li>
+											<li>Error <code>UnknownTypeError</code> to <code>UnknownTypeTypeError</code>.</li>
+											<li>Error <code>PropertyNotFoundError</code> to <code>PropertyNotFoundTypeError</code>.</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="fixed-1">Fixed</h3>
+								<ul>
+									<li>
+										<code>PropertyNotFoundTypeError</code> being thrown as a stand-alone error instead of being set as
+										the cause for any parent assignment operation failure.
+									</li>
+									<li>
+										<code>PropertyNotFoundTypeError</code> being checked for in the wrong direction i.e. that
+										<code>otherT</code> had to have all the properties of <code>thisT</code> instead of the other way
+										around (which is the correct way).
+									</li>
+									<li>
+										Indexable checks for <code>str</code> and <code>Array&lt;T&gt;</code> being accidentally turned off
+										by incorrect logic. This caused <code>ValueTypeNotIndexableWithGivenAccessorTypeError</code> to be
+										only thrown for objects and not for arrays and strings.
+									</li>
+								</ul>
+								<h2 id="0120---2024-09-25">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.11.0…v0.12.0">0.12.0</a> - 2024-09-25
+								</h2>
+								<h3 id="added-1">Added</h3>
+								<ul>
+									<li>
+										Support for dot notation for accessing properties of objects. (<a href="https://github.com/Kipper-Lang/Kipper/issues/67">#67</a>)
+									</li>
+									<li>
+										Support for classes, class methods, class properties and class constructors. (<a href="https://github.com/Kipper-Lang/Kipper/issues/665">#665</a>)
+									</li>
+									<li>
+										Support for object literals and object properties. (<a href="https://github.com/Kipper-Lang/Kipper/issues/526">#526</a>)
+									</li>
+									<li>
+										Support for calling lambdas and functions stored in variables or expressions. (<a href="https://github.com/Kipper-Lang/Kipper/issues/674">#674</a>)
+									</li>
+									<li>
+										Semantic checking and code generation for the <code>new</code> keyword expression to be able to
+										create new instances of classes. (<a href="https://github.com/Kipper-Lang/Kipper/issues/679">#679</a>)
+									</li>
+									<li>
+										Support for the <code>this</code> keyword inside a class method to access the current instance of
+										the class. (<a href="https://github.com/Kipper-Lang/Kipper/issues/697">#697</a>)
+									</li>
+									<li>
+										Support for the typeof operator, which returns the runtime type of a value. (<a href="https://github.com/Kipper-Lang/Kipper/issues/663">#663</a>)
+									</li>
+									<li>
+										Implemented <code>instanceof</code> operator expression, which checks if an object is an instance of
+										a class. (<a href="https://github.com/Kipper-Lang/Kipper/issues/686">#686</a>)
+									</li>
+									<li>
+										Implemented <code>matches</code> operator expression, which checks if an object matches an
+										interface. (<a href="https://github.com/Kipper-Lang/Kipper/issues/672">#672</a>)
+									</li>
+									<li>
+										Implemented the generic <code>Array&lt;T&gt;</code> type and single-type array initializers. (<a href="https://github.com/Kipper-Lang/Kipper/issues/499">#499</a>)
+									</li>
+									<li>
+										Support for index-based array assignments. (<a href="https://github.com/Kipper-Lang/Kipper/issues/669">#669</a>)
+									</li>
+									<li>
+										Implemented the generic <code>Func&lt;T..., R&gt;</code> type and function type initializers. (<a href="https://github.com/Kipper-Lang/Kipper/issues/584">#584</a>)
+									</li>
+									<li>
+										Implemented internal generic spread argument <code>T...</code>, which allows multiple arguments to
+										be passed to a single parameter inside a generic type specifier.
+									</li>
+									<li>
+										Implemented constant <code>NaN</code>, which represents the <code>NaN</code> value in JavaScript
+										(Not a Number). (<a href="https://github.com/Kipper-Lang/Kipper/issues/671">#671</a>)
+									</li>
+									<li>
+										Support for Nix Flakes and direnv, which allows for a more reproducible and consistent development
+										environment.
+									</li>
+									<li>
+										Support for internal type unions in built-in and internal functions. (<a href="https://github.com/Kipper-Lang/Kipper/issues/496">#496</a>)
+									</li>
+									<li>Support for the <code>obj</code> type translation to TypeScript.</li>
+									<li>
+										Implemented internal representation for custom types such as objects, interfaces and classes. This
+										change means that the entire core type system has been reworked and adjusted to also support custom
+										types as well as complex types (objects, arrays etc.). This does not inherently add functionality
+										but serves as the stepping stone for the implementation of all custom types in the future. (<a href="https://github.com/Kipper-Lang/Kipper/issues/524">#524</a>)
+									</li>
+									<li>
+										Implemented internal preliminary type checking and "ahead of time" type evaluation to allow for
+										self-referential types and type checking of recursive types.
+									</li>
+									<li>
+										New module:
+										<ul>
+											<li>
+												<code>semantics/runtime-built-ins</code>, which contains runtime built-in functions, variables
+												and types.
+											</li>
+											<li><code>semantics/runtime-internals</code>, which contains the runtime internal functions.</li>
+											<li><code>semantics/types</code>, which contains the runtime types.</li>
+										</ul>
+									</li>
+									<li>
+										New classes:
+										<ul>
+											<li>
+												<code>NewInstantiationExpression</code>, which represents an AST new instantiation expression.
+											</li>
+											<li>
+												<code>TypeofExpression</code>, which represents an AST typeof expression that returns the
+												runtime type of an object.
+											</li>
+											<li>
+												<code>TypeofTypeSpecifierExpression</code>, which represents an AST typeof type specifier that
+												lets one define a type by using an object as reference
+											</li>
+											<li>
+												<code>BuiltInTypeObject</code>, which is the base class for the compilers representation of
+												runtime objects
+											</li>
+											<li>
+												<code>UniverseScope</code>, which represents the universe scope, where all built-in types,
+												functions and variables are declared. This serves as the parent of the global scope.
+											</li>
+											<li><code>InterfaceDeclaration</code>, which represents an AST interface declaration.</li>
+											<li><code>ClassMethodDeclaration</code>, which represents an AST class method declaration.</li>
+											<li>
+												<code>ClassPropertyDeclaration</code>, which represents an AST class property declaration.
+											</li>
+											<li><code>ClassConstructorDeclaration</code>, which represents an AST class constructor.</li>
+											<li><code>ClassDeclaration</code>, which represents an AST class declaration.</li>
+											<li><code>BuiltInType</code>, which represents a built-in type.</li>
+											<li><code>CustomType</code>, which represents a user defined type.</li>
+											<li><code>UnionType</code>, which represents a union type.</li>
+											<li><code>BuiltInTypeAny</code>, which represents the <code>any</code> type.</li>
+											<li><code>BuiltInTypeVoid</code>, which represents the <code>void</code> type.</li>
+											<li><code>BuiltInTypeNull</code>, which represents the <code>null</code> type.</li>
+											<li><code>BuiltInTypeUndefined</code>, which represents the <code>undefined</code> type.</li>
+											<li><code>BuiltInTypeBool</code>, which represents the <code>bool</code> type.</li>
+											<li><code>BuiltInTypeNum</code>, which represents the <code>num</code> type.</li>
+											<li><code>BuiltInTypeStr</code>, which represents the <code>str</code> type.</li>
+											<li><code>BuiltInTypeArray</code>, which represents the <code>Array&lt;T&gt;</code> type.</li>
+											<li><code>BuiltInTypeFunc</code>, which represents the <code>Func&lt;T..., R&gt;</code> type.</li>
+											<li><code>BuiltInTypeObj</code>, which represents the <code>obj</code> type.</li>
+											<li><code>ScopeTypeDeclaration</code>, which represents a scope type declaration.</li>
+											<li>
+												<code>CustomType</code>, which is a class extending from <code>ProcessedType</code> and
+												implementing the functionality for a custom type such as an interface or class.
+											</li>
+											<li>
+												<code>UserScope</code>, which represents a user scope i.e. any scope except the universe scope.
+											</li>
+											<li>
+												<code>ClassScopeThisDeclaration</code>, which represents the <code>this</code> declaration of a
+												class.
+											</li>
+											<li>
+												<code>InstanceOfExpression</code>, which represents the <code>instanceof</code> operator
+												expression.
+											</li>
+											<li>
+												<code>MatchesExpression</code>, which represents the <code>matches</code> operator expression.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New errors:
+										<ul>
+											<li>
+												<code>TypeCanNotBeUsedForTypeCheckingError</code>, which is thrown when a type is used for type
+												checking, but is not a valid type. This is an error indicating an invalid logic that should be
+												fixed.
+											</li>
+											<li>
+												<code>GenericArgumentTypeError</code>, which is thrown when a generic argument is used with an
+												invalid type. This is an error indicating an invalid logic that should be fixed.
+											</li>
+											<li>
+												<code>InvalidAmountOfGenericArgumentsError</code>, which is thrown when an invalid amount of
+												generic arguments is used. This is an error indicating an invalid logic that should be fixed.
+											</li>
+											<li>
+												<code>CanNotUseNonGenericAsGenericTypeError</code>, which is thrown when a non-generic type is
+												used as a generic type. This is an error indicating an invalid logic that should be fixed.
+											</li>
+											<li>
+												<code>MismatchingArgCountBetweenFuncTypesError</code>, which is thrown when the amount of
+												arguments in a function type does not match the number of arguments in the function type it is
+												compared to.
+											</li>
+											<li>
+												<code>GenericCanOnlyHaveOneSpreadError</code>, which is thrown when a generic type has more than
+												one spread argument. This is for now an internal-only error that should not be thrown in normal
+												circumstances.
+											</li>
+											<li>
+												<code>TypeNotAssignableToUnionError</code>, which is thrown when a type is not assignable to a
+												union type.
+											</li>
+											<li>
+												<code>ValueTypeNotIndexableWithGivenAccessor</code>, which is thrown when a value type is not
+												indexable with the given accessor.
+											</li>
+											<li>
+												<code>PropertyDoesNotExistError</code>, which is thrown when a property does not exist on a
+												type.
+											</li>
+											<li>
+												<code>DuplicateUniverseKeyError</code>, which is thrown when a key is duplicated in the universe
+												scope.
+											</li>
+											<li>
+												<code>IdentifierAlreadyUsedByMemberError</code>, which is thrown when an identifier is already
+												used by another property.
+											</li>
+											<li>
+												<code>InvalidInstanceOfTypeError</code>, which is thrown when the
+												<code>instanceof</code> operator is used with a type other than a class.
+											</li>
+											<li>
+												<code>InvalidMatchesTypeError</code>, which is thrown when the <code>matches</code> operator is
+												used with a type other than an interface.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New interfaces and types:
+										<ul>
+											<li>
+												<code>InterfaceDeclarationSemantics</code>, which represents the semantics of an interface
+												declaration.
+											</li>
+											<li>
+												<code>InterfaceDeclarationTypeSemantics</code>, which represents the type semantics of an
+												interface declaration.
+											</li>
+											<li>
+												<code>ClassMethodDeclarationSemantics</code>, which represents the semantics of a class method
+												declaration.
+											</li>
+											<li>
+												<code>ClassMethodDeclarationTypeSemantics</code>, which represents the type semantics of a class
+												method declaration.
+											</li>
+											<li>
+												<code>ClassPropertyDeclarationSemantics</code>, which represents the semantics of a class
+												property declaration.
+											</li>
+											<li>
+												<code>ClassPropertyDeclarationTypeSemantics</code>, which represents the type semantics of a
+												class property declaration.
+											</li>
+											<li>
+												<code>ClassConstructorDeclarationSemantics</code>, which represents the semantics of a class
+												constructor declaration.
+											</li>
+											<li>
+												<code>ClassConstructorDeclarationTypeSemantics</code>, which represents the type semantics of a
+												class constructor declaration.
+											</li>
+											<li>
+												<code>ClassDeclarationSemantics</code>, which represents the semantics of a class declaration.
+											</li>
+											<li>
+												<code>ClassDeclarationTypeSemantics</code>, which represents the type semantics of a class
+												declaration.
+											</li>
+											<li>
+												<code>TypeDeclaration</code>, which represents a type declaration. This is an abstract base
+												class for all type declarations.
+											</li>
+											<li>
+												<code>TypeDeclarationSemantics</code>, which represents the semantics of a type declaration.
+											</li>
+											<li>
+												<code>TypeDeclarationTyp</code>KipperTypeChecker.validArrayExpression<code>eSemantics</code>,
+												which represents the type semantics of a type declaration.
+											</li>
+											<li><code>CompilableType</code>, which represents a type that can be compiled.</li>
+											<li>
+												<code>BuiltInReference</code>, which replaces the now removed type <code>Reference</code> in the
+												<code>KipperProgramContext</code> for reference tracking of built-in types.
+											</li>
+											<li>
+												<code>NewInstantiationExpressionSemantics</code>, which represents the semantics of a new
+												instantiation expression.
+											</li>
+											<li>
+												<code>NewInstantiationExpressionTypeSemantics</code>, which represents the type semantics of a
+												new instantiation expression.
+											</li>
+											<li>
+												<code>TypeofExpressionSemantics</code>, which represents the semantics of a typeof expression.
+											</li>
+											<li>
+												<code>TypeofExpressionTypeSemantics</code>, which represents the type semantics of a typeof
+												expression.
+											</li>
+											<li>
+												<code>KipperCallable</code>, which is an alias for <code>FunctionDeclaration</code>,
+												<code>LambdaPrimaryExpression</code> and <code>ClassMethodDeclaration</code>.
+											</li>
+											<li>
+												<code>TypeDeclarationPropertyTypeSemantics</code>, which represents the type semantics of a type
+												declaration property.
+											</li>
+											<li>
+												<code>InstanceOfExpressionSemantics</code>, which represents the semantics of an instanceof
+												expression.
+											</li>
+											<li>
+												<code>InstanceOfExpressionTypeSemantics</code>, which represents the type semantics of an
+												instanceof expression.
+											</li>
+											<li>
+												<code>MatchesExpressionSemantics</code>, which represents the semantics of a matches expression.
+											</li>
+											<li>
+												<code>MatchesExpressionTypeSemantics</code>, which represents the type semantics of a matches
+												expression.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New functions:
+										<ul>
+											<li>
+												<code>KipperTypeChecker.validArrayExpression()</code>, which ensures that an array expression is
+												valid.
+											</li>
+											<li>
+												<code>KipperTypeChecker.validInstanceofClassType()</code>, which ensures that an
+												<code>instanceof</code> expression is valid for a class.
+											</li>
+											<li>
+												<code>KipperTypeChecker.validMatchesInterfaceType()</code>, which ensures that a
+												<code>matches</code> expression is valid for an interface.
+											</li>
+											<li>
+												<code>ClassDeclaration.getThis()</code>, which returns the <code>this</code> type of the class.
+											</li>
+											<li>
+												<code>ClassScope.getThis()</code>, which returns the <code>this</code> type of the class. This
+												is a simple alias for the method in the <code>ClassDeclaration</code> class.
+											</li>
+											<li>
+												<code>JavaScriptTargetCodeGenerator.generateInterfaceRuntimeTypeChecks()</code> which generates
+												runtime type checks for an interface.
+											</li>
+											<li>
+												<code>getRuntimeType()</code>, which gets the corresponding runtime representation of a built-in
+												type.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New properties:
+										<ul>
+											<li>
+												<code>BuiltInFunction.funcType</code>, which returns a function type for the built-in function.
+											</li>
+											<li>
+												<code>FunctionDeclarationTypeSemantics.type</code>, which returns the type of the function
+												declaration i.e. the function type.
+											</li>
+											<li>
+												<code>LambdaPrimaryExpressionTypeSemantics.type</code>, which returns the type of the lambda
+												primary expression i.e. the function type.
+											</li>
+											<li>
+												<code>FunctionCallExpressionTypeSemantics.funcOrExp</code>, which returns the function or
+												expression that is called. This always stores some sort of value that extends
+												<code>BuiltInTypeFunc</code>.
+											</li>
+											<li>
+												<code>CustomType.clsExtends</code>, which returns the class that the custom type extends. This
+												is only applicable for classes.
+											</li>
+											<li>
+												<code>CustomType.clsImplements</code>, which returns the interfaces that the custom type
+												implements. This is only applicable for classes.
+											</li>
+											<li>
+												<code>CustomType.intfExtends</code>, which returns the interfaces that the custom type extends.
+												This is only applicable for interfaces.
+											</li>
+											<li>
+												<code>CustomType._clsStaticFields</code>, which returns the static fields of the custom type.
+												This is only applicable for classes.
+											</li>
+											<li>
+												<code>ASTNode.preliminaryTypeSemantics</code>, which runs the preliminary type semantics of the
+												node as well as the preliminary type semantics of all its children. This is a recursive
+												function.
+											</li>
+											<li>
+												<code>ASTNode.primaryPreliminaryTypeSemantics</code>, which returns the primary preliminary type
+												semantics of the node. May be undefined if there is no primary preliminary type semantics for
+												the given node.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New runtime error <code>KipperError</code>, which serves as the base for <code>TypeError</code> and
+										<code>IndexError</code>.
+									</li>
+								</ul>
+								<h3 id="changed-2">Changed</h3>
+								<ul>
+									<li>
+										Argument type of built-in function <code>print</code> from <code>str</code> to <code>any</code>.
+									</li>
+									<li>
+										Argument type of built-in function <code>len</code> from <code>str</code> to
+										<code>str | Array&lt;any&gt;</code>. (<a href="https://github.com/Kipper-Lang/Kipper/issues/667">#667</a>)
+									</li>
+									<li>
+										Type from interface to class:
+										<ul>
+											<li><code>InternalFunction</code>, which represents an internal function.</li>
+											<li><code>BuiltInFunction</code>, which represents a built-in function.</li>
+											<li><code>InternalFunctionArgument</code>, which represents an internal function argument.</li>
+											<li><code>BuiltInVariable</code>, which represents a built-in variable.</li>
+										</ul>
+									</li>
+									<li>
+										Renamed:
+										<ul>
+											<li>Module <code>analysis</code> to <code>semantics</code>.</li>
+											<li>
+												Module <code>compiler/.../expressions/arithmetic</code> to <code>arithmetic-expression</code>.
+											</li>
+											<li>Class <code>UncheckedType</code> to <code>RawType</code>.</li>
+											<li>Class <code>CheckedType</code> to <code>ProcessedType</code>.</li>
+											<li>Class <code>UndefinedCustomType</code> to <code>UndefinedType</code>.</li>
+											<li>
+												Method <code>KipperProgramContext._initUniversalReferencables()</code> to
+												<code>_initUniversalReferenceables()</code>.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="fixed-2">Fixed</h3>
+								<ul>
+									<li>
+										All functions and lambdas simply resolving to <code>Func</code> instead of the appropriate filled-up
+										<code>Func&lt;T..., R&gt;</code> type. This now enables proper type checking for function
+										references.
+									</li>
+									<li>
+										CLI command <code>run</code> not properly reporting internal or unexpected errors, as they were
+										already prettified in the internally called up command <code>compile</code>.
+									</li>
+									<li>
+										Previously invalid parent type checking and evaluation performed in <code>ReturnStatement</code>.
+										This was now made absolute by the introduction of the preliminary type checking and "ahead of time"
+										type evaluation, as that now allows for self-referential types and type checking of recursive types
+										i.e. the return statement now knows the type of its function even though it is not yet fully
+										processed.
+									</li>
+									<li>
+										Duplicate universe entry registration in the <code>KipperProgramContext</code> for built-in types,
+										functions and variables.
+									</li>
+									<li>
+										Bug where lambda compound bodies would cause a syntax error, despite being a valid lambda body.
+									</li>
+								</ul>
+								<h3 id="removed-1">Removed</h3>
+								<ul>
+									<li>
+										Type <code>Reference</code> as it is no longer needed and has been replaced by
+										<code>KipperReferenceable</code>.
+									</li>
+									<li>
+										Function <code>FunctionCallExpressionTypeSemantics.func</code>, which is now has been replaced by
+										<code>funcOrExp</code>.
+									</li>
+									<li>
+										Function <code>KipperProgramContext.setUpBuiltInsInGlobalScope()</code>, which is no longer needed
+										as the universe scope now handles all built-in types, functions and variables.
+									</li>
+								</ul>
+								<h2 id="0110---2024-07-10">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.10.4…v0.11.0">0.11.0</a> - 2024-07-10
+								</h2>
+								<h3 id="added-2">Added</h3>
+								<ul>
+									<li>
+										Implemented Processing for File Scoped pragmas (<a href="https://github.com/Kipper-Lang/Kipper/issues/480">#480</a>)
+									</li>
+									<li>
+										Added Lambda Expressions, which are anonymous functions that can be used as expressions. (<a href="https://github.com/Kipper-Lang/Kipper/issues/572">#572</a>)
+									</li>
+									<li>
+										Implemented Bitwise Operations (<code>&amp;</code>, <code>|</code>, <code>^</code>, <code>~</code>,
+										<code>&lt;&lt;</code>, <code>&gt;&gt;</code>, <code>&gt;&gt;&gt;</code>). (<a href="https://github.com/Kipper-Lang/Kipper/issues/493">#493</a>)
+									</li>
+									<li>
+										Implemented Conditional Expression (<code>COND ? EXP : EXP</code>) as a ternary operator. (<a href="https://github.com/Kipper-Lang/Kipper/issues/534">#534</a>)
+									</li>
+									<li>
+										Implemented Do-While-Loop (<code>do ... while ...</code>) iteration statements. (<a href="https://github.com/Kipper-Lang/Kipper/issues/271">#271</a>)
+									</li>
+									<li>
+										Support for config files with a new monorepo package called <code>@kipper/config</code>, which
+										implements config file loading and parsing. This package is used by the Kipper CLI to automatically
+										load and parse config files. (<a href="https://github.com/Kipper-Lang/Kipper/issues/502">#502</a>).
+									</li>
+									<li>
+										Added setup wizard to the <code>@kipper/cli</code> to automatically create a Kipper project with a
+										config file. (<a href="https://github.com/Kipper-Lang/Kipper/issues/502">#502</a>).
+									</li>
+									<li>
+										Support for complex string formatting (or also called templating) in the form of Python-like
+										F-Strings. (<a href="https://github.com/Kipper-Lang/Kipper/issues/287">#287</a>).
+									</li>
+									<li>
+										Support for string multiplication using the <code>*</code> operator. (<a href="https://github.com/Kipper-Lang/Kipper/issues/478">#478</a>).
+									</li>
+									<li>
+										New CLI flag <code>--dry-run</code> in <code>compile</code>, which only compiles the program and
+										does not write any outputs. (<a href="https://github.com/Kipper-Lang/Kipper/issues/532">#532</a>).
+									</li>
+									<li>
+										New valid conversions:
+										<ul>
+											<li><code>void</code> to <code>str</code>.</li>
+											<li><code>null</code> to <code>str</code>.</li>
+											<li><code>undefined</code> to <code>str</code>.</li>
+										</ul>
+									</li>
+									<li>
+										New modules:
+										<ul>
+											<li>
+												<code>kipper/core/tools</code>, which contains all tools and utilities used by the compiler.
+											</li>
+											<li>
+												<code>kipper/core/tools/decorators</code>, which contains all decorators used by the compiler.
+											</li>
+											<li>
+												<code>kipper/core/tools/functions</code>, which contains all functions used by the compiler.
+											</li>
+											<li><code>kipper/core/tools/types</code>, which contains all types used by the compiler.</li>
+											<li>
+												<code>kipper/core/compiler/ast/common</code>, which contains commonly used types and functions.
+											</li>
+											<li>
+												<code>kipper/core/compiler/ast/factories</code>, which replaces the old file
+												<code>factories.ts</code> and contains all AST factory classes and types.
+											</li>
+											<li>
+												<code>kipper/core/compiler/ast/mapping</code>, which contains all AST mapping objects and the
+												<code>ASTNodeMapper</code> class.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New classes:
+										<ul>
+											<li>
+												<code>ASTNodeMapper</code>, which handles the mapping between kind numbers, rule names, AST
+												classes and parser context classes.
+											</li>
+											<li>
+												<code>PrimaryExpression</code>, which is an abstract base class for all primary expressions.
+											</li>
+											<li>
+												<code>PostfixExpression</code>, which is an abstract base class for all postfix expressions.
+											</li>
+											<li>
+												<code>PromptModule</code> in <code>@kipper/cli</code>, which contains all prompt-related
+												functions and classes.
+											</li>
+											<li><code>ObjectPrimaryExpression</code>, which represents an AST object primary expression.</li>
+											<li><code>ObjectProperty</code>, which represents an AST object property.</li>
+											<li><code>BitwiseExpression</code>, which represents an AST bitwise expression.</li>
+											<li><code>BitwiseAndExpression</code>, which represents an AST bitwise AND expression.</li>
+											<li><code>BitwiseOrExpression</code>, which represents an AST bitwise OR expression.</li>
+											<li><code>BitwiseXorExpression</code>, which represents an AST bitwise XOR expression.</li>
+											<li><code>BitwiseShiftExpression</code>, which represents an AST bitwise shift expression.</li>
+											<li><code>LambdaExpression</code>, which represents an AST lambda expression.</li>
+											<li><code>PragmaProcessor</code> which handles the processing of all possible Pragmas.</li>
+										</ul>
+									</li>
+									<li>
+										New interfaces:
+										<ul>
+											<li>
+												<code>LambdaExpressionSemantics</code>, which represents the semantics of a lambda expression.
+											</li>
+											<li>
+												<code>LambdaExpressionTypeSemantics</code>, which represents the type semantics of a lambda
+												expression.
+											</li>
+											<li>
+												<code>PrimaryExpressionSemantics</code>, which represents the semantics of a primary expression.
+											</li>
+											<li>
+												<code>PrimaryExpressionTypeSemantics</code>, which represents the type semantics of a primary
+												expression.
+											</li>
+											<li>
+												<code>PostfixExpressionSemantics</code>, which represents the semantics of a postfix expression.
+											</li>
+											<li>
+												<code>PostfixExpressionTypeSemantics</code>, which represents the type semantics of a postfix
+												expression.
+											</li>
+											<li>
+												<code>IterationStatementTypeSemantics</code>, which represents the type semantics of an
+												iteration statement.
+											</li>
+											<li>
+												<code>ExpressionStatementSemantics</code>, which represents the semantics of an expression
+												statement.
+											</li>
+											<li>
+												<code>ExpressionStatementTypeSemantics</code>, which represents the type semantics of an
+												expression statement.
+											</li>
+											<li><code>StatementSemantics</code>, which represents the semantics of a statement.</li>
+											<li><code>StatementTypeSemantics</code>, which represents the type semantics of a statement.</li>
+											<li>
+												<code>IfStatementTypeSemantics</code>, which represents the type semantics of an if statement.
+											</li>
+											<li>
+												<code>CompoundStatementSemantics</code>, which represents the semantics of a compound statement.
+											</li>
+											<li>
+												<code>CompoundStatementTypeSemantics</code>, which represents the type semantics of a compound
+												statement.
+											</li>
+											<li>
+												<code>ForLoopStatementTypeSemantics</code>, which represents the type semantics of a for loop
+												statement.
+											</li>
+											<li>
+												<code>DoWhileLoopIterationStatementTypeSemantics</code>, which represents the type semantics of
+												a do-while loop statement.
+											</li>
+											<li>
+												<code>WhileLoopStatementTypeSemantics</code>, which represents the type semantics of a while
+												loop statement.
+											</li>
+											<li>
+												<code>JumpStatementTypeSemantics</code>, which represents the type semantics of a jump
+												statement.
+											</li>
+											<li>
+												<code>SwitchStatementSemantics</code>, which represents the semantics of a switch statement.
+											</li>
+											<li>
+												<code>SwitchStatementTypeSemantics</code>, which represents the type semantics of a switch
+												statement.
+											</li>
+											<li>
+												<code>ObjectPrimaryExpressionSemantics</code>, which represents the semantics of an object
+												primary expression.
+											</li>
+											<li>
+												<code>ObjectPrimaryExpressionTypeSemantics</code>, which represents the type semantics of an
+												object primary expression.
+											</li>
+											<li>
+												<code>ObjectPropertySemantics</code>, which represents the semantics of an object property.
+											</li>
+											<li>
+												<code>ObjectPropertyTypeSemantics</code>, which represents the type semantics of an object
+												property.
+											</li>
+											<li>
+												<code>BitwiseExpressionSemantics</code>, which represents the semantics of a bitwise expression.
+											</li>
+											<li>
+												<code>BitwiseExpressionTypeSemantics</code>, which represents the type semantics of a bitwise
+												expression.
+											</li>
+											<li>
+												<code>BitwiseAndExpressionSemantics</code>, which represents the semantics of a bitwise AND
+												expression.
+											</li>
+											<li>
+												<code>BitwiseAndExpressionTypeSemantics</code>, which represents the type semantics of a bitwise
+												AND expression.
+											</li>
+											<li>
+												<code>BitwiseOrExpressionSemantics</code>, which represents the semantics of a bitwise OR
+												expression.
+											</li>
+											<li>
+												<code>BitwiseOrExpressionTypeSemantics</code>, which represents the type semantics of a bitwise
+												OR expression.
+											</li>
+											<li>
+												<code>BitwiseXorExpressionSemantics</code>, which represents the semantics of a bitwise XOR
+												expression.
+											</li>
+											<li>
+												<code>BitwiseXorExpressionTypeSemantics</code>, which represents the type semantics of a bitwise
+												XOR expression.
+											</li>
+											<li>
+												<code>BitwiseShiftExpressionSemantics</code>, which represents the semantics of a bitwise shift
+												expression.
+											</li>
+											<li>
+												<code>BitwiseShiftExpressionTypeSemantics</code>, which represents the type semantics of a
+												bitwise shift expression.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New parameters:
+										<ul>
+											<li>
+												<code>ignoreParams</code> in <code>genJSFunction()</code>, which, if true makes the function
+												signature define no parameters.
+											</li>
+											<li>
+												<code>ignoreParams</code> in <code>createJSFunctionSignature()</code>, which, if true makes the
+												function signature define no parameters.
+											</li>
+											<li>
+												<code>ignoreParams</code> in <code>genTSFunction()</code>, which, if true makes the function
+												signature define no parameters.
+											</li>
+											<li>
+												<code>ignoreParams</code> in <code>createTSFunctionSignature()</code>, which, if true makes the
+												function signature define no parameters.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New constants:
+										<ul>
+											<li>
+												<code>DEFAULT_TOKEN_CHANNEL</code>, which is the channel id of the default channel storing all
+												the parser-relevant tokens that the Lexer lexed.
+											</li>
+											<li>
+												<code>HIDDEN</code>, which is the channel id of the channel storing all whitespaces and newlines
+												that the Lexer lexed.
+											</li>
+											<li>
+												<code>COMMENT</code>, which is the channel id of the channel storing all the comments that the
+												Lexer lexed.
+											</li>
+											<li>
+												<code>PRAGMA</code>, which is the channel id of the channel storing all pragma comments that the
+												Lexer lexed.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New fields:
+										<ul>
+											<li>
+												<code>KipperError.programCtx</code>, which contains, if
+												<code>KipperError.tracebackData.errorNode</code> is not undefined, the program context of the
+												error.
+											</li>
+											<li><code>ParserASTNode.ruleName</code>, which contains the rule name of the node.</li>
+											<li><code>LexerParserData.channels</code>, which stores the channels generated by the Lexer.</li>
+										</ul>
+									</li>
+									<li>
+										New types:
+										<ul>
+											<li><code>InverseMap</code>, which inverts a map by swapping the keys and values.</li>
+										</ul>
+									</li>
+									<li>
+										New functions:
+										<ul>
+											<li>
+												<code>KipperTargetBuiltInGenerator.voidToStr()</code>, for the built-in conversion from
+												<code>void</code> to <code>str</code>.
+											</li>
+											<li>
+												<code>KipperTargetBuiltInGenerator.nullToStr()</code>, for the built-in conversion from
+												<code>null</code> to <code>str</code>.
+											</li>
+											<li>
+												<code>KipperTargetBuiltInGenerator.undefinedToStr()</code>, for the built-in conversion from
+												<code>undefined</code> to <code>str</code>.
+											</li>
+											<li>
+												<code>replaceObjKeys()</code>, which replaces the keys of an object with the values returned by
+												a function.
+											</li>
+											<li><code>inverseMap()</code>, which inverts a map by swapping the keys and values.</li>
+											<li>
+												<code>loadConfig()</code> in <code>@kipper/cli</code>, which loads a config file from the
+												specified path.
+											</li>
+											<li>
+												<code>loadAutoConfig()</code> in <code>@kipper/cli</code>, which loads a config file from the
+												current working directory.
+											</li>
+											<li>
+												<code>copyConfigResources()</code> in <code>@kipper/cli</code>, which copies the resources from
+												the config file to the output directory.
+											</li>
+											<li>
+												<code>KipperTypeChecker.validConditionalExpression()</code>, which ensures that a conditional
+												expression is valid.
+											</li>
+											<li>
+												<code>PragmaProcessor.processSingleLine()</code>, which changes the compiler options according
+												to the pragmas found in the file.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="changed-3">Changed</h3>
+								<ul>
+									<li>
+										Fixed bug allowing the use of any expressions for call expressions as that is not implemented yet.
+									</li>
+									<li>
+										Standardised error output for the CLI as described in
+										<a href="https://github.com/Kipper-Lang/Kipper/issues/435">#435</a>. (This is the same change as in
+										<code>0.10.3</code>, but was only added to the dev branch with the release of
+										<code>0.11.0-alpha.1</code> i.e. <code>0.11.0-alpha.0</code> does <em>not</em> have this change).
+									</li>
+									<li>
+										Made <code>VoidOrNullOrUndefinedPrimaryExpression</code> a constant expression and inherit from the
+										<code>ConstantExpression</code> class. This means it's AST kind number is now also added to the
+										<code>ASTConstantExpressionKind</code> type and its context class is also part of the
+										<code>ParserConstantExpressionContext</code> type.
+									</li>
+									<li>
+										Renamed:
+										<ul>
+											<li>Module <code>compiler/parser</code> to <code>lexer-parser</code>.</li>
+											<li>
+												File <code>kipper/core/compiler/parser/parser-ast-mapping.ts</code> to
+												<code>parse-rule-kind-mappings.ts</code>.
+											</li>
+											<li>
+												Class <code>KipperParseStream</code> to <code>KipperFileStream</code> including its file to
+												<code>file-stream.ts</code>.
+											</li>
+											<li>
+												CLI Class <code>KipperParseFile</code> to <code>KipperInputFile</code> including its file to
+												<code>input-file.ts</code>.
+											</li>
+											<li>
+												Class <code>FunctionCallPostfixTypeSemantics</code> to
+												<code>FunctionCallExpressionTypeSemantics</code>.
+											</li>
+											<li>Field <code>FStringPrimaryExpressionSemantics.items</code> to <code>atoms</code>.</li>
+											<li>Function <code>getTSFunction()</code> to <code>genTSFunction()</code>.</li>
+											<li>
+												Grammar Rule <code>typeSpecifier</code> to <code>typeSpecifierExpression</code> and its AST
+												class <code>TypeSpecifier</code> to <code>TypeSpecifierExpression</code>. This also includes
+												changing the name in the <code>KipperTargetCodeGenerator</code>,
+												<code>KipperTargetSemanticAnalyser</code> and <code>KipperTargetBuiltInGenerator</code> classes.
+											</li>
+											<li>
+												Grammar Rule <code>identifierTypeSpecifier</code> to
+												<code>identifierTypeSpecifierExpression</code> and its AST class
+												<code>IdentifierTypeSpecifier</code> to <code>IdentifierTypeSpecifierExpression</code>. This
+												also includes changing the name in the <code>KipperTargetCodeGenerator</code>,
+												<code>KipperTargetSemanticAnalyser</code> and <code>KipperTargetBuiltInGenerator</code> classes.
+											</li>
+											<li>
+												Grammar Rule <code>genericTypeSpecifier</code> to
+												<code>genericTypeSpecifierExpression</code> and its AST class
+												<code>GenericTypeSpecifier</code> to <code>GenericTypeSpecifierExpression</code>. This also
+												includes changing the name in the <code>KipperTargetCodeGenerator</code>,
+												<code>KipperTargetSemanticAnalyser</code> and <code>KipperTargetBuiltInGenerator</code> classes.
+											</li>
+											<li>
+												Grammar Rule <code>typeofTypeSpecifier</code> to <code>typeofTypeSpecifierExpression</code> and
+												its AST class <code>TypeofTypeSpecifier</code> to <code>TypeofTypeSpecifierExpression</code>.
+												This also includes changing the name in the <code>KipperTargetCodeGenerator</code>,
+												<code>KipperTargetSemanticAnalyser</code> and <code>KipperTargetBuiltInGenerator</code> classes.
+											</li>
+											<li>
+												Grammar Rule <code>forLoopStatement</code> to <code>forLoopIterationStatement</code> and its AST
+												class <code>ForLoopStatement</code> to <code>ForLoopIterationStatement</code>. This also
+												includes changing the name in the <code>KipperTargetCodeGenerator</code>,
+												<code>KipperTargetSemanticAnalyser</code> and <code>KipperTargetBuiltInGenerator</code> classes.
+											</li>
+											<li>
+												Grammar Rule <code>whileLoopStatement</code> to <code>whileLoopIterationStatement</code> and its
+												AST class <code>WhileLoopStatement</code> to <code>WhileLoopIterationStatement</code>. This also
+												includes changing the name in the <code>KipperTargetCodeGenerator</code>,
+												<code>KipperTargetSemanticAnalyser</code> and <code>KipperTargetBuiltInGenerator</code> classes.
+											</li>
+											<li>
+												Grammar Rule <code>doWhileLoopStatement</code> to <code>doWhileLoopIterationStatement</code> and
+												its AST class <code>DoWhileLoopStatement</code> to <code>DoWhileLoopIterationStatement</code>.
+												This also includes changing the name in the <code>KipperTargetCodeGenerator</code>,
+												<code>KipperTargetSemanticAnalyser</code> and <code>KipperTargetBuiltInGenerator</code> classes.
+											</li>
+											<li>
+												File <code>kipper/core/compiler/parser/parser-ast-mapping.ts</code> to
+												<code>parse-rule-kind-mappings.ts</code>.
+											</li>
+											<li>Class <code>ArrayLiteralPrimaryExpression</code> to <code>ArrayPrimaryExpression</code>.</li>
+											<li>
+												Interface <code>ArrayLiteralPrimaryExpressionSemantics</code> to
+												<code>ArrayPrimaryExpressionSemantics</code>.
+											</li>
+											<li>
+												Interface <code>ArrayLiteralPrimaryExpressionTypeSemantics</code> to
+												<code>ArrayPrimaryExpressionTypeSemantics</code>.
+											</li>
+											<li>
+												Interface <code>TangledPrimaryTypeSemantics</code> to
+												<code>TangledPrimaryExpressionTypeSemantics</code>.
+											</li>
+											<li>
+												Interface <code>DoWhileLoopStatementSemantics</code> to
+												<code>DoWhileLoopIterationStatementSemantics</code>.
+											</li>
+											<li>Interface <code>ParseData</code> to <code>LexerParserData</code>.</li>
+											<li>
+												Method <code>TargetASTNodeCodeGenerator.arrayLiteralExpression</code> to
+												<code>arrayPrimaryExpression</code>.
+											</li>
+											<li>
+												Method <code>TargetASTNodeSemanticAnalyser.listPrimaryExpression</code> to
+												<code>arrayPrimaryExpression</code>.
+											</li>
+											<li>Field <code>FStringPrimaryExpressionSemantics.items</code> to <code>atoms</code>.</li>
+											<li>Field <code>LexerParserData.parseStream</code> to <code>fileStream</code>.</li>
+										</ul>
+									</li>
+									<li>
+										Moved:
+										<ul>
+											<li>
+												<code>kipper/core/utils.ts</code> to <code>kipper/core/tools</code> and separated it into
+												multiple files &amp; modules.
+											</li>
+											<li>
+												<code>kipper/core/compiler/ast/root-ast-node.ts</code> to the
+												<code>kipper/core/compiler/ast/nodes</code> module.
+											</li>
+											<li>
+												<code>kipper/core/compiler/ast/ast-types.ts</code> to the new
+												<code>kipper/core/compiler/ast/common</code> module.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="fixed-3">Fixed</h3>
+								<ul>
+									<li>
+										Redeclaration bug causing an <code>InternalError</code> after calling the compiler (<a href="https://github.om/Kipper-Lang/Kipper/issues/462">#462</a>).
+									</li>
+									<li>
+										Compiler argument bug in <code>KipperCompiler</code>, where <code>abortOnFirstError</code> didn't
+										precede <code>recover</code>, meaning that instead of an error being thrown the failed result was
+										returned (As defined in the <code>recover</code> behaviour, which is incorrect).
+									</li>
+									<li>
+										Bug of invalid underline indent in error traceback. (<a href="https://github.com/Kipper-Lang/Kipper/issues/434">#434</a>).
+									</li>
+									<li>
+										CLI bug where the <code>-t</code> shortcut flag was incorrectly shown for the command
+										<code>help compile</code>. (<a href="https://github.com/Kipper-Lang/Kipper/issues/451">#451</a>)
+										(This is the same fix as in <code>0.10.3</code>, but was only added to the dev branch with the
+										release of <code>0.11.0-alpha.1</code> i.e. <code>0.11.0-alpha.0</code> still has this bug).
+									</li>
+									<li>
+										CLI error handling bug as described in
+										<a href="https://github.com/Kipper-Lang/Kipper/issues/491">#491</a>. This includes multiple bugs
+										where errors were reported as "Unexpected CLI Error". (This is the same fix as in
+										<code>0.10.4</code>, but with one additional edge-case covered. This fix was only added to the dev
+										branch with the release of <code>0.11.0-alpha.1</code> i.e. <code>0.11.0-alpha.0</code> still has
+										this bug).
+									</li>
+								</ul>
+								<h3 id="removed-2">Removed</h3>
+								<ul>
+									<li>
+										Removed deprecated flag <code>--abort-on-first-error</code> in favour of <code>--no-recover</code>.
+										(<a href="https://github.com/Kipper-Lang/Kipper/issues/501">#501</a>).
+									</li>
+									<li>
+										Removed CLI command <code>analyse</code> in favor of the flag <code>--dry-run</code> in the CLI
+										command <code>compile</code>. (<a href="https://github.com/Kipper-Lang/Kipper/issues/532">#532</a>).
+									</li>
+									<li>
+										Removed AST parent class <code>ConstantExpression</code>, its interfaces
+										<code>ConstantExpressionSemantics</code> and <code>ConstantExpressionTypeSemantics</code>, as they
+										were not really needed and unnecessarily added another level of complexity to the AST. All classes
+										which previously inherited from <code>ConstantExpression</code> now inherit from
+										<code>PrimaryExpression</code> instead.
+									</li>
+								</ul>
+								<h2 id="0104---2023-08-15">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.10.3…v0.10.4">0.10.4</a> - 2023-08-15
+								</h2>
+								<h3 id="changed-4">Changed</h3>
+								<ul>
+									<li>Moved function <code>executeKipperProgram</code> to <code>Run</code> as a private function.</li>
+									<li>
+										Moved class <code>KipperCompileResult</code> to new file <code>compile-result.ts</code> in the same
+										directory.
+									</li>
+									<li>
+										Field <code>KipperCompileResult.programCtx</code> can now be also <code>undefined</code>, due to the
+										changed behaviour that now a <code>KipperCompileResult</code> is also returned for syntax errors
+										(where it has no value).
+									</li>
+								</ul>
+								<h3 id="fixed-4">Fixed</h3>
+								<ul>
+									<li>
+										CLI error handling bug as described in
+										<a href="https://github.com/Kipper-Lang/Kipper/issues/491">#491</a>. This includes multiple bugs
+										where errors were reported as "Unexpected CLI Error".
+									</li>
+								</ul>
+								<h3 id="deprecated-1">Deprecated</h3>
+								<ul>
+									<li>
+										CLI flag <code>--abort-on-first-error</code> in favour of <code>--no-recover</code>.
+										<a href="https://github.com/Kipper-Lang/Kipper/issues/501">#501</a>.
+									</li>
+								</ul>
+								<h2 id="0103---2023-07-22">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.10.2…v0.10.3">0.10.3</a> - 2023-07-22
+								</h2>
+								<h3 id="added-3">Added</h3>
+								<ul>
+									<li>
+										New modules in <code>@kipper/cli</code>:
+										<ul>
+											<li><code>input</code>, which contains all input-related handling functions and classes.</li>
+											<li><code>output</code>, which contains the output-related handling functions and classes.</li>
+										</ul>
+									</li>
+									<li>
+										New decorator <code>prettifiedErrors</code> in <code>@kipper/cli</code>, which applies standardised
+										error formatting to any thrown error.
+									</li>
+								</ul>
+								<h3 id="changed-5">Changed</h3>
+								<ul>
+									<li>
+										Standardised error output for the CLI as described in
+										<a href="https://github.com/Kipper-Lang/Kipper/issues/435">#435</a>.
+									</li>
+									<li>
+										Error message of <code>KipperInternalError</code>, which does not have " - Report this bug to the
+										developer using the traceback!" as a suffix anymore.
+									</li>
+									<li>
+										Changed success message of the <code>kipper analyse</code> command
+										<code>Finished code analysis in ...</code> to <code>Done in ...</code>.
+									</li>
+									<li>Renamed <code>getFile</code> to <code>getParseStream</code>.</li>
+								</ul>
+								<h3 id="fixed-5">Fixed</h3>
+								<ul>
+									<li>
+										CLI bug where the <code>-t</code> shortcut flag was incorrectly shown for the command
+										<code>help compile</code>. (<a href="https://github.com/Kipper-Lang/Kipper/issues/451">#451</a>)
+									</li>
+								</ul>
+								<h2 id="0102---2023-06-16">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.10.1…v0.10.2">0.10.2</a> - 2023-06-16
+								</h2>
+								<h3 id="added-4">Added</h3>
+								<ul>
+									<li>
+										New field:
+										<ul>
+											<li>
+												<code>KipperError.programCtx</code>, which contains, if
+												<code>KipperError.tracebackData.errorNode</code> is not undefined, the program context of the
+												error.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New function:
+										<ul>
+											<li>
+												<code>ensureScopeDeclarationAvailableIfNeeded</code>, which ensures that a scope declaration is
+												available if needed. This is used during the semantic analysis/type checking of a declaration
+												statement, which may need the scope declaration object during the processing.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="fixed-6">Fixed</h3>
+								<ul>
+									<li>
+										Redeclaration bug causing an <code>InternalError</code> after calling the compiler (<a href="https://github.com/Kipper-Lang/Kipper/issues/462">#462</a>).
+									</li>
+									<li>
+										Compiler argument bug in <code>KipperCompiler</code>, where <code>abortOnFirstError</code> didn't
+										precede <code>recover</code>, meaning that instead of an error being thrown the failed result was
+										returned (As defined in the <code>recover</code> behaviour, which is incorrect).
+									</li>
+									<li>
+										Bug of invalid underline indent in error traceback. (<a href="https://github.com/Kipper-Lang/Kipper/issues/434">#434</a>).
+									</li>
+								</ul>
+								<h2 id="0101---2023-02-21">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.10.0…v0.10.1">0.10.1</a> - 2023-02-21
+								</h2>
+								<h3 id="fixed-7">Fixed</h3>
+								<ul>
+									<li>
+										Bug causing the compiler to not detect the expected useless statement warning for a useless
+										arithmetic expression. (<a href="https://github.com/Kipper-Lang/Kipper/issues/426">#426</a>).
+									</li>
+								</ul>
+								<h2 id="0100---2023-02-19">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.9.2…v0.10.0">0.10.0</a> - 2023-02-19
+								</h2>
+								<h3 id="added-5">Added</h3>
+								<ul>
+									<li>
+										Added full support for custom-defined functions, function arguments, function return evaluation,
+										function scopes/argument referencing and return-value code branch inspection. (<a href="https://github.om/Kipper-Lang/Kipper/issues/183">#183</a>).
+									</li>
+									<li>
+										Implemented while-loop iteration statements (<a href="https://github.com/Kipper-Lang/Kipper/issues/268">#268</a>).
+									</li>
+									<li>
+										Implemented for-loop iteration statements (<a href="https://github.com/Kipper-Lang/Kipper/issues/270">#270</a>).
+									</li>
+									<li>
+										JavaScript compilation target with a new monorepo package called <code>@kipper/target-js</code>,
+										which implements the semantic analysis and code generation for JavaScript, and provides the class
+										<code>KipperJavaScriptTarget</code> (<code>TargetTS</code> available as alias), which can be used as
+										the target in the <code>CompileConfig</code>. (<a href="https://github.com/Kipper-Lang/Kipper/issues/208">#208</a>).
+									</li>
+									<li>
+										Standalone web-module package called <code>@kipper/web</code>, which from now on will provide the
+										<code>kipper-standalone.js</code> script that can be used in a web-application. This also bundles
+										<code>@kipper/target-js</code> and <code>@kipper/target-ts</code>, which can be also accessed using
+										the identifiers <code>KipperJS</code> and <code>KipperTS</code> in the web environment. (<a href="https://github.com/Kipper-Lang/Kipper/issues/86">#86</a>).
+									</li>
+									<li>
+										Implemented arithmetic assignment operators <code>+=</code>, <code>-=</code>, <code>*=</code>,
+										<code>%=</code> and <code>/=</code> (<a href="https://github.com/Kipper-Lang/Kipper/issues/273">#273</a>).
+									</li>
+									<li>
+										Support for unary and postfix increment and decrement (<code>++</code>, <code>--</code>) expressions
+										(<a href="https://github.com/Kipper-Lang/Kipper/issues/272">#272</a>).
+									</li>
+									<li>
+										Implemented member-access expressions using bracket and slice notation (<code>[]</code>,
+										<code>[:]</code>), which can be used to access specific elements of a string (In the future, this
+										will also be used to access elements of arrays and objects). (<a href="https://github.com/Kipper-Lang/Kipper/issues/372">#372</a>).
+									</li>
+									<li>
+										Support for single-line comments separated by a newline char. (<a href="https://github.com/Kipper-Lang/Kipper/issues/400">#400</a>).
+									</li>
+									<li>
+										Implemented new built-in function <code>len()</code>, which returns the length of a string (In the
+										future also arrays). (<a href="https://github.com/Kipper-Lang/Kipper/issues/411">#411</a>).
+									</li>
+									<li>
+										Support for jump statements <code>continue</code> and <code>break</code> for iteration statements.
+										(<a href="https://github.com/Kipper-Lang/Kipper/issues/269">#269</a>).
+									</li>
+									<li>
+										New built-in variable <code>__name__</code> returning the name of the current file. This also
+										includes general support for built-in variables in the compiler. (<a href="https://github.com/Kipper-Lang/Kipper/issues/412">#412</a>).
+									</li>
+									<li>
+										New built-in Kipper type <code>null</code> and <code>undefined</code>, and support for the constant
+										identifier <code>void</code>, <code>null</code> and <code>undefined</code>.
+									</li>
+									<li>
+										Finished implementation of warning reporting system and added warning for useless expression
+										statements. (<a href="https://github.com/Kipper-Lang/Kipper/issues/413">#413</a>).
+									</li>
+									<li>
+										New Kipper CLI flag <code>-t/--target</code> to specify the target to use for a compilation or
+										execution.
+									</li>
+									<li>
+										Use of <code>"use strict";</code> in the TypeScript target to enforce the use of strict mode during
+										runtime.
+									</li>
+									<li>
+										New generic parameter <code>TypeSemantics</code> to <code>ASTNode</code>, which defines the type
+										data that the AST Node should evaluate during type checking.
+									</li>
+									<li>
+										New CLI flags for commands <code>run</code> and <code>compile</code>:
+										<ul>
+											<li><code>--log-timestamp</code>, which enables timestamps for the log messages.</li>
+											<li><code>--recover</code>, which enables error recovery for the Kipper compiler.</li>
+											<li>
+												<code>--abort-on-first-error</code>, which aborts the compilation on the first compiler error
+												that is encountered.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New errors/warnings:
+										<ul>
+											<li>
+												<code>MissingFunctionBodyError</code>, which is thrown when a function declaration is missing a
+												body (compound statement).
+											</li>
+											<li>
+												<code>LexerOrParserSyntaxError</code>, which is thrown when the lexer or parser encounters a
+												syntax error.
+											</li>
+											<li>
+												<code>IdentifierAlreadyUsedByParameterError</code>, which is thrown when an identifier is
+												already used by a parameter in the same scope or any parent scope.
+											</li>
+											<li>
+												<code>ExpressionNotCallableError</code>, which is thrown when an expression is not callable,
+												despite it being used in a call expression.
+											</li>
+											<li>
+												<code>IncompleteReturnsInCodePathsError</code>, which is thrown whenever a non-void function has
+												code paths that do not return a value.
+											</li>
+											<li>
+												<code>ReturnStatementError</code>, which is thrown whenever a return statement is used outside a
+												function.
+											</li>
+											<li>
+												<code>InvalidUnaryExpressionOperandError</code>, which is thrown whenever a unary expression is
+												used with an invalid operand.
+											</li>
+											<li>
+												<code>UndefinedDeclarationCtxError</code>, which is thrown when the declaration context of a
+												declaration is undefined. (This is an internal error that happens if the declaration context is
+												accessed too early e.g. before its creation.)
+											</li>
+											<li>
+												<code>TypeNotCompilableError</code>, which is thrown when an invalid/undefined type is cast to a
+												compilable type, despite it being invalid. (This is an internal error that happens if the type
+												is cast during compilation despite it having errored during semantic analysis/type checking.)
+											</li>
+											<li>
+												<code>InvalidKeyTypeError</code>, which is thrown when an expression with an invalid type is
+												used as a key/index to access an object-like or array-like.
+											</li>
+											<li>
+												<code>ValueNotIndexableTypeError</code>, which is thrown when a value is not indexable (not
+												object-like), despite it being used in a member access expression.
+											</li>
+											<li>
+												<code>MissingRequiredSemanticDataError</code>, which is a specific internal error used to
+												indicate that a specified node is missing required semantic data from another node and as a
+												result failed to process itself.
+											</li>
+											<li>
+												<code>UselessExpressionStatementWarning</code>, which is reported when an expression statement
+												is used without any side-effects and as such does not have any effect on the program.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New classes/interfaces:
+										<ul>
+											<li>
+												<code>KipperWarning</code>, which is a subclass of <code>KipperError</code> that is used to
+												indicate a warning. This replaces the use of <code>KipperError</code> for warnings.
+											</li>
+											<li>
+												<code>ReturnStatement</code>, which is a subclass of <code>Statement</code> that represents a
+												return statement. This is not anymore included in the <code>JumpStatement</code> class.
+											</li>
+											<li>
+												<code>FunctionScope</code>, which is a subclass of <code>Scope</code> that represents a function
+												scope with registered parameters.
+											</li>
+											<li>
+												<code>UndefinedCustomType</code>, which represents an invalid/undefined type that was created by
+												the user, but is not defined in the program. This is used to allow error recovery and continue
+												even with an invalid type during type checking, and let the type checker know to ignore type
+												checks with references of this type.
+											</li>
+											<li>
+												<code>Type</code>, which is an abstract base class for defining a wrapper class for a Kipper
+												type during semantic analysis and type checking.
+											</li>
+											<li>
+												<code>UncheckedType</code>, which is an implementation of <code>Type</code> and represents a raw
+												specified type during semantic analysis.
+											</li>
+											<li>
+												<code>CheckedType</code>, which is an implementation of <code>Type</code> and represents a
+												checked type during type checking, which also handles compatibility and error recovery for
+												undefined types.
+											</li>
+											<li>
+												<code>MemberAccessExpression</code>, which is a subclass of <code>Expression</code> that
+												represents a member access expression (Antlr4 rule <code>memberAccessExpression</code>).
+											</li>
+											<li>
+												<code>AnalysableASTNode</code>, which represents an AST node that can be semantically processed.
+												This class was created as a parent class for <code>CompilableASTNode</code>, as a way to split
+												up the semantic analysis and code generation.
+											</li>
+											<li>
+												<code>KipperWarningIssuer</code>, which is a class similar to
+												<code>KipperSemanticChecker</code> and checks for certain conditions and reports warnings if
+												they are met.
+											</li>
+											<li>
+												<code>ScopeNode&lt;T&gt;</code>, which is an interface representing an AST node that implements
+												its own local scope. This means that the definitions of its children, will be stored in the
+												<code>innerScope</code> field of the class implementation.
+											</li>
+											<li>
+												<code>SymbolTable</code>, which implements the basic functionality of a symbol table containing
+												the metadata for a scope.
+											</li>
+											<li>
+												<code>MemberAccessExpressionSemantics</code>, which represents the semantics for
+												<code>MemberAccessExpression</code>.
+											</li>
+											<li>
+												<code>MemberAccessExpressionTypeSemantics</code>, which represents the type semantics for
+												<code>MemberAccessExpression</code>.
+											</li>
+											<li>
+												<code>TargetAnalysableNode</code>, which represents an AST node that has a target-specific
+												semantic analysis function.
+											</li>
+											<li>
+												<code>TargetCompilableNode</code>, which represents an AST node that has a target-specific code
+												generation function.
+											</li>
+											<li><code>ASTNodeFactory</code>, which represents a basic factory for creating AST nodes.</li>
+											<li><code>InternalFunctionArgument</code>, which represents an internal function argument.</li>
+											<li>
+												<code>InternalReference&lt;T&gt;</code>, which represents an indirect reference to an internal
+												function by the user. This is primarily used to keep track of the internal functions that are
+												used in the program, and to generate them in the target code.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New functions:
+										<ul>
+											<li>
+												<code>KipperTargetCodeGenerator.setUp()</code>, which should generate SetUp code for the
+												specified target.
+											</li>
+											<li>
+												<code>KipperTargetCodeGenerator.wrapUp()</code>, which should generate WrapUp code for the
+												specified target.
+											</li>
+											<li>
+												<code>ASTNode.getTypeSemanticData()</code>, which returns the type semantics if they are
+												defined, otherwise throws an <code>UndefinedSemanticsError</code>.
+											</li>
+											<li>
+												<code>CompilableASTNode.semanticTypeChecking()</code>, which performs type checking for the AST
+												node and its children nodes. This is called in the function
+												<code>RootASTNode.semanticAnalysis</code> after
+												<code>CompilableASTNode.semanticAnalysis()</code>.
+											</li>
+											<li>
+												<code>CompilableASTNode.wrapUpSemanticAnalysis()</code>, which performs wrap-up semantic
+												analysis for the target of the AST node. This is called in the function
+												<code>RootASTNode.semanticAnalysis</code> after
+												<code>CompilableASTNode.semanticTypeChecking()</code>.
+											</li>
+											<li>
+												<code>Scope.getReferenceRecursively()</code>, which tries to evaluate a reference recursively in
+												the scope and its parent scopes.
+											</li>
+											<li>
+												<code>KipperTypeChecker.validReturnStatement()</code>, which ensures that a return statement is
+												only used inside a function.
+											</li>
+											<li>
+												<code>KipperTypeChecker.checkMatchingTypes()</code>, which checks if the two specified types are
+												matching.
+											</li>
+											<li>
+												<code>KipperTypeChecker.referenceCallable()</code>, which asserts that the specified reference
+												is a callable function.
+											</li>
+											<li>
+												<code>KipperTypeChecker.validReturnCodePathsInFunctionBody()</code>, which ensures that all code
+												paths of a non-void function return a proper value.
+											</li>
+											<li>
+												<code>KipperSemanticChecker.identifierNotUsed()</code>, which asserts that the specified
+												identifier is unused in the specified scope and can be used for a new declaration.
+											</li>
+											<li>
+												<code>KipperSemanticChecker.getReturnStatementParent()</code>, which evaluates the parent
+												function for a return statement.
+											</li>
+											<li>
+												<code>KipperSemanticChecker.refTargetDefined()</code>, which asserts that the specified
+												reference is defined and can be used.
+											</li>
+											<li>
+												<code>KipperSemanticChecker.validFunctionBody()</code>, which ensures the body of a function is
+												a compound statement.
+											</li>
+											<li>
+												<code>CompilableASTNode.addError()</code>, which adds an error to the list of errors caused by
+												the node.
+											</li>
+											<li><code>removeBraces()</code> for removing braces due to formatting reasons.</li>
+											<li>
+												<code>CompilableASTNode.recursivelyCheckForWarnings()</code>, which recursively calls all
+												children's <code>checkforWarnings()</code> functions as well as the function of the parent
+												instance.
+											</li>
+											<li>
+												<code>shouldRecoverFromError()</code> and <code>handleSemanticError()</code> in
+												<code>handle-error.ts</code>.
+											</li>
+											<li>
+												<code>AnalysableASTNode.semanticallyAnalyseChildren()</code>, which semantically analyses all
+												children nodes of the AST node.
+											</li>
+											<li>
+												<code>AnalysableASTNode.semanticallyTypeCheckChildren()</code>, which semantically type checks
+												all children nodes of the AST node.
+											</li>
+											<li>
+												<code>AnalysableASTNode.targetSemanticallyAnalyseChildren()</code>, which semantically analyses
+												all children nodes of the AST node for the target.
+											</li>
+											<li>
+												<code>AnalysableASTNode.ensureSemanticallyValid()</code>, which throws a
+												<code>MissingRequiredSemanticDataError</code> in case that the specified node failed during
+												semantic analysis. This is used by other nodes to ensure that the node is valid and its data can
+												be safely accessed.
+											</li>
+											<li>
+												<code>AnalysableASTNode.ensureTypeSemanticallyValid()</code>, which throws a
+												<code>MissingRequiredSemanticDataError</code> in case that the specified node failed during type
+												checking. This is used by other nodes to ensure that the node is valid and its data can be
+												safely accessed.
+											</li>
+											<li>
+												<code>KipperSemanticChecker.getJumpStatementParent()</code>, which evaluates the parent
+												iteration statement for a jump statement.
+											</li>
+											<li>
+												<code>KipperProgramContext.registerBuiltInFunctions()</code>, which registers one or more
+												built-in functions.
+											</li>
+											<li>
+												<code>KipperProgramContext.registerBuiltInVariables()</code>, which registers one or more
+												built-in variables.
+											</li>
+											<li>
+												<code>KipperProgramContext.clearBuiltInFunctions()</code>, which clears the list of built-in
+												functions.
+											</li>
+											<li>
+												<code>KipperProgramContext.clearBuiltInVariables()</code>, which clears the list of built-in
+												variables.
+											</li>
+											<li>
+												<code>KipperProgramContext.getBuiltInVariable()</code>, which returns the built-in variable with
+												the specified name if found.
+											</li>
+											<li>
+												<code>KipperProgramContext.builtInFunctionReferences</code>, which stores all the references to
+												built-in functions.
+											</li>
+											<li>
+												<code>KipperProgramContext.builtInVariableReferences</code>, which stores all the references to
+												built-in variables.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New types:
+										<ul>
+											<li><code>TypeData</code>, which represents the type data of an <code>ASTNode</code>.</li>
+											<li>
+												<code>NoTypeSemantics</code>, which hints that an <code>ASTNode</code> has no type semantic
+												data.
+											</li>
+											<li>
+												<code>TargetSetUpCodeGenerator</code>, which represents a function that generates SetUp code for
+												a Kipper file.
+											</li>
+											<li>
+												<code>TargetWrapUpCodeGenerator</code>, which represents a function that generates WrapUp code
+												for a Kipper file.
+											</li>
+											<li>
+												<code>KipperEqualAssignOperator</code>, which represents the equal assignment operator
+												(<code>=</code>).
+											</li>
+											<li><code>KipperAssignOperator</code>, which represents all available assignment operators.</li>
+											<li>
+												<code>KipperArithmeticAssignOperator</code>, which represents all available arithmetic
+												assignment operators.
+											</li>
+											<li>
+												<code>KipperArg</code>, which represents a function argument. Alias for
+												<code>KipperParam</code>.
+											</li>
+											<li><code>KipperParam</code>, which represents a function parameter.</li>
+											<li>
+												<code>JmpStatementType</code>, which represents all possible jump statement types e.g.
+												<code>break</code> and <code>continue</code>.
+											</li>
+											<li>
+												<code>ASTDeclarationKind</code>, which is a union type of all possible
+												<code>ParserASTNode.kind</code> values for a <code>Declaration</code> AST node.
+											</li>
+											<li>
+												<code>ASTExpressionKind</code>, which is a union type of all possible
+												<code>ParserASTNode.kind</code> values for a <code>Expression</code> AST node.
+											</li>
+											<li>
+												<code>ASTStatementKind</code>, which is a union type of all possible
+												<code>ParserASTNode.kind</code> values for a <code>Statement</code> AST node.
+											</li>
+											<li>
+												<code>ASTConstantExpressionKind</code>, which is a union type of all possible
+												<code>ParserASTNode.kind</code> values for a <code>ConstantExpression</code> AST node.
+											</li>
+											<li>
+												<code>ParserConstantExpressionContext</code>, which is a union type of all possible
+												<code>ParserASTNode.antlrRuleCtx</code> values for a <code>ConstantExpression</code> AST node.
+											</li>
+											<li>
+												<code>ASTTypeSpecifierExpressionKind</code>, which is a union type of all possible
+												<code>ParserASTNode.kind</code> values for a <code>TypeSpecifierExpression</code> AST node.
+											</li>
+											<li>
+												<code>ParserTypeSpecifierExpressionContext</code>, which is a union type of all possible
+												<code>ParserASTNode.antlrRuleCtx</code> values for a <code>TypeSpecifierExpression</code> AST
+												node.
+											</li>
+											<li>
+												<code>ASTUnaryExpressionKind</code>, which is a union type of all possible
+												<code>ParserASTNode.kind</code> values for a <code>UnaryExpression</code> AST node.
+											</li>
+											<li>
+												<code>ParserUnaryExpressionContext</code>, which is a union type of all possible
+												<code>ParserASTNode.antlrRuleCtx</code> values for a <code>UnaryExpression</code> AST node.
+											</li>
+											<li>
+												<code>ASTComparativeExpressionKind</code>, which is a union type of all possible
+												<code>ParserASTNode.kind</code> values for a <code>ComparativeExpression</code> AST node.
+											</li>
+											<li>
+												<code>ParserComparativeExpressionContext</code>, which is a union type of all possible
+												<code>ParserASTNode.antlrRuleCtx</code> values for a <code>ComparativeExpression</code> AST
+												node.
+											</li>
+											<li>
+												<code>ConstructableASTStatementClass</code>, which is a union type of all possible
+												<code>Statement</code> AST node classes.
+											</li>
+											<li>
+												<code>ASTLogicalExpressionKind</code>, which is a union type of all possible
+												<code>ParserASTNode.kind</code> values for a <code>LogicalExpression</code> AST node.
+											</li>
+											<li>
+												<code>ParserLogicalExpressionContext</code>, which is a union type of all possible
+												<code>Parserement</code> AST node classes.
+											</li>
+											<li>
+												<code>ConstructableASTExpressionClass</code>, which is a union type of all possible
+												<code>Expression</code> AST node classes.
+											</li>
+											<li>
+												<code>ConstructableASTDeclarationClass</code>, which is a union type of all possible
+												<code>Declaration</code> AST node classes.
+											</li>
+											<li>
+												<code>ConstructableASTNodeClass</code>, which is a union type of all possible
+												<code>ASTNode</code> AST node classes.
+											</li>
+											<li>
+												<code>ConstructableASTStatement</code>, which is a union type of all possible
+												<code>Statement</code> AST node instances.
+											</li>
+											<li>
+												<code>ConstructableASTExpression</code>, which is a union type of all possible
+												<code>Expression</code> AST node instances.
+											</li>
+											<li>
+												<code>ConstructableASTDeclaration</code>, which is a union type of all possible
+												<code>Declaration</code> AST node instances.
+											</li>
+											<li>
+												<code>ConstructableASTNode</code>, which is a union type of all possible
+												<code>ASTNode</code> AST node instances.
+											</li>
+											<li>
+												<code>ASTKind</code>, which represents a union of all AST node kind values that can be used to
+												map a KipperParser rule context to an AST node. This is the type representing all values from
+												<code>ParserASTMapping</code>.
+											</li>
+											<li>
+												<code>ConstructableASTKind</code>, which is the same as <code>ASTKind</code>, but removes any
+												kind value that does not have a corresponding AST node class.
+											</li>
+											<li>
+												<code>KipperReferenceableFunction</code>, which represents a function that can be referenced by
+												a <code>FunctionCallExpression</code>.
+											</li>
+											<li>
+												<code>ASTNodeParserContext</code>, which represents a union of all possible
+												<code>ParserASTNode.antlrRuleCtx</code> values implemented in the <code>KipperParser</code> that
+												have a corresponding AST node class.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New fields/properties:
+										<ul>
+											<li><code>CompileConfig.recover</code>, which if set enables compiler error recovery.</li>
+											<li>
+												<code>CompileConfig.abortOnFirstError</code>, which changes the compiler error handling
+												behaviour and makes it abort on the first error encountered. This overwrites
+												<code>recover</code> per default.
+											</li>
+											<li>
+												<code>RootASTNode.target</code>, which returns the <code>KipperCompileTarget</code> of the
+												program ctx the root AST node is in.
+											</li>
+											<li>
+												<code>RootASTNode.codeGenerator</code>, which returns the
+												<code>KipperTargetCodeGenerator</code> of the program ctx the root AST node is in.
+											</li>
+											<li>
+												<code>RootASTNode.semanticAnalyser</code>, which returns the
+												<code>KipperTargetSemanticAnalyser</code> of the program ctx the root AST node is in.
+											</li>
+											<li>
+												<code>ASTNode.typeSemantics</code>, which contains the type data for an ASTNode that was
+												evaluated during type checking.
+											</li>
+											<li>
+												<code>ScopeFunctionDeclaration.typeData</code>, which returns the type data of the function AST
+												node.
+											</li>
+											<li>
+												<code>ScopeVariableDeclaration.typeData</code>, which returns the type data of the variable AST
+												node.
+											</li>
+											<li>
+												<code>ScopeVariableDeclaration.valueWasUpdated</code>, which returns true if the variable was
+												updated after its initial declaration.
+											</li>
+											<li>
+												<code>ScopeDeclaration.isDefined</code>, which is an abstract field that returns whether the
+												scope declaration was defined during its declaration.
+											</li>
+											<li>
+												<code>ScopeDeclaration.hasValue</code>, which is an abstract field that returns whether the
+												scope declaration has a value set.
+											</li>
+											<li>
+												<code>FunctionDeclaration.innerScope</code>, which returns the inner scope of the function
+												declaration. This can be used before semantic analysis, though will return undefined if it
+												encounters any error.
+											</li>
+											<li>
+												<code>TracebackMetadata.errorNode</code>, which contains the error node that caused the error.
+											</li>
+											<li>
+												<code>CompilableASTNode.errors</code> and <code>RootASTNode.errors</code>, which returns all
+												errors caused by this node and or its children.
+											</li>
+											<li>
+												<code>KipperProgramContext.hasFailed</code>, <code>CompilableASTNode.hasFailed</code>,
+												<code>RootASTNode.hasFailed</code>, which returns true if the node or any of its children have
+												failed to be processed during semantic analysis or type checking.
+											</li>
+											<li>
+												<code>Scope.parent</code>, which returns the parent scope of the scope. This is used to
+												recursively evaluate references in all parent scopes.
+											</li>
+											<li>
+												<code>ParserASTNode.kind</code>, which returns the kind of the parser AST node. This returns the
+												<code>KipperParser</code> rule number, as defined by <code>KipperParser.RULE_*</code>.
+											</li>
+											<li>
+												<code>StatementASTNodeFactory.statementMatchTable</code>, which returns the match table for the
+												statement AST node factory.
+											</li>
+											<li>
+												<code>ExpressionASTNodeFactory.expressionMatchTable</code>, which returns the match table for
+												the expression AST node factory.
+											</li>
+											<li>
+												<code>DeclarationASTNodeFactory.declarationMatchTable</code>, which returns the match table for
+												the declaration AST node factory.
+											</li>
+											<li>
+												<code>CompileConfig.builtInFunctions</code>, which overwrites the built-in functions of the
+												target.
+											</li>
+											<li>
+												<code>CompileConfig.extendBuiltInFunctions</code>, which adds new built-in functions to the
+												target.
+											</li>
+											<li>
+												<code>CompileConfig.builtInVariables</code>, which overwrites the built-in variables of the
+												target.
+											</li>
+											<li>
+												<code>CompileConfig.extendBuiltInVariables</code>, which adds new built-in variables to the
+												target.
+											</li>
+											<li>
+												<code>Expression.hasSideEffects</code>, which returns true if the expression has side effects
+												and as such affects the state of the program. This is primarily used for reporting warnings.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New constants:
+										<ul>
+											<li><code>kipperNullType</code>, which represents the Kipper null type.</li>
+											<li><code>kipperUndefinedType</code>, which represents the Kipper undefined type.</li>
+											<li>
+												<code>ParserASTMapping</code>, which is a special mapping object used to get the AST kind number
+												for a <code>KipperParser</code> rule ctx instance.
+											</li>
+											<li>
+												<code>kipperRuntimeBuiltInVariables</code>, which contains the built-in variables of the Kipper
+												runtime.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="changed-6">Changed</h3>
+								<ul>
+									<li>
+										Moved TypeScript target from the core package to a new monorepo package called
+										<code>@kipper/target-ts</code>, which implements the semantic analysis and code generation for
+										TypeScript, and provides the class <code>KipperTypeScriptTarget</code> (<code>TargetTS</code>
+										available as alias), which can be used as the target in the <code>CompileConfig</code>.
+									</li>
+									<li>
+										Updated behaviour of the Compiler semantic analysis and implemented a basic error recovery system.
+										(<a href="https://github.com/Kipper-Lang/Kipper/issues/198">#198</a>)
+									</li>
+									<li>
+										Updated behaviour of Kipper Compiler semantic analysis and separated primary semantic analysis, type
+										checking and target-specific semantic analysis into their own processing steps. (E.g. First, all AST
+										nodes are semantically analysed, then type checked and semantically analysed for the target
+										language)
+									</li>
+									<li>
+										Updated the built-in functions' generation behaviour, by making every built-in function be defined
+										inside the global variable <code>__kipper</code> and the global object property
+										<code>globalThis.__kipper</code>. This means that the functions are directly bound to the JS runtime
+										and any function definition in the generated file is placed after the initial evaluation of the
+										global scope.
+									</li>
+									<li>
+										Updated the function call syntax and made the <code>call</code> keyword optional. This allows for
+										simplified function calls, such as <code>print("Hello world!");</code>.
+									</li>
+									<li>Default error identifier is now just <code>Error</code> instead of <code>KipperError</code>.</li>
+									<li>
+										Migrated the internal storage of <code>Scope</code> and its implementing classes to a hashmap
+										implementation.
+									</li>
+									<li>
+										Updated types of <code>CompilableASTNode</code> functions <code>primarySemanticAnalysis</code>,
+										<code>primarySemanticTypeChecking</code> and <code>targetSemanticAnalysis</code> and made them
+										possibly undefined if there is nothing to check. This is to improve performance and not call an
+										async function unnecessarily.
+									</li>
+									<li>
+										Allowed the use of function declarations inside nested scopes (e.g. inside a function body or
+										compound statement).
+									</li>
+									<li>
+										Split grammar file <code>Kipper.g4</code> into <code>KipperLexer.g4</code> and
+										<code>KipperParser.g4</code>.
+									</li>
+									<li>
+										Updated factory system for <code>StatementASTNodeFactory</code>,
+										<code>DeclarationASTNodeFactory</code> and <code>ExpressionASTNodeFactory</code> to use a mapping
+										table instead of a switch statement for better readability and accessibility. This also allows for
+										easier extension of the factory system. The <code>create</code> function is now instance-based (not
+										static anymore) as well.
+									</li>
+									<li>
+										Constructor in <code>KipperParseStream</code> to allow either an <code>CharPointCharStream</code> or
+										a <code>string</code> as input, but not allow a mismatch content between the two.
+									</li>
+									<li>
+										Cleaned up structure in <code>KipperFileASTGenerator</code> (previously
+										<code>KipperFileListener</code>) and removed unnecessary code.
+									</li>
+									<li>
+										Renamed:
+										<ul>
+											<li><code>EvaluatedCompileOptions</code> to <code>EvaluatedCompileConfig</code>.</li>
+											<li><code>UnableToDetermineMetadataError</code> to <code>UndefinedSemanticsError</code>.</li>
+											<li><code>ReadOnlyAssignmentTypeError</code> to <code>ReadOnlyWriteTypeError</code>.</li>
+											<li><code>InvalidAssignmentTypeError</code> to <code>AssignmentTypeError</code>.</li>
+											<li><code>InvalidArgumentTypeError</code> to <code>ArgumentTypeError</code>.</li>
+											<li>
+												<code>InvalidArithmeticOperationTypeError</code> to <code>ArithmeticOperationTypeError</code>.
+											</li>
+											<li><code>InvalidReturnTypeError</code> to <code>FunctionReturnTypeError</code>.</li>
+											<li><code>UndefinedIdentifierError</code> to <code>UndefinedReferenceError</code>.</li>
+											<li><code>UnknownIdentifierError</code> to <code>UnknownReferenceError</code>.</li>
+											<li><code>FunctionDeclarationSemantics.args</code> to <code>params</code>.</li>
+											<li><code>KipperTypeChecker.argumentTypesMatch</code> to <code>validArgumentValue</code>.</li>
+											<li><code>ListPrimaryExpression</code> to <code>ArrayLiteralPrimaryExpression</code>.</li>
+											<li><code>FunctionCallPostfixExpression</code> to <code>FunctionCallExpression</code>.</li>
+											<li><code>antlrDefinitionCtxType</code> to <code>ParserDeclarationCtx</code>.</li>
+											<li><code>antlrExpressionCtxType</code> to <code>ParserExpressionCtx</code>.</li>
+											<li><code>antlrStatementCtxType</code> to <code>ParserStatementCtx</code>.</li>
+											<li><code>ParserExpressionCtx</code> to <code>ParserExpressionContext</code>.</li>
+											<li><code>ParserStatementCtx</code> to <code>ParserStatementContext</code>.</li>
+											<li><code>ParserDeclarationCtx</code> to <code>ParserDeclarationContext</code>.</li>
+											<li><code>KipperFileListener</code> to <code>KipperFileASTGenerator</code>.</li>
+											<li><code>KipperProgramContext.addError</code> to <code>reportError</code>.</li>
+											<li><code>kipperRuntimeBuiltIns</code> to <code>kipperRuntimeBuiltInFunctions</code>.</li>
+											<li><code>kipperInternalBuiltIns</code> to <code>kipperInternalBuiltInFunctions</code>.</li>
+										</ul>
+									</li>
+									<li>
+										Moved:
+										<ul>
+											<li>
+												Function <code>KipperSemanticsAsserter.getReference</code> to class
+												<code>KipperSemanticChecker</code>.
+											</li>
+											<li>
+												Function <code>KipperSemanticsAsserter.getExistingReference</code> to class
+												<code>KipperSemanticChecker</code>.
+											</li>
+											<li>
+												Function <code>indentLines</code> to file <code>tools.ts</code> of
+												<code>@kipper/target-js</code>.
+											</li>
+											<li>
+												Function <code>CompilableASTNode.semanticAnalysis</code> to <code>AnalysableASTNode</code>.
+											</li>
+											<li>
+												Function <code>CompilableASTNode.semanticTypeChecking</code> to <code>AnalysableASTNode</code>.
+											</li>
+											<li>
+												Function <code>CompilableASTNode.wrapUpSemanticAnalysis</code> to
+												<code>AnalysableASTNode</code>.
+											</li>
+											<li>
+												Function <code>CompilableASTNode.recursivelyCheckForWarnings</code> to
+												<code>AnalysableASTNode</code>.
+											</li>
+											<li>
+												Function <code>CompilableASTNode.recursivelyCheckForWarnings</code> to
+												<code>AnalysableASTNode</code>.
+											</li>
+											<li>
+												Abstract Function <code>CompilableASTNode.primarySemanticAnalysis</code> to
+												<code>AnalysableASTNode</code>.
+											</li>
+											<li>
+												Abstract Function <code>CompilableASTNode.primarySemanticTypeChecking</code> to
+												<code>AnalysableASTNode</code>.
+											</li>
+											<li>
+												Abstract Function <code>CompilableASTNode.checkForWarnings</code> to
+												<code>AnalysableASTNode</code>.
+											</li>
+											<li>Field <code>CompilableASTNode.programCtx</code> to <code>AnalysableASTNode</code>.</li>
+											<li>Field <code>CompilableASTNode.compileConfig</code> to <code>AnalysableASTNode</code>.</li>
+											<li>Field <code>CompilableASTNode.errors</code> to <code>AnalysableASTNode</code>.</li>
+											<li>Field <code>CompilableASTNode.addError</code> to <code>AnalysableASTNode</code>.</li>
+											<li>Field <code>CompilableASTNode.hasFailed</code> to <code>AnalysableASTNode</code>.</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="fixed-8">Fixed</h3>
+								<ul>
+									<li>
+										Multiple reference and declaration bugs, which resulted in invalid handling of declarations and
+										assignments to undefined variables and allowed the referencing of variables that were not defined or
+										had no value set.
+									</li>
+									<li>Grammar bug which didn't allow the representation of empty lists (e.g. <code>[]</code>).</li>
+									<li>
+										Multiple reference and declaration bugs, which resulted in invalid handling of declarations and
+										assignments to undefined variables and allowed the referencing of variables that were not defined or
+										had no value set.
+									</li>
+									<li>Grammar bug which didn't allow the representation of empty lists (e.g. <code>[]</code>).</li>
+									<li>
+										A bug where using a <code>KipperParseStream</code> multiple times would result in the
+										<code>CodePointCharStream</code> being empty.
+									</li>
+									<li>Grammar bug not allowing an empty statement (<code>;</code>) in a compound statement.</li>
+								</ul>
+								<h3 id="removed-3">Removed</h3>
+								<ul>
+									<li>
+										Kipper CLI command <code>update</code>, as it was not needed since there are no plans to deploy S3
+										distributions of Kipper.
+									</li>
+									<li>
+										<code>KipperError.isWarning</code>, which has been replaced by the new class
+										<code>KipperWarning</code>.
+									</li>
+									<li>
+										<code>KipperCharType</code> (<code>char</code>) and its grammar implementation, meaning all string
+										types from now on will only be of type <code>str</code>. This also means that the single-quote
+										character <code>'</code> can from now also be used for string literals and f-strings with the same
+										behaviour as the regular double-quoted character <code>"</code>.
+									</li>
+									<li>
+										<code>KipperReturnType</code> and <code>kipperReturnTypes</code>, as they are always identical to
+										the <code>KipperType</code> and <code>kipperTypes</code> respectively.
+									</li>
+									<li><code>FunctionReturnTypeError</code>, as it is obsolete since all return types are valid.</li>
+									<li>
+										The following fields:
+										<ul>
+											<li><code>Scope.functions</code> (replaced by hash-map implementation of <code>Scope</code>).</li>
+											<li><code>Scope.variables</code> (replaced by hash-map implementation of <code>Scope</code>).</li>
+											<li>
+												<code>Scope.getVariable</code> (replaced by hash-map implementation of <code>Scope</code>).
+											</li>
+											<li>
+												<code>Scope.getFunction</code> (replaced by hash-map implementation of <code>Scope</code>).
+											</li>
+											<li>
+												<code>KipperError.antlrCtx</code>, as it was replaced by
+												<code>TracebackMetadata.errorNode</code>.
+											</li>
+											<li>
+												<code>KipperTypeChecker.validReturnType</code>, as it is obsolete due to the absence of
+												<code>KipperReturnType</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										The following functions:
+										<ul>
+											<li><code>KipperFileASTGenerator.handleIncomingDeclarationCtx</code> (removed in clean-up).</li>
+											<li><code>KipperFileASTGenerator.handleIncomingStatementCtx</code> (removed in clean-up).</li>
+											<li>
+												<code>KipperFileASTGenerator.handleExitingStatementOrDefinitionCtx</code> (removed in clean-up).
+											</li>
+											<li><code>KipperFileASTGenerator.handleIncomingExpressionCtx</code> (removed in clean-up).</li>
+											<li><code>KipperFileASTGenerator.handleExitingExpressionCtx</code> (removed in clean-up).</li>
+											<li>
+												<code>KipperProgramConext.builtInReferences</code> (replaced by
+												<code>builtInFunctionReferences</code> and <code>builtInVariableReferences</code>).
+											</li>
+											<li>
+												<code>KipperProgramConext.registerBuiltIns</code> (replaced by
+												<code>registerBuiltInFunctions</code> and <code>registerBuiltInVariables</code>).
+											</li>
+											<li>
+												<code>CompileConfig.builtIns</code> (replaced by <code>builtInFunctions</code> and
+												<code>builtInVariables</code>).
+											</li>
+											<li>
+												<code>CompileConfig.extendBuiltIns</code> (replaced by <code>extendBuiltInFunctions</code> and
+												<code>extendBuiltInVariables</code>).
+											</li>
+										</ul>
+									</li>
+									<li>
+										Parser rule <code>arraySpecifierExpression</code> (<code>ArraySpecifierExpression</code>), which was
+										made obsolete with the addition of
+										<code>bracketNotationMemberAccessExpression</code>
+										(<code>BracketNotationMemberAccessExpression</code>).
+									</li>
+								</ul>
+								<h2 id="092---2022-07-23">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.9.1…v0.9.2">0.9.2</a> - 2022-07-23
+								</h2>
+								<h3 id="changed-7">Changed</h3>
+								<ul>
+									<li>
+										Fixed traceback bug for re-declarations inside compound statements generating an invalid error
+										message and traceback. (<a href="https://github.com/Kipper-Lang/Kipper/issues/240">#240</a>)
+									</li>
+									<li>Updated Kipper compiler error message.</li>
+								</ul>
+								<h2 id="091---2022-06-29">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.9.0…v0.9.1">0.9.1</a> - 2022-06-29
+								</h2>
+								<h3 id="changed-8">Changed</h3>
+								<ul>
+									<li>Fixed invalid traceback underline formatting for Kipper errors.</li>
+									<li>Updated error messages in multiple Kipper errors.</li>
+								</ul>
+								<h2 id="090---2022-06-26">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.8.3…v0.9.0">0.9.0</a> - 2022-06-26
+								</h2>
+								<h3 id="added-6">Added</h3>
+								<ul>
+									<li>
+										Entry point file for the root package <code>kipper</code>, which exports
+										<code>@kipper/core</code> allowing the <code>kipper</code> package to be used in projects.
+									</li>
+									<li>
+										Syntax support and code generation for if, else-if and else statements (<a href="https://github.com/Kipper-Lang/Kipper/issues/182">#182</a>).
+									</li>
+									<li>
+										Code generation of expression lists (e.g. expression statements containing multiple child
+										expressions) (<a href="https://github.com/Kipper-Lang/Kipper/issues/173">#173</a>).
+									</li>
+									<li>
+										Code generation for tangled expressions. (<a href="https://github.com/Kipper-Lang/Kipper/issues/203">#203</a>)
+									</li>
+									<li>
+										Comparative and relational expressions, which allow for logical operations and comparisons on
+										expressions. List of all supported operators, which can be used between two expressions.
+										<ul>
+											<li><code>!=</code> (Not Equal Operator)</li>
+											<li><code>==</code> (Equal Operator)</li>
+											<li><code>&gt;</code> (Greater than Operator)</li>
+											<li><code>&gt;=</code> (Greater or equal to Operator)</li>
+											<li><code>&lt;</code> (Less than Operator)</li>
+											<li><code>&lt;=</code> (Less or equal to Operator)</li>
+										</ul>
+									</li>
+									<li>
+										Logical expressions, which allow for the chaining and combination of expressions and conditions.
+										List of all available supported operators, which can be used between two expressions/conditions:
+										<ul>
+											<li><code>&amp;&amp;</code> (Logical And Operator)</li>
+											<li><code>||</code> (Logical Or Operator)</li>
+										</ul>
+									</li>
+									<li>
+										Operator modified expressions, which allow for the modification of an expression using a specific
+										operator. List of all supported operators:
+										<ul>
+											<li><code>!</code> (Logical NOT Operator)</li>
+											<li><code>+</code> (Plus Operator)</li>
+											<li><code>-</code> (Minus Operator)</li>
+										</ul>
+									</li>
+									<li>
+										Partial support for compiler warnings by allowing <code>KipperError</code> instances to be warnings
+										if <code>isWarning</code> is set to true and implementing AST-based checks for warnings using the
+										new function <code>CompilableASTNode.checkForWarnings()</code>. (<a href="https://github.com/Kipper-Lang/Kipper/issues/199">#199</a>)
+									</li>
+									<li>
+										New flag <code>-w/--warnings</code> in the commands <code>compile</code>, <code>run</code> and
+										<code>analyse</code>, which enables logger warnings. (<a href="https://github.com/Kipper-Lang/Kipper/issues/199">#199</a>)
+									</li>
+									<li>
+										Support for hex, binary and octal numbers. (Only minor changes, as previously the syntax for binary,
+										octal and hex numbers was already added.) (<a href="https://github.com/Kipper-Lang/Kipper/issues/184">#184</a>)
+									</li>
+									<li>
+										New errors:
+										<ul>
+											<li>
+												<code>InvalidRelationalComparisonTypeError</code>, which is thrown whenever a relational
+												comparison is used with types that are not comparable.
+											</li>
+											<li>
+												<code>InvalidUnaryExpressionTypeError</code>, which is thrown whenever a unary expression has an
+												operand with an invalid type.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New classes:
+										<ul>
+											<li>
+												<code>IfStatement</code>, which represents if, if-else and else statements. Chained if, else-if
+												and else statements are structured like a tree, where the top if statement represents the root
+												and each following if statement is a section/branch of the tree.
+											</li>
+											<li>
+												<code>TypeSpecifierExpression</code>, which is an abstract class used to provide the commonality
+												between the different type specifier expressions.
+											</li>
+											<li>
+												<code>ComparativeExpression</code>, which is an abstract class used to provide the commonality
+												between the different comparative expressions.
+											</li>
+											<li>
+												<code>LogicalExpression</code>, which is an abstract class used to provide the commonality
+												between the different logical expressions.
+											</li>
+											<li>
+												<code>UnaryExpression</code>, which is an abstract class used to provide the commonality between
+												the different unary expressions.
+											</li>
+											<li><code>SwitchStatement</code>, which represents a switch selection statement.</li>
+											<li>
+												<code>DefinitionASTNodeFactory</code>, which is a factory that creates a definition instance
+												based on a <code>antlrRuleCtx</code>.
+											</li>
+											<li>
+												<code>ExpressionASTNodeFactory</code>, which is a factory that creates an expression instance
+												based on a <code>antlrRuleCtx</code>.
+											</li>
+											<li>
+												<code>StatementASTNodeFactory</code>, which is a factory that creates a statement instance based
+												on a <code>antlrRuleCtx</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New types:
+										<ul>
+											<li><code>KipperUnaryOperator</code></li>
+											<li><code>KipperLogicalAndOperator</code></li>
+											<li><code>KipperLogicalOrOperator</code></li>
+											<li><code>KipperLogicalOperator</code></li>
+											<li><code>KipperEqualityOperator</code></li>
+											<li><code>KipperRelationalOperator</code></li>
+											<li><code>KipperComparativeOperator</code></li>
+											<li><code>KipperUnaryModifierOperator</code></li>
+											<li><code>KipperIncrementOrDecrementOperator</code></li>
+											<li><code>KipperNegateOperator</code></li>
+											<li><code>KipperSignOperator</code></li>
+										</ul>
+									</li>
+									<li>
+										New constants:
+										<ul>
+											<li><code>kipperUnaryOperators</code></li>
+											<li><code>kipperLogicalAndOperator</code></li>
+											<li><code>kipperLogicalOrOperator</code></li>
+											<li><code>kipperLogicalOperator</code></li>
+											<li><code>kipperEqualityOperators</code></li>
+											<li><code>kipperRelationalOperators</code></li>
+											<li><code>kipperComparativeOperators</code></li>
+											<li><code>kipperIncrementOrDecrementOperators</code></li>
+											<li><code>kipperNegateOperators</code></li>
+											<li><code>kipperSignOperators</code></li>
+										</ul>
+									</li>
+									<li>
+										New interfaces:
+										<ul>
+											<li><code>IfStatementSemantics</code>, which contains the semantic data of an if-statement.</li>
+											<li>
+												<code>ComparativeExpressionSemantics</code>, which defines the semantic data of a comparative
+												expression.
+											</li>
+											<li>
+												<code>LogicalExpressionSemantics</code>, which defines the semantics of a logical expression.
+											</li>
+											<li>
+												<code>UnaryExpressionSemantics</code>, which defines the base semantics for every unary
+												expression.
+											</li>
+											<li>
+												<code>TracebackMetadata</code>, which defines the required data for a full traceback in a
+												<code>KipperError</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New functions:
+										<ul>
+											<li>
+												<code>CompilableASTNode.checkForWarnings()</code>, which checks for warnings in an AST Node.
+											</li>
+											<li>
+												<code>KipperTypeChecker.validRelationalExpression()</code>, which ensures a
+												<code>RelationalExpression</code> is semantically valid.
+											</li>
+											<li>
+												<code>KipperTypeChecker.validUnaryExpression()</code>, which ensures a
+												<code>UnaryExpression</code> is semantically valid.
+											</li>
+											<li>
+												<code>KipperProgramContext.addWarning()</code>, which adds a warning to the program context.
+											</li>
+											<li>
+												<code>KipperLogger.reportWarning()</code>, which reports a warning with its traceback to the
+												consoles.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New fields/properties:
+										<ul>
+											<li>
+												<code>CompileConfig.warnings</code>, which if set to true enables warnings and stores them in
+												<code>KipperCompileResult.warnings</code>.
+											</li>
+											<li>
+												<code>EvaluatedCompileOptions.warnings</code>, which if set to true enables warnings and stores
+												them in <code>KipperCompileResult.warnings</code>.
+											</li>
+											<li>
+												<code>KipperCompileResult.warnings</code>, which contains a list of all warnings that were found
+												during the compilation of a program.
+											</li>
+											<li>
+												<code>KipperError.isWarning</code>, which if true defines the error as non-fatal warning that
+												does not prevent the compilation from continuing.
+											</li>
+											<li>
+												<code>KipperProgramContext.warnings</code>, which contains all warnings that have been found in
+												the program.
+											</li>
+											<li>
+												<code>KipperLogger.reportWarnings</code>, which if set to true will report warnings to the
+												console.
+											</li>
+											<li>
+												<code>KipperProgramContext.reportWarnings</code>, which if set to true will run warning checks
+												on the AST nodes of the program.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="changed-9">Changed</h3>
+								<ul>
+									<li>
+										Moved <code>KipperSemanticChecker.arithmeticExpressionValid()</code> to
+										<code>KipperTypeChecker</code> and renamed it to <code>validArithmeticExpression()</code>.
+									</li>
+									<li>
+										Renamed Antlr4 rule <code>singleTypeSpecifier</code> to <code>identifierTypeSpecifier</code> and its
+										associated class to <code>IdentifierTypeSpecifierExpression</code>.
+									</li>
+									<li>
+										Renamed:
+										<ul>
+											<li>
+												<code>SingleTypeSpecifierExpression</code> to <code>IdentifierTypeSpecifierExpression</code>.
+											</li>
+											<li><code>ParserASTNode.getTokenChildren()</code> to <code>getAntlrRuleChildren()</code>.</li>
+											<li><code>Scope.localVariables</code> to <code>variables</code>.</li>
+											<li><code>Scope.localFunctions</code> to <code>functions</code>.</li>
+										</ul>
+									</li>
+									<li>Updated logging messages and shortened them to be more concise.</li>
+								</ul>
+								<h3 id="removed-4">Removed</h3>
+								<ul>
+									<li>
+										Deprecated and replaced functions:
+										<ul>
+											<li>
+												<code>getDefinitionInstance</code>, which was replaced with
+												<code>DefinitionASTNodeFactory</code>.
+											</li>
+											<li>
+												<code>getExpressionInstance</code>, which was replaced with
+												<code>ExpressionASTNodeFactory</code>.
+											</li>
+											<li>
+												<code>getStatementInstance</code>, which was replaced with <code>StatementASTNodeFactory</code>.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h2 id="083---2022-06-18">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.8.2…v0.8.3">0.8.3</a> - 2022-06-18
+								</h2>
+								<h3 id="added-7">Added</h3>
+								<ul>
+									<li>
+										New errors:
+										<ul>
+											<li>
+												<code>ReadOnlyAssignmentTypeError</code>, which is thrown whenever a read-only (constant)
+												variable is being assigned to.
+											</li>
+											<li>
+												<code>InvalidAssignmentTypeError</code>, which is thrown whenever an assignment has mismatching
+												types that are not compatible.
+											</li>
+											<li>
+												<code>UndefinedConstantError</code>, which is thrown whenever a constant declaration is not
+												defined. (Constants may not be undefined).
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="changed-10">Changed</h3>
+								<ul>
+									<li>
+										Fixed const assignment bug <a href="https://github.com/Kipper-Lang/Kipper/issues/188">#188</a>,
+										which allowed assignments to read-only (constant) variables.
+									</li>
+									<li>Fixed invalid identifier translation of built-in references in the TypeScript target.</li>
+									<li>
+										Renamed:
+										<ul>
+											<li><code>KipperProgramContext.registerGlobals()</code> to <code>registerBuiltIns</code>.</li>
+											<li><code>InvalidConversionError</code> to <code>InvalidConversionTypeError</code></li>
+											<li>
+												<code>InvalidArithmeticOperationError</code> to <code>InvalidArithmeticOperationTypeError</code>
+											</li>
+										</ul>
+									</li>
+									<li>
+										Set display error name of <code>InvalidArithmeticOperationTypeError</code> to
+										<code>TypeError</code>.
+									</li>
+								</ul>
+								<h2 id="082---2022-06-14">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.8.1…v0.8.2">0.8.2</a> - 2022-06-14
+								</h2>
+								<h3 id="changed-11">Changed</h3>
+								<ul>
+									<li>Handling of integer constants and cleaned up the lexer rules in Kipper.g4.</li>
+									<li>Updated error message of <code>InvalidAmountOfArgumentsError</code>.</li>
+									<li>
+										Updated and improved speed of space handling by optimising parser rules and removing manual spaces
+										in rules.
+									</li>
+								</ul>
+								<h3 id="removed-5">Removed</h3>
+								<ul>
+									<li>
+										Integer and float suffixes from the lexer rules in Kipper.g4, as they are meaningless in Kipper.
+									</li>
+								</ul>
+								<h2 id="081---2022-06-09">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.8.0…v0.8.1">0.8.1</a> - 2022-06-09
+								</h2>
+								<h3 id="changed-12">Changed</h3>
+								<ul>
+									<li>
+										Replaced outdated <code>NotImplemented</code> errors from <code>KipperFileListener.ts</code> with
+										<code>KipperNotImplementedError</code> errors, which are now thrown inside the
+										<code>primarySemanticAnalysis()</code> functions of the affected statements.
+									</li>
+									<li>Updated and simplified logging messages.</li>
+									<li>
+										Fixed grammar issue in <code>Kipper.g4</code>, which resulted in spaces being syntactically invalid
+										in an empty function argument list, e.g. <code>def func( ) -&gt; void;</code> was invalid before.
+									</li>
+								</ul>
+								<h3 id="removed-6">Removed</h3>
+								<ul>
+									<li>Unused grammar rule <code>nestedParenthesesBlock</code>.</li>
+								</ul>
+								<h2 id="080---2022-06-07">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.7.0…v0.8.0">0.8.0</a> - 2022-06-07
+								</h2>
+								<h3 id="added-8">Added</h3>
+								<ul>
+									<li>
+										Implemented type conversion expressions, which allow for the conversion of a value to another type.
+										(<a href="https://github.com/Kipper-Lang/Kipper/issues/133">#133</a>) The following conversions are
+										supported:
+										<ul>
+											<li><code>str</code> as <code>num</code></li>
+											<li><code>num</code> as <code>str</code></li>
+											<li><code>bool</code> as <code>str</code></li>
+											<li><code>bool</code> as <code>num</code></li>
+										</ul>
+									</li>
+									<li>
+										Boolean constant expressions <code>true</code> and <code>false</code>, which automatically evaluate
+										to the type <code>bool</code> and can be used in expressions. (<code>true</code> and
+										<code>false</code> are now reserved identifiers, which can never be overwritten and any attempts to
+										do so will be blocked by the parser). This also includes a new expression class
+										<code>BoolPrimaryExpression</code>, a new target-specific semantics function
+										<code>KipperTargetSemanticAnalyser.boolPrimaryExpression</code> and target-specific translation
+										function <code>KipperTargetCodeGenerator.boolPrimaryExpression</code>. (<a href="https://github.com/Kipper-Lang/Kipper/issues/134">#134</a>)
+									</li>
+									<li>
+										Implemented reserved identifier checking, which ensures that no declarations overwrite/interfere
+										with an internal identifier or reserved identifier/keyword. (<a href="https://github.com/Kipper-Lang/Kipper/issues/153">#153</a>)
+									</li>
+									<li>
+										Implemented tree-shaking for internal and built-in functions using the new class
+										<code>KipperOptimiser</code>, which removes any function definitions that are not used (<a href="https://github.com/Kipper-Lang/Kipper/issues/159">#159</a>).
+									</li>
+									<li>
+										New field <code>KipperCompileTarget.builtInGenerator</code>, which will store the built-in generator
+										for each target.
+									</li>
+									<li>
+										New classes and interfaces:
+										<ul>
+											<li>
+												<code>KipperTargetBuiltInGenerator</code>, which updates the behaviour for generating built-in
+												functions. This function should also allow the use of built-in variables in the future and also
+												provide a basis for dynamic dependency generation for the Kipper built-ins. This means that
+												targets can now specify themselves how the built-in should be generated and can handle all type
+												conversions, internal prefixes, name mangling etc. themselves.
+											</li>
+											<li>
+												<code>identifierTypeSpecifierExpression</code>, which represents a single constant type
+												identifier, such as <code>str</code>.
+											</li>
+											<li>
+												<code>GenericTypeSpecifierExpression</code>, which represents a generic type constant, such as
+												<code>type&lt;T&gt;</code>. (Functionality not implemented yet! Planned for v0.12)
+											</li>
+											<li>
+												<code>TypeofTypeSpecifierExpression</code>, which represents a dynamically evaluated type, such
+												as <code>typeof("string")</code>. (Functionality not implemented yet! Planned for v0.11)
+											</li>
+											<li>
+												<code>InternalFunction</code>, which represents an internal function for Kipper, which provides
+												specific functionality for keywords and other internal logic.
+											</li>
+											<li>
+												<code>KipperSemanticErrorHandler</code>, which implements a default abstract error handler for
+												semantic errors. This is used by <code>KipperTargetSemanticAnalyser</code> and
+												<code>KipperAsserter</code>.
+											</li>
+											<li><code>KipperOptimiser</code>, which handles code optimisation for a Kipper program.</li>
+										</ul>
+									</li>
+									<li>
+										New functions:
+										<ul>
+											<li>
+												<code>KipperSemanticChecker.validConversion()</code>, which checks whether a type conversion is
+												valid and implemented by Kipper.
+											</li>
+											<li>
+												<code>KipperOptimiser.optimise()</code>, which performs optimisation on an abstract syntax tree.
+											</li>
+											<li>
+												<code>KipperProgramContext.getBuiltInFunction()</code>, which searches for a built-in function
+												based on a passed identifier.
+											</li>
+											<li>
+												<code>KipperProgramContext.optimise()</code>, which performs code optimisations for the local
+												abstract syntax tree.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New errors:
+										<ul>
+											<li>
+												<code>InvalidConversionError</code>, which is thrown when an invalid or unimplemented conversion
+												is performed in a Kipper program.
+											</li>
+											<li>
+												<code>ReservedIdentifierOverwriteError</code>, which is thrown whenever a declaration identifier
+												overwrites/interferes with an internal function or reserved keyword/identifier.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New types and constants:
+										<ul>
+											<li>Kipper meta type <code>type</code>, which represents the type of a Kipper type.</li>
+											<li>
+												<code>kipperSupportedConversions</code>, which is an array containing multiple tuples
+												representing allowed conversions in Kipper.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New <code>CompileConfig</code> option <code>optimisationOptions</code>, which contains the
+										configuration for the <code>KipperOptimiser</code>.
+									</li>
+									<li>
+										Added new flags <code>-b/--[no-]optimise-builtins</code> and
+										<code>-i/--[no-]optimise-internals</code> to the <code>@kipper/cli</code> for enabling internal and
+										built-in functions optimisation.
+									</li>
+								</ul>
+								<h3 id="changed-13">Changed</h3>
+								<ul>
+									<li>
+										Updated error traceback generation algorithm to be more concise and useful. The algorithm will try
+										from now on to mark the origin of the error in the source line, instead of only returning the
+										characters causing the error.
+									</li>
+									<li>
+										Updated folder structure of built-in targets, by moving all target-related files to
+										<code>kipper/core/src/targets</code>. This should from now on be the folder, where all the targets
+										that are natively supported by Kipper should be located.
+									</li>
+									<li>
+										Moved all typescript-related target files to <code>kipper/core/src/targets/typescript</code> and
+										split up the classes into their own files.
+									</li>
+									<li>
+										Updated built-in code generation behaviour in
+										<code>KipperProgramContext.generateRequirements()</code>. This function generates the built-ins for
+										a program using its <code>KipperTargetBuiltInGenerator</code>, which is specified in the
+										<code>KipperCompileTarget</code>.
+									</li>
+									<li>
+										Fixed bug in <code>@kipper/cli</code> which occurred when reading files causing line endings to be
+										internally removed. This resulted in CLI errors sometimes displaying an entire Kipper file as a
+										single line of code, instead of displaying the original code line alone.
+									</li>
+									<li>
+										Renamed:
+										<ul>
+											<li><code>builtIns</code> to <code>kipperRuntimeBuiltIns</code>.</li>
+											<li><code>semantic-analyser.ts</code> to <code>target-semantic-analyser.ts</code>.</li>
+											<li><code>ParserASTNode.ensureTokenChildrenExist()</code> to <code>getTokenChildren()</code>.</li>
+											<li><code>ParserASTNode.ensureSemanticDataExists()</code> to <code>getSemanticData()</code>.</li>
+											<li><code>KipperError.setMetadata()</code> to <code>KipperError.setTracebackData()</code>.</li>
+											<li><code>KipperAsserter</code> to <code>KipperSemanticsAsserter</code>.</li>
+											<li><code>TargetTokenCodeGenerator</code> to <code>TargetASTNodeCodeGenerator</code>.</li>
+											<li><code>TargetTokenSemanticAnalyser</code> to <code>TargetASTNodeSemanticAnalyser</code>.</li>
+											<li><code>CompilerEvaluatedOptions</code> to <code>EvaluatedCompileOptions</code>.</li>
+											<li><code>KipperProgramContext.processedParseTree</code> to <code>abstractSyntaxTree</code>.</li>
+											<li><code>KipperProgramContext.builtInGlobals</code> to <code>builtIns</code>.</li>
+											<li><code>CompileConfig.globals</code> to <code>builtIns</code>.</li>
+											<li><code>CompileConfig.extendGlobals</code> to <code>extendBuiltIns</code>.</li>
+										</ul>
+									</li>
+									<li>Optimised and simplified Kipper code generation in <code>KipperCompileResult.write()</code>.</li>
+									<li>
+										Updated <code>@kipper/core</code> code base structure:
+										<ul>
+											<li><code>/parser/</code> now contains these new files:</li>
+											<li><code>ast-node.test.ts</code> - AST Node (Previously parse-token.ts)</li>
+											<li>
+												<code>root-ast-node.test.ts</code> - Root AST Node (Extracted from compilable-ast-node.test.ts)
+											</li>
+											<li>
+												<code>compilable-ast-node.test.ts</code> - Compilable AST Node (Previously
+												compilable-parse-token.ts)
+											</li>
+											<li>
+												<code>/semantics/language/</code> which contains the language specific AST Node classes that
+												implement the semantics for the expressions, definitions and statements in Kipper.
+											</li>
+											<li>
+												<code>/semantics/processor/</code> which is the module containing the Semantic analyser and Type
+												checker.
+											</li>
+										</ul>
+									</li>
+									<li>
+										Updated local and global scope handling by introducing three new classes: <code>Scope</code>,
+										<code>GlobalScope</code> and <code>LocalScope</code>. These classes now handle local variables and
+										functions and implement a standard interface for handling declarations and definitions.
+									</li>
+									<li>Updated <code>@kipper/cli</code> flag names from camelCase to dash-case.</li>
+								</ul>
+								<h3 id="removed-7">Removed</h3>
+								<ul>
+									<li>
+										Module <code>kipper/core/compiler/lib</code>, as the built-ins shall from now on be handled by each
+										individual target instead of the whole Kipper package to allow a unique specific implementation per
+										target.
+									</li>
+									<li>
+										Deprecated errors and functions:
+										<ul>
+											<li><code>UnknownFunctionIdentifierError</code></li>
+											<li><code>UnknownVariableIdentifierError</code></li>
+											<li><code>KipperSemanticChecker.functionIsDefined</code></li>
+											<li><code>KipperSemanticChecker.variableIsDefined</code></li>
+										</ul>
+									</li>
+									<li>
+										<code>BuiltInFunction.handler</code> as the core compiler will not handle code generation of Kipper
+										built-ins (like for example <code>print</code>) anymore.
+									</li>
+									<li>
+										Support for multi strings seperated by a whitespace (e.g. <code>"1" "2"</code> is counted as a
+										single string <code>"12"</code>). This may be added back later, but for now it will be removed from
+										the Kipper language.
+									</li>
+									<li>
+										Error <code>InvalidOverwriteError</code>, as all errors it represented are now subclasses of
+										<code>IdentifierError</code>.
+									</li>
+									<li>
+										Unneeded functions from <code>KipperProgramContext</code>, as they were replaced by the new scope
+										handling classes:
+										<ul>
+											<li><code>getGlobalFunction()</code></li>
+											<li><code>getGlobalIdentifier()</code></li>
+											<li><code>getGlobalVariable()</code></li>
+											<li><code>addGlobalVariable()</code></li>
+										</ul>
+									</li>
+									<li>
+										Unneeded function <code>determineScope()</code>, as the scope handling was moved to
+										<code>CompilableASTNode.scope</code>.
+									</li>
+								</ul>
+								<h2 id="070---2022-05-22">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.6.1…v0.7.0">0.7.0</a> - 2022-05-22
+								</h2>
+								<h3 id="added-9">Added</h3>
+								<ul>
+									<li>
+										Implemented code generation for declarations, definitions and variable assignments (<a href="https://github.com/Kipper-Lang/Kipper/issues/26">#26</a>).
+									</li>
+									<li>
+										Implemented semantic analysis for <code>AssignmentExpression</code> and
+										<code>VariableDeclaration</code>.
+									</li>
+									<li>
+										Implemented support for identifiers references, which means variables can now be used in the
+										following contexts:
+										<ul>
+											<li>As a function call argument: <code>call print(identifier)</code></li>
+											<li>
+												As a value in an arithmetic expression: <code>identifier + identifier</code> or
+												<code>identifier + 5</code>
+											</li>
+										</ul>
+									</li>
+									<li>
+										Implemented CLI flag <code>-s/--stringCode</code>, which can be used as a replacement for the
+										argument <code>file</code>. (<a href="https://github.com/Kipper-Lang/Kipper/issues/100">#100</a>).
+										This flag is available for <code>kipper analyse</code>, <code>kipper compile</code> and
+										<code>kipper run</code>)
+									</li>
+									<li>
+										Implemented single char flags for the CLI (<a href="https://github.com/Kipper-Lang/Kipper/issues/109">#109</a>).
+									</li>
+									<li>
+										Additional metadata and stack info when non-compiler errors are thrown during runtime in the CLI.
+									</li>
+									<li>
+										New fields:
+										<ul>
+											<li>
+												<code>VariableDeclarationSemantics.value</code>, which represents the expression that was
+												assigned in the definition. This field is <code>undefined</code> if
+												<code>VariableDeclarationSemantics.isDefined</code> is <code>false</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New functions:
+										<ul>
+											<li>
+												<code>CompileAssert.validAssignment()</code>, which asserts that an assignment expression is
+												valid.
+											</li>
+											<li>
+												<code>abstract CompilableASTNode.semanticTypeChecking()</code>, which must be implemented by
+												every child and should serve as a separate semantic type checking step outside of
+												<code>primarySemanticAnalysis()</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New classes:
+										<ul>
+											<li>
+												<code>KipperAsserter</code>, which is an abstract base class that represents a class that can be
+												used to assert certain truths and handle/throw compile errors.
+											</li>
+											<li>
+												<code>KipperTypeChecker</code> and <code>KipperSemanticChecker</code>, which perform specialised
+												semantic checking and verify logical integrity and cohesion. These two classes replace
+												<code>CompileAssert</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New errors:
+										<ul>
+											<li><code>InvalidAssignmentError</code>, which is thrown when an invalid assignment is used.</li>
+											<li>
+												<code>KipperInvalidInputError</code>, which is thrown when passing invalid input to the Kipper
+												cli.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="changed-14">Changed</h3>
+								<ul>
+									<li>
+										Optimised Kipper parsing and lexing process by updating the parsing behaviour in Kipper.g4. Kipper
+										should handle standard expressions a lot faster from no on.
+									</li>
+									<li>
+										Fixed bug <a href="https://github.com/Kipper-Lang/Kipper/issues/104">#104</a>, which caused an
+										invalid evaluation of the return type of string additive expressions causing invalid type errors
+										when used with other expressions.
+									</li>
+									<li>
+										Fixed CLI issues with unrecognisable non-printable unicode characters, which caused errors with the
+										Antlr4 Parser and Lexer, when reading files using the <code>utf16le</code> encoding.
+									</li>
+									<li>
+										Fixed NULL character issue <a href="https://github.com/Kipper-Lang/Kipper/pull/114">#114</a> when
+										writing TypeScript code onto files using the <code>utf16le</code> encoding. From now on a buffer
+										will be created using the proper encoding (also for <code>ascii</code> and <code>utf8</code>) that
+										should be properly writable to a file.
+									</li>
+									<li>
+										Fixed incomplete translation bug
+										<a href="https://github.com/Kipper-Lang/Kipper/issues/118">#118</a> of chained arithmetic
+										expressions with the same operator (<code>N + N + N</code>) resulting in incomplete TypeScript code.
+									</li>
+									<li>
+										Fixed bug <a href="https://github.com/Kipper-Lang/Kipper/issues/111">#111</a>, which caused an
+										invalid evaluation of the return type of string expressions.
+									</li>
+									<li>Updated logger messages.</li>
+									<li>
+										Updated <code>compiler</code> folder structure of the core package:
+										<ul>
+											<li><code>compiler/parser</code> from now on contains everything parser and lexer-related.</li>
+											<li>
+												<code>compiler/parser/antlr</code> from now on contains the Antlr4 generated parser and lexer
+												files.
+											</li>
+											<li>
+												<code>compiler/semantics</code> from now on contains everything semantics related, such as the
+												file listener, the Kipper tokens, logical constants etc.
+											</li>
+											<li>
+												<code>compiler/translation</code> from now on contains the classes and tools used for
+												translating Kipper code into another language.
+											</li>
+											<li>
+												<code>compiler/targets</code> from now on contains the existing targets for Kipper, such as
+												<code>typescript</code>.
+											</li>
+											<li>
+												<code>compiler/lib</code> from now on contains the standard library and built-ins for Kipper.
+											</li>
+											<li>
+												<code>compiler/lib/import</code> from now on contains the default importable libraries for
+												Kipper.
+											</li>
+										</ul>
+									</li>
+									<li>
+										Renamed:
+										<ul>
+											<li>Error <code>InvalidTypeError</code> to <code>TypeError</code>.</li>
+											<li>
+												Function <code>KipperProgramContext.addNewGlobalScopeEntry</code> to
+												<code>addGlobalVariable()</code>.
+											</li>
+											<li>
+												Function <code>CompoundStatement.addNewLocalVariable</code> to <code>addLocalVariable()</code>.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="removed-8">Removed</h3>
+								<ul>
+									<li>
+										Unnecessary traceback when encountering Kipper runtime errors as explained in
+										<a href="https://github.com/Kipper-Lang/Kipper/issues/109">#110</a>.
+									</li>
+									<li>
+										Option to use unary expressions for the left-hand side of an assignment expression in Kipper.g4.
+										(Only identifiers may be used.)
+									</li>
+									<li>
+										Option to redeclare variables. From on a variable declaration can only be done once and afterwards
+										the variable may only be overwritten or modified, but not re-declared. This should help make Kipper
+										have a similar behaviour to TypeScript.
+									</li>
+								</ul>
+								<h2 id="061---2022-05-17">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.6.0…v0.6.1">0.6.1</a> - 2022-05-17
+								</h2>
+								<h3 id="added-10">Added</h3>
+								<ul>
+									<li><code>@types/node</code> as a dependency for <code>@kipper/cli</code>.</li>
+								</ul>
+								<h3 id="changed-15">Changed</h3>
+								<ul>
+									<li>
+										Updated locale dependency requirements for kipper packages to <code>~</code> (Accepting patches, but
+										not new features). E.g. <code>@kipper/cli</code> requires <code>"@kipper/core": "~0.6"</code>
+									</li>
+								</ul>
+								<h2 id="060---2022-05-16">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.5.0…v0.6.0">0.6.0</a> - 2022-05-16
+								</h2>
+								<h3 id="added-11">Added</h3>
+								<ul>
+									<li>
+										Implemented TypeScript translation for constant numeric values
+										(<code>NumberPrimaryExpression</code>).
+									</li>
+									<li>
+										Implemented TypeScript translation for arithmetic expressions:
+										<code>MultiplicativeExpression</code> and <code>AdditiveExpression</code>.
+									</li>
+									<li>
+										New base interface <code>ExpressionSemantics</code>, which is the base for all expression semantics.
+									</li>
+									<li>
+										New interface <code>ArithmeticExpressionSemantics</code> which is used as a parent for
+										<code>MultiplicativeExpressionSemantics</code> and <code>AdditiveExpressionSemantics</code>.
+									</li>
+									<li>
+										Field <code>args</code> in <code>FunctionCallPostfixExpressionSemantics</code>, which contains the
+										<code>Expression</code> instances representing the arguments of a function call.
+									</li>
+									<li>
+										New functions:
+										<ul>
+											<li>
+												<code>getTokenIntervalSource()</code>, which fetches the source code for an interval of two
+												<code>Token</code> instances.
+											</li>
+											<li><code>getParseTreeSource()</code>, which fetches the source code for a parse tree.</li>
+											<li>
+												<code>CompilableASTNode.ensureTokenChildrenExist()</code>, which throws an
+												<code>UnableToDetermineMetadataError</code> error in case that the children tokens are
+												undefined.
+											</li>
+											<li>
+												<code>KipperProgramContext.semanticAnalysis()</code> (which allows for semantic analysis without
+												compiling)
+											</li>
+											<li><code>KipperProgramContext.translate()</code>, which translates a processed parse tree.</li>
+											<li>
+												<code>CompileAssert.getExistingVariable()</code> and
+												<code>CompileAssert.getExistingReference()</code> for fetching reference variables based on an
+												identifier.
+											</li>
+											<li>
+												<code>CompoundStatement.getLocalVariable()</code> and
+												<code>CompoundStatement.getVariableRecursively()</code> for fetching a variable based on an
+												identifier inside a <code>CompoundStatement</code>/<code>KipperScope</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New types:
+										<ul>
+											<li>
+												<code>KipperReturnType</code>, which represents valid types that may be returned from a
+												function.
+											</li>
+											<li><code>KipperPrimitiveType</code>, which represents primitive types in Kipper.</li>
+											<li>
+												<code>KipperMultiplicativeOperator</code>, which represents multiplicative operators
+												(<code>*</code>, <code>/</code>, <code>**</code> and <code>%</code>).
+											</li>
+											<li>
+												<code>KipperAdditiveOperator</code>, which represents additive operators (<code>+</code> and
+												<code>-</code>).
+											</li>
+											<li><code>KipperPlusOperator</code>, which represents the Kipper plus operator.</li>
+											<li><code>KipperMinusOperator</code>, which represents the Kipper minus operator.</li>
+											<li>
+												<code>KipperStrLikeTypes</code>, which represents string-like Kipper types, like
+												<code>char</code> and <code>str</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New errors:
+										<ul>
+											<li>
+												<code>UndefinedSemanticsError</code>, which specifically is thrown whenever the semantics of a
+												token are undefined.
+											</li>
+											<li>
+												<code>UndefinedIdentifierError</code>, which is thrown when an identifier is referenced that
+												does not exist.
+											</li>
+											<li>
+												<code>ArgumentError</code>, which is thrown whenever there is an error related to invalid
+												arguments inside a function call.
+											</li>
+											<li>
+												<code>InvalidReturnTypeError</code>, which is thrown whenever an invalid type is set as return
+												type of a function.
+											</li>
+											<li>
+												<code>InvalidAmountOfArgumentsError</code>, which is thrown whenever an invalid amount of
+												arguments is passed to a function.
+											</li>
+											<li>
+												<code>InvalidArithmeticOperationError</code>, which is thrown whenever an invalid arithmetic
+												operation is performed.
+											</li>
+											<li>
+												<code>KipperNotImplementedError</code>, which is thrown when a feature is used that is not yet
+												implemented in Kipper.
+											</li>
+										</ul>
+									</li>
+									<li>
+										New constants:
+										<ul>
+											<li>
+												<code>defaultWebBuiltIns</code> and <code>defaultNodeBuiltIns</code>, which provide the default
+												built-in functions for Kipper. Kipper will attempt from now on to detect whether the environment
+												is a browser and use <code>defaultWebBuiltIns</code> in that case and otherwise default to
+												<code>defaultNodeBuiltIns</code>.
+											</li>
+											<li><code>kipperStorageTypes</code>, which represents all valid storage types in Kipper.</li>
+											<li>
+												<code>kipperMultiplicativeOperators</code>, which represents all valid multiplicative operators
+												in Kipper.
+											</li>
+											<li>
+												<code>kipperAdditiveOperators</code>, which represents all valid additive operators in Kipper.
+											</li>
+											<li>
+												<code>kipperArithmeticOperators</code>, which combines both
+												<code>kipperAdditiveOperators</code> and <code>kipperMultiplicativeOperators</code>.
+											</li>
+											<li><code>kipperVoidType</code>, which represents the Kipper void type.</li>
+											<li><code>kipperFuncType</code>, which represents the Kipper func type.</li>
+											<li><code>kipperBoolType</code>, which represents the Kipper bool type.</li>
+											<li><code>kipperNumType</code>, which represents the Kipper num type.</li>
+											<li><code>kipperCharType</code>, which represents the Kipper char type.</li>
+											<li><code>kipperStrType</code>, which represents the Kipper str type.</li>
+											<li><code>kipperPlusOperator</code>, which represents the Kipper plus operator.</li>
+											<li><code>kipperMinusOperator</code>, which represents the Kipper minus operator.</li>
+											<li>
+												<code>kipperStrLikeTypes</code>, which represents string-like Kipper types, like
+												<code>char</code> and <code>str</code>.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="changed-16">Changed</h3>
+								<ul>
+									<li>
+										Renamed:
+										<ul>
+											<li>
+												<code>getTokenSource</code> to <code>getParseRuleSource</code>, and replaced the original
+												function with <code>getTokenSource</code> that only fetches the code for a single
+												<code>Token</code> instance.
+											</li>
+											<li><code>CompilableASTNode.antlrCtx</code> to <code>antlrRuleCtx</code>.</li>
+											<li><code>functionIdentifierNotUsed</code> to <code>functionIdentifierNotDeclared</code>.</li>
+											<li><code>variableIdentifierNotUsed</code> to <code>variableIdentifierNotDeclared</code>.</li>
+											<li>
+												Field <code>name</code> to <code>identifier</code> in interface
+												<code>BuiltInFunctionArgument</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										Deprecated the following items (Should be removed in <code>0.8.0</code>):
+										<ul>
+											<li><code>variableIsDefined</code></li>
+											<li><code>functionIsDefined</code></li>
+											<li><code>UnknownVariableIdentifierError</code></li>
+											<li><code>UnknownFunctionIdentifierError</code></li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="removed-9">Removed</h3>
+								<ul>
+									<li>
+										Invalid expression class <code>ArgumentExpressionListExpression</code> and its abstract translation
+										function in <code>KipperTargetCodeGenerator</code>.
+									</li>
+									<li>Unneeded function <code>RootFileParseToken.compileCtx</code>.</li>
+								</ul>
+								<h2 id="050---2022-05-11">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.4.0…v0.5.0">0.5.0</a> - 2022-05-11
+								</h2>
+								<h3 id="added-12">Added</h3>
+								<ul>
+									<li>
+										New field <code>target</code> in <code>CompileConfig</code>, which defines the compilation target
+										for a Kipper program.
+									</li>
+									<li>
+										New field and constructor argument <code>KipperProgramContext.target</code>, which defines the
+										compilation target for the program.
+									</li>
+									<li>
+										New type <code>TargetTokenSemanticAnalyser</code>, which represents a function type that
+										semantically analyses a <code>CompilableASTNode</code>.
+									</li>
+									<li>
+										New type <code>TargetTokenCodeGenerator</code>, which represents a function type that semantically
+										analyses a <code>CompilableASTNode</code>.
+									</li>
+									<li>
+										Target-specific code generator <code>KipperTargetCodeGenerator</code>, which defines the functions
+										that convert the Kipper code into a specific target language.
+									</li>
+									<li>
+										Target-specific semantic analyser class <code>KipperTargetSemanticAnalyser</code>, which can define
+										additional semantic analysis logic for a compilation target.
+									</li>
+									<li>
+										Class <code>KipperCompileTarget</code> which defines the functions and classes for how to handle the
+										translation to a specific target.
+									</li>
+									<li>Class <code>TypeScriptTarget</code>, which defines the default target for Kipper.</li>
+									<li>
+										Abstract fields <code>targetCodeGenerator</code> and <code>targetSemanticAnalysis</code>, which must
+										be defined in child classes of abstract base class <code>CompilableASTNode</code>.
+									</li>
+									<li>
+										New getters <code>target</code>, <code>codeGenerator</code> and <code>semanticAnalyser</code> in
+										class <code>CompilableASTNode</code>.
+									</li>
+									<li>
+										New protected functions <code>primarySemanticAnalysis</code> and
+										<code>targetSemanticAnalysis</code>, which are split to separate the core/primary semantic analysis
+										and the target specific semantic analysis.
+									</li>
+									<li>
+										New types <code>KipperVoidType</code>, <code>KipperNumType</code>, <code>KipperStrType</code>,
+										<code>KipperCharType</code>, <code>KipperBoolType</code> and <code>KipperListType</code>, which
+										represent Kipper available types in the Kipper language. core/primary semantic analysis and the
+										target specific semantic analysis.
+									</li>
+									<li>
+										Assert function <code>CompileAssert.getExistingFunction()</code> for fetching a function and
+										throwing an error if it does not exist.
+									</li>
+									<li>
+										New CLI commands:
+										<ul>
+											<li><code>version</code>, which returns the currently installed Kipper version.</li>
+											<li><code>update</code>, which updates the CLI if a new version is available.</li>
+										</ul>
+									</li>
+									<li>
+										New CLI plugins:
+										<ul>
+											<li>
+												Plugin and manual command <code>update</code>, which updates the CLI if a new release is
+												available.
+											</li>
+											<li>
+												Plugin <code>warn-if-update-available</code>, which will display a warning when the CLI is used
+												that a new version can be installed.
+											</li>
+										</ul>
+									</li>
+								</ul>
+								<h3 id="changed-17">Changed</h3>
+								<ul>
+									<li>Deprecated <code>@kipper/base</code> as it is now replaced with <code>@kipper/core</code>.</li>
+									<li>
+										Fixed <code>@kipper/cli</code> bug causing logging messages to only contain "anonymous-script".
+									</li>
+									<li>
+										Extracted the content of the <code>RootFileParseToken.compileCtx</code> function and added new two
+										functions <code>RootFileParseToken.semanticAnalysis()</code>, which semantically analysis the code
+										for basic semantics and target-specific semantics, and <code>RootFileParseToken.translate()</code>,
+										which translates the code into the specific target.
+									</li>
+									<li>
+										Made <code>CompilableASTNode.semanticAnalysis()</code> and
+										<code>CompilableASTNode.translateCtxAndChildren()</code> non-abstract and implemented basic
+										processing algorithm to run the code from <code>CompilableASTNode.targetCodeGenerator</code> and
+										<code>CompilableASTNode.targetSemanticAnalysis</code>.
+									</li>
+									<li>
+										Changed semantic definitions for <code>CompilableASTNode</code> children classes and created for
+										each child class a representing semantics class defining the metadata for the token.
+									</li>
+									<li>
+										Renamed error <code>UnknownFunctionIdentifier</code> to <code>UnknownFunctionIdentifierError</code>.
+									</li>
+									<li>Renamed function <code>CompileAssert.assertTypeExists</code> to <code>typeExists</code>.</li>
+								</ul>
+								<h3 id="removed-10">Removed</h3>
+								<ul>
+									<li>
+										File <code>CHANGELOG.md</code> from <code>@kipper/cli</code> and <code>@kipper/core</code>, as it is
+										now only shipped with <code>kipper</code>.
+									</li>
+								</ul>
+								<h2 id="040---2022-05-03">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.3.0…v0.4.0">0.4.0</a> - 2022-05-03
+								</h2>
+								<h3 id="added-13">Added</h3>
+								<ul>
+									<li>New function <code>KipperLogger.reportError()</code> for reporting and logging errors.</li>
+									<li>
+										New function <code>KipperAntlrErrorListener.getSourceCode()</code> for fetching the source code for
+										a syntax error.
+									</li>
+									<li>
+										Proper tracebacks handling for <code>KipperSyntaxError</code> (<a href="https://github.com/Kipper-Lang/Kipper/issues/42">#42</a>).
+									</li>
+									<li>
+										Getter fields <code>line</code>, <code>col</code>, <code>filePath</code> and
+										<code>tokenSrc</code> in <code>KipperError</code>, which returns the metadata for the error.
+									</li>
+									<li>
+										Fallback option for Lexer errors, where if <code>offendingSymbol</code> is
+										<code>undefined</code> the entire line of code is set as <code>tokenSrc</code> (<a href="https://github.com/Kipper-Lang/Kipper/issues/36">#36</a>).
+									</li>
+									<li>
+										Getter field <code>KipperParseStream.lines</code> returning all lines in the source file as an
+										array.
+									</li>
+								</ul>
+								<h3 id="changed-18">Changed</h3>
+								<ul>
+									<li>
+										Fixed missing traceback line hinting (<a href="https://github.com/Kipper-Lang/Kipper/issues/24">#24</a>).
+									</li>
+									<li>
+										Fixed missing error and fatal error logs (<a href="https://github.com/Kipper-Lang/Kipper/issues/34">#34</a>).
+									</li>
+									<li>
+										Renamed function <code>CompileAssert.error()</code> to <code>CompileAssert.throwError()</code> and
+										added error logging for the error passed as argument.
+									</li>
+									<li>Renamed <code>KipperErrorListener</code> to <code>KipperAntlrErrorListener</code>.</li>
+									<li>Renamed <code>InternalKipperError</code> to <code>KipperInternalError</code>.</li>
+									<li>
+										Fixed usage of default antlr4 listeners for lexer errors (<a href="https://github.com/Kipper-Lang/Kipper/issues/36">#36</a>).
+									</li>
+								</ul>
+								<h3 id="removed-11">Removed</h3>
+								<ul>
+									<li>
+										Field <code>KipperCompiler.errorListener</code>, as due to (<a href="https://github.com/Kipper-Lang/Kipper/issues/42">#42</a>) the <code>KipperAntlrErrorListener</code> will have to be initialised per compilation, not per
+										compiler instance.
+									</li>
+									<li>
+										Namespace <code>Utils</code> and moved its methods into the global scope of the file to allow the
+										following import scheme <code>import * as Utils from "@kipper/core/utils"</code>, where the user can
+										themselves define the wanted scope identifier.
+									</li>
+								</ul>
+								<h2 id="030---2022-04-28">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.2.1…v0.3.0">0.3.0</a> - 2022-04-28
+								</h2>
+								<h3 id="added-14">Added</h3>
+								<ul>
+									<li>
+										Implemented handling of declarations and definitions, where definitions can only appear once. (
+										Reassignments are not counted as definitions!)
+									</li>
+									<li>
+										Traceback handling using <code>KipperErorr.getTraceback()</code> and
+										<code>KipperError.setMetadata</code>.
+									</li>
+									<li>
+										New namespace <code>Utils</code> with new function <code>getTokenSource()</code> and
+										<code>determineScope()</code>.
+									</li>
+									<li>
+										New errors <code>FunctionDefinitionAlreadyExistsError</code> and
+										<code>VariableDefinitionAlreadyExistsError</code>, which are raised if definition rules are
+										violated.
+									</li>
+									<li>Project version information constants in <code>index.ts</code>.</li>
+									<li>
+										Implemented abstract classes to differentiate error groups: <code>InvalidOverwriteError</code> and
+										<code>IdentifierError</code>.
+									</li>
+									<li><code>KipperInternalError</code>, which is raised in case there is an internal error/bug.</li>
+								</ul>
+								<h3 id="changed-19">Changed</h3>
+								<ul>
+									<li>
+										Renamed definition errors:
+										<ul>
+											<li>
+												<code>DuplicateVariableDefinitionError</code> to
+												<code>IdentifierAlreadyUsedByVariableError</code>
+											</li>
+											<li>
+												<code>DuplicateFunctionDefinitionError</code> to
+												<code>IdentifierAlreadyUsedByFunctionError</code>
+											</li>
+										</ul>
+									</li>
+									<li>Renamed <code>antlrContext</code> to <code>antlrCtx</code> across all files.</li>
+									<li>
+										Changed behaviour of the <code>assert</code> system:
+										<ul>
+											<li>
+												All assertion will if possible now handled using the expression
+												<code>KipperProgramContext.assert(ctx).ASSERT_FUNC()</code>.
+											</li>
+											<li>Assertions should happen in the <code>semanticAnalysis()</code> step.</li>
+											<li>
+												Registrations and updates of stack information should also happen in the
+												<code>semanticAnalysis()</code> step to properly compile top to bottom. (For now there is no
+												support for calling functions that are defined afterwards in the file. So a pre-declaration is
+												required!)
+											</li>
+										</ul>
+									</li>
+									<li>
+										Updated behaviour of <code>CompilableASTNode</code> to determine semantics and semantic types using
+										generic classes. This means all semantic data is now stored using the get and setter
+										<code>CompilableASTNode.semanticData</code>.
+									</li>
+								</ul>
+								<h3 id="removed-12">Removed</h3>
+								<ul>
+									<li>
+										Method <code>CompilableASTNode.compileCtx()</code> added in <code>0.2.0</code>, and split the
+										handling of the semantic analysis and compilation into two separate stages. This means that before
+										compilation, all children will be semantically analysed. Starting from the bottom/the simplest
+										tokens working upwards as the tokens get more complicated.
+									</li>
+									<li>
+										Unneeded private tracking of <code>_currentScope</code> in <code>KipperFileListener</code>, as the
+										scope handling system has been replaced with a dynamic determination using
+										<code>semanticAnalysis()</code>.
+									</li>
+								</ul>
+								<h2 id="021---2022-04-22">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.2.0…v0.2.1">0.2.1</a> - 2022-04-22
+								</h2>
+								<h3 id="added-15">Added</h3>
+								<ul>
+									<li>Updated kipper-standalone global identifier behaviour and added support for WebWorkers.</li>
+								</ul>
+								<h2 id="020---2022-04-13">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.1.2…v0.2.0">0.2.0</a> - 2022-04-13
+								</h2>
+								<h3 id="added-16">Added</h3>
+								<ul>
+									<li>
+										Created new class <code>CompileAssert</code>, which is used to assert certain compiler-required
+										truths, which, if false, trigger corresponding errors.
+									</li>
+									<li>New errors <code>UnknownVariableDefinition</code> and <code>UnknownFunctionDefinition</code>.</li>
+									<li>
+										New getter <code>CompilableASTNode.tokenStream</code>, which returns the
+										<code>programCtx.tokenStream</code> instance.
+									</li>
+									<li>
+										Created new expression class <code>ArgumentExpressionList</code> representing an argument list
+										inside function calls.
+									</li>
+									<li>
+										New function <code>KipperCompileResult.write()</code>, which creates a human-readable string from
+										the generated source code.
+									</li>
+									<li>
+										Added new property and constructor parameter <code>logLevel</code>, which defines which messages
+										should be logged. (Only messages with equal or higher importance will be logged).
+									</li>
+									<li>
+										Added class name insertion for custom Kipper errors by setting the <code>name</code> property
+										explicitly.
+									</li>
+								</ul>
+								<h3 id="changed-20">Changed</h3>
+								<ul>
+									<li>Changed execution of most compilation functions to async.</li>
+									<li>
+										Replaced <code>DuplicateIdentifierError</code> with
+										<code>DuplicateVariableDefinitionError</code> and <code>DuplicateFunctionDefinitionError</code>.
+									</li>
+									<li>Renamed <code>NoBuiltInOverwriteError</code> to <code>BuiltInOverwriteError</code>.</li>
+									<li>
+										Made all <code>getMetadata</code> functions <code>/tokens/</code> instance-methods, removing all
+										required parameters.
+									</li>
+									<li>
+										Changed compilation result from <code>Array&lt;string&gt;</code> to
+										<code>Array&lt;Array&lt;string&gt;&gt;</code>, where each nested array represents a line combined of
+										string tokens.
+									</li>
+									<li>
+										Set explicit children type for expressions and statements, instead of letting them inherit the
+										children type from <code>CompilableASTNode</code>.
+									</li>
+									<li>
+										Set return type of <code>compileCtx</code> to <code>Array&lt;string&gt;</code> in children classes
+										of <code>Expression</code>.
+										<ul>
+											<li>
+												Changed visibility of <code>CompilableASTNode.semanticAnalysis()</code> and
+												<code>CompilableASTNode.translateCtxAndChildren()</code> to <code>protected</code>, as they will
+												be replaced and tied together using <code>CompilableASTNode.compileCtx()</code>.
+											</li>
+										</ul>
+									</li>
+									<li>
+										Replaced compilation in <code>RootParseToken.translateCtxAndChildren</code> with
+										<code>RootParseToken.compileCtx()</code>.
+									</li>
+									<li>
+										Changed values of <code>LogLevel</code> to numeric values, which can be translated into strings
+										using <code>getLogLevelString()</code>.
+									</li>
+								</ul>
+								<h3 id="removed-13">Removed</h3>
+								<ul>
+									<li>
+										Functions <code>RootParseToken.semanticAnalysis()</code> and
+										<code>RootParseToken.translateCtxAndChildren</code>
+									</li>
+								</ul>
+								<h2 id="012---2022-04-06">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.1.1…v0.1.2">0.1.2</a> - 2022-04-06
+								</h2>
+								<h3 id="added-17">Added</h3>
+								<ul>
+									<li>
+										Implemented simple scope logic by adding the <code>scope</code> property to all
+										<code>Statement</code> classes and creating a tracking variable called <code>_currentScope</code> in
+										<code>KipperFileListener</code>, which will be updated while processing the parse tree.
+									</li>
+									<li>
+										Added variable metadata handling in <code>VariableDeclaration</code>. The class will now on
+										construction determine its identifier, storage type, value type and state (whether it was defined
+										yet) using its antlr4 context instance.
+									</li>
+									<li>
+										Added errors <code>BuiltInOverwriteError</code>, <code>UnableToDetermineMetadataError</code> and
+										<code>UnknownTypeError</code>.
+									</li>
+									<li>
+										Added new abstract base class <code>ScopeDeclaration</code>, which is the parent class for the
+										already existing <code>ScopeDeclaration</code> and the added <code>ScopeFunctionDeclaration</code>.
+									</li>
+									<li>
+										Implemented <code>KipperProgramContext.globalScope</code>, which contains all global variables and
+										function definitions.
+									</li>
+									<li>
+										Implemented support for function definitions that will be from now on automatically registered
+										globally.
+									</li>
+								</ul>
+								<h3 id="changed-21">Changed</h3>
+								<ul>
+									<li>
+										Renamed class <code>ScopeDeclaration</code> to <code>ScopeDeclaration</code> and updated its
+										constructor to require a token (<code>VariableDeclaration</code> instance), which will automatically
+										set the properties (identifier, storage type, value type, scope and state).
+									</li>
+									<li>
+										Rearranged constructor arguments of <code>KipperParseStream</code> to
+										<code>stringContent, name, charStream</code>, and set <code>name</code> to default to
+										<code>"anonymous-script"</code>.
+									</li>
+									<li>
+										Updated <code>CompoundStatement</code> children behaviour, by adding a new array
+										<code>localScope</code>, which will store the metadata for all variables exclusively available in
+										that compound statement.
+									</li>
+								</ul>
+								<h2 id="011---2022-04-01">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.0.5…v0.1.1">0.1.1</a> - 2022-04-01
+								</h2>
+								<h3 id="added-18">Added</h3>
+								<ul>
+									<li>Added missing dependency <code>tslib</code></li>
+								</ul>
+								<h2 id="010---2022-04-01">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.0.5…v0.1.1">0.1.0</a> - 2022-04-01
+								</h2>
+								<h3 id="added-19">Added</h3>
+								<ul>
+									<li>
+										<code>KipperFileListener.itemBuffer</code>, which will contain the generated TypeScript code-lines,
+										that were generated in the walking step.
+									</li>
+									<li>
+										Basic <code>KipperFileContext</code>, which will serve as the base class, where the compilation data
+										is stored.
+									</li>
+									<li>
+										General namespace import of <code>kipper</code> in <code>index.ts</code>, which allows the usage of
+										the entire library.
+									</li>
+									<li>
+										<code>KipperFileContext.translate()</code>, which walks through the listener and returns the
+										generated code. The generated code will be cached inside
+										<code>KipperFileContext.typescriptCode</code> to allow reusing code instead of unnecessarily
+										generating code again.
+									</li>
+									<li><code>LogLevel.UNKNOWN</code> as the default log level for <code>LogLevel</code>.</li>
+									<li>
+										<code>KipperLogger.levels</code> as a static variable to access the enum <code>LogLevel</code>.
+									</li>
+									<li>
+										New abstract base class <code>CompilableASTNode</code>, which will represent the major parse tokens
+										inside a kipper program. The token class has the additional functionality of wrapping an entire
+										antlr4 statement, expression or block, and being able to semantically analyse it using
+										<code>semanticAnalysis()</code> and translate it to TypeScript using <code>compileCtx()</code>.
+									</li>
+									<li>
+										Properties <code>parser</code>, <code>lexer</code>, <code>errorHandler</code> and
+										<code>tokenStream</code> inside the class <code>KipperFileContext</code>.
+									</li>
+									<li>
+										File <code>builtIns.ts</code>, which defines the behaviour on how to define built-in items inside a
+										kipper program. This primarily includes global functions, which can be represented using the
+										interface <code>BuiltInFunction</code>. (In work!)
+									</li>
+									<li>Implemented <code>**</code> (Power-to) as a valid arithmetic expression.</li>
+									<li>
+										Implemented <code>RuntimeCompileConfig</code> and <code>CompileConfig</code>, which may be passed
+										onto <code>KipperCompile.compile()</code> to configure the compilation behaviour.
+									</li>
+									<li>
+										Implemented new module <code>/compiler/tokens</code>, which contains the parse token
+										implementations.
+									</li>
+									<li>
+										Implemented basic global function <code>print</code> that will be available inside a Kipper program
+										per default (unless forcibly changed).
+									</li>
+									<li>
+										New Class <code>ScopeDeclaration</code> representing a declaration/entry inside a scope. This is
+										used primarily inside <code>KipperProgramContext</code>, which uses it to keep track of global
+										definitions and also <code>CompoundStatement</code>s, which may have children definitions.
+									</li>
+									<li>
+										Type Implementation with two new type aliases: <code>KipperStorageType</code> and
+										<code>KipperType</code>.
+									</li>
+								</ul>
+								<h3 id="changed-22">Changed</h3>
+								<ul>
+									<li>
+										Made return of <code>KipperCompiler.parse()</code> to <code>KipperFileContext</code>, which wraps
+										the generated parse tree.
+									</li>
+									<li>
+										Behaviour of <code>KipperCompileResult</code>, which will now store the
+										<code>programCtx: KipperFileContext</code> and <code>result: string[]</code> of a compilation.
+									</li>
+									<li>
+										Fixed bug in <code>KipperErrorListener</code>, which resulted in errors being not properly raised.
+										The function is now a template, where <code>&lt;T&gt;</code> represents the offending token.
+										<code>&lt;T&gt;</code> will also be passed onto <code>KipperSyntaxError&lt;T&gt;</code>.
+									</li>
+									<li>
+										Changed type of <code>LogLevel</code>, which now returns string-representations of the log level.
+									</li>
+									<li>Fixed <code>initializer</code> rule in Kipper.g4 and removed invalid designator rules.</li>
+									<li>
+										Updated all expressions in <code>Kipper.g4</code> to contain proper labelled sub-rules, which
+										clearly state if the expression is used or if it's a pass on and an expression with higher
+										importance is used (child of that expression).
+									</li>
+									<li>
+										Renamed <code>KipperFileContext</code> to <code>KipperProgramContext</code>, which will now handle
+										the entire compilation and store its meta-data.
+									</li>
+								</ul>
+								<h3 id="removed-14">Removed</h3>
+								<ul>
+									<li>Unneeded namespace <code>KipperStreams</code> and its functions.</li>
+									<li>
+										Unneeded variable <code>LogLevelNames</code>, as now the enum <code>LogLevel</code> per default
+										returns the names of the level.
+									</li>
+									<li>
+										Removed <code>preferLogging</code> options in the entire module, as errors and warnings will always
+										be logged no matter what. This also means that errors will always be logged <em>and</em> thrown as a
+										catchable error instance.
+									</li>
+									<li>
+										Argument <code>streamName</code> in <code>KipperCompiler.syntaxAnalyse()</code> and
+										<code>KipperCompiler.compile()</code>.
+									</li>
+								</ul>
+								<h2 id="005---2022-03-02">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.0.3…v0.0.5">0.0.5</a> - 2022-03-02
+								</h2>
+								<h3 id="changed-23">Changed</h3>
+								<ul>
+									<li>Fixed invalid publish of the module on npm</li>
+								</ul>
+								<h2 id="004---2022-03-02">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.0.3…v0.0.5">0.0.4</a> - 2022-03-02
+								</h2>
+								<p><strong>Broken version!</strong></p>
+								<h2 id="003---2022-03-02">
+									<a href="https://github.com/Kipper-Lang/Kipper/compare/v0.0.2…v0.0.3">0.0.3</a> - 2022-03-02
+								</h2>
+								<h3 id="added-20">Added</h3>
+								<ul>
+									<li>Build Option for the browser-compatible script <code>kipper-standalone.js</code></li>
+									<li>
+										Basic <code>run</code> command for running a compiled file or compiling and running a file. (This is
+										still in development).
+									</li>
+									<li>
+										Basic <code>compile</code> command for compiling a file into it's js-counterpart with its typescript
+										types added.
+									</li>
+									<li>
+										New Parse Stream class <code>KipperParseStream</code>, which implements a basic Utf-16 stream.
+									</li>
+									<li>Support for <code>[]</code> initializers for lists in Kipper.g4.</li>
+									<li>
+										Support for <code>multiItemTypeSpecifier</code>, which use the
+										<code>identifier&lt;T&gt;</code> syntax (for lists specifically).
+									</li>
+									<li>
+										Support for <code>typeof(V)</code> (<code>typeofTypeSpecifier</code>) syntax for
+										<code>typeSpecifier</code> expressions.
+									</li>
+									<li>Support for Kipper-Conversion <code>identifier as typeSpecifier</code> syntax.</li>
+									<li>
+										Support for for-loops using the
+										<code>for(INIT_EXPRESSION; CONDITION, LOOP_EXPRESSION) STATEMENT</code> syntax.
+									</li>
+									<li>
+										New Map <code>LogLevelNames</code>, which will map <code>LogLevel</code> enum values to constant
+										strings (e.g. <code>LogLevel.CRITICAL</code> -&gt; <code>"CRITICAL"</code>).
+									</li>
+								</ul>
+								<h3 id="changed-24">Changed</h3>
+								<ul>
+									<li>
+										Fixed syntax bug in Kipper.g4 that caused typed arguments to not be able to passed to functions.
+									</li>
+									<li>
+										Updated handling of the <code>KipperLogger</code>, which will now only use an
+										<code>emitHandler</code>, which can be defined by the user. This means the user entirely decides how
+										to handle the logging output of the compiler, and there is no default logging anymore.
+									</li>
+								</ul>
+								<h3 id="removed-15">Removed</h3>
+								<ul>
+									<li>
+										Oclif CLI, which will be released in another package separate to this one, as this will be made to
+										suit the usage inside a browser.
+									</li>
+									<li>
+										<code>KipperParseFile</code>, which will be implemented in the NodeJS CLI implementation for Kipper
+									</li>
+								</ul>
+								<h2 id="002---2021-11-23">
+									<a href="https://github.com/Kipper-Lang/Kipper/tags/v0.0.2">0.0.2</a> - 2021-11-23
+								</h2>
+								<h3 id="added-21">Added</h3>
+								<ul>
+									<li><code>oclif</code> environment with the appropriate tests</li>
+									<li><code>/test/module</code> for module specific tests using <code>mocha</code></li>
+									<li>
+										<code>KipperErrorListener&lt;Token&gt;</code> for listening to <code>KipperParser</code> and
+										<code>KipperLexer</code> errors
+									</li>
+									<li>
+										<code>ParserFile</code> for implementing the stream that may be used for
+										<code>KipperCompiler.parser()</code>
+									</li>
+								</ul>
+								<h3 id="changed-25">Changed</h3>
+								<ul>
+									<li>
+										Updated file structure to separate <code>commands</code> (for <code>oclif</code>) and
+										<code>compiler</code> (for the compiler source-code)
+									</li>
+								</ul>
+							</article>
+						</section>
+					</div>
+				</div>
+
+				<!-- Footer bar - contains some links and general copyright notice -->
+				<footer id="footer-bar" class="flex-parent-container flex-column">
+					<ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+						<li id="development-and-support-notice">
+							<p>Developed at:</p>
+						</li>
+						<li id="footer-logos">
+							<img id="htlleonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="">
+							<img id="jku-logo" src="https://www.jku.at/typo3conf/ext/jku_distribution/Resources/Public/Images/Footer/jku-logo-mobile-en.svg" alt="">
+						</li>
+						<li>
+							<ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/releases">Releases</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper">GitHub</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/security/policy">Security</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/issues">Issue Tracker</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE">License</a>
+									</small>
+								</li>
+							</ul>
+						</li>
+						<li id="copyright">
+							<small class="centered-text white-text">
+								Copyright © 2021-2025 Luna Klatzer, 2024-2025 Lorenz Holzbauer &amp; Fabian Baitura. <br>
+								Kipper is licensed under the GPL-3.0-or-later license.
+							</small>
+						</li>
+					</ul>
+				</footer>
+			</div>
+		</div>
+
+		<!-- Overlay for displaying search results -->
+		<div id="search-result-overlay">
+			<div class="flex-column flex-parent-container" id="search-result"></div>
+		</div>
+		<script src="https://kipper-lang.org/index.3b69bdcb.js" defer=""></script>
+	</body>
+</html>

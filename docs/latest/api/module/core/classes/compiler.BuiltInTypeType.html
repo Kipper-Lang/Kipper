@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+	
+		<!-- isDocsFile: true -->
+		<!-- docsVersion: latest -->
+		<!-- latestVersion: 0.12.1 -->
+
+		<meta charset="utf-8">
+
+		<title>compiler - Kipper Docs v0.12.1</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<link rel="manifest" href="https://kipper-lang.org/up_/site.webmanifest">
+		<link rel="apple-touch-icon" href="https://kipper-lang.org/kipper-icon.4fb9d618.png">
+		<link rel="shortcut icon" type="image/ico" href="https://kipper-lang.org/favicon.dcdc2d88.ico">
+
+		<!-- Loading the prism highlighting style-sheet -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.f4d6a214.css">
+
+		<!-- Font Awesome Icons -->
+		<script src="https://kit.fontawesome.com/951ef1f046.js" crossorigin="anonymous"></script>
+
+		<!-- Loading the main stylesheets -->
+		<link rel="stylesheet" href="https://kipper-lang.org/index.0b0dca04.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.244b5875.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.e24a109c.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.64273195.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.ee0d14b6.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.a30088c4.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.acde3bdd.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.4a54af2e.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.45a9510a.css">
+		<link rel="stylesheet" href="https://kipper-lang.org/index.06a4d211.css">
+
+		<!-- Phone header nav bar functionality script -->
+		<script defer="" src="https://kipper-lang.org/index.f9a5285a.js"></script>
+
+		<!-- Including stylesheet for the Inter-Font -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter">
+
+		<!--
+Specifying the preferred environment colour to be the primary scheme colour.
+See main.scss for the --scheme-primary variable
+-->
+		<meta name="theme-color" content="#e01a4f">
+
+		<!-- Meta fields -->
+		<meta property="og:site_name" content="Kipper">
+		<meta property="og:title" content="compiler - Kipper Docs  v0.12.1">
+		<meta property="og:description" content="">
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+		<meta property="og:image" content="https://kipper-lang.org/img/icons/kipper-head-icon.png">
+		<meta property="og:locale" content="en_GB">
+
+		<!-- Load in the entire locale object -->
+		<script>var locale = {
+    name: "en-US",
+    values: {
+        pages: {
+            homepage: {
+                title: "Welcome to Kipper!",
+                description: "The new customisable and easy to use type-safe language for the web and Node.js!"
+            },
+            downloads: {
+                title: "Downloads",
+                description: "Download the latest version of Kipper for your platform."
+            },
+            docs: {
+                title: "Documentation",
+                description: "Learn how to use Kipper with our comprehensive documentation."
+            },
+            playground: {
+                title: "Playground",
+                description: "Try out Kipper in our online playground."
+            },
+            changelog: {
+                title: "Changelog",
+                description: "View the latest changes to Kipper."
+            }
+        },
+        homepage: {
+            welcome: "Welcome to Kipper!",
+            description: "The new customisable and easy to use type-safe language for the web and Node.js!",
+            "play-button": "Try our Playground",
+            "docs-button": "View the Docs"
+        },
+        "nav-bar": {
+            downloads: "Downloads",
+            docs: "Docs",
+            playground: "Playground",
+            changelog: "Changelog"
+        },
+        playground: {
+            buttons: {
+                run: "Run",
+                stop: "Stop",
+                copy: "Copy",
+                clear: "Clear",
+                console: "Console",
+                compiler: "Compiler"
+            },
+            "save-state": {
+                saving: "Saving...",
+                saved: "Saved!",
+                loaded: "Loaded :)"
+            },
+            actions: {
+                cleared: "Cleared!",
+                copied: "Copied!"
+            }
+        },
+        footer: {
+            "supported-by": "Developed at:",
+            list: {
+                releases: "Releases",
+                github: "GitHub",
+                security: "Security",
+                issues: "Issue Tracker",
+                license: "License"
+            },
+            license: "Kipper is licensed under the GPL-3.0-or-later license."
+        }
+    }
+};
+window.locale = locale;
+var localeKey = "locale";
+window.localeKey = localeKey;
+let storedLocale = localStorage.getItem(localeKey);
+if (storedLocale === null) localStorage.setItem(localeKey, locale.name);
+// In case a site was loaded with a different locale than the one in the locale storage, then we redirect to
+// the correct locale
+if (!!storedLocale && storedLocale !== locale.name && !window.location.pathname.includes(`/${storedLocale}/`) && !window.location.pathname.includes("/docs/")) {
+    if (window.location.pathname.includes("/" + locale.name + "/")) window.location.pathname = window.location.pathname.replace(`/${locale.name}/`, `/${storedLocale}/`);
+    else window.location.pathname = `/${storedLocale}${window.location.pathname}`;
+}
+
+</script>
+
+		<link rel="stylesheet" href="https://kipper-lang.org/docs/index.9b1a8e07.css">
+	
+	
+		<script defer="" src="https://kipper-lang.org/index.ab8b3880.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.c645b044.js"></script>
+		<script defer="" src="https://kipper-lang.org/index.27bd5b50.js"></script>
+
+		<!-- Show Error if JS is disabled or blocked -->
+		<noscript>Oops that shouldn't have happened! Please enable Java-Script to use our site!</noscript>
+
+		<!-- Docs specific scripts -->
+		<script defer="" src="https://kipper-lang.org/docs/index.8234afb6.js"></script>
+
+		<div id="main-frame">
+			<div id="actual-content">
+				<!-- The top element: menu and search bar -->
+
+				<header id="primary-page-header" class="page-header">
+					<nav id="header-nav-bar">
+						<ul id="std-header-primary-content">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/index.html">
+									<script defer="">(()=>{
+    const link = document.querySelector(".kipper-version-and-logo .underline-button.kipper-logo-identifier");
+    const localeName = localStorage.getItem(window.localeKey);
+    const href = link.getAttribute("href");
+    if (!href.includes(localeName)) link.setAttribute("href", `/${localeName}${href}`);
+})();
+
+</script>
+									<h2>Kipper</h2>
+								</a>
+								<a id="version-identifier" href="https://github.com/Kipper-Lang/Kipper/releases/tag/v0.12.1">
+									<small>v0.12.1</small>
+								</a>
+							</li>
+
+							<!-- Main navigation links -->
+
+							<li>
+								<a href="https://kipper-lang.org/downloads.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Downloads</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Docs</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Playground</h4>
+								</a>
+							</li>
+
+							<li>
+								<a href="https://kipper-lang.org/changelog.html" class="underline-button top-nav-menu-item top-nav-button">
+									<h4>Changelog</h4>
+								</a>
+							</li>
+
+							<script defer="">function changeHrefLocaleIfNecessary(links) {
+    const localeName = localStorage.getItem(window.localeKey);
+    for (const link of links){
+        // Insert locale name into the URL and replace the domain if it's included in the URL
+        const href = link.getAttribute("href").replace(window.location.origin, "").replace(`${window.location.protocol}//`, "");
+        if (!href.includes(localeName) && !href.includes("docs")) link.setAttribute("href", `/${localeName}${href}`);
+    }
+}
+(()=>{
+    const deskLinks = document.querySelectorAll("#phone-header-nav-bar-menu li .top-nav-menu-item");
+    const phoneLinks = document.querySelectorAll("#std-header-primary-content li .top-nav-menu-item");
+    changeHrefLocaleIfNecessary(deskLinks);
+    changeHrefLocaleIfNecessary(phoneLinks);
+})();
+
+</script>
+						</ul>
+						<div class="search-bar-wrapper">
+							<ul class="no-style-list">
+								<li class="search-icon-wrapper">
+									<i class="search-icon fa-solid fa-magnifying-glass"></i>
+								</li>
+								<li id="std-search-bar" class="search-bar">
+									<label for="std-search-bar-input"></label>
+									<input id="std-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+								</li>
+							</ul>
+						</div>
+					</nav>
+
+					<!-- Per default invisible phone nav bar, which is shown on smaller screens -->
+					<nav id="phone-header-nav-bar">
+						<ul id="phone-header-primary-content" class="no-style-list">
+							<!-- Kipper logo + version identifier -->
+							<li class="kipper-version-and-logo">
+								<a href="https://kipper-lang.org/index.html" class="no-style-list flex-row flex-parent-container flex-center kipper-logo-container">
+									<img class="kipper-logo" src="https://kipper-lang.org/kipper-base-head.b81e1ef7.png" alt="">
+								</a>
+								<a class="underline-button kipper-logo-identifier" href="https://kipper-lang.org/index.html">
+									<script defer="">(()=>{
+    const link = document.querySelector(".kipper-version-and-logo .underline-button.kipper-logo-identifier");
+    const localeName = localStorage.getItem(window.localeKey);
+    const href = link.getAttribute("href");
+    if (!href.includes(localeName)) link.setAttribute("href", `/${localeName}${href}`);
+})();
+
+</script>
+									<h2>Kipper</h2>
+								</a>
+								<a id="version-identifier" href="https://github.com/Kipper-Lang/Kipper/releases/tag/v0.12.1">
+									<small>v0.12.1</small>
+								</a>
+							</li>
+
+							<!--
+        Unlike the standard nav, the links will be not shown per default and there will be a dropdown menu.
+        Additionally, the search bar is shown in the dropdown menu.
+        -->
+							<li class="phone-header-nav-bar-menu-toggle">
+								<i class="fa-solid fa-bars"></i>
+							</li>
+						</ul>
+
+						<!-- Dropdown menu -->
+						<ul id="phone-header-nav-bar-menu" class="no-style-list">
+							<li>
+								<ul id="phone-header-dropdown-urls" class="no-style-list">
+									<!-- Main navigation links - 'pages' is a global variable added by the parent 'header-nav-bar.ejs' -->
+
+									<li>
+										<a href="https://kipper-lang.org/downloads.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Downloads</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/docs/index.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Docs</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/playground.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Playground</h4>
+										</a>
+									</li>
+
+									<li>
+										<a href="https://kipper-lang.org/changelog.html" class="underline-button top-nav-menu-item top-nav-button">
+											<h4>Changelog</h4>
+										</a>
+									</li>
+								</ul>
+							</li>
+							<li>
+								<div class="search-bar-wrapper">
+									<ul class="no-style-list">
+										<li class="search-icon-wrapper">
+											<i class="search-icon fa-solid fa-magnifying-glass"></i>
+										</li>
+										<li id="phone-search-bar" class="search-bar">
+											<label for="phone-search-bar-input"></label>
+											<input id="phone-search-bar-input" class="search-bar-input" type="search" placeholder="Search..." spellcheck="false">
+										</li>
+									</ul>
+								</div>
+							</li>
+						</ul>
+					</nav>
+
+					<div id="header-description-content" class="text-page-content-container"></div>
+				</header>
+
+				<!-- Main Content, where the text is located and the items unique to this site are defined -->
+				<div class="flex-parent-container flex-fill-to-parent">
+					<ul class="no-style-list flex-parent-container flex-row flex-fill-to-parent">
+						<li id="docs-sidebar-nav-wrapper">
+							<nav id="docs-sidebar-nav">
+								<!-- Only visible on small screens to enhance navigability -->
+								<!-- Phone Path Nav - To not show the entire sidebar on phones and simplify the display -->
+								<nav class="phone-docs-nav">
+									<!-- Class as it appears twice. Here and in the nav sidebar -->
+									<ul class="no-style-list">
+										<li class="phone-docs-nav-bar-menu-toggle"><i class="fa-solid fa-bars"></i></li>
+										<li>
+											<ul class="phone-docs-nav-path">
+												<li>
+													<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/latest/index.html">
+														latest
+													</a>
+													<span> /</span>
+												</li>
+
+												<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/index.html">
+														Kipper API
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/index.html">
+														Module
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/index.html">
+														@kipper/core
+													</a>
+													<span> /</span>
+												</li>
+
+												<li>
+													<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+														compiler
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</nav>
+
+								<div id="docs-sidebar-std-nav">
+									<!-- Standard sidebar nav visible on all screen sizes -->
+									<div id="docs-sidebar-nav-head">
+										<h6><a class="docs-page-header-path-item" href="https://kipper-lang.org/index.html">Kipper Docs</a></h6>
+										<div id="docs-version-selection">
+											<div id="docs-version-selector-root-button-wrapper">
+												<button>
+													<span class="h6">
+														<span>latest</span>
+														<i class="fa-solid fa-xs fa-caret-down"></i>
+													</span>
+												</button>
+											</div>
+											<ul id="docs-versions-dropdown" class="no-style-list flex-column">
+												<li id="docs-version-selector-next" class="docs-version-selector-button-wrapper" data-version="next">
+													<a href="https://kipper-lang.org/docs/next/api/module/core/compiler.html">next</a>
+												</li>
+
+												<li id="docs-version-selector-latest" class="docs-version-selector-button-wrapper" data-version="latest">
+													<a href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">latest</a>
+												</li>
+
+												<li id="docs-version-selector-0.11.0" class="docs-version-selector-button-wrapper" data-version="0.11.0">
+													<a href="https://kipper-lang.org/docs/0.11.0/api/module/core/compiler.html">0.11.0</a>
+												</li>
+
+												<li id="docs-version-selector-0.10.4" class="docs-version-selector-button-wrapper" data-version="0.10.4">
+													<a href="https://kipper-lang.org/docs/0.10.4/index.html">0.10.4</a>
+												</li>
+
+												<li id="docs-version-selector-0.9.2" class="docs-version-selector-button-wrapper" data-version="0.9.2">
+													<a href="https://kipper-lang.org/docs/0.9.2/index.html">0.9.2</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<ul class="docs-sidebar-nav-list no-style-list flex-column">
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/index.html">Overview</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/quickstart.html">Quickstart</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/goals-and-roadmap.html">Goals for Kipper</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/supported-platforms.html">Supported platforms</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/usage-examples.html">Usage Examples</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Concepts</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/type-consistency.html">Type Consistency</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/runtime-type-casting.html">Runtime Type Casting</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/strict-compiler-inspection.html">Strict Compiler Inspection</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- concepts -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/concepts/integrated-runtime-library.html">Integrated Runtime Library</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/variables.html">Variables</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Datatypes</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/str-type.html">String Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/num-type.html">Number Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/bool-type.html">Boolean Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/void-type.html">Void Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/null-type.html">Null Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/undefined-type.html">Undefined Type</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- datatypes -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/datatypes/array-type.html">Array Type</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Expressions</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/tangled-expression.html">Tangled Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/arithmetic-expression.html">Arithmetic Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/assignment-expression.html">Assignment Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/conditional-expression.html">Conditional Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/logical-expression.html">Logical Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/bitwise-expression.html">Bitwise Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/relational-expression.html">Relational Expressions</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/convert-expression.html">Convert Or Cast Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/f-string-expression.html">F-String Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/member-access-expression.html">Member Access Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/function-call-expression.html">Function Call Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/lambda-expression.html">Lambda Expression</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- expressions -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/expressions/matches-expression.html">Matches Expression</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Statements</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column">
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/expression-statement.html">Expression Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/if-statement.html">If Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/while-loop.html">While Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/do-while-loop.html">Do-While Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/for-loop.html">For Loop</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/compound-statement.html">Compound Statement</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- statements -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/statements/jump-statement.html">Jump Statement</a>
+													</p>
+												</li>
+											</ul>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/functions.html">Functions</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/interfaces.html">Interfaces</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/classes.html">Classes</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/comments.html">Comments</a>
+											</p>
+										</li>
+
+										<!-- core, module, api -->
+										<!--  -->
+
+										<li>
+											<p class="sidebar-nav-header-list-item">
+												<a href="https://kipper-lang.org/docs/latest/built-in-functions.html">Built-in Functions</a>
+											</p>
+										</li>
+
+										<li>
+											<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+												<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Kipper API</span></button>
+											</p>
+											<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+												<!-- core, module, api -->
+												<!-- api -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/api/index.html">Overview</a>
+													</p>
+												</li>
+
+												<!-- core, module, api -->
+												<!-- api -->
+
+												<li>
+													<p class="sidebar-nav-header-list-item">
+														<a href="https://kipper-lang.org/docs/latest/api/compiler-setup.html">Compiler Setup</a>
+													</p>
+												</li>
+
+												<li>
+													<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+														<button><i class="fa-solid fa-xs fa-caret-down"></i><span>Module</span></button>
+													</p>
+													<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+														<!-- core, module, api -->
+														<!-- module, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/module/index.html">Overview</a>
+															</p>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header sidebar-nav-header-dir-item">
+																<button><i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/core</span></button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column selected-sidebar-nav-dir">
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/index.html">index</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item selected-page-sidebar-nav-header">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">compiler</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/errors.html">errors</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/logger.html">logger</a>
+																	</p>
+																</li>
+
+																<!-- core, module, api -->
+																<!-- core, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/core/utils.html">utils</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button><i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/config</span></button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- config, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/config/index.html">config</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button>
+																	<i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/target-js</span>
+																</button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- target-js, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/target-js/index.html">index</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+
+														<li>
+															<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+																<button>
+																	<i class="fa-solid fa-xs fa-caret-down"></i><span>@kipper/target-ts</span>
+																</button>
+															</p>
+															<ul class="docs-sidebar-nav-list no-style-list flex-column">
+																<!-- core, module, api -->
+																<!-- target-ts, module, api -->
+
+																<li>
+																	<p class="sidebar-nav-header-list-item">
+																		<a href="https://kipper-lang.org/docs/latest/api/module/target-ts/index.html">index</a>
+																	</p>
+																</li>
+															</ul>
+														</li>
+													</ul>
+												</li>
+
+												<li>
+													<p class="sidebar-nav-header-list-item sidebar-nav-header-dir-item">
+														<button><i class="fa-solid fa-xs fa-caret-down"></i><span>CLI</span></button>
+													</p>
+													<ul class="docs-sidebar-nav-list no-style-list flex-column">
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/index.html">Overview</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/new.html">new</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/run.html">run</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/compile.html">compile</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/help.html">help</a>
+															</p>
+														</li>
+
+														<!-- core, module, api -->
+														<!-- cli, api -->
+
+														<li>
+															<p class="sidebar-nav-header-list-item">
+																<a href="https://kipper-lang.org/docs/latest/api/cli/version.html">version</a>
+															</p>
+														</li>
+													</ul>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</nav>
+						</li>
+						<li id="docs-page-content-wrapper">
+							<!-- Phone-specific navigation bar, for the top of the page -->
+							<!-- Phone Path Nav - To not show the entire sidebar on phones and simplify the display -->
+							<nav class="phone-docs-nav">
+								<!-- Class as it appears twice. Here and in the nav sidebar -->
+								<ul class="no-style-list">
+									<li class="phone-docs-nav-bar-menu-toggle"><i class="fa-solid fa-bars"></i></li>
+									<li>
+										<ul class="phone-docs-nav-path">
+											<li>
+												<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/latest/index.html">
+													latest
+												</a>
+												<span> /</span>
+											</li>
+
+											<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/index.html">
+													Kipper API
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/index.html">
+													Module
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/index.html">
+													@kipper/core
+												</a>
+												<span> /</span>
+											</li>
+
+											<li>
+												<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+													compiler
+												</a>
+											</li>
+										</ul>
+									</li>
+								</ul>
+							</nav>
+
+							<section id="docs-content" class="shadowed-box">
+								<nav id="docs-page-header">
+									<ul id="docs-nav-current-page-path" class="flex-row no-style-list">
+										<li>
+											<a class="docs-page-header-kipper-version" href="https://kipper-lang.org/docs/latest/index.html">
+												latest
+											</a>
+											<span> /</span>
+										</li>
+
+										<!-- The detailed path to this docs page, which is represented using the title of every parent -->
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/index.html">
+												Kipper API
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/index.html">
+												Module
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<!-- If it's not the last item, it's a dir parent, as such we need to link the index file -->
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/index.html">
+												@kipper/core
+											</a>
+											<span> /</span>
+										</li>
+
+										<li>
+											<a class="docs-page-header-path-item" href="https://kipper-lang.org/docs/latest/api/module/core/compiler.html">
+												compiler
+											</a>
+										</li>
+									</ul>
+									<a id="edit-page-on-github" href="https://github.com/Kipper-Lang/Kipper/edit/docs/src/docs/latest/api/module/core/compiler.md" title="Edit this page on GitHub">
+										<i class="fa-brands fa-github"></i>
+										<p>Edit page</p>
+									</a>
+								</nav>
+								<article class="markdown-content">
+									<h1 id="class-builtintypetype">Class: BuiltInTypeType</h1>
+<p><a href="../compiler.html">compiler</a>.BuiltInTypeType</p>
+<p>Represents the built-in type <code>type</code>.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.12.0</p>
+<h2 id="hierarchy">Hierarchy</h2>
+<ul>
+<li><p><a href="compiler.BuiltInType.html"><code>BuiltInType</code></a></p>
+<p>↳ <strong><code>BuiltInTypeType</code></strong></p></li>
+</ul>
+<h2 id="implements">Implements</h2>
+<ul>
+<li><a href="../interfaces/compiler.CompilableType.html"><code>CompilableType</code></a></li>
+</ul>
+<h2 id="table-of-contents">Table of contents</h2>
+<h3 id="constructors">Constructors</h3>
+<ul>
+<li><a href="compiler.BuiltInTypeType.html#constructor">constructor</a></li>
+</ul>
+<h3 id="properties">Properties</h3>
+<ul>
+<li><a href="compiler.BuiltInTypeType.html#_identifier">_identifier</a></li>
+<li><a href="compiler.BuiltInTypeType.html#interchangeabletypes">interchangeableTypes</a></li>
+</ul>
+<h3 id="accessors">Accessors</h3>
+<ul>
+<li><a href="compiler.BuiltInTypeType.html#identifier">identifier</a></li>
+<li><a href="compiler.BuiltInTypeType.html#iscompilable">isCompilable</a></li>
+<li><a href="compiler.BuiltInTypeType.html#isgeneric">isGeneric</a></li>
+<li><a href="compiler.BuiltInTypeType.html#isunion">isUnion</a></li>
+</ul>
+<h3 id="methods">Methods</h3>
+<ul>
+<li><a href="compiler.BuiltInTypeType.html#assertassignableto">assertAssignableTo</a></li>
+<li><a href="compiler.BuiltInTypeType.html#getcompilabletype">getCompilableType</a></li>
+<li><a href="compiler.BuiltInTypeType.html#isassignableto">isAssignableTo</a></li>
+<li><a href="compiler.BuiltInTypeType.html#tostring">toString</a></li>
+</ul>
+<h2 id="constructors-1">Constructors</h2>
+<h3 id="constructor">constructor</h3>
+<p>• <strong>new BuiltInTypeType</strong>()</p>
+<h4 id="overrides">Overrides</h4>
+<p><a href="compiler.BuiltInType.html">BuiltInType</a>.<a href="compiler.BuiltInType.html#constructor">constructor</a></p>
+<h4 id="defined-in">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/built-in/type.ts:8</p>
+<h2 id="properties-1">Properties</h2>
+<h3 id="_identifier">_identifier</h3>
+<p>• <code>Protected</code> <code>Readonly</code> <strong>_identifier</strong>: <code>string</code></p>
+<h4 id="implementation-of">Implementation of</h4>
+<p><a href="../interfaces/compiler.CompilableType.html">CompilableType</a>.<a href="../interfaces/compiler.CompilableType.html#_identifier">_identifier</a></p>
+<h4 id="inherited-from">Inherited from</h4>
+<p><a href="compiler.BuiltInType.html">BuiltInType</a>.<a href="compiler.BuiltInType.html#_identifier">_identifier</a></p>
+<h4 id="defined-in-1">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/base/type.ts:9</p>
+<hr>
+<h3 id="interchangeabletypes">interchangeableTypes</h3>
+<p>▪ <code>Static</code> <code>Readonly</code> <strong>interchangeableTypes</strong>: <code>string</code>[]</p>
+<h4 id="inherited-from-1">Inherited from</h4>
+<p><a href="compiler.BuiltInType.html">BuiltInType</a>.<a href="compiler.BuiltInType.html#interchangeabletypes">interchangeableTypes</a></p>
+<h4 id="defined-in-2">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/base/built-in-type.ts:13</p>
+<h2 id="accessors-1">Accessors</h2>
+<h3 id="identifier">identifier</h3>
+<p>• <code>get</code> <strong>identifier</strong>(): <code>string</code></p>
+<p>The identifier of this type.</p>
+<h4 id="returns">Returns</h4>
+<p><code>string</code></p>
+<h4 id="implementation-of-1">Implementation of</h4>
+<p><a href="../interfaces/compiler.CompilableType.html">CompilableType</a>.<a href="../interfaces/compiler.CompilableType.html#identifier">identifier</a></p>
+<h4 id="inherited-from-2">Inherited from</h4>
+<p>BuiltInType.identifier</p>
+<h4 id="defined-in-3">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/base/processed-type.ts:19</p>
+<hr>
+<h3 id="iscompilable">isCompilable</h3>
+<p>• <code>get</code> <strong>isCompilable</strong>(): <code>true</code></p>
+<p>Returns whether the type is a compilable type.</p>
+<p>This is always true for the built-in type <code>type</code>.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.12.0</p>
+<h4 id="returns-1">Returns</h4>
+<p><code>true</code></p>
+<h4 id="implementation-of-2">Implementation of</h4>
+<p><a href="../interfaces/compiler.CompilableType.html">CompilableType</a>.<a href="../interfaces/compiler.CompilableType.html#iscompilable">isCompilable</a></p>
+<h4 id="overrides-1">Overrides</h4>
+<p>BuiltInType.isCompilable</p>
+<h4 id="defined-in-4">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/built-in/type.ts:18</p>
+<hr>
+<h3 id="isgeneric">isGeneric</h3>
+<p>• <code>get</code> <strong>isGeneric</strong>(): <code>boolean</code></p>
+<p>Returns whether the type is a generic type.</p>
+<p>This is false unless overridden by a subclass.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.12.0</p>
+<h4 id="returns-2">Returns</h4>
+<p><code>boolean</code></p>
+<h4 id="implementation-of-3">Implementation of</h4>
+<p>CompilableType.isGeneric</p>
+<h4 id="inherited-from-3">Inherited from</h4>
+<p>BuiltInType.isGeneric</p>
+<h4 id="defined-in-5">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/base/processed-type.ts:38</p>
+<hr>
+<h3 id="isunion">isUnion</h3>
+<p>• <code>get</code> <strong>isUnion</strong>(): <code>boolean</code></p>
+<p>Returns whether the type is a union type.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.12.0</p>
+<h4 id="returns-3">Returns</h4>
+<p><code>boolean</code></p>
+<h4 id="implementation-of-4">Implementation of</h4>
+<p>CompilableType.isUnion</p>
+<h4 id="inherited-from-4">Inherited from</h4>
+<p>BuiltInType.isUnion</p>
+<h4 id="defined-in-6">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/base/processed-type.ts:46</p>
+<h2 id="methods-1">Methods</h2>
+<h3 id="assertassignableto">assertAssignableTo</h3>
+<p>▸ <strong>assertAssignableTo</strong>(<code>type</code>, <code>propertyName?</code>, <code>argumentName?</code>): <code>void</code></p>
+<p>Returns whether this type is assignable to another type.</p>
+<p><strong><code>Throws</code></strong></p>
+<p>AssignmentTypeError If the types are not assignable.</p>
+<p><strong><code>Throws</code></strong></p>
+<p>PropertyAssignmentTypeError If a property is not assignable.</p>
+<p><strong><code>Throws</code></strong></p>
+<p>ArgumentAssignmentTypeError If an argument is not assignable.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.11.0</p>
+<h4 id="parameters">Parameters</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th id="name" style="text-align:left;">Name</th>
+<th id="type" style="text-align:left;">Type</th>
+<th id="description" style="text-align:left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>type</code></td>
+<td style="text-align:left;"><a href="compiler.ProcessedType.html"><code>ProcessedType</code></a></td>
+<td style="text-align:left;">The type to check against.</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>propertyName?</code></td>
+<td style="text-align:left;"><code>string</code></td>
+<td style="text-align:left;">The name of the property that is being assigned. This is used for error messages.</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>argumentName?</code></td>
+<td style="text-align:left;"><code>string</code></td>
+<td style="text-align:left;">The name of the argument that is being assigned to. This is used for error messages.</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="returns-4">Returns</h4>
+<p><code>void</code></p>
+<h4 id="implementation-of-5">Implementation of</h4>
+<p><a href="../interfaces/compiler.CompilableType.html">CompilableType</a>.<a href="../interfaces/compiler.CompilableType.html#assertassignableto">assertAssignableTo</a></p>
+<h4 id="inherited-from-5">Inherited from</h4>
+<p><a href="compiler.BuiltInType.html">BuiltInType</a>.<a href="compiler.BuiltInType.html#assertassignableto">assertAssignableTo</a></p>
+<h4 id="defined-in-7">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/base/built-in-type.ts:39</p>
+<hr>
+<h3 id="getcompilabletype">getCompilableType</h3>
+<p>▸ <strong>getCompilableType</strong>(): <a href="../interfaces/compiler.CompilableType.html"><code>CompilableType</code></a></p>
+<p>Gets the compilable type for this type.</p>
+<p>This function throws an error instead of returning undefined, since it's intended to be used in circumstances,
+where only due to a bug the type is not compilable. As such, it makes sense to strictly assert it will be
+compilable, unless an error occurs.</p>
+<p><strong><code>Throws</code></strong></p>
+<p>UndefinedType If the <a href="compiler.ProcessedType.html#iscompilable">isCompilable</a> is false, which should only occur if the identifier is of
+type <a href="compiler.UndefinedType.html">UndefinedType</a>.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.10.0</p>
+<h4 id="returns-5">Returns</h4>
+<p><a href="../interfaces/compiler.CompilableType.html"><code>CompilableType</code></a></p>
+<h4 id="implementation-of-6">Implementation of</h4>
+<p><a href="../interfaces/compiler.CompilableType.html">CompilableType</a>.<a href="../interfaces/compiler.CompilableType.html#getcompilabletype">getCompilableType</a></p>
+<h4 id="inherited-from-6">Inherited from</h4>
+<p><a href="compiler.BuiltInType.html">BuiltInType</a>.<a href="compiler.BuiltInType.html#getcompilabletype">getCompilableType</a></p>
+<h4 id="defined-in-8">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/base/processed-type.ts:60</p>
+<hr>
+<h3 id="isassignableto">isAssignableTo</h3>
+<p>▸ <strong>isAssignableTo</strong>(<code>type</code>): <code>boolean</code></p>
+<p>Returns whether this type is assignable to the given type. This discards any error messages.</p>
+<p>This simply returns whether the <a href="compiler.ProcessedType.html#assertassignableto">assertAssignableTo</a> function throws an error or not.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.12.0</p>
+<h4 id="parameters-1">Parameters</h4>
+<div class="table-wrapper"><table>
+<thead>
+<tr>
+<th id="name" style="text-align:left;">Name</th>
+<th id="type" style="text-align:left;">Type</th>
+<th id="description" style="text-align:left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>type</code></td>
+<td style="text-align:left;"><a href="compiler.ProcessedType.html"><code>ProcessedType</code></a></td>
+<td style="text-align:left;">The type to check against.</td>
+</tr>
+</tbody>
+</table></div>
+<h4 id="returns-6">Returns</h4>
+<p><code>boolean</code></p>
+<h4 id="implementation-of-7">Implementation of</h4>
+<p><a href="../interfaces/compiler.CompilableType.html">CompilableType</a>.<a href="../interfaces/compiler.CompilableType.html#isassignableto">isAssignableTo</a></p>
+<h4 id="inherited-from-7">Inherited from</h4>
+<p><a href="compiler.BuiltInType.html">BuiltInType</a>.<a href="compiler.BuiltInType.html#isassignableto">isAssignableTo</a></p>
+<h4 id="defined-in-9">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/base/processed-type.ts:84</p>
+<hr>
+<h3 id="tostring">toString</h3>
+<p>▸ <strong>toString</strong>(): <code>string</code></p>
+<p>Returns the full string representation of this type.</p>
+<p>This also includes generic type arguments if this type is a generic type.</p>
+<p><strong><code>Since</code></strong></p>
+<p>0.12.0</p>
+<h4 id="returns-7">Returns</h4>
+<p><code>string</code></p>
+<h4 id="implementation-of-8">Implementation of</h4>
+<p><a href="../interfaces/compiler.CompilableType.html">CompilableType</a>.<a href="../interfaces/compiler.CompilableType.html#tostring">toString</a></p>
+<h4 id="inherited-from-8">Inherited from</h4>
+<p><a href="compiler.BuiltInType.html">BuiltInType</a>.<a href="compiler.BuiltInType.html#tostring">toString</a></p>
+<h4 id="defined-in-10">Defined in</h4>
+<p>kipper/core/src/compiler/semantics/types/base/processed-type.ts:93</p>
+								</article>
+							</section>
+						</li>
+					</ul>
+				</div>
+				<!-- Footer bar - contains some links and general copyright notice -->
+				<footer id="footer-bar" class="flex-parent-container flex-column">
+					<ul id="footer-content" class="no-style-list flex-column flex-parent-container flex-center">
+						<li id="development-and-support-notice">
+							<p>Developed at:</p>
+						</li>
+						<li id="footer-logos">
+							<img id="htlleonding-logo" src="https://edufs.edu.htl-leonding.ac.at/htl_leonding_logo_hell.png" alt="">
+							<img id="jku-logo" src="https://www.jku.at/typo3conf/ext/jku_distribution/Resources/Public/Images/Footer/jku-logo-mobile-en.svg" alt="">
+						</li>
+						<li>
+							<ul id="footer-bar-list" class="no-style-list flex-row flex-parent-container flex-center">
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/releases">Releases</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper">GitHub</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/security/policy">Security</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/issues">Issue Tracker</a>
+									</small>
+								</li>
+								<li>
+									<small>
+										<a class="underline-button" href="https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE">License</a>
+									</small>
+								</li>
+							</ul>
+						</li>
+						<li id="copyright">
+							<small class="centered-text white-text">
+								Copyright © 2021-2025 Luna Klatzer, 2024-2025 Lorenz Holzbauer &amp; Fabian Baitura. <br>
+								Kipper is licensed under the GPL-3.0-or-later license.
+							</small>
+						</li>
+					</ul>
+				</footer>
+			</div>
+		</div>
+
+		<!-- Overlay for displaying search results -->
+		<div id="search-result-overlay">
+			<div class="flex-column flex-parent-container" id="search-result"></div>
+		</div>
+		<script src="https://kipper-lang.org/index.3b69bdcb.js" defer=""></script>
+	
+

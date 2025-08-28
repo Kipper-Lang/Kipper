@@ -1,0 +1,80 @@
+:root {
+  --scheme-primary: #e01a4f;
+  --scheme-primary-rgb: 224, 26, 79;
+  --scheme-dark-primary: #c71242;
+  --scheme-dark-primary-rgb: 199, 18, 66;
+  --scheme-secondary: #ffe74c;
+  --scheme-secondary-rgb: 255, 231, 76;
+  --scheme-url-blue: #002240;
+  --scheme-background-gray: #002240;
+  --scheme-shadow-gray: #ccc;
+  --scheme-shadow-gray-rgb: 204, 204, 204;
+  --scheme-gray: #f0f0f0;
+  --scheme-gray-rgb: 240, 240, 240;
+  --scheme-dark-gray: #787878;
+  --scheme-dark-gray-rgb: 120, 120, 120;
+  --scheme-white: #e9eaed;
+  --scheme-white-rgb: 233, 234, 237;
+  --scheme-dark: #1a1f36;
+  --scheme-dark-rgb: 26, 31, 54;
+  --scheme-console-blue: #1e1e3f;
+  --scheme-console-blue-rgb: 30, 30, 63;
+  --default-border-radius: .5em;
+  --default-text-margin: 2em;
+  --large-screen-size: 1200px;
+  --medium-screen-size: 920px;
+  --small-screen-size: 600px;
+  --button-dark-primary: #c71242;
+}
+
+.table-wrapper {
+  overflow: scroll hidden;
+}
+
+@media screen and (width <= 600px) {
+  .table-wrapper:after {
+    content: "Scroll horizontally to see more";
+    text-align: center;
+    color: #787878;
+    margin: .5rem 0;
+    font-size: .8rem;
+    display: block;
+  }
+
+  .table-wrapper > table {
+    margin-bottom: 0;
+  }
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-color: #000;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  line-height: 1.2em;
+}
+
+table thead tr th {
+  color: #e01a4f;
+  word-break: normal;
+  border-width: 1px 1px 2px;
+  font-weight: 700;
+  overflow: hidden;
+}
+
+table tbody tr td {
+  border-width: 1px;
+}
+
+table tbody tr td, table thead tr th {
+  text-align: left;
+  vertical-align: top;
+  border-collapse: collapse;
+  border-style: solid;
+  border-color: #19191c33;
+  padding: 1rem .8rem;
+  line-height: 1.5em;
+}
+
+/*# sourceMappingURL=index.a30088c4.css.map */
