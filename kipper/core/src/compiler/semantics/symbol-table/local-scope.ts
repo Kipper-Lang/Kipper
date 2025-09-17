@@ -61,10 +61,10 @@ export class LocalScope extends UserScope<VariableDeclaration, FunctionDeclarati
 	}
 
 	public getEntryRecursively(identifier: string): ScopeDeclaration | undefined {
-		const localRef = this.getEntry(identifier);
-		if (!localRef) {
+		const ref = this.getEntry(identifier);
+		if (!ref) {
 			return this.parent.getEntryRecursively(identifier);
 		}
-		return localRef;
+		return ref;
 	}
 }

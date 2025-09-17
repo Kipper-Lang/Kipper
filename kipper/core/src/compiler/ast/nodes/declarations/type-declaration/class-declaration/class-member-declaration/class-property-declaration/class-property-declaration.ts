@@ -124,7 +124,7 @@ export class ClassPropertyDeclaration extends ClassMemberDeclaration<
 			typeSpecifier: typeSpecifier,
 			valueType: typeSpecifier.getSemanticData().rawType,
 		};
-		this.scopeDeclaration = this.scope.addVariable(this);
+		this.scopeDeclaration = this.scope.addProperty(this);
 	}
 
 	/**

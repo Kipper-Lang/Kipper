@@ -95,6 +95,8 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * Recursively ensures that the identifier does not overwrite any declarations in this scope or parent scopes.
 	 * @param declaration The declaration to check.
 	 * @param identifier The identifier to search for in this scope and its parent scopes.
+	 * @param isClass Whether this is a class scope. If true, the check will only check for class members as they do not
+	 * clash with other scopes.
 	 * @param scopeCtx The context instance of the scope.
 	 * @throws {IdentifierAlreadyUsedByVariableError} If the identifier is already used by a variable.
 	 * @throws {IdentifierAlreadyUsedByFunctionError} If the identifier is already used by a function.
@@ -102,11 +104,11 @@ export class KipperSemanticChecker extends KipperSemanticsAsserter {
 	 * @throws {BuiltInOverwriteError} If the identifier is already in use by a built-in function.
 	 * @since 0.10.0
 	 */
-	public identifierNotUsed(declaration: Declaration, identifier: string, scopeCtx: Scope): void {
+	public identifierNotUsed(declaration: Declaration, identifier: string, isClass: boolean, scopeCtx: Scope): void {
 		// Ensure beforehand that also no built-in has the same identifier
 		this.builtInNotDefined(identifier);
 
-		const ref = scopeCtx.getEntryRecursively(identifier);
+		const ref = isClass ? scopeCtx.getEntry(identifier) : this.getReference(identifier, scopeCtx);
 		if (ref) {
 			if (ref instanceof ScopeVariableDeclaration) {
 				if (ref.node instanceof ClassPropertyDeclaration) {
