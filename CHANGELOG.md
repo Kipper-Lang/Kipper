@@ -61,6 +61,8 @@ To use development versions of Kipper download the
 - Empty arrays not being assignable to `Array<T>` types, due to a strict type checking error. This was fixed by adding
   a special case for empty arrays in the type checking logic and code generation to ensure the type of the empty array
   matches the required type set by the declaration or parameter. ([#696](https://github.com/Kipper-Lang/Kipper/issues/696))
+- Fixed class members being accessible without the use of 'this' causing a runtime error. ([#721](https://github.com/Kipper-Lang/Kipper/issues/721))
+- Fixed class members not being allowed to use names already used in a parent scope.
 
 ### Deprecated
 
