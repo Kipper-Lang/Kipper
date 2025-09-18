@@ -10,7 +10,7 @@ describe("Matches", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
 
 		const written = instance.write();
 		const jsCode = ts.transpile(written);
@@ -22,7 +22,7 @@ describe("Matches", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
 
 		const written = instance.write();
 		const jsCode = ts.transpile(written);
@@ -34,7 +34,7 @@ describe("Matches", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
 
 		const written = instance.write();
 		const jsCode = ts.transpile(written);
@@ -46,7 +46,7 @@ describe("Matches", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
 
 		const written = instance.write();
 		const jsCode = ts.transpile(written);
@@ -58,7 +58,7 @@ describe("Matches", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
 
 		const written = instance.write();
 		const jsCode = ts.transpile(written);
@@ -70,7 +70,7 @@ describe("Matches", () => {
 	// 	const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 	//
 	// 	assert.isDefined(instance.programCtx);
-	// 	assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+	// 	assert.deepEqual(instance.programCtx!!.errors, [],"Expected no compilation errors");
 	//
 	// 	const written = instance.write();
 	// 	const jsCode = ts.transpile(written);
@@ -82,7 +82,7 @@ describe("Matches", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
 
 		const written = instance.write();
 		const jsCode = ts.transpile(written);

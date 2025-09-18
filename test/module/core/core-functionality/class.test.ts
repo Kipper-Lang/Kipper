@@ -11,8 +11,8 @@ describe("Class", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-		let written = instance.write();
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
+		const written = instance.write();
 		assert.include(written, "class Test {\n}", "Invalid TypeScript code (Expected different output)");
 	});
 
@@ -21,8 +21,8 @@ describe("Class", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-		let written = instance.write();
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
+		const written = instance.write();
 		assert.include(
 			written,
 			"class Test {\n  constructor(a: number, b: string)\n  {\n  }\n}",
@@ -35,7 +35,7 @@ describe("Class", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
 
 		const written = instance.write();
 		assert.include(
@@ -59,7 +59,7 @@ describe("Class", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
 
 		const written = instance.write();
 		assert.include(
@@ -85,7 +85,7 @@ describe("Class", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
 
 		const written = instance.write();
 		assert.include(
@@ -113,8 +113,8 @@ describe("Class", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-		let written = instance.write();
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
+		const written = instance.write();
 		assert.include(
 			written,
 			"class Test {\n" +
@@ -142,8 +142,8 @@ describe("Class", () => {
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
 
 		assert.isDefined(instance.programCtx);
-		assert.equal(instance.programCtx!!.errors.length, 0, "Expected no compilation errors");
-		let written = instance.write();
+		assert.deepEqual(instance.programCtx!!.errors, [], "Expected no compilation errors");
+		const written = instance.write();
 		assert.include(
 			written,
 			"class Test {\n" +
