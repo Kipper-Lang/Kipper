@@ -15,4 +15,9 @@ export interface ArrayPrimaryExpressionSemantics extends PrimaryExpressionSemant
 	 * @since 0.5.0
 	 */
 	value: Array<Expression>;
+	/**
+	 * Marks if the list constant is empty. This is essential when assigning to other arrays since there it is allowed
+	 * to go around type restrictions as the empty list constant can be assigned to any array type.
+	 */
+	empty: boolean;
 }

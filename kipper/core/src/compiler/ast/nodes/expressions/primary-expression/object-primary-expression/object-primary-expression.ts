@@ -81,7 +81,6 @@ export class ObjectPrimaryExpression extends PrimaryExpression<
 		if (!children) {
 			throw new UnableToDetermineSemanticDataError();
 		}
-
 		const keyValuePairs = <ObjectProperty[]>this.children;
 
 		this.semanticData = {

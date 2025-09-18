@@ -17,9 +17,9 @@ describe("GenericArgumentTypeError", () => {
 			assert.fail("Expected 'TypeError'");
 		});
 
-		it("Array<num> = Array<str>", async () => {
+		it("Array<num> = Array<bool>", async () => {
 			try {
-				await new KipperCompiler().compile("var x: Array<num> = ['0'];", defaultConfig);
+				await new KipperCompiler().compile("var x: Array<num> = [true];", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).cause?.constructor.name, "GenericArgumentTypeError", "Expected different error");
 				assert((<KipperError>e).cause?.name === "TypeError", "Expected different error");

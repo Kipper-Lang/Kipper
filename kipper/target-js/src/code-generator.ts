@@ -12,8 +12,8 @@ import type {
 	BitwiseShiftExpression,
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
-	CastOrConvertExpression,
 	CatchBlock,
+	CastExpression,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
@@ -21,9 +21,11 @@ import type {
 	ComparativeExpression,
 	ComparativeExpressionSemantics,
 	ConditionalExpression,
+	ConvertExpression,
 	DoWhileLoopIterationStatement,
 	EqualityExpression,
 	ExpressionStatement,
+	ForceCastExpression,
 	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
@@ -35,6 +37,8 @@ import type {
 	IncrementOrDecrementUnaryExpression,
 	InstanceOfExpression,
 	InterfaceDeclaration,
+	InterfaceMethodDeclaration,
+	InterfacePropertyDeclaration,
 	JumpStatement,
 	KipperProgramContext,
 	LambdaPrimaryExpression,
@@ -46,6 +50,7 @@ import type {
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
+	NullableTypeSpecifierExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -60,28 +65,29 @@ import type {
 	TranslatedCodeToken,
 	TranslatedExpression,
 	TryCatchStatement,
+	TryCastExpression,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	InterfaceMethodDeclaration,
-	InterfacePropertyDeclaration,
 } from "@kipper/core";
 import {
 	AssignmentExpression,
-	BuiltInType,
+	BuiltInTypeArray,
+	BuiltInTypeEmptyArray,
 	BuiltInTypes,
 	CompoundStatement,
 	Expression,
 	getConversionFunctionIdentifier,
 	IfStatement,
+	KipperNotImplementedError,
 	KipperTargetCodeGenerator,
 	ScopeDeclaration,
 	VariableDeclaration,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
-import { KipperJavaScriptTarget, TargetJS, version } from "./index";
-import { RuntimeTypesGenerator } from "./runtime-types";
+import { TargetJS, version } from "./index";
+import { createGlobalScope, createKipper, RuntimeTypesGenerator } from "./runtime";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
 	return lines.slice(1, lines.length - 1);
@@ -104,157 +110,16 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		programCtx: KipperProgramContext,
 		requirements: Array<TranslatedCodeLine>,
 	): Promise<Array<TranslatedCodeLine>> => {
-		const inlinedRequirements = requirements.map((req) => req.join("")).join(", ");
 		return [
 			[`/* Generated from '${programCtx.fileName}' by the Kipper Compiler v${version} */`],
 			// Always enable strict mode when using Kipper
 			['"use strict"', ";"],
 			// Determine the global scope in the JS execution environment
 			["// @ts-ignore"],
-			[
-				'var __globalScope = typeof __globalScope !== "undefined" ? __globalScope : typeof' +
-					' globalThis !== "undefined" ?' +
-					" globalThis : typeof" +
-					' window !== "undefined" ?' +
-					' window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {}',
-				";",
-			],
+			[createGlobalScope()],
 			// __createKipper function
 			["// @ts-ignore"],
-			[
-				"var __createKipper = () => {" +
-					" if (__globalScope.__kipper || __kipper) { return undefined; }" +
-					" class KipperError extends Error { constructor(msg) { super(msg); this.name='KipError'; }};" +
-					" class KipperNotImplementedError extends KipperError { " +
-					"		constructor(msg) { super(msg); this.name = 'KipNotImplementedError'; } " +
-					"	}" +
-					" class KipperType {" +
-					"  constructor(name, fields, methods, baseType = null) " +
-					"  { this.name = name; this.fields = fields; this.methods = methods; this.baseType = baseType; }" +
-					"  isCompatibleWith(obj) { return this.name === obj.name; }" +
-					" };" +
-					" class KipperGenericType extends KipperType {" +
-					"  constructor(name, fields, methods, genericArgs, baseType = null) " +
-					"  { super(name, fields, methods, baseType); this.genericArgs = genericArgs; }" +
-					"  isCompatibleWith(obj) { return this.name === obj.name; }" +
-					"  changeGenericTypeArguments(genericArgs) { return new KipperGenericType(this.name, this.fields, this.methods, genericArgs, this.baseType) }" +
-					" };" +
-					" const __type_any = new KipperType('any', undefined, undefined);" +
-					" const __type_null = new KipperType('null', undefined, undefined);" +
-					" const __type_undefined = new KipperType('undefined', undefined, undefined);" +
-					" const __type_str = new KipperType('str', undefined, undefined);" +
-					" const __type_num = new KipperType('num', undefined, undefined);" +
-					" const __type_bool = new KipperType('bool', undefined, undefined);" +
-					" const __type_obj = new KipperType('obj', [], []);" +
-					" const __type_Array = new KipperGenericType('Array', undefined, undefined, {T: __type_any});" +
-					" const __type_Func = new KipperGenericType('Func', undefined, undefined, {T: [], R: __type_any});" +
-					" const __type_Error = new KipperType('error', undefined, undefined);" +
-					" return {" +
-					"  KipperError: KipperError," +
-					"  TypeError: (class KipperTypeError extends KipperError { constructor(msg) { super(msg); this.name = 'KipTypeError'; } })," +
-					"  IndexError: (class KipperIndexError extends KipperError { constructor(msg) { super(msg); this.name = 'KipIndexError'; } })," +
-					"  NotImplementedError: KipperNotImplementedError," +
-					"  Property: class KipperProperty { constructor(name, type) { this.name = name; this.type = type; } }," +
-					"  MethodParameter: class MethodParameter { constructor(name, type) { this.name = name; this.type = type; } }," +
-					"  Method: class KipperMethod { constructor(name, returnType, parameters) { this.name = name; this.returnType = returnType; this.parameters = parameters; } }," +
-					"  Type: KipperType," +
-					"  builtIn: {" +
-					"   any: __type_any," +
-					"   null: __type_null," +
-					"   undefined: __type_undefined," +
-					"   str: __type_str," +
-					"   num: __type_num," +
-					"   bool: __type_bool," +
-					"   obj: __type_obj," +
-					"   Array: __type_Array," +
-					"   Func: __type_Func," +
-					"   Error: __type_Error," +
-					"  }," +
-					"  assignTypeMeta: (value, typeMeta) => Object.assign(value, { __kipType: typeMeta })," +
-					"  typeOf: (value) => {" +
-					"   const prim = typeof value;" +
-					"   switch (prim) {" +
-					"    case 'undefined': return __kipper.builtIn.undefined;" +
-					"    case 'string': return __kipper.builtIn.str;" +
-					"    case 'number': return __kipper.builtIn.num;" +
-					"    case 'boolean': return __kipper.builtIn.bool;" +
-					"    case 'function': {" +
-					"     return '__kipType' in value ? value.__kipType : __kipper.builtIn.Func;" +
-					"    }" +
-					"    case 'symbol':" +
-					"    case 'bigint':" +
-					"    case 'object': {" +
-					"     if (value === null) return __kipper.builtIn.null;" +
-					"     if (Array.isArray(value)) {" +
-					"      return '__kipType' in value ? value.__kipType : __kipper.builtIn.Array;" +
-					"     }" +
-					"     const prot = Object.getPrototypeOf(value);" +
-					"     if (prot && prot.constructor !== Object) {" +
-					"      return prot.constructor;" +
-					"     }" +
-					"     return __kipper.builtIn.obj;" +
-					"    }" +
-					"  	}" +
-					"  }," +
-					"  matches: (value, pattern) => {" +
-					"    const primTypes = [ 'str', 'num', 'bool', 'null', 'undefined' ];" +
-					"    const genTypes = [ 'Array', 'Func' ];" +
-					"    if (pattern.fields && Array.isArray(pattern.fields)) {" +
-					"      for (const field of pattern.fields) {" +
-					"        const fieldName = field.name;" +
-					"        const fieldType = field.type;" +
-					"        const nameIsInType = fieldName in value;" +
-					"        if (!nameIsInType) {" +
-					"          return false;" +
-					"        }" +
-					"        const fieldValue = value[fieldName];" +
-					"        const isSameType = __kipper.typeOf(fieldValue) === field.type;" +
-					"        if (primTypes.includes(field.type.name) && !isSameType) {" +
-					"          return false;" +
-					"        }" +
-					"        if (genTypes.includes(fieldType.name)) {" +
-					"          throw new KipperNotImplementedError(\"Matches does not yet support the 'Array' and 'Func' types\");" +
-					"        }" +
-					"        if (!primTypes.includes(fieldType.name)) {" +
-					"          if (!__kipper.matches(fieldValue, fieldType)) {" +
-					"            return false;" +
-					"          }" +
-					"        }" +
-					"      }" +
-					"    }" +
-					"    if (pattern.methods && Array.isArray(pattern.methods)) {" +
-					"      for (const field of pattern.methods) {" +
-					"        const fieldName = field.name;" +
-					"        const fieldReturnType = field.returnType;" +
-					"        const parameters = field.parameters;" +
-					"        const nameIsInType = fieldName in value;" +
-					"        if (!nameIsInType) {" +
-					"          return false;" +
-					"        }" +
-					"        const fieldValue = value[fieldName];" +
-					"        const isSameType = fieldReturnType === fieldValue.__kipType.genericArgs.R;" +
-					"        if (!isSameType) {" +
-					"          return false;" +
-					"        }" +
-					"        const methodParameters = fieldValue.__kipType.genericArgs.T;" +
-					"        if (parameters.length !== methodParameters.length) {" +
-					"          return false;" +
-					"        }" +
-					"        let count = 0;" +
-					"        for (let param of parameters) {" +
-					"          if (param.type.name !== methodParameters[count].name) {" +
-					"            return false;" +
-					"          }" +
-					"          count++;" +
-					"        }" +
-					"      }" +
-					"    }" +
-					"    return true;" +
-					"  }," +
-					inlinedRequirements +
-					" };" +
-					"};",
-			],
+			[createKipper({ inlinedRequirements: requirements })],
 			// global __kipper variable
 			["var __kipper = __globalScope.__kipper = (__globalScope.__kipper || __createKipper());"],
 		];
@@ -488,7 +353,29 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	returnStatement = async (node: ReturnStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
-		const returnValue = await semanticData.returnValue?.translateCtxAndChildren();
+		const functionReturnType = node.getSemanticData().function.getTypeSemanticData().valueType;
+		let returnValue = await semanticData.returnValue?.translateCtxAndChildren();
+
+		if (returnValue) {
+			// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+			// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+			if (
+				functionReturnType.returnType instanceof BuiltInTypeArray &&
+				semanticData.returnValue?.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+			) {
+				returnValue = [
+					TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+					"(",
+					...returnValue,
+					",",
+					TargetJS.getBuiltInIdentifier("newArrayT"),
+					"(",
+					TargetJS.getRuntimeType(functionReturnType.returnType.valueType),
+					")",
+					")",
+				];
+			}
+		}
 
 		return [["return", ...(returnValue ? [" ", ...returnValue] : []), ";"]];
 	};
@@ -563,15 +450,38 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	variableDeclaration = async (node: VariableDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
+		const typeSemantics = node.getTypeSemanticData();
 		const storage = semanticData.storageType === "const" ? "const" : "let";
-		const assign = semanticData.value ? await semanticData.value.translateCtxAndChildren() : [];
 
-		// Only add ' = EXP' if assignValue is defined
-		return [[storage, " ", semanticData.identifier, ...(assign.length > 0 ? [" ", "=", " ", ...assign] : []), ";"]];
+		let valueToAssign: Array<TranslatedCodeToken> = [];
+		if (semanticData.value) {
+			valueToAssign = await semanticData.value.translateCtxAndChildren();
+
+			// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+			// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+			if (
+				typeSemantics.valueType instanceof BuiltInTypeArray &&
+				semanticData.value.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+			) {
+				valueToAssign = [
+					TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+					"(",
+					...valueToAssign,
+					",",
+					TargetJS.getBuiltInIdentifier("newArrayT"),
+					"(",
+					TargetJS.getRuntimeType(typeSemantics.valueType.valueType),
+					")",
+					")",
+				];
+			}
+			valueToAssign = [" ", "=", " ", ...valueToAssign];
+		}
+		return [[storage, " ", semanticData.identifier, ...valueToAssign, ";"]];
 	};
 
 	/**
-	 * Translates a {@link AssignmentExpression} into the JavaScript language.
+	 * Translates a {@link InterfaceDeclaration} into the JavaScript language.
 	 */
 	interfaceDeclaration = async (node: InterfaceDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const runtimeInterfaceType = await RuntimeTypesGenerator.generateInterfaceRuntimeType(node);
@@ -587,7 +497,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 
 	/**
 	 * Translates a {@link InterfaceMethodDeclaration} into the JavaScript language.
-	 * @param node
 	 */
 	interfaceMethodDeclaration = async (node: InterfaceMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		return [];
@@ -621,18 +530,53 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		];
 	};
 
+	/**
+	 * Translates a {@link NewInstantiationExpression} into the JavaScript language.
+	 */
 	newInstantiationExpression = async (node: NewInstantiationExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-		const identifier = semanticData.class.getSemanticData().rawType.identifier;
-		const args = semanticData.args;
-		const translatedArgs = args.map(async (arg) => {
-			return await arg.translateCtxAndChildren();
-		});
-		const finishedArgs = await Promise.all(translatedArgs);
+		const typeSemantics = node.getTypeSemanticData();
 
-		return ["new", " ", identifier, "(", ...finishedArgs.join(", "), ")"];
+		const identifier = semanticData.classRef.getSemanticData().rawType.identifier;
+		const args = semanticData.args;
+		const constructorType = typeSemantics.constructor?.getTypeSemanticData().valueType;
+
+		let argsTokens: Array<TranslatedExpression> = [];
+		if (constructorType) {
+			const translatedArgs = args.map(async (arg, i) => {
+				let tokens = await arg.translateCtxAndChildren();
+
+				// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+				// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+				let corrType = constructorType.paramTypes[i];
+				if (
+					corrType instanceof BuiltInTypeArray &&
+					arg.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+				) {
+					tokens = [
+						TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+						"(",
+						...tokens,
+						",",
+						TargetJS.getBuiltInIdentifier("newArrayT"),
+						"(",
+						TargetJS.getRuntimeType(corrType.valueType),
+						")",
+						")",
+					];
+				}
+				return tokens.concat([",", " "]);
+			});
+			argsTokens = await Promise.all(translatedArgs);
+		}
+
+		const finishedArgs = argsTokens.flat().slice(0, -2); // Remove the last comma and space
+		return ["new", " ", identifier, "(", ...finishedArgs, ")"];
 	};
 
+	/**
+	 * Translates a {@link ClassPropertyDeclaration} into the JavaScript language.
+	 */
 	classPropertyDeclaration = async (node: ClassPropertyDeclaration): Promise<TranslatedCodeLine> => {
 		const semanticData = node.getSemanticData();
 		const identifier = semanticData.identifier;
@@ -640,6 +584,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [`${identifier};`];
 	};
 
+	/**
+	 * Translates a {@link ClassMethodDeclaration} into the JavaScript language.
+	 */
 	classMethodDeclaration = async (node: ClassMethodDeclaration): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const identifier = semanticData.identifier;
@@ -706,6 +653,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			}),
 		);
 
+		// Otherwise we have to add metadata information to the array to ensure that the type is correctly typed at runtime
 		return [
 			TargetJS.getBuiltInIdentifier("assignTypeMeta"),
 			"(",
@@ -713,9 +661,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			...translatedValues.flat(),
 			"]",
 			",",
-			TargetJS.getBuiltInIdentifier("builtIn.Array.changeGenericTypeArguments"),
+			TargetJS.getBuiltInIdentifier("newArrayT"),
 			"(",
-			`{T: ${valueTypeIdentifier}}`,
+			valueTypeIdentifier,
 			")",
 			")",
 		];
@@ -812,21 +760,35 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	identifierTypeSpecifierExpression = async (
 		node: IdentifierTypeSpecifierExpression,
 	): Promise<TranslatedExpression> => {
-		return [];
+		const typeData = node.getTypeSemanticData();
+		return [TargetJS.getRuntimeType(typeData.storedType)];
 	};
 
 	/**
 	 * Translates a {@link GenericTypeSpecifierExpression} into the JavaScript language.
 	 */
 	genericTypeSpecifierExpression = async (node: GenericTypeSpecifierExpression): Promise<TranslatedExpression> => {
-		return [];
+		throw new KipperNotImplementedError(
+			"Runtime translation of generic type specifier expressions are not supported in target 'JavaScript'.",
+		);
 	};
 
 	/**
 	 * Translates a {@link TypeofTypeSpecifierExpression} into the JavaScript language.
 	 */
 	typeofTypeSpecifierExpression = async (node: TypeofTypeSpecifierExpression): Promise<TranslatedExpression> => {
-		return [];
+		throw new KipperNotImplementedError(
+			"Runtime translation of typeof type specifier expressions are not supported in target 'JavaScript'.",
+		);
+	};
+
+	/**
+	 * Translates a {@link NullableTypeSpecifierExpression} into the JavaScript language.
+	 */
+	nullableTypeSpecifierExpression = async (node: NullableTypeSpecifierExpression): Promise<TranslatedExpression> => {
+		throw new KipperNotImplementedError(
+			"Runtime translation of nullable type specifier expressions are not supported in target 'JavaScript'.",
+		);
 	};
 
 	/**
@@ -897,7 +859,9 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	 */
 	functionCallExpression = async (node: FunctionCallExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
-		const func = node.getTypeSemanticData().funcOrExp;
+		const typeSemantics = node.getTypeSemanticData();
+		const func = typeSemantics.funcOrExp;
+		const funcType = typeSemantics.funcType;
 
 		// Get the proper identifier for the function
 		const exp = func instanceof Expression ? await func.translateCtxAndChildren() : undefined;
@@ -908,16 +872,39 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 					: func.identifier
 				: undefined;
 
-		// Generate the arguments
-		let args: TranslatedExpression = [];
-		for (const i of semanticData.args) {
-			const arg = await i.translateCtxAndChildren();
-			args = args.concat(arg.concat(", "));
+		// Generate the arguments and cover any edge cases
+		let i = 0;
+		let argsTokens: TranslatedExpression = [];
+		for (const arg of semanticData.args) {
+			let argTokens = await arg.translateCtxAndChildren();
+
+			// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+			// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+			let corrType = funcType.paramTypes[i];
+			if (
+				corrType instanceof BuiltInTypeArray &&
+				arg.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+			) {
+				argTokens = [
+					TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+					"(",
+					...argTokens,
+					",",
+					TargetJS.getBuiltInIdentifier("newArrayT"),
+					"(",
+					TargetJS.getRuntimeType(corrType.valueType),
+					")",
+					")",
+				];
+			}
+
+			argsTokens = [...argsTokens, ...argTokens, ",", " "];
+			i++;
 		}
-		args = args.slice(0, -1); // Removing last whitespace and comma before the closing parenthesis
+		argsTokens = argsTokens.slice(0, -2); // Removing last whitespace and comma before the closing parenthesis
 
 		// Return the compiled function call
-		return [...(identifier ? [identifier] : exp!!), "(", ...args, ")"];
+		return [...(identifier ? [identifier] : exp!!), "(", ...argsTokens, ")"];
 	};
 
 	/**
@@ -948,9 +935,51 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	};
 
 	/**
-	 * Translates a {@link CastOrConvertExpression} into the JavaScript language.
+	 * Translates a {@link CastExpression} into the JavaScript language.
+	 * @since 0.12.0
 	 */
-	castOrConvertExpression = async (node: CastOrConvertExpression): Promise<TranslatedExpression> => {
+	castExpression = async (node: CastExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		return await semanticData.exp.translateCtxAndChildren();
+	};
+
+	/**
+	 * Translates a {@link TryCastExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	tryCastExpression = async (node: TryCastExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		return [
+			TargetJS.getBuiltInIdentifier("tryCastAs"),
+			"(",
+			...(await semanticData.exp.translateCtxAndChildren()),
+			",",
+			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
+			")",
+		];
+	};
+
+	/**
+	 * Translates a {@link ForceCastExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	forceCastExpression = async (node: ForceCastExpression): Promise<TranslatedExpression> => {
+		const semanticData = node.getSemanticData();
+		return [
+			TargetJS.getBuiltInIdentifier("forceCastAs"),
+			"(",
+			...(await semanticData.exp.translateCtxAndChildren()),
+			",",
+			...(await semanticData.castTypeSpecifier.translateCtxAndChildren()),
+			")",
+		];
+	};
+
+	/**
+	 * Translates a {@link ConvertExpression} into the JavaScript language.
+	 * @since 0.12.0
+	 */
+	convertExpression = async (node: ConvertExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const typeData = node.getTypeSemanticData();
 
@@ -1101,9 +1130,29 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	assignmentExpression = async (node: AssignmentExpression): Promise<TranslatedExpression> => {
 		const semanticData = node.getSemanticData();
 		const toAssign = await semanticData.toAssign.translateCtxAndChildren();
-		const assignExp = await semanticData.value.translateCtxAndChildren();
+		let valueToAssign = await semanticData.value.translateCtxAndChildren();
 
-		return [...toAssign, " ", semanticData.operator, " ", ...assignExp];
+		// In case that we are dealing with an empty array, we need to add type metadata to the array to ensure that the
+		// type is correctly typed at runtime (This is a special case for arrays, no interfaces or classes)
+		const assignTargetType = semanticData.toAssign.getTypeSemanticData().evaluatedType;
+		if (
+			assignTargetType instanceof BuiltInTypeArray &&
+			semanticData.value.getTypeSemanticData().evaluatedType instanceof BuiltInTypeEmptyArray
+		) {
+			valueToAssign = [
+				TargetJS.getBuiltInIdentifier("assignTypeMeta"),
+				"(",
+				...valueToAssign,
+				",",
+				TargetJS.getBuiltInIdentifier("newArrayT"),
+				"(",
+				TargetJS.getRuntimeType(assignTargetType.valueType),
+				")",
+				")",
+			];
+		}
+
+		return [...toAssign, " ", semanticData.operator, " ", ...valueToAssign];
 	};
 
 	/**
@@ -1174,7 +1223,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			...translatedExpression,
 			", ",
 			// Always only accepts a Kipper interface
-			`${TargetJS.internalInterfacePrefix}_${pattern.storedType.identifier}`,
+			TargetJS.getRuntimeType(pattern.storedType),
 			")",
 		];
 	};

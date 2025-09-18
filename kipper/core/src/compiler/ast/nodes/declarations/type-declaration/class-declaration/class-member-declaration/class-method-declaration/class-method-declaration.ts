@@ -3,7 +3,8 @@
  * @since 0.12.0
  */
 import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
-import { BuiltInTypeFunc, FunctionScope } from "../../../../../../../semantics";
+import { BuiltInTypeFunc } from "../../../../../../../semantics";
+import { FunctionScope } from "../../../../../../../semantics";
 import type { ClassMethodDeclarationContext } from "../../../../../../../lexer-parser";
 import { DeclaratorContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
 import type { CompilableNodeParent } from "../../../../../../compilable-ast-node";

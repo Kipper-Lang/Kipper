@@ -10,7 +10,7 @@ describe("InvalidConversionTypeError", () => {
 				await new KipperCompiler().compile('"5" as Func;', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -22,7 +22,7 @@ describe("InvalidConversionTypeError", () => {
 				await new KipperCompiler().compile("5 as Func;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -34,7 +34,7 @@ describe("InvalidConversionTypeError", () => {
 				await new KipperCompiler().compile("true as Func;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -46,7 +46,7 @@ describe("InvalidConversionTypeError", () => {
 				await new KipperCompiler().compile("print as str;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -58,7 +58,7 @@ describe("InvalidConversionTypeError", () => {
 				await new KipperCompiler().compile("print as bool;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -70,7 +70,7 @@ describe("InvalidConversionTypeError", () => {
 				await new KipperCompiler().compile("print as bool;", defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidConversionTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

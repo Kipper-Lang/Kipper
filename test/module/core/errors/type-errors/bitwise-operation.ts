@@ -10,7 +10,7 @@ describe("BitwiseOperationTypeError", () => {
 				await new KipperCompiler().compile('10 << "2";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "BitwiseOperationTypeError");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -22,7 +22,7 @@ describe("BitwiseOperationTypeError", () => {
 				await new KipperCompiler().compile('10 >>> "2";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "BitwiseOperationTypeError");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -34,7 +34,7 @@ describe("BitwiseOperationTypeError", () => {
 				await new KipperCompiler().compile('10 >> "2";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "BitwiseOperationTypeError");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -48,7 +48,7 @@ describe("BitwiseOperationTypeError", () => {
 				await new KipperCompiler().compile('10 & "2";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "BitwiseOperationTypeError");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -62,7 +62,7 @@ describe("BitwiseOperationTypeError", () => {
 				await new KipperCompiler().compile('10 | "2";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "BitwiseOperationTypeError");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -76,7 +76,7 @@ describe("BitwiseOperationTypeError", () => {
 				await new KipperCompiler().compile('10 ^ "2";', defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "BitwiseOperationTypeError");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

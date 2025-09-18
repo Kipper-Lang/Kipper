@@ -11,7 +11,7 @@ import type {
 	BitwiseShiftExpression,
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
-	CastOrConvertExpression,
+	CastExpression,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
 	ClassMethodDeclaration,
@@ -19,9 +19,11 @@ import type {
 	CompilableASTNode,
 	CompoundStatement,
 	ConditionalExpression,
+	ConvertExpression,
 	DoWhileLoopIterationStatement,
 	EqualityExpression,
 	ExpressionStatement,
+	ForceCastExpression,
 	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
@@ -44,6 +46,7 @@ import type {
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
+	NullableTypeSpecifierExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -55,6 +58,7 @@ import type {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TryCatchStatement,
+	TryCastExpression,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
@@ -324,6 +328,14 @@ export abstract class KipperTargetCodeGenerator {
 	>;
 
 	/**
+	 * Translates a {@link NullableTypeSpecifierExpression} into a specific language.
+	 */
+	public abstract nullableTypeSpecifierExpression: TargetASTNodeCodeGenerator<
+		NullableTypeSpecifierExpression,
+		TranslatedExpression
+	>;
+
+	/**
 	 * Translates a {@link TangledPrimaryExpression} into a specific language.
 	 */
 	public abstract tangledPrimaryExpression: TargetASTNodeCodeGenerator<TangledPrimaryExpression, TranslatedExpression>;
@@ -366,9 +378,24 @@ export abstract class KipperTargetCodeGenerator {
 	>;
 
 	/**
-	 * Translates a {@link CastOrConvertExpression} into a specific language.
+	 * Translates a {@link CastExpression} into a specific language.
 	 */
-	public abstract castOrConvertExpression: TargetASTNodeCodeGenerator<CastOrConvertExpression, TranslatedExpression>;
+	public abstract castExpression: TargetASTNodeCodeGenerator<CastExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link TryCastExpression} into a specific language.
+	 */
+	public abstract tryCastExpression: TargetASTNodeCodeGenerator<TryCastExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link ForceCastExpression} into a specific language.
+	 */
+	public abstract forceCastExpression: TargetASTNodeCodeGenerator<ForceCastExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link ConvertExpression} into a specific language.
+	 */
+	public abstract convertExpression: TargetASTNodeCodeGenerator<ConvertExpression, TranslatedExpression>;
 
 	/**
 	 * Translates a {@link MultiplicativeExpression} into a specific language.
@@ -446,7 +473,7 @@ export abstract class KipperTargetCodeGenerator {
 	public abstract matchesExpression: TargetASTNodeCodeGenerator<MatchesExpression, TranslatedExpression>;
 
 	/**
-	 * Translates a {@Link InstanceOfExpression} into a specific language.
+	 * Translates a {@link InstanceOfExpression} into a specific language.
 	 */
 	public abstract instanceOfExpression: TargetASTNodeCodeGenerator<InstanceOfExpression, TranslatedExpression>;
 

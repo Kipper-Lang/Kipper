@@ -665,3 +665,41 @@ export const KipperConstructorInternalIdentifierLiteral = "@constructor";
  * @since 0.12.0
  */
 export type KipperConstructorInternalIdentifier = typeof KipperConstructorInternalIdentifierLiteral;
+
+/**
+ * Represents the null operator for applying "nullability" to a type by unified it with `null`.
+ * @since 0.13.0
+ */
+export type KipperNullableNullOperator = "?";
+
+/**
+ * Represents the null operator for applying "nullability" to a type by unified it with `null`.
+ * @since 0.13.0
+ */
+export const kipperNullableNullOperator: KipperNullableNullOperator = "?";
+
+/**
+ * Represents the undefined operator for applying "nullability" to a type by unified it with `undefined`.
+ * @since 0.13.0
+ */
+export type KipperNullableUndefinedOperator = "??";
+
+/**
+ * Represents the undefined operator for applying "nullability" to a type by unified it with `undefined`.
+ * @since 0.13.0
+ */
+export const kipperNullableUndefinedOperator: KipperNullableUndefinedOperator = "??";
+
+/**
+ * Represents the two possible operators for applying "nullability" to a type by either unifying it with `null` or
+ * `undefined`.
+ * @since 0.13.0
+ */
+export type KipperNullableOperators = KipperNullableNullOperator | KipperNullableUndefinedOperator;
+
+/**
+ * Represents the two possible operators for applying "nullability" to a type by either unifying it with `null` or
+ * `undefined`.
+ * @since 0.13.0
+ */
+export const kipperNullableOperators: Array<KipperNullableOperators> = ["?", "??"];

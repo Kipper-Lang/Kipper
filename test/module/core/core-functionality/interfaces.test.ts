@@ -1,0 +1,67 @@
+import type { KipperCompileResult } from "@kipper/core";
+import { assert } from "chai";
+import { compiler, defaultTarget } from ".";
+import { assertCodeIncludesSnippet, assertErrorsAreEmpty } from "../index";
+
+describe("Interfaces", async () => {
+	it("Can initialize empty interface", async () => {
+		const fileContent = "interface Test { }";
+		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+		assert.isDefined(instance.programCtx);
+		assertErrorsAreEmpty(instance.programCtx!);
+
+		let written = instance.write();
+		assertCodeIncludesSnippet(written, "interface Test {\n}");
+	});
+
+	it("should be able to to create object with interface blueprint", async () => {
+		const fileContent = `interface Test {a: str;}; var x: Test = {a: "3"}; print(x.a);`;
+		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+		assert.isDefined(instance.programCtx);
+		assertErrorsAreEmpty(instance.programCtx!);
+
+		let written = instance.write();
+		assertCodeIncludesSnippet(
+			written,
+			`interface Test {\n` +
+				`  a: string;\n` +
+				`}\n` +
+				`const __intf_Test = __kipper.newIntfT("Test",[new __kipper.Property("a", __kipper.builtIn.str),],[],__kipper.builtIn.obj)\n` +
+				"let x: Test = {\n" +
+				'  a: "3",\n' +
+				"};\n" +
+				"__kipper.print(x.a);",
+		);
+	});
+
+	it("can initialize interface with members", async () => {
+		const fileContent = "interface Test {\n x: num;\n y: str;\n greet(name: str): str;}";
+		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+		assert.isDefined(instance.programCtx);
+		assertErrorsAreEmpty(instance.programCtx!);
+
+		let written = instance.write();
+		assertCodeIncludesSnippet(
+			written,
+			"interface Test {\n  x: number;\n  y: string;\n  greet(name: string): string;\n}",
+		);
+	});
+
+	it("should can initialize with mixed members", async () => {
+		const fileContent = "interface Test {\n x: num;\n isTrue(f: bool): str;\n y: str;\n greet(name: str): str;}";
+		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
+
+		assert.isDefined(instance.programCtx);
+		assertErrorsAreEmpty(instance.programCtx!);
+
+		let written = instance.write();
+		assertCodeIncludesSnippet(
+			written,
+			"interface Test {\n  x: number;\n  isTrue(f: boolean): string;\n  y: string;\n  greet(name: string):" +
+				" string;\n}",
+		);
+	});
+});

@@ -7,6 +7,7 @@ import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-pa
 import type { CompilableASTNode } from "../../../compilable-ast-node";
 import type { IdentifierTypeSpecifierExpression } from "../type-specifier-expression";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
+import type { CustomType } from "../../../../semantics";
 
 /**
  * New instantiation expressions, which are used to create a new instance of a class.
@@ -41,32 +42,32 @@ export class NewInstantiationExpression extends Expression<
 		return NewInstantiationExpression.ruleName;
 	}
 
-	public async primarySemanticTypeChecking?(): Promise<void> {
-		const typeSepcifier = this.semanticData!.class.getTypeSemanticData().storedType;
-
-		this.typeSemantics = {
-			evaluatedType: typeSepcifier,
-		};
-	}
-
 	constructor(antlrRuleCtx: NewInstantiationExpressionContext, parent: CompilableASTNode) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 	}
 
-	public async primarySemanticAnalysis?(): Promise<void> {
-		const children = this.children;
-
-		const classIdentifier = <IdentifierTypeSpecifierExpression>children[0];
-		const args = <Array<Expression>>children.slice(1);
+	public async primarySemanticAnalysis(): Promise<void> {
+		const classIdentifier = <IdentifierTypeSpecifierExpression>this.children[0];
+		const args = <Array<Expression>>this.children.slice(1);
 
 		if (!classIdentifier || !args) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
 		this.semanticData = {
-			class: classIdentifier,
+			classRef: classIdentifier,
 			args: args,
+		};
+	}
+
+	public async primarySemanticTypeChecking(): Promise<void> {
+		const semanticData = this.getSemanticData();
+		const typeSpecifier = <CustomType>semanticData.classRef.getTypeSemanticData().storedType;
+
+		this.typeSemantics = {
+			evaluatedType: typeSpecifier,
+			constructor: typeSpecifier.clsConstructor,
 		};
 	}
 

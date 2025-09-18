@@ -18,15 +18,75 @@ To use development versions of Kipper download the
 
 ### Added
 
+- New cast keywords `cast as`, `force as` and `try as`, which allow for various type-safe cast operations.
+  ([#685](https://github.com/Kipper-Lang/Kipper/issues/685))
+- Implemented new `T?` and `T??` nullable type operator which marks the given type as `T | null` and `T | undefined`
+  respectively.
+- New classes:
+  - `NullableTypeSpecifierExpression`, which represents an AST nullable type specifier expression that marks a given
+    type as nullable with either `null` or `undefined`.
+- New interfaces:
+  - `NullableTypeSpecifierExpressionSemantics`, which represents the semantics of a nullable type specifier expression.
+  - `NullableTypeSpecifierExpressionTypeSemantics`, which represents the type semantics of a nullable type specifier
+    expression.
+- New functions:
+  - `KipperTypeScriptTarget.getRuntimeType`, which gets the corresponding runtime representation of a type.
+- New properties:
+  - `CompilableASTNode.closestHigherLevelParent`, which returns the closest parent of the node that is of a higher level
+    than the node itself. (Higher level as in statement or declaration level, undefined means the item itself is already
+    at the highest level).
+  - `BuiltInTypeArray.valueType`, which returns the value type of the array.
+  - `FunctionCallExpressionTypeSemantics.funcType`, which returns the function type of the function call expression.
+  - `NewInstantiationExpressionTypeSemantics.constructor`, which returns the constructor of the new instantiation
+    expression that is being called (if it exists).
+  - `CustomType.sourceNode`, which returns the source node of the custom type.
+  - `CustomType.clsConstructor`, which returns the constructor of the class if the type is a class and the class has a
+    constructor.
+- New types:
+  - `KipperNullableNullOperator`, which is the `null` nullable operator that can be used in Kipper.
+  - `KipperNullableUndefinedOperator`, which is the `undefined` nullable operator that can be used in Kipper.
+  - `KipperNullableOperators`, which are the nullable operators that can be used in Kipper.
+- New constants:
+  - `kipperNullableNullOperator`, which is the `null` nullable operator that can be used in Kipper.
+  - `kipperNullableUndefinedOperator`, which is the `undefined` nullable operator that can be used in Kipper.
+  - `kipperNullableOperators`, which are the nullable operators that can be used in Kipper.
+
 ### Changed
 
+- Renamed:
+  - Error `ValueTypeNotIndexableWithGivenAccessor` to `ValueTypeNotIndexableWithGivenAccessorTypeError`.
+
 ### Fixed
+
+- Empty arrays not being assignable to `Array<T>` types, due to a strict type checking error. This was fixed by adding
+  a special case for empty arrays in the type checking logic and code generation to ensure the type of the empty array
+  matches the required type set by the declaration or parameter. ([#696](https://github.com/Kipper-Lang/Kipper/issues/696))
+- Fixed class members being accessible without the use of 'this' causing a runtime error. ([#721](https://github.com/Kipper-Lang/Kipper/issues/721))
+- Fixed class members not being allowed to use names already used in a parent scope.
 
 ### Deprecated
 
 ### Removed
 
 </details>
+
+## [0.12.1] - 2025-02-17
+
+### Changed
+
+- Renamed:
+  - Error `MismatchingArgCountBetweenFuncTypesError` to `MismatchingArgCountBetweenFuncTypesTypeError`.
+  - Error `UnknownTypeError` to `UnknownTypeTypeError`.
+  - Error `PropertyNotFoundError` to `PropertyNotFoundTypeError`.
+
+### Fixed
+
+- `PropertyNotFoundTypeError` being thrown as a stand-alone error instead of being set as the cause for any parent
+  assignment operation failure.
+- `PropertyNotFoundTypeError` being checked for in the wrong direction i.e. that `otherT` had to have all the properties
+  of `thisT` instead of the other way around (which is the correct way).
+- Indexable checks for `str` and `Array<T>` being accidentally turned off by incorrect logic. This caused
+  `ValueTypeNotIndexableWithGivenAccessorTypeError` to be only thrown for objects and not for arrays and strings.
 
 ## [0.12.0] - 2024-09-25
 
@@ -1606,7 +1666,8 @@ To use development versions of Kipper download the
 
 - Updated file structure to separate `commands` (for `oclif`) and `compiler` (for the compiler source-code)
 
-[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.12.0...HEAD
+[unreleased]: https://github.com/Kipper-Lang/Kipper/compare/v0.12.1...HEAD
+[0.12.1]: https://github.com/Kipper-Lang/Kipper/compare/v0.12.0...v0.12.1
 [0.12.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.4...v0.11.0
 [0.10.4]: https://github.com/Kipper-Lang/Kipper/compare/v0.10.3...v0.10.4

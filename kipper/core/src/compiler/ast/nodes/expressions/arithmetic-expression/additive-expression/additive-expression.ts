@@ -37,11 +37,13 @@ export class AdditiveExpression extends ArithmeticExpression<
 	 * @since 0.11.0
 	 */
 	public static readonly kind = ParseRuleKindMapping.RULE_additiveExpression;
+
 	/**
 	 * The static rule name for this AST Node.
 	 * @since 0.11.0
 	 */
 	public static readonly ruleName = KindParseRuleMapping[this.kind];
+
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
 	 *
@@ -49,8 +51,10 @@ export class AdditiveExpression extends ArithmeticExpression<
 	 * @since 0.9.0
 	 */
 	public checkForWarnings = undefined; // TODO!
+
 	readonly targetSemanticAnalysis = this.semanticAnalyser.additiveExpression;
 	readonly targetCodeGenerator = this.codeGenerator.additiveExpression;
+
 	/**
 	 * The private field '_antlrRuleCtx' that actually stores the variable data,
 	 * which is returned inside the {@link this.antlrRuleCtx}.

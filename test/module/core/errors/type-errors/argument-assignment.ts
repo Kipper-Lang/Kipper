@@ -10,7 +10,7 @@ describe("ArgumentAssignmentTypeError", () => {
 				await new KipperCompiler().compile(`len(1);`, defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArgumentAssignmentTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -22,7 +22,7 @@ describe("ArgumentAssignmentTypeError", () => {
 				await new KipperCompiler().compile(`def test(p1: str, p2: str) -> void {}; test("Hello", 1);`, defaultConfig);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArgumentAssignmentTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -37,7 +37,7 @@ describe("ArgumentAssignmentTypeError", () => {
 				);
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "ArgumentAssignmentTypeError", "Expected different error");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}

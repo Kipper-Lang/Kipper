@@ -16,7 +16,8 @@ import { Expression } from "../expression";
 export type ASTTypeSpecifierExpressionKind =
 	| typeof ParseRuleKindMapping.RULE_identifierTypeSpecifierExpression
 	| typeof ParseRuleKindMapping.RULE_genericTypeSpecifierExpression
-	| typeof ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression;
+	| typeof ParseRuleKindMapping.RULE_typeofTypeSpecifierExpression
+	| typeof ParseRuleKindMapping.RULE_nullableTypeSpecifierExpression;
 
 /**
  * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link TypeSpecifierExpression}

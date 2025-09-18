@@ -2,30 +2,30 @@ import { KipperCompiler, type KipperCompileResult, type KipperError } from "@kip
 import { defaultConfig, ensureTracebackDataExists } from "../index";
 import { assert } from "chai";
 
-describe("MismatchingArgCountBetweenFuncTypesError", () => {
+describe("MismatchingArgCountBetweenFuncTypesTypeError", () => {
 	describe("Error", () => {
 		it("Too many", async () => {
 			try {
 				await new KipperCompiler().compile("var x: Func<str> = (x: num): str -> '';", defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "MismatchingArgCountBetweenFuncTypesError");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).constructor.name, "MismatchingArgCountBetweenFuncTypesTypeError");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert.fail("Expected 'MismatchingArgCountBetweenFuncTypesError'");
+			assert.fail("Expected 'MismatchingArgCountBetweenFuncTypesTypeError'");
 		});
 
 		it("Too few", async () => {
 			try {
 				await new KipperCompiler().compile("var x: Func<num, str> = (): str -> '';", defaultConfig);
 			} catch (e) {
-				assert.equal((<KipperError>e).constructor.name, "MismatchingArgCountBetweenFuncTypesError");
-				assert((<KipperError>e).name === "TypeError", "Expected different error");
+				assert.equal((<KipperError>e).constructor.name, "MismatchingArgCountBetweenFuncTypesTypeError");
+				assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
-			assert.fail("Expected 'MismatchingArgCountBetweenFuncTypesError'");
+			assert.fail("Expected 'MismatchingArgCountBetweenFuncTypesTypeError'");
 		});
 	});
 

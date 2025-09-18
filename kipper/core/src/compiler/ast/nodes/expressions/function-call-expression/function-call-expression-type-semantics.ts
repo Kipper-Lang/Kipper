@@ -4,6 +4,7 @@
  */
 import type { ExpressionTypeSemantics } from "../expression-type-semantics";
 import type {
+	BuiltInTypeFunc,
 	ScopeFunctionDeclaration,
 	ScopeParameterDeclaration,
 	ScopeVariableDeclaration,
@@ -23,4 +24,9 @@ export interface FunctionCallExpressionTypeSemantics extends ExpressionTypeSeman
 	 * @since 0.12.0
 	 */
 	funcOrExp: ScopeFunctionDeclaration | ScopeParameterDeclaration | ScopeVariableDeclaration | Expression;
+	/**
+	 * The function type that is being called.
+	 * @since 0.13.0
+	 */
+	funcType: BuiltInTypeFunc;
 }

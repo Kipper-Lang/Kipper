@@ -12,6 +12,7 @@ import type {
 	BitwiseShiftExpression,
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
+	CastExpression,
 	CastOrConvertExpression,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
@@ -21,6 +22,7 @@ import type {
 	DoWhileLoopIterationStatement,
 	EqualityExpression,
 	ExpressionStatement,
+	ForceCastExpression,
 	ForLoopIterationStatement,
 	FStringPrimaryExpression,
 	FunctionCallExpression,
@@ -43,6 +45,7 @@ import type {
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
+	NullableTypeSpecifierExpression,
 	NumberPrimaryExpression,
 	ObjectPrimaryExpression,
 	ObjectProperty,
@@ -55,6 +58,7 @@ import type {
 	SwitchStatement,
 	TangledPrimaryExpression,
 	TryCatchStatement,
+	TryCastExpression,
 	TypeData,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
@@ -242,6 +246,11 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract typeofTypeSpecifierExpression?: TargetASTNodeSemanticAnalyser<TypeofTypeSpecifierExpression>;
 
 	/**
+	 * Performs translation-specific semantic analysis for {@link NullableTypeSpecifierExpression} instances.
+	 */
+	public abstract nullableTypeSpecifierExpression?: TargetASTNodeSemanticAnalyser<NullableTypeSpecifierExpression>;
+
+	/**
 	 * Performs translation-specific semantic analysis for {@link TangledPrimaryExpression} instances.
 	 */
 	public abstract tangledPrimaryExpression?: TargetASTNodeSemanticAnalyser<TangledPrimaryExpression>;
@@ -272,9 +281,24 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	public abstract operatorModifiedUnaryExpression?: TargetASTNodeSemanticAnalyser<OperatorModifiedUnaryExpression>;
 
 	/**
-	 * Performs translation-specific semantic analysis for {@link CastOrConvertExpression} instances.
+	 * Performs translation-specific semantic analysis for {@link CastExpression} instances.
 	 */
-	public abstract castOrConvertExpression?: TargetASTNodeSemanticAnalyser<CastOrConvertExpression>;
+	public abstract castExpression?: TargetASTNodeSemanticAnalyser<CastExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link TryCastExpression} instances.
+	 */
+	public abstract tryCastExpression?: TargetASTNodeSemanticAnalyser<TryCastExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ForceCastExpression} instances.
+	 */
+	public abstract forceCastExpression?: TargetASTNodeSemanticAnalyser<ForceCastExpression>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link ConvertCastExpression} instances.
+	 */
+	public abstract convertExpression?: TargetASTNodeSemanticAnalyser<CastOrConvertExpression>;
 
 	/**
 	 * Performs translation-specific semantic analysis for {@link MultiplicativeExpression} instances.

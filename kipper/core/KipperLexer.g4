@@ -44,6 +44,9 @@ Var : 'var';
 
 // conversion
 As : 'as';
+CastAs : 'cast as';
+ForceAs : 'force as';
+TryAs : 'try as';
 
 // spread operator
 Spread : '...';
@@ -109,6 +112,7 @@ Undefined : 'undefined';
 Comma : ',';
 SemiColon : ';';
 QuestionMark : '?';
+DoubleQuestionMark : '??';
 Colon : ':';
 LeftParen : '(';
 RightParen : ')';

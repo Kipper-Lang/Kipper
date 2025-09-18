@@ -9,7 +9,7 @@ import type { FunctionDeclarationTypeSemantics } from "./function-declaration-ty
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
 import type { CompoundStatement, Statement } from "../../statements";
 import type { IdentifierTypeSpecifierExpression } from "../../expressions";
-import type { GlobalScope, RawType, ScopeFunctionDeclaration } from "../../../../semantics";
+import type { GlobalScope, ScopeFunctionDeclaration } from "../../../../semantics";
 import { BuiltInTypeFunc, FunctionScope } from "../../../../semantics";
 import type { FunctionDeclarationContext } from "../../../../lexer-parser";
 import {
@@ -181,8 +181,6 @@ export class FunctionDeclaration
 		this.programCtx.semanticCheck(this).validFunctionBody(body);
 
 		const identifier = this.tokenStream.getText(declaratorCtx.sourceInterval);
-		const returnType: RawType = retTypeSpecifier.getSemanticData().rawType;
-
 		this.semanticData = {
 			isDefined: parseTreeChildren.find((val) => val instanceof CompoundStatementContext) !== undefined,
 			identifier: identifier,

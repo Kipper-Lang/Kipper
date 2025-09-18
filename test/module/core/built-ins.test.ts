@@ -4,7 +4,7 @@ import type { CompileConfig, KipperCompileResult, KipperError } from "@kipper/co
 import { KipperCompiler, KipperFileStream } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
-import { testPrintOutput } from "./core-functionality.test";
+import { testPrintOutput } from "./index";
 
 /**
  * Returns the JavaScript code from the given Kipper compilation result.
@@ -43,7 +43,7 @@ describe("Built-ins", () => {
 							"InvalidAmountOfArgumentsError",
 							"Expected different error",
 						);
-						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+						assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
@@ -59,7 +59,7 @@ describe("Built-ins", () => {
 							"InvalidAmountOfArgumentsError",
 							"Expected different error",
 						);
-						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+						assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
@@ -117,7 +117,7 @@ describe("Built-ins", () => {
 							"InvalidAmountOfArgumentsError",
 							"Expected different error",
 						);
-						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+						assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
@@ -133,7 +133,7 @@ describe("Built-ins", () => {
 							"InvalidAmountOfArgumentsError",
 							"Expected different error",
 						);
-						assert((<KipperError>e).name === "ArgumentError", "Expected different error");
+						assert.equal((<KipperError>e).name, "ArgumentError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'InvalidAmountOfArgumentsError'");
@@ -145,7 +145,7 @@ describe("Built-ins", () => {
 						await compiler.compile(fileContent, config);
 					} catch (e) {
 						assert.equal((<KipperError>e).constructor.name, "ArgumentAssignmentTypeError", "Expected different error");
-						assert((<KipperError>e).name === "TypeError", "Expected different error");
+						assert.equal((<KipperError>e).name, "TypeError", "Expected different error");
 						return;
 					}
 					assert.fail("Expected 'ArgumentAssignmentTypeError'");
@@ -179,7 +179,7 @@ describe("Built-ins", () => {
 			assert.equal(result.programCtx!!.builtInVariableReferences.length, 1);
 
 			const code: string = getJSEvalCode(result);
-			testPrintOutput((out) => assert.equal(out, "test.kip"), code);
+			testPrintOutput((out: any) => assert.equal(out, "test.kip"), code);
 		});
 
 		it("NaN", async () => {

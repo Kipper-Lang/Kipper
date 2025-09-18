@@ -10,7 +10,7 @@ describe("InvalidAssignmentError", () => {
 				await new KipperCompiler().compile("5 = 5;", { abortOnFirstError: true, target: defaultTarget });
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidAssignmentError", "Expected different error");
-				assert((<KipperError>e).name === "InvalidAssignmentError", "Expected different error");
+				assert.equal((<KipperError>e).name, "InvalidAssignmentError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
@@ -25,7 +25,7 @@ describe("InvalidAssignmentError", () => {
 				});
 			} catch (e) {
 				assert.equal((<KipperError>e).constructor.name, "InvalidAssignmentError", "Expected different error");
-				assert((<KipperError>e).name === "InvalidAssignmentError", "Expected different error");
+				assert.equal((<KipperError>e).name, "InvalidAssignmentError", "Expected different error");
 				ensureTracebackDataExists(<KipperError>e);
 				return;
 			}
