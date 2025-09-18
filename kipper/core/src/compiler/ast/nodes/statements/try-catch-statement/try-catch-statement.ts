@@ -94,26 +94,27 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const tryBlock: Statement = <Statement>this._children.shift();
+		const children = [...this.children];
+		const tryBlock: Statement = <Statement>children.shift();
 		let catchClauses: CatchBlock[] = [];
 		let finallyBlock: Statement | undefined = undefined;
 
 		let finallyClauseExists = this.getAntlrRuleChildren().some((node) => node instanceof FinallyClauseContext);
 		if (finallyClauseExists) {
-			finallyBlock = <Statement>this._children.pop();
+			finallyBlock = <Statement>children.pop();
 		}
 
-		if (this._children.length === 1) {
+		if (children.length === 1) {
 			catchClauses.push({
 				parameter: undefined,
-				body: <Statement>this._children.pop(),
+				body: <Statement>children.pop(),
 			});
 		}
 
-		for (let i = 0; i < this._children.length; i += 2) {
+		for (let i = 0; i < children.length; i += 2) {
 			const catchClause: CatchBlock = {
-				parameter: <ParameterDeclaration>this._children[i],
-				body: <Statement>this._children[i + 1],
+				parameter: <ParameterDeclaration>children[i],
+				body: <Statement>children[i + 1],
 			};
 			catchClauses.push(catchClause);
 		}
