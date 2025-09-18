@@ -15,8 +15,5 @@
 	],
 	"spec": [
 		"**/*.test.ts"
-	],
-	"node-option": [
-		"no-experimental-strip-types"
 	]
 }

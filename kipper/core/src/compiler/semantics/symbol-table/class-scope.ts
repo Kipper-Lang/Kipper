@@ -3,9 +3,9 @@
  * the global namespace.
  * @since 0.11.0
  */
-import type {
+import {
 	ClassConstructorDeclaration,
-	ClassDeclaration,
+	ClassDeclaration, ClassMemberDeclaration,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
 } from "../../ast";
@@ -37,7 +37,7 @@ export class ClassScope extends UserScope {
 
 	public addConstructor(declaration: ClassConstructorDeclaration): ScopeFunctionDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-		this.ensureNotUsed(identifier, declaration);
+		this.clsEnsureNotUsed(declaration);
 
 		const scopeDeclaration = ScopeFunctionDeclaration.fromClassConstructorDeclaration(declaration);
 		this.entries.set(identifier, scopeDeclaration);
@@ -46,7 +46,7 @@ export class ClassScope extends UserScope {
 
 	public override addFunction(declaration: ClassMethodDeclaration): ScopeFunctionDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-		this.ensureNotUsed(identifier, declaration);
+		this.clsEnsureNotUsed(declaration);
 
 		const scopeDeclaration = ScopeFunctionDeclaration.fromClassMethodDeclaration(declaration);
 		this.entries.set(identifier, scopeDeclaration);
@@ -54,8 +54,12 @@ export class ClassScope extends UserScope {
 	}
 
 	public addVariable(declaration: ClassPropertyDeclaration): ScopeVariableDeclaration {
+		return this.addProperty(declaration);
+	}
+
+	public addProperty(declaration: ClassPropertyDeclaration): ScopeVariableDeclaration {
 		const identifier = declaration.getSemanticData().identifier;
-		this.ensureNotUsed(identifier, declaration);
+		this.clsEnsureNotUsed(declaration);
 
 		const scopeDeclaration = ScopeVariableDeclaration.fromClassPropertyDeclaration(declaration);
 		this._entries.set(identifier, scopeDeclaration);
@@ -68,6 +72,12 @@ export class ClassScope extends UserScope {
 			.notImplementedError(new KipperNotImplementedError("Local types have not been implemented yet."));
 	}
 
+	public clsEnsureNotUsed(declaration: ClassMemberDeclaration): void {
+		// Only checks for other members, as they do not shadow parent scope members
+		const identifier = declaration.getSemanticData().identifier;
+		super.ensureNotUsed(identifier, declaration, true);
+	}
+
 	/**
 	 * Gets the "this" keyword which is simply a reference to the class.
 	 * @since 0.12.0
@@ -76,15 +86,23 @@ export class ClassScope extends UserScope {
 		return this.ctx.thisAliasDeclaration;
 	}
 
+	/**
+	 * Gets the searched entry if it exists in any scope excluding the class scope itself, which requires explicit an
+	 * explicit `this` keyword to be used (internally we will handle 'this' references as a member access of the 'this'
+	 * type of the class).
+	 *
+	 * This is essential to allow the class to use common identifiers like `length` or `name` for properties and methods
+	 * without having to conform to naming conflicts with parent scopes.
+	 */
 	public getEntry(identifier: string): ScopeDeclaration | undefined {
-		return identifier === "this" ? this.getThis() : this.entries.get(identifier);
+		return identifier === "this" ? this.getThis() : undefined; // returns 'undefined' for direct references
 	}
 
 	public getEntryRecursively(identifier: string): ScopeDeclaration | undefined {
-		const localRef = this.getEntry(identifier);
-		if (!localRef) {
+		const ref = this.getEntry(identifier);
+		if (!ref) {
 			return this.parent.getEntryRecursively(identifier);
 		}
-		return localRef;
+		return ref;
 	}
 }

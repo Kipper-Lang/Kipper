@@ -20,7 +20,7 @@ describe("Kipper CLI 'compile'", async () => {
 			test
 				.stdout()
 				.command(["compile", filePath])
-				.it("Compile file 'hello-world.kip' with file argument", async (ctx) => {
+				.it("Compile file 'hello-world.kip' with file argument", async (ctx: any) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'hello-world.kip'.");
 					expect(ctx.stdout).to.contain("Parsing file content.");
@@ -36,7 +36,7 @@ describe("Kipper CLI 'compile'", async () => {
 			test
 				.stdout()
 				.command(["compile", filePath])
-				.it("Run file 'hello-world.kip' with file argument", async (ctx) => {
+				.it("Run file 'hello-world.kip' with file argument", async (ctx: any) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 
 					// Read the created file
@@ -73,7 +73,7 @@ describe("Kipper CLI 'compile'", async () => {
 			test
 				.stdout()
 				.command(["compile", "-s", `call print("Hello world!");`])
-				.it("Compile Hello world with --stringCode flag", async (ctx) => {
+				.it("Compile Hello world with --stringCode flag", async (ctx: any) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
 					expect(ctx.stdout).to.contain("Parsing file content.");
@@ -89,7 +89,7 @@ describe("Kipper CLI 'compile'", async () => {
 			test
 				.stdout()
 				.command(["compile", "-s", `call print("Hello world!");`])
-				.it("Run Hello world with --stringCode flag", async (ctx) => {
+				.it("Run Hello world with --stringCode flag", async (ctx: any) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 
 					// Read the created file
@@ -132,7 +132,7 @@ describe("Kipper CLI 'compile'", async () => {
 			test
 				.stdout()
 				.command(["compile", filePath, "-e", "ascii"])
-				.it("Compile using encoding 'ascii'", async (ctx) => {
+				.it("Compile using encoding 'ascii'", async (ctx: any) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'hello-world.kip'.");
 					expect(ctx.stdout).to.contain("Parsing file content.");
@@ -148,7 +148,7 @@ describe("Kipper CLI 'compile'", async () => {
 			test
 				.stdout()
 				.command(["compile", filePath, "-e", "utf8"])
-				.it("Compile using encoding 'utf8'", async (ctx) => {
+				.it("Compile using encoding 'utf8'", async (ctx: any) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'hello-world.kip'.");
 					expect(ctx.stdout).to.contain("Parsing file content.");
@@ -164,7 +164,7 @@ describe("Kipper CLI 'compile'", async () => {
 			test
 				.stdout()
 				.command(["compile", utf16filePath, "-e", "utf16le"])
-				.it("Compile using encoding 'utf16le'", async (ctx) => {
+				.it("Compile using encoding 'utf16le'", async (ctx: any) => {
 					expect(ctx.stdout).to.length.greaterThan(0);
 					expect(ctx.stdout).to.contain("Starting compilation for 'hello-world-utf16.kip'.");
 					expect(ctx.stdout).to.contain("Parsing file content.");
@@ -184,7 +184,7 @@ describe("Kipper CLI 'compile'", async () => {
 				test
 					.stdout()
 					.command(["compile", "-s", `call print("Hello world!");`, "-e", "ascii"])
-					.it("Compile using encoding 'ascii'", async (ctx) => {
+					.it("Compile using encoding 'ascii'", async (ctx: any) => {
 						expect(ctx.stdout).to.length.greaterThan(0);
 						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
 						expect(ctx.stdout).to.contain("Parsing file content.");
@@ -200,7 +200,7 @@ describe("Kipper CLI 'compile'", async () => {
 				test
 					.stdout()
 					.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf8"])
-					.it("Compile using encoding 'utf8'", async (ctx) => {
+					.it("Compile using encoding 'utf8'", async (ctx: any) => {
 						expect(ctx.stdout).to.length.greaterThan(0);
 						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
 						expect(ctx.stdout).to.contain("Parsing file content.");
@@ -216,7 +216,7 @@ describe("Kipper CLI 'compile'", async () => {
 				test
 					.stdout()
 					.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf16le"])
-					.it("Compile using encoding 'utf16le'", async (ctx) => {
+					.it("Compile using encoding 'utf16le'", async (ctx: any) => {
 						expect(ctx.stdout).to.length.greaterThan(0);
 						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
 						expect(ctx.stdout).to.contain("Parsing file content.");
@@ -234,7 +234,7 @@ describe("Kipper CLI 'compile'", async () => {
 				test
 					.stdout()
 					.command(["compile", "-s", `call print("Hello world!");`, "-e", "ascii", "-t", "ts"])
-					.it("Compile using encoding 'ascii'", async (ctx) => {
+					.it("Compile using encoding 'ascii'", async (ctx: any) => {
 						expect(ctx.stdout).to.length.greaterThan(0);
 						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
 						expect(ctx.stdout).to.contain("Parsing file content.");
@@ -250,7 +250,7 @@ describe("Kipper CLI 'compile'", async () => {
 				test
 					.stdout()
 					.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf8", "-t", "ts"])
-					.it("Compile using encoding 'utf8'", async (ctx) => {
+					.it("Compile using encoding 'utf8'", async (ctx: any) => {
 						expect(ctx.stdout).to.length.greaterThan(0);
 						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
 						expect(ctx.stdout).to.contain("Parsing file content.");
@@ -266,7 +266,7 @@ describe("Kipper CLI 'compile'", async () => {
 				test
 					.stdout()
 					.command(["compile", "-s", `call print("Hello world!");`, "-e", "utf16le", "-t", "ts"])
-					.it("Compile using encoding 'utf16le'", async (ctx) => {
+					.it("Compile using encoding 'utf16le'", async (ctx: any) => {
 						expect(ctx.stdout).to.length.greaterThan(0);
 						expect(ctx.stdout).to.contain("Starting compilation for 'anonymous-script'.");
 						expect(ctx.stdout).to.contain("Parsing file content.");
