@@ -88,13 +88,14 @@ export class ClassScope extends UserScope {
 
 	/**
 	 * Gets the searched entry if it exists in any scope excluding the class scope itself, which requires explicit an
-	 * explicit `this` keyword to be used.
+	 * explicit `this` keyword to be used (internally we will handle 'this' references as a member access of the 'this'
+	 * type of the class).
 	 *
 	 * This is essential to allow the class to use common identifiers like `length` or `name` for properties and methods
 	 * without having to conform to naming conflicts with parent scopes.
 	 */
 	public getEntry(identifier: string): ScopeDeclaration | undefined {
-		return identifier === "this" ? this.getThis() : undefined;
+		return identifier === "this" ? this.getThis() : undefined; // returns 'undefined' for direct references
 	}
 
 	public getEntryRecursively(identifier: string): ScopeDeclaration | undefined {
