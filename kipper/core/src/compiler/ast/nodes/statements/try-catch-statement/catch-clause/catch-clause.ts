@@ -1,27 +1,27 @@
 /**
- * TryCatchStatement class, which represents try-catch statements in the Kipper language and is compilable using
+ * CatchClause class, which represents try-catch statements in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { TryCatchStatementTypeSemantics } from "./try-catch-statement-type-semantics";
-import type { TryCatchStatementSemantics } from "./try-catch-statement-semantics";
-import type { ParameterDeclaration } from "../../declarations";
-import type { CatchClause } from "./catch-clause";
-import type { TryCatchStatementContext } from "../../../../lexer-parser";
-import { FinallyClauseContext, KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
-import { Statement } from "../statement";
-import type { Expression } from "../../expressions";
+import type { CompilableNodeParent } from "../../../../compilable-ast-node";
+import type { ParameterDeclaration } from "../../../declarations";
+import type { CatchClauseContext } from "../../../../../lexer-parser";
+import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
+import { Statement } from "../../statement";
+import type { Expression, TypeSpecifierExpression } from "../../../expressions";
+import type { CatchClauseSemanticData } from "./catch-clause-semantics";
+import type { CatchClauseTypeSemantics } from "./catch-clause-type-semantics";
+import type { CompoundStatement } from "../../compound-statement";
 
 /**
- * TryCatchStatement class, which represents try-catch statements in the Kipper language and is compilable using
+ * CatchClause class, which represents try-catch statements in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class TryCatchStatement extends Statement<TryCatchStatementSemantics, TryCatchStatementTypeSemantics> {
+export class CatchClause extends Statement<CatchClauseSemanticData, CatchClauseTypeSemantics> {
 	/**
 	 * The static kind for this AST Node.
 	 * @since 0.13.0
 	 */
-	public static readonly kind = ParseRuleKindMapping.RULE_tryCatchStatement;
+	public static readonly kind = ParseRuleKindMapping.RULE_catchClause;
 
 	/**
 	 * The static rule name for this AST Node.
@@ -34,11 +34,11 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 * which is returned inside the {@link this.antlrRuleCtx}.
 	 * @private
 	 */
-	protected override readonly _antlrRuleCtx: TryCatchStatementContext;
+	protected override readonly _antlrRuleCtx: CatchClauseContext;
 
 	protected readonly _children: Array<Expression | Statement | ParameterDeclaration>;
 
-	constructor(antlrRuleCtx: TryCatchStatementContext, parent: CompilableNodeParent) {
+	constructor(antlrRuleCtx: CatchClauseContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
 		this._antlrRuleCtx = antlrRuleCtx;
 		this._children = [];
@@ -54,7 +54,7 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 * @since 0.13.0
 	 */
 	public override get kind() {
-		return TryCatchStatement.kind;
+		return CatchClause.kind;
 	}
 
 	/**
@@ -66,7 +66,7 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 * @since 0.13.0
 	 */
 	public override get ruleName() {
-		return TryCatchStatement.ruleName;
+		return CatchClause.ruleName;
 	}
 
 	/**
@@ -82,7 +82,7 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	/**
 	 * The antlr context containing the antlr4 metadata for this statement.
 	 */
-	public override get antlrRuleCtx(): TryCatchStatementContext {
+	public override get antlrRuleCtx(): CatchClauseContext {
 		return this._antlrRuleCtx;
 	}
 
@@ -94,19 +94,13 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const children = [...this.children];
-		const tryBlock: Statement = <Statement>children.shift();
-		let finallyBlock: Statement | undefined = undefined;
+		const antlrChildren = this.getAntlrRuleChildren();
 
-		let finallyClauseExists = this.getAntlrRuleChildren().some((node) => node instanceof FinallyClauseContext);
-		if (finallyClauseExists) {
-			finallyBlock = <Statement>children.pop();
-		}
-
+		const identifier = antlrChildren[2].text;
 		this.semanticData = {
-			tryBlock: tryBlock,
-			catchClauses: <Array<CatchClause>>children,
-			finallyBlock: finallyBlock,
+			identifier,
+			narrowedType: this.children[this.children.length - 2] as TypeSpecifierExpression | undefined,
+			body: this.children[this.children.length - 1] as CompoundStatement,
 		};
 	}
 
@@ -128,6 +122,6 @@ export class TryCatchStatement extends Statement<TryCatchStatementSemantics, Try
 	 */
 	public checkForWarnings = undefined; // TODO!
 
-	readonly targetSemanticAnalysis = this.semanticAnalyser.tryCatchStatement;
-	readonly targetCodeGenerator = this.codeGenerator.tryCatchStatement;
+	readonly targetSemanticAnalysis = this.semanticAnalyser.catchClause;
+	readonly targetCodeGenerator = this.codeGenerator.catchClause;
 }

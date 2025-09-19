@@ -13,6 +13,7 @@ import type {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
+	CatchClauseContext,
 	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
 	ClassMethodDeclarationContext,
@@ -113,7 +114,8 @@ export type ParserStatementContext =
 	| ForLoopIterationStatementContext
 	| JumpStatementContext
 	| TryCatchStatementContext
-	| ReturnStatementContext;
+	| ReturnStatementContext
+	| CatchClauseContext;
 
 /**
  * Union type of all usable definition/declaration rule context classes implemented by the {@link ParseRuleKindMapping}
@@ -171,7 +173,8 @@ export type ASTStatementKind =
 	| typeof ParseRuleKindMapping.RULE_forLoopIterationStatement
 	| typeof ParseRuleKindMapping.RULE_jumpStatement
 	| typeof ParseRuleKindMapping.RULE_tryCatchStatement
-	| typeof ParseRuleKindMapping.RULE_returnStatement;
+	| typeof ParseRuleKindMapping.RULE_returnStatement
+	| typeof ParseRuleKindMapping.RULE_catchClause;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values that have a constructable {@link Expression} AST node.
@@ -264,7 +267,8 @@ export type ASTStatementRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_forLoopIterationStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_jumpStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_tryCatchStatement]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_returnStatement];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_returnStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_catchClause];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link Expression} AST

@@ -65,6 +65,7 @@ import type {
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	CatchClause,
 } from "../ast";
 import { KipperSemanticErrorHandler } from "../semantics";
 
@@ -384,4 +385,9 @@ export abstract class KipperTargetSemanticAnalyser extends KipperSemanticErrorHa
 	 * Performs translation-specific semantic analysis for {@link TryCatchStatement} instances.
 	 */
 	public abstract tryCatchStatement?: TargetASTNodeSemanticAnalyser<TryCatchStatement>;
+
+	/**
+	 * Performs translation-specific semantic analysis for {@link CatchClause} instances.
+	 */
+	public abstract catchClause?: TargetASTNodeSemanticAnalyser<CatchClause>;
 }

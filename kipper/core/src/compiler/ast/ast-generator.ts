@@ -93,6 +93,7 @@ import type {
 	TryCastExpressionContext,
 	ForceCastExpressionContext,
 	NullableTypeSpecifierExpressionContext,
+	CatchClauseContext,
 } from "../lexer-parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
@@ -1090,6 +1091,18 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
 	 */
 	public exitTryCatchStatement: (ctx: TryCatchStatementContext) => void = this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.catchClause`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public enterCatchClause: (ctx: CatchClauseContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.catchClause`.
+	 * @param ctx The parse tree (instance of {@link KipperParserRuleContext}).
+	 */
+	public exitCatchClause: (ctx: CatchClauseContext) => void = this.handleExitingTreeNode;
 
 	// -------------------------------------------------------------------------------------------------------------------
 	//  Declaration section

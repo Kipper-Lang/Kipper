@@ -15,6 +15,7 @@ import {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastExpressionContext,
+	CatchClauseContext,
 	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
 	ClassMethodDeclarationContext,
@@ -77,6 +78,7 @@ import type {
 	ASTStatementRuleName,
 } from "../common";
 import type { Declaration, Expression, Statement } from "../nodes";
+import { CatchClause } from "../nodes";
 import {
 	CastExpression,
 	ConvertExpression,
@@ -229,6 +231,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_returnStatement]: ReturnStatement,
 		[ParseRuleKindMapping.RULE_jumpStatement]: JumpStatement,
 		[ParseRuleKindMapping.RULE_tryCatchStatement]: TryCatchStatement,
+		[ParseRuleKindMapping.RULE_catchClause]: CatchClause,
 	} satisfies Record<ASTStatementKind, typeof Statement<any, any>>;
 
 	/**
@@ -318,6 +321,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_returnStatement]: ReturnStatementContext,
 		[ParseRuleKindMapping.RULE_jumpStatement]: JumpStatementContext,
 		[ParseRuleKindMapping.RULE_tryCatchStatement]: TryCatchStatementContext,
+		[ParseRuleKindMapping.RULE_catchClause]: CatchClauseContext,
 	} satisfies Record<ASTStatementKind, any>;
 
 	/**
@@ -402,6 +406,7 @@ export class ASTNodeMapper {
 		RULE_returnStatement: ReturnStatement,
 		RULE_jumpStatement: JumpStatement,
 		RULE_tryCatchStatement: TryCatchStatement,
+		RULE_catchClause: CatchClause,
 	} satisfies Record<ASTStatementRuleName, typeof Statement<any, any>>;
 
 	/**

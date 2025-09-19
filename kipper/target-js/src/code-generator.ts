@@ -12,7 +12,7 @@ import type {
 	BitwiseShiftExpression,
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
-	CatchBlock,
+	CatchClauseSemanticData,
 	CastExpression,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
@@ -70,6 +70,7 @@ import type {
 	TypeofTypeSpecifierExpression,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	CatchClause,
 } from "@kipper/core";
 import {
 	AssignmentExpression,
@@ -86,7 +87,7 @@ import {
 	VariableDeclaration,
 } from "@kipper/core";
 import { createJSFunctionSignature, getJSFunctionSignature, indentLines, removeBraces } from "./tools";
-import { TargetJS, version } from "./index";
+import { KipperJavaScriptTarget, TargetJS, version } from "./index";
 import { createGlobalScope, createKipper, RuntimeTypesGenerator } from "./runtime";
 
 function removeBrackets(lines: Array<TranslatedCodeLine>) {
@@ -380,36 +381,6 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		return [["return", ...(returnValue ? [" ", ...returnValue] : []), ";"]];
 	};
 
-	generateCatch = async (catchBlocks: CatchBlock[]): Promise<Array<TranslatedCodeLine>> => {
-		if (catchBlocks.length === 0) {
-			return [];
-		}
-
-		if (catchBlocks.length === 1 && catchBlocks[0].parameter === undefined) {
-			let catchBlock = await catchBlocks[0].body.translateCtxAndChildren();
-			return [["catch", " ", "(__e_1: unknown)"], ...catchBlock];
-		}
-
-		let catchBlocksCode = [];
-		for (let catchBlock of catchBlocks) {
-			const blockBody = await this.generateCatchIfCondition(catchBlock);
-			catchBlocksCode.push(...blockBody);
-		}
-		return [["catch", " ", "(__e_1: unknown) {"], ...indentLines(catchBlocksCode), ["}"]];
-	};
-
-	generateCatchIfCondition = async (catchBlock: CatchBlock): Promise<Array<TranslatedCodeLine>> => {
-		const blockBody = await catchBlock.body.translateCtxAndChildren();
-
-		if (catchBlock.parameter === undefined) {
-			return [...blockBody];
-		}
-
-		const parameterType = catchBlock.parameter.getTypeSemanticData();
-
-		return [["if", " ", "(", "__e_1", " ", "instanceof", " ", parameterType.valueType.identifier, ")"], ...blockBody];
-	};
-
 	/**
 	 * Translates a {@link TryCatchStatement} into the JavaScript language.
 	 * @since 0.12.0
@@ -417,11 +388,94 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	tryCatchStatement = async (node: TryCatchStatement): Promise<Array<TranslatedCodeLine>> => {
 		const semanticData = node.getSemanticData();
 		const tryBlock = await semanticData.tryBlock.translateCtxAndChildren();
-		const catchBlocks = await this.generateCatch(semanticData.catchBlock);
+		const catchClauses = await this.generateCatchClauses(semanticData.catchClauses);
 		const finallyBlock = semanticData.finallyBlock ? await semanticData.finallyBlock.translateCtxAndChildren() : [];
 
-		return [["try"], ...tryBlock, ...catchBlocks, ...(finallyBlock.length > 0 ? [["finally"], ...finallyBlock] : [])];
+		return [["try"], ...tryBlock, ...catchClauses, ...(finallyBlock.length > 0 ? [["finally"], ...finallyBlock] : [])];
 	};
+
+	/**
+	 * Generates the 'catch' blocks for a {@link TryCatchStatement}.
+	 *
+	 * This itself only generates the body as the parent context will properly format the 'catch' blocks as they are
+	 * handled differently based on the number of catch clauses and their parameters.
+	 * @param node The catch clause to generate the code for.
+	 */
+	catchClause = async (node: CatchClause): Promise<Array<TranslatedCodeLine>> => {
+		const semanticData = node.getSemanticData();
+		return await semanticData.body.translateCtxAndChildren();
+	};
+
+	/**
+	 * Generates the 'catch' blocks for a {@link TryCatchStatement}.
+	 * @param catchClauses The catch clauses to generate the code for.
+	 */
+	async generateCatchClauses(catchClauses: Array<CatchClause>): Promise<Array<TranslatedCodeLine>> {
+		if (catchClauses.length === 0) {
+			return [];
+		}
+		const reservedErrorSymbol = KipperJavaScriptTarget.getInternalIdentifier("e");
+
+		const semanticData = catchClauses[0].getSemanticData() as CatchClauseSemanticData;
+		if (catchClauses.length === 1 && semanticData.identifier === undefined) {
+			const clause = catchClauses[0];
+			const translatedBody = await clause.translateCtxAndChildren();
+			return [["catch", " ", `(${reservedErrorSymbol})`], ...translatedBody];
+		}
+
+		const catchClausesCode = [];
+		for (let i = 0; i < catchClauses.length; i++) {
+			const blockBody = await this.generateCatchCondition(i, catchClauses[i], reservedErrorSymbol);
+			catchClausesCode.push(...blockBody);
+		}
+		catchClausesCode.push(["else", " ", "{", " ", "throw", " ", reservedErrorSymbol, ";", " ", "}"]);
+		return [["catch", " ", `(${reservedErrorSymbol})`], ["{"], ...indentLines(catchClausesCode), ["}"]];
+	}
+
+	/**
+	 * Generates the 'if' condition for a {@link CatchClauseSemanticData}, which has a parameter defined.
+	 * @param i The index of the catch clause i.e. the first, second, etc.
+	 * @param catchClause The catch block to generate the condition for.
+	 * @param reservedErrorSymbol The reserved symbol for the error object.
+	 */
+	async generateCatchCondition(
+		i: number,
+		catchClause: CatchClause,
+		reservedErrorSymbol: string,
+	): Promise<Array<TranslatedCodeLine>> {
+		const blockBody = await catchClause.translateCtxAndChildren();
+		const semanticData = catchClause.getSemanticData();
+
+		if (!semanticData.narrowedType) {
+			return [...blockBody];
+		}
+
+		const typeSpecifier = semanticData.narrowedType?.getTypeSemanticData().storedType;
+		let typeCondition = typeSpecifier
+			? [
+					"if",
+					" ",
+					"(",
+					reservedErrorSymbol,
+					" ",
+					"instanceof",
+					" ",
+					TargetJS.getRuntimeType(typeSpecifier),
+					")",
+					" ",
+					"{",
+				]
+			: [];
+		if (i > 0) {
+			typeCondition = ["else", " ", ...typeCondition];
+		}
+		return [
+			typeCondition,
+			...indentLines([["const", " ", semanticData.identifier, " ", "=", " ", reservedErrorSymbol, ";"]]),
+			...blockBody.slice(1, -1), // Remove the braces from the block body
+			["}"],
+		];
+	}
 
 	/**
 	 * Translates a {@link ParameterDeclaration} into the JavaScript language.
