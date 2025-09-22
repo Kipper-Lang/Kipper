@@ -5,7 +5,7 @@ import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
 import { testPrintOutput } from "../index";
 
-describe("Try-Catch statements", () => {
+describe("Try-Catch Statements", () => {
 	it("should be able to catch errors using try-catch", async () => {
 		const fileContent = `class CustomError {} var x: num = 4; try { x = 5; } catch (e: CustomError) { x = 6; } print(x);`;
 		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
@@ -118,7 +118,7 @@ describe("Try-Catch statements", () => {
 			} catch (e: CustomErrorA) {
 				try {
 					x = 3;
-				} catch (e: CustomErrorB) {
+				} catch (e2: CustomErrorB) {
 					x = 4;
 				}
 			}
@@ -142,7 +142,7 @@ describe("Try-Catch statements", () => {
 		);
 		assert.include(
 			written,
-			`if (__kipper_e instanceof CustomErrorB) {\n        const e = __kipper_e;\n        x = 4;\n      }`,
+			`if (__kipper_e instanceof CustomErrorB) {\n        const e2 = __kipper_e;\n        x = 4;\n      }`,
 			"Invalid TypeScript code (Expected different output)",
 		);
 		assert.include(written, `throw __kipper_e;`, "Invalid TypeScript code (Expected different output)");
