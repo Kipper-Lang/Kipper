@@ -78,6 +78,7 @@ import type {
 	ASTStatementRuleName,
 } from "../common";
 import type { Declaration, Expression, Statement } from "../nodes";
+import { ErrorBindingDeclaration } from "../nodes";
 import { CatchClause } from "../nodes";
 import {
 	CastExpression,
@@ -165,6 +166,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_classPropertyDeclaration]: ClassPropertyDeclaration,
 		[ParseRuleKindMapping.RULE_classMethodDeclaration]: ClassMethodDeclaration,
 		[ParseRuleKindMapping.RULE_classConstructorDeclaration]: ClassConstructorDeclaration,
+		[ParseRuleKindMapping.RULE_errorBindingDeclaration]: ErrorBindingDeclaration,
 	} satisfies Record<ASTDeclarationKind, typeof Declaration<any, any>>;
 
 	/**
@@ -250,6 +252,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_classPropertyDeclaration]: ClassPropertyDeclarationContext,
 		[ParseRuleKindMapping.RULE_classMethodDeclaration]: ClassMethodDeclarationContext,
 		[ParseRuleKindMapping.RULE_classConstructorDeclaration]: ClassConstructorDeclarationContext,
+		[ParseRuleKindMapping.RULE_errorBindingDeclaration]: ParameterDeclarationContext,
 	} satisfies Record<ASTDeclarationKind, any>;
 
 	/**
@@ -340,6 +343,7 @@ export class ASTNodeMapper {
 		RULE_classPropertyDeclaration: ClassPropertyDeclaration,
 		RULE_classMethodDeclaration: ClassMethodDeclaration,
 		RULE_classConstructorDeclaration: ClassConstructorDeclaration,
+		RULE_errorBindingDeclaration: ErrorBindingDeclaration,
 	} satisfies Record<ASTDeclarationRuleName, typeof Declaration<any, any>>;
 
 	/**

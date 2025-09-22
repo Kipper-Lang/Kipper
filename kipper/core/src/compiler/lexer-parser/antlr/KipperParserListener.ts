@@ -88,6 +88,7 @@ import { ReturnStatementContext } from "./KipperParser";
 import { TryCatchStatementContext } from "./KipperParser";
 import { TryClauseContext } from "./KipperParser";
 import { CatchClauseContext } from "./KipperParser";
+import { ErrorBindingDeclarationContext } from "./KipperParser";
 import { FinallyClauseContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { LambdaPrimaryExpressionContext } from "./KipperParser";
@@ -1124,6 +1125,17 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitCatchClause?: (ctx: CatchClauseContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.errorBindingDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	enterErrorBindingDeclaration?: (ctx: ErrorBindingDeclarationContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.errorBindingDeclaration`.
+	 * @param ctx the parse tree
+	 */
+	exitErrorBindingDeclaration?: (ctx: ErrorBindingDeclarationContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.finallyClause`.

@@ -445,12 +445,13 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	): Promise<Array<TranslatedCodeLine>> {
 		const blockBody = await catchClause.translateCtxAndChildren();
 		const semanticData = catchClause.getSemanticData();
+		const errorBindingSemantics = semanticData.errorBinding?.getSemanticData();
 
-		if (!semanticData.narrowedType) {
+		if (!errorBindingSemantics?.valueTypeSpecifier) {
 			return [...blockBody];
 		}
 
-		const typeSpecifier = semanticData.narrowedType?.getTypeSemanticData().storedType;
+		const typeSpecifier = semanticData.errorBinding?.getTypeSemanticData().valueType;
 		let typeCondition = typeSpecifier
 			? [
 					"if",

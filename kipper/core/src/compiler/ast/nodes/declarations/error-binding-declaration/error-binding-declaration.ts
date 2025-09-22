@@ -1,26 +1,27 @@
 /**
- * Parameter declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
- * @since 0.5.0
+ * Error binding declaration AST node, which is used within a {@link CatchClause} to bind the error to a variable.
+ * @since 0.13.0
  */
-import type { ParameterDeclarationSemantics } from "./parameter-declaration-semantics";
-import type { ParameterDeclarationTypeSemantics } from "./parameter-declaration-type-semantics";
+import type { ErrorBindingDeclarationSemantics } from "./error-binding-declaration-semantics";
+import type { ErrorBindingDeclarationTypeSemantics } from "./error-binding-declaration-type-semantics";
 import type { CompilableNodeParent } from "../../../compilable-ast-node";
-import type { FunctionScope, LambdaScope, ScopeParameterDeclaration } from "../../../../semantics";
-import type { FunctionDeclaration } from "../function-declaration";
-import type { IdentifierTypeSpecifierExpression, LambdaPrimaryExpression } from "../../expressions";
+import type { LocalScope, ScopeVariableDeclaration } from "../../../../semantics";
+import { BuiltInTypes } from "../../../../semantics";
+import type { IdentifierTypeSpecifierExpression } from "../../expressions";
 import { Declaration } from "../declaration";
-import type { ParameterDeclarationContext } from "../../../../lexer-parser";
+import type { ErrorBindingDeclarationContext, ParameterDeclarationContext } from "../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../lexer-parser";
 import { getParseTreeSource } from "../../../../../tools";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
+import type { CatchClause, CompoundStatement } from "../../statements";
 
 /**
- * Parameter declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
- * @since 0.5.0
+ * Error binding declaration AST node, which is used within a {@link CatchClause} to bind the error to a variable.
+ * @since 0.13.0
  */
-export class ParameterDeclaration extends Declaration<
-	ParameterDeclarationSemantics,
-	ParameterDeclarationTypeSemantics
+export class ErrorBindingDeclaration extends Declaration<
+	ErrorBindingDeclarationSemantics,
+	ErrorBindingDeclarationTypeSemantics
 > {
 	/**
 	 * The static kind for this AST Node.
@@ -51,18 +52,18 @@ export class ParameterDeclaration extends Declaration<
 	 * which is returned inside the {@link this.scopeDeclaration}.
 	 * @private
 	 */
-	protected override _scopeDeclaration: ScopeParameterDeclaration | undefined;
+	protected override _scopeDeclaration: ScopeVariableDeclaration | undefined;
 
 	/**
 	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
 	 * in the {@link scope parent scope}.
 	 * @since 0.10.0
 	 */
-	public override get scopeDeclaration(): ScopeParameterDeclaration | undefined {
+	public override get scopeDeclaration(): ScopeVariableDeclaration | undefined {
 		return this._scopeDeclaration;
 	}
 
-	protected override set scopeDeclaration(declaration: ScopeParameterDeclaration | undefined) {
+	protected override set scopeDeclaration(declaration: ScopeVariableDeclaration | undefined) {
 		this._scopeDeclaration = declaration;
 	}
 
@@ -75,7 +76,7 @@ export class ParameterDeclaration extends Declaration<
 	 * @since 0.10.0
 	 */
 	public override get kind() {
-		return ParameterDeclaration.kind;
+		return ErrorBindingDeclaration.kind;
 	}
 
 	/**
@@ -87,33 +88,27 @@ export class ParameterDeclaration extends Declaration<
 	 * @since 0.11.0
 	 */
 	public override get ruleName() {
-		return ParameterDeclaration.ruleName;
+		return ErrorBindingDeclaration.ruleName;
 	}
 
 	/**
 	 * The antlr context containing the antlr4 metadata for this expression.
 	 */
-	public override get antlrRuleCtx(): ParameterDeclarationContext {
+	public override get antlrRuleCtx(): ErrorBindingDeclarationContext {
 		return this._antlrRuleCtx;
 	}
 
-	public override getScopeDeclaration(): ScopeParameterDeclaration {
+	public override getScopeDeclaration(): ScopeVariableDeclaration {
 		/* istanbul ignore next: super function already being run/tested */
-		return <ScopeParameterDeclaration>super.getScopeDeclaration();
+		return <ScopeVariableDeclaration>super.getScopeDeclaration();
 	}
 
 	/**
-	 * Registers this parameter in the {@link semanticData.func.innerScope scope} of the
-	 * {@link this.semanticData.func parent function}.
-	 *
-	 * This will also populate the {@link scopeDeclaration} field, since only after the parameter is registered in the
-	 * scope the {@link scopeDeclaration} is created.
-	 * @param scopeToUse The scope to register the parameter in. Should match
-	 * {@link this.semantic.func.innerScope the scope of the parent function}.
-	 * @since 0.10.0
+	 * Registers this parameter in the
+	 * @since 0.13.0
 	 */
-	public async addParamToFunctionScope(scopeToUse: FunctionScope | LambdaScope): Promise<void> {
-		this.scopeDeclaration = scopeToUse.addArgument(this);
+	public async addParamToBodyScope(scopeToUse: LocalScope): Promise<void> {
+		this.scopeDeclaration = scopeToUse.addErrorBinding(this);
 	}
 
 	/**
@@ -132,20 +127,16 @@ export class ParameterDeclaration extends Declaration<
 		const identifier = getParseTreeSource(this.tokenStream, parseTreeChildren[0]);
 		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[0];
 
+		const parentCatchClause = this.parent as CatchClause;
 		this.semanticData = {
-			identifier: identifier,
+			identifier,
+			storageType: "const",
 			valueTypeSpecifier: typeSpecifier,
-			valueType: typeSpecifier.getSemanticData().rawType,
-			func: <FunctionDeclaration | LambdaPrimaryExpression>this.parent,
+			isDefined: true,
+			scope: (parentCatchClause.children[1] as CompoundStatement).innerScope,
 		};
 
-		// Register this parameter in the function scope
-		if (this.semanticData.func.innerScope) {
-			await this.addParamToFunctionScope(this.semanticData.func.innerScope);
-		}
-
-		// IMPORTANT! If 'innerScope' returns undefined, then the function has an error and the parameter should not be
-		// registered in the scope. For now, we will ignore the error, since the function will throw an error anyway.
+		await this.addParamToBodyScope(this.semanticData.scope);
 	}
 
 	/**
@@ -157,10 +148,8 @@ export class ParameterDeclaration extends Declaration<
 	public async primaryPreliminaryTypeChecking(): Promise<void> {
 		const semanticData = this.getSemanticData();
 
-		// Get the type that will be returned using the value type specifier
-		const valueType = semanticData.valueTypeSpecifier.getTypeSemanticData().storedType;
 		this.typeSemantics = {
-			valueType: valueType,
+			valueType: semanticData.valueTypeSpecifier?.getTypeSemanticData().storedType ?? BuiltInTypes.any,
 		};
 	}
 

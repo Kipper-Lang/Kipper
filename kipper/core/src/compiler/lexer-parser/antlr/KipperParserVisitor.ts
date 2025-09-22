@@ -88,6 +88,7 @@ import { ReturnStatementContext } from "./KipperParser";
 import { TryCatchStatementContext } from "./KipperParser";
 import { TryClauseContext } from "./KipperParser";
 import { CatchClauseContext } from "./KipperParser";
+import { ErrorBindingDeclarationContext } from "./KipperParser";
 import { FinallyClauseContext } from "./KipperParser";
 import { PrimaryExpressionContext } from "./KipperParser";
 import { LambdaPrimaryExpressionContext } from "./KipperParser";
@@ -762,6 +763,13 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitCatchClause?: (ctx: CatchClauseContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.errorBindingDeclaration`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitErrorBindingDeclaration?: (ctx: ErrorBindingDeclarationContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.finallyClause`.

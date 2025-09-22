@@ -3,11 +3,11 @@
  * {@link translateCtxAndChildren}.
  */
 import type { CompilableNodeParent } from "../../../../compilable-ast-node";
-import type { ParameterDeclaration } from "../../../declarations";
+import type { ErrorBindingDeclaration } from "../../../declarations";
 import type { CatchClauseContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { Statement } from "../../statement";
-import type { Expression, TypeSpecifierExpression } from "../../../expressions";
+import type { Expression } from "../../../expressions";
 import type { CatchClauseSemanticData } from "./catch-clause-semantics";
 import type { CatchClauseTypeSemantics } from "./catch-clause-type-semantics";
 import type { CompoundStatement } from "../../compound-statement";
@@ -36,7 +36,7 @@ export class CatchClause extends Statement<CatchClauseSemanticData, CatchClauseT
 	 */
 	protected override readonly _antlrRuleCtx: CatchClauseContext;
 
-	protected readonly _children: Array<Expression | Statement | ParameterDeclaration>;
+	protected readonly _children: Array<Expression | Statement | ErrorBindingDeclaration>;
 
 	constructor(antlrRuleCtx: CatchClauseContext, parent: CompilableNodeParent) {
 		super(antlrRuleCtx, parent);
@@ -75,7 +75,7 @@ export class CatchClause extends Statement<CatchClauseSemanticData, CatchClauseT
 	 * May contain both {@link Expression expressions} and {@link Statement statements}, as it will always contain
 	 * an expression at index 03 to represent the condition.
 	 */
-	public get children(): Array<Expression | Statement | ParameterDeclaration> {
+	public get children(): Array<Expression | Statement | ErrorBindingDeclaration> {
 		return this._children;
 	}
 
@@ -94,13 +94,14 @@ export class CatchClause extends Statement<CatchClauseSemanticData, CatchClauseT
 	 * the children has already failed and as such no parent node should run type checking.
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
-		const antlrChildren = this.getAntlrRuleChildren();
+		const errorBinding = this.children[0] as ErrorBindingDeclaration;
+		const body = this.children[1] as CompoundStatement;
+		const identifier = errorBinding.getSemanticData().identifier;
 
-		const identifier = antlrChildren[2].text;
 		this.semanticData = {
 			identifier,
-			narrowedType: this.children[this.children.length - 2] as TypeSpecifierExpression | undefined,
-			body: this.children[this.children.length - 1] as CompoundStatement,
+			errorBinding,
+			body,
 		};
 	}
 

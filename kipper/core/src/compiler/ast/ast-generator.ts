@@ -94,6 +94,7 @@ import type {
 	ForceCastExpressionContext,
 	NullableTypeSpecifierExpressionContext,
 	CatchClauseContext,
+	ErrorBindingDeclarationContext,
 } from "../lexer-parser";
 import type { KipperProgramContext } from "../program-ctx";
 import type { CompilableASTNode } from "./compilable-ast-node";
@@ -1250,6 +1251,16 @@ export class KipperFileASTGenerator implements KipperParserListener, ParseTreeLi
 	 */
 	public exitClassConstructorDeclaration: (ctx: ClassConstructorDeclarationContext) => void =
 		this.handleExitingTreeNode;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.errorBindingDeclaration`.
+	 */
+	public enterErrorBindingDeclaration: (ctx: ErrorBindingDeclarationContext) => void = this.handleEnteringTreeNode;
+
+	/**
+	 * Exit a parse tree produced by `KipperParser.errorBindingDeclaration`.
+	 */
+	public exitErrorBindingDeclaration: (ctx: ErrorBindingDeclarationContext) => void = this.handleExitingTreeNode;
 
 	// -------------------------------------------------------------------------------------------------------------------
 	//  Other

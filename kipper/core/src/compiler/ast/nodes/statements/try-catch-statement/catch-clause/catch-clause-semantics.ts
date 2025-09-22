@@ -3,8 +3,8 @@
  * @since 0.13.0
  */
 import type { SemanticData } from "../../../../ast-node";
-import type { TypeSpecifierExpression } from "../../../expressions";
 import type { Statement } from "../../statement";
+import type { ErrorBindingDeclaration } from "../../../declarations";
 
 /**
  * Semantics for AST Node {@link TryCatchStatement}.
@@ -18,10 +18,10 @@ export interface CatchClauseSemanticData extends SemanticData {
 	identifier: string;
 
 	/**
-	 * The narrowed type of the exception being caught.
+	 * The error binding declaration that declares the variable to which the caught error is assigned.
 	 * @since 0.13.0
 	 */
-	narrowedType?: TypeSpecifierExpression;
+	errorBinding: ErrorBindingDeclaration;
 
 	/**
 	 * The block of code to be executed if an exception is thrown.

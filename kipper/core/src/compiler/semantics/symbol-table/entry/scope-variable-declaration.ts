@@ -6,6 +6,8 @@ import type {
 	ClassPropertyDeclaration,
 	ClassPropertyDeclarationSemantics,
 	ClassPropertyDeclarationTypeSemantics,
+	ErrorBindingDeclarationSemantics,
+	ErrorBindingDeclarationTypeSemantics,
 	VariableDeclaration,
 	VariableDeclarationSemantics,
 	VariableDeclarationTypeSemantics,
@@ -15,6 +17,17 @@ import type { UniverseScope } from "../index";
 import { BuiltInTypeFunc, type ProcessedType } from "../../types";
 import { ScopeDeclaration } from "./scope-declaration";
 import type { BuiltInVariable } from "../../runtime-built-ins";
+import type { ErrorBindingDeclaration } from "../../../ast/nodes/declarations/error-binding-declaration";
+
+type ScopeVariableDeclarationASTNode = VariableDeclaration | ClassPropertyDeclaration | ErrorBindingDeclaration;
+type ScopeVariableDeclarationSemantics =
+	| VariableDeclarationSemantics
+	| ClassPropertyDeclarationSemantics
+	| ErrorBindingDeclarationSemantics;
+type ScopeVariableDeclarationTypeSemantics =
+	| VariableDeclarationTypeSemantics
+	| ClassPropertyDeclarationTypeSemantics
+	| ErrorBindingDeclarationTypeSemantics;
 
 /**
  * Represents a variable scope entry that may be a child of the global scope or local scope.
@@ -24,7 +37,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	private _valueWasUpdated: boolean = false;
 
 	protected constructor(
-		private readonly _declaration?: VariableDeclaration | ClassPropertyDeclaration,
+		private readonly _declaration?: ScopeVariableDeclarationASTNode,
 		private readonly _builtInVariable?: BuiltInVariable,
 		private readonly _universeScope?: UniverseScope,
 	) {
@@ -44,6 +57,10 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * @param declaration The class property declaration.
 	 */
 	public static fromClassPropertyDeclaration(declaration: ClassPropertyDeclaration): ScopeVariableDeclaration {
+		return new ScopeVariableDeclaration(declaration);
+	}
+
+	public static fromErrorBindingDeclaration(declaration: ErrorBindingDeclaration): ScopeVariableDeclaration {
 		return new ScopeVariableDeclaration(declaration);
 	}
 
@@ -80,7 +97,7 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * @throws UndefinedSemanticsError If this is accessed, before semantic analysis was performed.
 	 * @private
 	 */
-	private get semanticData(): VariableDeclarationSemantics | ClassPropertyDeclarationSemantics | undefined {
+	private get semanticData(): ScopeVariableDeclarationSemantics | undefined {
 		return this._declaration?.getSemanticData();
 	}
 
@@ -89,14 +106,14 @@ export class ScopeVariableDeclaration extends ScopeDeclaration {
 	 * @throws UndefinedSemanticsError If this is accessed, before type checking was performed.
 	 * @private
 	 */
-	private get typeData(): VariableDeclarationTypeSemantics | ClassPropertyDeclarationTypeSemantics | undefined {
+	private get typeData(): ScopeVariableDeclarationTypeSemantics | undefined {
 		return this._declaration?.getTypeSemanticData();
 	}
 
 	/**
 	 * Returns the {@link VariableDeclaration AST node} this scope declaration bases on.
 	 */
-	public get node(): VariableDeclaration | ClassPropertyDeclaration | undefined {
+	public get node(): ScopeVariableDeclarationASTNode | undefined {
 		return this._declaration;
 	}
 

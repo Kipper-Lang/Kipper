@@ -23,6 +23,7 @@ import type {
 	DotNotationMemberAccessExpressionContext,
 	DoWhileLoopIterationStatementContext,
 	EqualityExpressionContext,
+	ErrorBindingDeclarationContext,
 	ExpressionStatementContext,
 	ForLoopIterationStatementContext,
 	FStringPrimaryExpressionContext,
@@ -131,7 +132,8 @@ export type ParserDeclarationContext =
 	| ClassDeclarationContext
 	| ClassPropertyDeclarationContext
 	| ClassMethodDeclarationContext
-	| ClassConstructorDeclarationContext;
+	| ClassConstructorDeclarationContext
+	| ErrorBindingDeclarationContext;
 
 /**
  * Union type of all rule context classes implemented by the {@link ParseRuleKindMapping} that have a corresponding AST node class.
@@ -157,7 +159,8 @@ export type ASTDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_classDeclaration
 	| typeof ParseRuleKindMapping.RULE_classPropertyDeclaration
 	| typeof ParseRuleKindMapping.RULE_classMethodDeclaration
-	| typeof ParseRuleKindMapping.RULE_classConstructorDeclaration;
+	| typeof ParseRuleKindMapping.RULE_classConstructorDeclaration
+	| typeof ParseRuleKindMapping.RULE_errorBindingDeclaration;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a {@link Statement} AST node.
@@ -250,7 +253,8 @@ export type ASTDeclarationRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classPropertyDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classMethodDeclaration]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classConstructorDeclaration];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classConstructorDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_errorBindingDeclaration];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link Statement} AST

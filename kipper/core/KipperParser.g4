@@ -202,7 +202,11 @@ tryClause
 	;
 
 catchClause
-	:	'catch' '(' declarator (':' typeSpecifierExpression)? ')' compoundStatement
+	:	'catch' '(' errorBindingDeclaration ')' compoundStatement
+	;
+
+errorBindingDeclaration
+	:	declarator (':' typeSpecifierExpression)?
 	;
 
 finallyClause

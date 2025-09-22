@@ -56,6 +56,7 @@ export const ParseRuleKindMapping = {
 	RULE_returnStatement: KipperParser.RULE_returnStatement,
 	RULE_tryCatchStatement: KipperParser.RULE_tryCatchStatement,
 	RULE_catchClause: KipperParser.RULE_catchClause,
+	RULE_errorBindingDeclaration: KipperParser.RULE_errorBindingDeclaration,
 	RULE_primaryExpression: KipperParser.RULE_primaryExpression,
 	RULE_lambdaPrimaryExpression: KipperParser.RULE_lambdaPrimaryExpression,
 	RULE_tangledPrimaryExpression: KipperParser.RULE_tangledPrimaryExpression,
