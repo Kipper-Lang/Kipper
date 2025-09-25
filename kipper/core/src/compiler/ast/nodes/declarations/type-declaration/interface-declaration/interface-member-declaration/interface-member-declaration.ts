@@ -38,6 +38,8 @@ export abstract class InterfaceMemberDeclaration<
 	TypeSemantics extends InterfaceMemberDeclarationTypeSemantics = InterfaceMemberDeclarationTypeSemantics,
 > extends TypeDeclaration<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserInterfaceMemberDeclarationContext;
+
 	public abstract get kind(): ASTInterfaceMemberDeclarationKind;
+
 	public abstract get ruleName(): ParserInterfaceMemberDeclarationRuleName;
 }

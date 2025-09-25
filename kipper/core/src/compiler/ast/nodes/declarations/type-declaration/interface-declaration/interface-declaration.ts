@@ -134,6 +134,7 @@ export class InterfaceDeclaration extends TypeDeclaration<
 			valueType: CustomType.fromInterfaceDeclaration(this),
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

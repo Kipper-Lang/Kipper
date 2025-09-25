@@ -113,6 +113,7 @@ export class IdentifierTypeSpecifierExpression extends TypeSpecifierExpression<
 			storedType: valueType,
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	public checkForWarnings = undefined; // TODO!

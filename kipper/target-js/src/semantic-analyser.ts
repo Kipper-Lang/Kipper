@@ -92,6 +92,17 @@ export class JavaScriptTargetSemanticAnalyser extends KipperTargetSemanticAnalys
 	returnStatement = undefined;
 
 	/**
+	 * Performs typescript-specific semantic analysis for {@link TryCatchStatement} instances.
+	 */
+	tryCatchStatement = undefined;
+
+	/**
+	 * Performs typescript-specific semantic analysis for {@link CatchClause} instances.
+	 * @since 0.13.0
+	 */
+	catchClause = undefined;
+
+	/**
 	 * Performs typescript-specific semantic analysis for {@link ParameterDeclaration} instances.
 	 */
 	parameterDeclaration = async (node: ParameterDeclaration) => {

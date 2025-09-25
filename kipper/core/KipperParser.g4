@@ -133,6 +133,7 @@ statement
     |   jumpStatement
     | 	returnStatement
     |	compoundStatement
+    |	tryCatchStatement
     ;
 
 compoundStatement
@@ -190,6 +191,26 @@ jumpStatement
 
 returnStatement
 	: 	'return' expression? SemiColon
+	;
+
+tryCatchStatement
+	:	tryClause catchClause* finallyClause?
+ 	;
+
+tryClause
+	:	'try' compoundStatement
+	;
+
+catchClause
+	:	'catch' '(' errorBindingDeclaration ')' compoundStatement
+	;
+
+errorBindingDeclaration
+	:	declarator (':' typeSpecifierExpression)?
+	;
+
+finallyClause
+	:	'finally' compoundStatement
 	;
 
 // -- Expressions

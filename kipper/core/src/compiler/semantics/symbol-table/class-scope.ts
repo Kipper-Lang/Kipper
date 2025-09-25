@@ -3,9 +3,10 @@
  * the global namespace.
  * @since 0.11.0
  */
-import {
+import type {
 	ClassConstructorDeclaration,
-	ClassDeclaration, ClassMemberDeclaration,
+	ClassDeclaration,
+	ClassMemberDeclaration,
 	ClassMethodDeclaration,
 	ClassPropertyDeclaration,
 } from "../../ast";

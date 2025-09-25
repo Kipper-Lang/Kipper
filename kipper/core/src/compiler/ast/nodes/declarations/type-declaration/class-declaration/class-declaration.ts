@@ -175,6 +175,7 @@ export class ClassDeclaration
 			valueType: CustomType.fromClassDeclaration(this),
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

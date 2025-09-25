@@ -15,6 +15,7 @@ import {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastExpressionContext,
+	CatchClauseContext,
 	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
 	ClassMethodDeclarationContext,
@@ -61,6 +62,7 @@ import {
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
 	TryCastExpressionContext,
+	TryCatchStatementContext,
 	TypeofExpressionContext,
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
@@ -76,9 +78,14 @@ import type {
 	ASTStatementRuleName,
 } from "../common";
 import type { Declaration, Expression, Statement } from "../nodes";
-import { NullableTypeSpecifierExpression } from "../nodes";
-import { CastExpression, ConvertExpression, ForceCastExpression, TryCastExpression } from "../nodes";
+import { ErrorBindingDeclaration } from "../nodes";
+import { CatchClause } from "../nodes";
 import {
+	CastExpression,
+	ConvertExpression,
+	ForceCastExpression,
+	TryCastExpression,
+	NullableTypeSpecifierExpression,
 	AdditiveExpression,
 	ArrayPrimaryExpression,
 	AssignmentExpression,
@@ -106,6 +113,7 @@ import {
 	IfStatement,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementUnaryExpression,
+	InstanceOfExpression,
 	InterfaceDeclaration,
 	InterfaceMethodDeclaration,
 	InterfacePropertyDeclaration,
@@ -113,6 +121,7 @@ import {
 	LambdaPrimaryExpression,
 	LogicalAndExpression,
 	LogicalOrExpression,
+	MatchesExpression,
 	MemberAccessExpression,
 	MultiplicativeExpression,
 	NewInstantiationExpression,
@@ -126,13 +135,12 @@ import {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TryCatchStatement,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
-	MatchesExpression,
-	InstanceOfExpression,
 } from "../nodes";
 
 /**
@@ -158,6 +166,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_classPropertyDeclaration]: ClassPropertyDeclaration,
 		[ParseRuleKindMapping.RULE_classMethodDeclaration]: ClassMethodDeclaration,
 		[ParseRuleKindMapping.RULE_classConstructorDeclaration]: ClassConstructorDeclaration,
+		[ParseRuleKindMapping.RULE_errorBindingDeclaration]: ErrorBindingDeclaration,
 	} satisfies Record<ASTDeclarationKind, typeof Declaration<any, any>>;
 
 	/**
@@ -223,6 +232,8 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_forLoopIterationStatement]: ForLoopIterationStatement,
 		[ParseRuleKindMapping.RULE_returnStatement]: ReturnStatement,
 		[ParseRuleKindMapping.RULE_jumpStatement]: JumpStatement,
+		[ParseRuleKindMapping.RULE_tryCatchStatement]: TryCatchStatement,
+		[ParseRuleKindMapping.RULE_catchClause]: CatchClause,
 	} satisfies Record<ASTStatementKind, typeof Statement<any, any>>;
 
 	/**
@@ -241,6 +252,7 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_classPropertyDeclaration]: ClassPropertyDeclarationContext,
 		[ParseRuleKindMapping.RULE_classMethodDeclaration]: ClassMethodDeclarationContext,
 		[ParseRuleKindMapping.RULE_classConstructorDeclaration]: ClassConstructorDeclarationContext,
+		[ParseRuleKindMapping.RULE_errorBindingDeclaration]: ParameterDeclarationContext,
 	} satisfies Record<ASTDeclarationKind, any>;
 
 	/**
@@ -311,6 +323,8 @@ export class ASTNodeMapper {
 		[ParseRuleKindMapping.RULE_forLoopIterationStatement]: ForLoopIterationStatementContext,
 		[ParseRuleKindMapping.RULE_returnStatement]: ReturnStatementContext,
 		[ParseRuleKindMapping.RULE_jumpStatement]: JumpStatementContext,
+		[ParseRuleKindMapping.RULE_tryCatchStatement]: TryCatchStatementContext,
+		[ParseRuleKindMapping.RULE_catchClause]: CatchClauseContext,
 	} satisfies Record<ASTStatementKind, any>;
 
 	/**
@@ -329,6 +343,7 @@ export class ASTNodeMapper {
 		RULE_classPropertyDeclaration: ClassPropertyDeclaration,
 		RULE_classMethodDeclaration: ClassMethodDeclaration,
 		RULE_classConstructorDeclaration: ClassConstructorDeclaration,
+		RULE_errorBindingDeclaration: ErrorBindingDeclaration,
 	} satisfies Record<ASTDeclarationRuleName, typeof Declaration<any, any>>;
 
 	/**
@@ -394,6 +409,8 @@ export class ASTNodeMapper {
 		RULE_forLoopIterationStatement: ForLoopIterationStatement,
 		RULE_returnStatement: ReturnStatement,
 		RULE_jumpStatement: JumpStatement,
+		RULE_tryCatchStatement: TryCatchStatement,
+		RULE_catchClause: CatchClause,
 	} satisfies Record<ASTStatementRuleName, typeof Statement<any, any>>;
 
 	/**

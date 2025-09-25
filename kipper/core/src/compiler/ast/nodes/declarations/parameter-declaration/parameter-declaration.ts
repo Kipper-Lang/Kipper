@@ -1,6 +1,6 @@
 /**
- * Function declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
- * @since 0.1.2
+ * Parameter declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
+ * @since 0.5.0
  */
 import type { ParameterDeclarationSemantics } from "./parameter-declaration-semantics";
 import type { ParameterDeclarationTypeSemantics } from "./parameter-declaration-type-semantics";
@@ -15,8 +15,8 @@ import { getParseTreeSource } from "../../../../../tools";
 import { UnableToDetermineSemanticDataError } from "../../../../../errors";
 
 /**
- * Function declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
- * @since 0.1.2
+ * Parameter declaration class, which represents the definition of a parameter inside a {@link FunctionDeclaration}.
+ * @since 0.5.0
  */
 export class ParameterDeclaration extends Declaration<
 	ParameterDeclarationSemantics,
@@ -163,6 +163,7 @@ export class ParameterDeclaration extends Declaration<
 			valueType: valueType,
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

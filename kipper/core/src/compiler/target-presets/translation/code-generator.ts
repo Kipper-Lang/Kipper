@@ -57,12 +57,14 @@ import type {
 	StringPrimaryExpression,
 	SwitchStatement,
 	TangledPrimaryExpression,
+	TryCatchStatement,
 	TryCastExpression,
 	TypeofExpression,
 	TypeofTypeSpecifierExpression,
 	VariableDeclaration,
 	VoidOrNullOrUndefinedPrimaryExpression,
 	WhileLoopIterationStatement,
+	CatchClause,
 } from "../../ast";
 import type { TranslatedCodeLine, TranslatedExpression } from "../../const";
 import type { KipperProgramContext } from "../../program-ctx";
@@ -475,4 +477,14 @@ export abstract class KipperTargetCodeGenerator {
 	 * Translates a {@link InstanceOfExpression} into a specific language.
 	 */
 	public abstract instanceOfExpression: TargetASTNodeCodeGenerator<InstanceOfExpression, TranslatedExpression>;
+
+	/**
+	 * Translates a {@link TryCatchStatement} into a specific language.
+	 */
+	public abstract tryCatchStatement: TargetASTNodeCodeGenerator<TryCatchStatement, Array<TranslatedCodeLine>>;
+
+	/**
+	 * Translates a {@link CatchClause} into a specific language.
+	 */
+	public abstract catchClause: TargetASTNodeCodeGenerator<CatchClause, Array<TranslatedCodeLine>>;
 }

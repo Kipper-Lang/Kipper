@@ -16,6 +16,7 @@ import type { ScopeDeclaration, ScopeFunctionDeclaration, ScopeTypeDeclaration }
 import { ScopeVariableDeclaration } from "./entry";
 import { KipperNotImplementedError } from "../../../errors";
 import { UserScope } from "./base/user-scope";
+import type { ErrorBindingDeclaration } from "../../ast/nodes/declarations/error-binding-declaration";
 
 /**
  * A scope that is bound to a {@link CompoundStatement} and not the global namespace.
@@ -46,6 +47,15 @@ export class LocalScope extends UserScope<VariableDeclaration, FunctionDeclarati
 		this.ensureNotUsed(identifier, declaration);
 
 		const scopeDeclaration = ScopeVariableDeclaration.fromVariableDeclaration(declaration);
+		this._entries.set(identifier, scopeDeclaration);
+		return scopeDeclaration;
+	}
+
+	public addErrorBinding(declaration: ErrorBindingDeclaration): ScopeVariableDeclaration {
+		const identifier = declaration.getSemanticData().identifier;
+		this.ensureNotUsed(identifier, declaration);
+
+		const scopeDeclaration = ScopeVariableDeclaration.fromErrorBindingDeclaration(declaration);
 		this._entries.set(identifier, scopeDeclaration);
 		return scopeDeclaration;
 	}

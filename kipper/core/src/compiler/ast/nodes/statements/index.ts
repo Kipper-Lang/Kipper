@@ -11,3 +11,4 @@ export * from "./if-statement/";
 export * from "./jump-statement/";
 export * from "./return-statement/";
 export * from "./switch-statement/";
+export * from "./try-catch-statement/";
