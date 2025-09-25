@@ -9,6 +9,7 @@ import type {
 	ArrayPrimaryExpression,
 	AssignmentExpression,
 	FunctionDeclaration,
+	IdentifierTypeSpecifierExpression,
 	IncrementOrDecrementPostfixExpression,
 	IncrementOrDecrementPostfixExpressionSemantics,
 	LambdaPrimaryExpression,
@@ -46,6 +47,7 @@ import {
 	kipperSupportedConversions,
 } from "../../const";
 import type { TypeError } from "../../../errors";
+import { InvalidErrorBindingTypeError } from "../../../errors";
 import {
 	ArithmeticOperationTypeError,
 	BitwiseOperationTypeError,
@@ -72,6 +74,7 @@ import {
 	InvalidCastTypeError,
 } from "../../../errors";
 import type { BuiltInTypeArray, GenericType, GenericTypeArguments, ProcessedType, RawType } from "../types";
+import { BuiltInTypeAny } from "../types";
 import { BuiltInTypeFunc, BuiltInTypeObj, CustomType, UndefinedType } from "../types";
 
 /**
@@ -844,24 +847,39 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	/**
 	 * Checks whether the passed object expression is valid.
 	 * @param type The object primary expression to check.
+	 * @throws {InvalidInstanceOfTypeError} If the type is not a class type.
 	 * @since 0.12.0
 	 */
 	public validInstanceofClassType(type: ProcessedType) {
 		// Ensure that the type is a class type
 		if (!(type instanceof CustomType) || type.kind !== "class") {
-			throw this.notImplementedError(new InvalidInstanceOfTypeError(type.toString()));
+			throw this.assertError(new InvalidInstanceOfTypeError(type.toString()));
 		}
 	}
 
 	/**
 	 * Checks whether the passed expression can be checked against the given interface pattern.
 	 * @param patternType The pattern to check against.
+	 * @throws {InvalidMatchesTypeError} If the pattern is not an interface type.
 	 * @since 0.12.0
 	 */
 	public validMatchesInterfaceType(patternType: ProcessedType) {
 		// Ensure that the pattern is an interface type
 		if (!(patternType instanceof CustomType) || patternType.kind !== "interface") {
-			throw this.notImplementedError(new InvalidMatchesTypeError(patternType.toString()));
+			throw this.assertError(new InvalidMatchesTypeError(patternType.toString()));
+		}
+	}
+
+	/**
+	 * Checks whether the passed value type specifier is valid to be used in an error binding.
+	 * @param valueTypeSpecifier The type specifier to check.
+	 * @throws {InvalidErrorBindingTypeError} If the type specifier does not evaluate to a class type.
+	 * @since 0.13.0
+	 */
+	public isValidErrorBindingArgument(valueTypeSpecifier: IdentifierTypeSpecifierExpression) {
+		const storedType = valueTypeSpecifier.getTypeSemanticData().storedType;
+		if (!storedType.isClass && !(storedType instanceof BuiltInTypeAny)) {
+			throw this.assertError(new InvalidErrorBindingTypeError(storedType.toString()));
 		}
 	}
 }

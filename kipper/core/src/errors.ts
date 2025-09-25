@@ -892,6 +892,16 @@ export class InvalidMatchesTypeError extends TypeError {
 }
 
 /**
+ * Error that is thrown whenever a type is used for an error binding that is not a class.
+ * @since 0.13.0
+ */
+export class InvalidErrorBindingTypeError extends TypeError {
+	constructor(type: string) {
+		super(`Type '${type}' can not be used as an error binding. Expects a type that extends 'Error'.`);
+	}
+}
+
+/**
  * Error that is thrown whenever a constant declaration is not defined.
  * @since 0.8.3
  */

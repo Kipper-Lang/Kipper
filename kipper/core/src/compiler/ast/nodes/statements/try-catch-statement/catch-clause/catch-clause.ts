@@ -8,7 +8,7 @@ import type { CatchClauseContext } from "../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../lexer-parser";
 import { Statement } from "../../statement";
 import type { Expression } from "../../../expressions";
-import type { CatchClauseSemanticData } from "./catch-clause-semantics";
+import type { CatchClauseSemantics } from "./catch-clause-semantics";
 import type { CatchClauseTypeSemantics } from "./catch-clause-type-semantics";
 import type { CompoundStatement } from "../../compound-statement";
 
@@ -16,7 +16,7 @@ import type { CompoundStatement } from "../../compound-statement";
  * CatchClause class, which represents try-catch statements in the Kipper language and is compilable using
  * {@link translateCtxAndChildren}.
  */
-export class CatchClause extends Statement<CatchClauseSemanticData, CatchClauseTypeSemantics> {
+export class CatchClause extends Statement<CatchClauseSemantics, CatchClauseTypeSemantics> {
 	/**
 	 * The static kind for this AST Node.
 	 * @since 0.13.0

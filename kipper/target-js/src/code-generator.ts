@@ -12,7 +12,6 @@ import type {
 	BitwiseShiftExpression,
 	BitwiseXorExpression,
 	BoolPrimaryExpression,
-	CatchClauseSemanticData,
 	CastExpression,
 	ClassConstructorDeclaration,
 	ClassDeclaration,
@@ -73,6 +72,7 @@ import type {
 	CatchClause,
 } from "@kipper/core";
 import {
+	BuiltInTypeAny,
 	AssignmentExpression,
 	BuiltInTypeArray,
 	BuiltInTypeEmptyArray,
@@ -414,26 +414,31 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 		if (catchClauses.length === 0) {
 			return [];
 		}
+
 		const reservedErrorSymbol = KipperJavaScriptTarget.getInternalIdentifier("e");
 
-		const semanticData = catchClauses[0].getSemanticData() as CatchClauseSemanticData;
-		if (catchClauses.length === 1 && semanticData.identifier === undefined) {
-			const clause = catchClauses[0];
-			const translatedBody = await clause.translateCtxAndChildren();
-			return [["catch", " ", `(${reservedErrorSymbol})`], ...translatedBody];
-		}
-
+		let containsAny = false;
 		const catchClausesCode = [];
 		for (let i = 0; i < catchClauses.length; i++) {
 			const blockBody = await this.generateCatchCondition(i, catchClauses[i], reservedErrorSymbol);
 			catchClausesCode.push(...blockBody);
+
+			const typeSpecifier = catchClauses[i].getSemanticData().errorBinding.getSemanticData().valueTypeSpecifier;
+			const valueType = typeSpecifier?.getTypeSemanticData().storedType;
+			if (valueType instanceof BuiltInTypeAny || !typeSpecifier) {
+				containsAny = true;
+			}
 		}
-		catchClausesCode.push(["else", " ", "{", " ", "throw", " ", reservedErrorSymbol, ";", " ", "}"]);
+
+		if (!containsAny) {
+			catchClausesCode.push(["else", " ", "{", " ", "throw", " ", reservedErrorSymbol, ";", " ", "}"]);
+		}
+
 		return [["catch", " ", `(${reservedErrorSymbol})`], ["{"], ...indentLines(catchClausesCode), ["}"]];
 	}
 
 	/**
-	 * Generates the 'if' condition for a {@link CatchClauseSemanticData}, which has a parameter defined.
+	 * Generates the 'if' condition for a {@link CatchClause}.
 	 * @param i The index of the catch clause i.e. the first, second, etc.
 	 * @param catchClause The catch block to generate the condition for.
 	 * @param reservedErrorSymbol The reserved symbol for the error object.
@@ -445,28 +450,34 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 	): Promise<Array<TranslatedCodeLine>> {
 		const blockBody = await catchClause.translateCtxAndChildren();
 		const semanticData = catchClause.getSemanticData();
-		const errorBindingSemantics = semanticData.errorBinding?.getSemanticData();
-
-		if (!errorBindingSemantics?.valueTypeSpecifier) {
-			return [...blockBody];
-		}
 
 		const typeSpecifier = semanticData.errorBinding?.getTypeSemanticData().valueType;
-		let typeCondition = typeSpecifier
-			? [
-					"if",
-					" ",
-					"(",
-					reservedErrorSymbol,
-					" ",
-					"instanceof",
-					" ",
-					TargetJS.getRuntimeType(typeSpecifier),
-					")",
-					" ",
-					"{",
-				]
-			: [];
+		let typeCondition =
+			typeSpecifier && !(typeSpecifier instanceof BuiltInTypeAny)
+				? [
+						"if",
+						" ",
+						"(",
+						reservedErrorSymbol,
+						" ",
+						"instanceof",
+						" ",
+						TargetJS.getRuntimeType(typeSpecifier),
+						")",
+						" ",
+						"{",
+					]
+				: [
+						// For proper logical handling, we need to ensure that the condition is always true if no type is specified or
+						// the type is 'any' (Otherwise the if-else chain is broken)
+						"if",
+						" ",
+						"(",
+						"true",
+						")",
+						" ",
+						"{",
+					];
 		if (i > 0) {
 			typeCondition = ["else", " ", ...typeCondition];
 		}

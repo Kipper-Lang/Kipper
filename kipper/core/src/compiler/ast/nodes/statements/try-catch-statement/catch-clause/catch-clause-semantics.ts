@@ -10,7 +10,7 @@ import type { ErrorBindingDeclaration } from "../../../declarations";
  * Semantics for AST Node {@link TryCatchStatement}.
  * @since 0.13.0
  */
-export interface CatchClauseSemanticData extends SemanticData {
+export interface CatchClauseSemantics extends SemanticData {
 	/**
 	 * The identifier of the catch block, used for distinguishing multiple catch blocks.
 	 * @since 0.13.0

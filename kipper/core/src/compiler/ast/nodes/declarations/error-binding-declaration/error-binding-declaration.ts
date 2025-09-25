@@ -120,12 +120,12 @@ export class ErrorBindingDeclaration extends Declaration<
 	 */
 	public async primarySemanticAnalysis(): Promise<void> {
 		const parseTreeChildren = this.getAntlrRuleChildren();
-		if (!parseTreeChildren || !this.children || this.children.length < 1) {
+		if (!parseTreeChildren || this.children === undefined) {
 			throw new UnableToDetermineSemanticDataError();
 		}
 
 		const identifier = getParseTreeSource(this.tokenStream, parseTreeChildren[0]);
-		const typeSpecifier = <IdentifierTypeSpecifierExpression>this.children[0];
+		const typeSpecifier = <IdentifierTypeSpecifierExpression | undefined>this.children[0];
 
 		const parentCatchClause = this.parent as CatchClause;
 		this.semanticData = {
@@ -153,7 +153,22 @@ export class ErrorBindingDeclaration extends Declaration<
 		};
 	}
 
-	public readonly primarySemanticTypeChecking: undefined;
+	/**
+	 * Performs type checking for this AST Node. This will log all warnings using {@link programCtx.logger}
+	 * and throw errors if encountered.
+	 *
+	 * This will not run in case that {@link this.hasFailed} is true, as that indicates that the type checking of
+	 * the children has already failed and as such no parent node should run type checking.
+	 * @since 0.7.0
+	 */
+	public async primarySemanticTypeChecking(): Promise<void> {
+		// We need to ensure that the given type is a class
+		const semanticData = this.getSemanticData();
+		const valueTypeSpecifier = semanticData.valueTypeSpecifier;
+		if (valueTypeSpecifier) {
+			this.programCtx.typeCheck(valueTypeSpecifier).isValidErrorBindingArgument(valueTypeSpecifier);
+		}
+	}
 
 	/**
 	 * Semantically analyses the code inside this AST node and checks for possible warnings or problematic code.
