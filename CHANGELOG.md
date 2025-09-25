@@ -18,6 +18,8 @@ To use development versions of Kipper download the
 
 ### Added
 
+- Error handling support using `try {} catch (e) {} finally {}` statements to catch and handle runtime errors.
+	([#654](https://github.com/Kipper-Lang/Kipper/issues/654))
 - New cast keywords `cast as`, `force as` and `try as`, which allow for various type-safe cast operations.
   ([#685](https://github.com/Kipper-Lang/Kipper/issues/685))
 - Implemented new `T?` and `T??` nullable type operator which marks the given type as `T | null` and `T | undefined`
@@ -25,12 +27,24 @@ To use development versions of Kipper download the
 - New classes:
   - `NullableTypeSpecifierExpression`, which represents an AST nullable type specifier expression that marks a given
     type as nullable with either `null` or `undefined`.
+  - `TryCatchStatement`, which represents an AST try-catch statement that handles exceptions thrown in the try block.
+  - `CatchClause`, which represents an AST catch clause that is part of a try-catch statement.
+  - `ErrorBindingDeclaration`, which represents an AST error binding declaration that is part of a catch clause. This
+    declaration binds the error object to a variable in the catch clause scope.
 - New interfaces:
   - `NullableTypeSpecifierExpressionSemantics`, which represents the semantics of a nullable type specifier expression.
   - `NullableTypeSpecifierExpressionTypeSemantics`, which represents the type semantics of a nullable type specifier
     expression.
+  - `TryCatchStatementSemantics`, which represents the semantics of a try-catch statement.
+  - `TryCatchStatementTypeSemantics`, which represents the type semantics of a try-catch statement.
+  - `CatchClauseSemantics`, which represents the semantics of a catch clause.
+  - `CatchClauseTypeSemantics`, which represents the type semantics of a catch clause.
+  - `ErrorBindingDeclarationSemantics`, which represents the semantics of an error binding declaration.
+  - `ErrorBindingDeclarationTypeSemantics`, which represents the type semantics of an error binding declaration.
 - New functions:
   - `KipperTypeScriptTarget.getRuntimeType`, which gets the corresponding runtime representation of a type.
+  - `KipperTypeChecker.isValidErrorBindingArgument`, which checks if a type is a valid type for an error binding
+    argument.
 - New properties:
   - `CompilableASTNode.closestHigherLevelParent`, which returns the closest parent of the node that is of a higher level
     than the node itself. (Higher level as in statement or declaration level, undefined means the item itself is already
@@ -42,6 +56,8 @@ To use development versions of Kipper download the
   - `CustomType.sourceNode`, which returns the source node of the custom type.
   - `CustomType.clsConstructor`, which returns the constructor of the class if the type is a class and the class has a
     constructor.
+  - `ProcessedType.isInterface`, which returns true if the type is an interface.
+  - `ProcessedType.isClass`, which returns true if the type is a class.
 - New types:
   - `KipperNullableNullOperator`, which is the `null` nullable operator that can be used in Kipper.
   - `KipperNullableUndefinedOperator`, which is the `undefined` nullable operator that can be used in Kipper.
