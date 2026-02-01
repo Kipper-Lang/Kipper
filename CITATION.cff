@@ -7,17 +7,14 @@ type: software
 authors:
   - given-names: Luna
     family-names: Klatzer
-    email: edu@lklatzer.com
-    affiliation: HTL Leonding
+    email: sci@lklatzer.com
+    affiliation: TU Vienna
     orcid: 'https://orcid.org/0009-0001-5332-8988'
   - given-names: Lorenz
     family-names: Holzbauer
-    email: l.holzbauer@students.htl-leonding.ac.at
-    affiliation: HTL Leonding
+    email: lorenz@holzbauer.dev
   - given-names: Fabian
     family-names: Baitura
-    email: f.baitura@students.htl-leonding.ac.at
-    affiliation: HTL Leonding
 identifiers:
   - type: url
     value: >-
