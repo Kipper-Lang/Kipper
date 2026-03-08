@@ -115,23 +115,35 @@ h6,
 	}
 }
 
-/* Block the CSS from applying text link formatting on buttons and docs headers */
-:not(.sidebar-nav-header-list-item) {
-	& > a:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button) {
-		&,
-		&:link,
-		&:active,
-		&:visited {
-			color: $scheme-dark-primary;
-			text-decoration: none;
-			background-color: transparent;
-		}
+:not(.sidebar-nav-header-list-item), {
+  /* Block the CSS from applying text link formatting on special buttons, docs headers etc. */
+  & > a:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button) {
+    &,
+    &:link,
+    &:active,
+    &:visited {
+      color: $scheme-dark-primary;
+      text-decoration: none;
+      background-color: transparent;
+    }
 
-		&:hover {
-			color: $scheme-primary;
-			text-decoration: underline;
-		}
-	}
+    &:hover {
+      color: $scheme-primary;
+      text-decoration: underline;
+    }
+  }
+}
+
+.protect-from-default-styling a:not(.button, .button-dark, .docs-button, .inverted-button, .underline-button) {
+  &,
+  &:link,
+  &:active,
+  &:visited,
+  &:hover {
+    color: unset;
+    text-decoration: unset;
+    background-color: unset;
+  }
 }
 
 p {
