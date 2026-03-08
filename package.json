@@ -31,7 +31,8 @@
     "predev": "pnpm run build",
     "host": "http-server ./dist -p 1234 -e html --cors",
     "dev": "pnpm run host",
-    "push-new-version": "ts-node ./tools/versioning/push-new-version.ts"
+    "push-new-version": "ts-node ./tools/versioning/push-new-version.ts",
+    "clean": "rm -rf ./.parcel-cache ./build ./dist"
   },
   "devDependencies": {
     "@parcel/babylon-walk": "2.2.1",
