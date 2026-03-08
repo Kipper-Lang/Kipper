@@ -238,8 +238,8 @@ We appreciate any feedback or help! Kipper is open-source and free for anyone, h
 ![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
-Copyright (C) 2021-2024 Luna Klatzer
-
+ Copyright © 2021-2026 Luna Klatzer, 2024-2025 Lorenz Holzbauer & Fabian Baitura
+ 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or
