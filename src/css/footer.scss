@@ -5,6 +5,7 @@
 #footer-bar {
 	margin-top: auto;
 	background-color: $scheme-background-gray;
+  z-index: 100;
 
 	#footer-content {
 		padding: 0.5rem 1.5rem 1.5rem;
@@ -56,6 +57,7 @@
 @media screen and (max-width: $small-screen-size) {
 	#footer-bar {
 		width: $phone-content-width;
+    z-index: unset;
 
 		#footer-content {
 			padding: 0.5rem 1rem 1rem;
