@@ -7,7 +7,6 @@
 [![codecov](https://codecov.io/gh/Kipper-Lang/Kipper/branch/main/graph/badge.svg?token=S4RQT7X3YP)](https://codecov.io/gh/Kipper-Lang/Kipper)
 [![Issues](https://img.shields.io/github/issues/Kipper-Lang/Kipper)](https://github.com/Kipper-Lang/Kipper/issues)
 [![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)](https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14927961.svg)](https://doi.org/10.5281/zenodo.14927961)
 
 Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
@@ -236,7 +235,6 @@ We appreciate any feedback or help! Kipper is open-source and free for anyone, h
 ## Copyright and License
 
 ![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
  Copyright © 2021-2026 Luna Klatzer, 2024-2025 Lorenz Holzbauer & Fabian Baitura
  
