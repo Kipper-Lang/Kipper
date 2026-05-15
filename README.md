@@ -9,9 +9,9 @@
 [![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)](https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14927961.svg)](https://doi.org/10.5281/zenodo.14927961)
 
-Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
-straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction! 
-Integrating strict type handling, runtime types, casts, among many other features, for a safer development experience!
+Kipper is a JavaScript-wrapping strongly and strictly typed language with Python flavour. It aims to provide
+straightforward, secure and type-safe coding by integrating strict type handling, runtime types, compiler
+checks, runtime casts, among many other features, for a safer development experience!
 
 It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
 
@@ -31,10 +31,17 @@ _For more details, you can read more about this project in the sections ["Goals 
 To install the whole Kipper package with its CLI, run the following command:
 
 ```bash
-npm i kipper
+npm i -g kipper @kipper/cli
 ```
 
-If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
+If you are using `pnpm` or `yarn`, use `pnpm i -g kipper @kipper/cli` or `yarn global add kipper @kipper/cli`.
+
+To verify the installation run a simple "Hello world!" like this:
+
+```bash
+kipper run -s "print('Hello world!');"
+```
+
 
 ## Project Packages
 
