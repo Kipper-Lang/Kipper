@@ -24,9 +24,9 @@ describe("Typeof Expression", () => {
 		{ type: "bool", value: "true" },
 		{ type: "null", value: "null" },
 		{ type: "undefined", value: "undefined" },
-		{ type: "obj", value: "{ x: 1, y: 2, z: 3 }" }
+		{ type: "obj", value: "{ x: 1, y: 2, z: 3 }" },
 	];
-	values.forEach(valueSet => {
+	values.forEach((valueSet) => {
 		it(`Evaluate primary expression during runtime [${valueSet.type}]`, async () => {
 			const fileContent = `print(typeof(${valueSet.value}));`;
 			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);

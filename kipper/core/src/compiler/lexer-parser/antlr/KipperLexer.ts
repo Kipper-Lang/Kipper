@@ -1,8 +1,6 @@
 // Generated from ./KipperLexer.g4 by ANTLR 4.9.0-SNAPSHOT
 
-
-	import KipperLexerBase from "./base/KipperLexerBase";
-
+import KipperLexerBase from "./base/KipperLexerBase";
 
 import { ATN } from "antlr4ts/atn/ATN";
 import { ATNDeserializer } from "antlr4ts/atn/ATNDeserializer";
@@ -16,7 +14,6 @@ import { Vocabulary } from "antlr4ts/Vocabulary";
 import { VocabularyImpl } from "antlr4ts/VocabularyImpl";
 
 import * as Utils from "antlr4ts/misc/Utils";
-
 
 export class KipperLexer extends KipperLexerBase {
 	public static readonly FStringExpStart = 1;
@@ -122,76 +119,335 @@ export class KipperLexer extends KipperLexerBase {
 	public static readonly DOUBLE_QUOTE_FSTRING = 2;
 
 	// tslint:disable:no-trailing-whitespace
-	public static readonly channelNames: string[] = [
-		"DEFAULT_TOKEN_CHANNEL", "HIDDEN", "COMMENT", "PRAGMA",
-	];
+	public static readonly channelNames: string[] = ["DEFAULT_TOKEN_CHANNEL", "HIDDEN", "COMMENT", "PRAGMA"];
 
 	// tslint:disable:no-trailing-whitespace
-	public static readonly modeNames: string[] = [
-		"DEFAULT_MODE", "SINGLE_QUOTE_FSTRING", "DOUBLE_QUOTE_FSTRING",
-	];
+	public static readonly modeNames: string[] = ["DEFAULT_MODE", "SINGLE_QUOTE_FSTRING", "DOUBLE_QUOTE_FSTRING"];
 
 	public static readonly ruleNames: string[] = [
-		"BlockComment", "LineComment", "Pragma", "InstanceOf", "Const", "Var", 
-		"As", "CastAs", "ForceAs", "TryAs", "Spread", "Switch", "Case", "Default", 
-		"Break", "Continue", "Do", "While", "If", "Else", "For", "Enum", "DefFunc", 
-		"Return", "CallFunc", "RetIndicator", "Class", "Interface", "Constructor", 
-		"New", "True", "False", "Matches", "Typeof", "Try", "Catch", "Finally", 
-		"Void", "Null", "Undefined", "Comma", "SemiColon", "QuestionMark", "DoubleQuestionMark", 
-		"Colon", "LeftParen", "RightParen", "LeftBracket", "RightBracket", "FStringExpEnd", 
-		"LeftBrace", "RightBrace", "Plus", "PlusPlus", "Minus", "MinusMinus", 
-		"Star", "Div", "Mod", "PowerTo", "AndAnd", "OrOr", "Not", "Assign", "PlusAssign", 
-		"MinusAssign", "StarAssign", "DivAssign", "ModAssign", "Equal", "NotEqual", 
-		"Less", "LessEqual", "Greater", "GreaterEqual", "BitwiseAnd", "BitwiseOr", 
-		"BitwiseXor", "BitwiseNot", "BitwiseZeroFillLeftShift", "BitwiseSignedRightShift", 
-		"BitwiseZeroFillRightShift", "Dot", "Identifier", "IntegerConstant", "SingleQuoteStringLiteral", 
-		"DoubleQuoteStringLiteral", "FloatingConstant", "Whitespace", "Newline", 
-		"FStringSingleQuoteStart", "FStringDoubleQuoteStart", "FStringSingleQuoteExpStart", 
-		"FStringSingleQuoteEnd", "FStringSingleQuoteAtom", "FStringDoubleQuoteExpStart", 
-		"FStringDoubleQuoteEnd", "FStringDoubleQuoteAtom", "IdentifierNondigit", 
-		"Nondigit", "Digit", "DecimalConstant", "BinaryConstant", "OctalConstant", 
-		"HexadecimalConstant", "NonzeroDigit", "BinaryDigit", "OctalDigit", "HexadecimalDigit", 
-		"DecimalFloatingConstant", "FractionalConstant", "ExponentPart", "DigitSequence", 
-		"Sign", "CCharSequence", "CChar", "EscapeSequence", "SimpleEscapeSequence", 
-		"OctalEscapeSequence", "HexadecimalEscapeSequence", "SingleQuoteFStringSCharSequence", 
-		"SingleQuoteFStringSChar", "DoubleQuoteFStringSCharSequence", "DoubleQuoteFStringSChar", 
-		"SingleQuoteSCharSequence", "SingleQuoteSChar", "DoubleQuoteSCharSequence", 
-		"DoubleQuoteSChar", "CommentContent",
+		"BlockComment",
+		"LineComment",
+		"Pragma",
+		"InstanceOf",
+		"Const",
+		"Var",
+		"As",
+		"CastAs",
+		"ForceAs",
+		"TryAs",
+		"Spread",
+		"Switch",
+		"Case",
+		"Default",
+		"Break",
+		"Continue",
+		"Do",
+		"While",
+		"If",
+		"Else",
+		"For",
+		"Enum",
+		"DefFunc",
+		"Return",
+		"CallFunc",
+		"RetIndicator",
+		"Class",
+		"Interface",
+		"Constructor",
+		"New",
+		"True",
+		"False",
+		"Matches",
+		"Typeof",
+		"Try",
+		"Catch",
+		"Finally",
+		"Void",
+		"Null",
+		"Undefined",
+		"Comma",
+		"SemiColon",
+		"QuestionMark",
+		"DoubleQuestionMark",
+		"Colon",
+		"LeftParen",
+		"RightParen",
+		"LeftBracket",
+		"RightBracket",
+		"FStringExpEnd",
+		"LeftBrace",
+		"RightBrace",
+		"Plus",
+		"PlusPlus",
+		"Minus",
+		"MinusMinus",
+		"Star",
+		"Div",
+		"Mod",
+		"PowerTo",
+		"AndAnd",
+		"OrOr",
+		"Not",
+		"Assign",
+		"PlusAssign",
+		"MinusAssign",
+		"StarAssign",
+		"DivAssign",
+		"ModAssign",
+		"Equal",
+		"NotEqual",
+		"Less",
+		"LessEqual",
+		"Greater",
+		"GreaterEqual",
+		"BitwiseAnd",
+		"BitwiseOr",
+		"BitwiseXor",
+		"BitwiseNot",
+		"BitwiseZeroFillLeftShift",
+		"BitwiseSignedRightShift",
+		"BitwiseZeroFillRightShift",
+		"Dot",
+		"Identifier",
+		"IntegerConstant",
+		"SingleQuoteStringLiteral",
+		"DoubleQuoteStringLiteral",
+		"FloatingConstant",
+		"Whitespace",
+		"Newline",
+		"FStringSingleQuoteStart",
+		"FStringDoubleQuoteStart",
+		"FStringSingleQuoteExpStart",
+		"FStringSingleQuoteEnd",
+		"FStringSingleQuoteAtom",
+		"FStringDoubleQuoteExpStart",
+		"FStringDoubleQuoteEnd",
+		"FStringDoubleQuoteAtom",
+		"IdentifierNondigit",
+		"Nondigit",
+		"Digit",
+		"DecimalConstant",
+		"BinaryConstant",
+		"OctalConstant",
+		"HexadecimalConstant",
+		"NonzeroDigit",
+		"BinaryDigit",
+		"OctalDigit",
+		"HexadecimalDigit",
+		"DecimalFloatingConstant",
+		"FractionalConstant",
+		"ExponentPart",
+		"DigitSequence",
+		"Sign",
+		"CCharSequence",
+		"CChar",
+		"EscapeSequence",
+		"SimpleEscapeSequence",
+		"OctalEscapeSequence",
+		"HexadecimalEscapeSequence",
+		"SingleQuoteFStringSCharSequence",
+		"SingleQuoteFStringSChar",
+		"DoubleQuoteFStringSCharSequence",
+		"DoubleQuoteFStringSChar",
+		"SingleQuoteSCharSequence",
+		"SingleQuoteSChar",
+		"DoubleQuoteSCharSequence",
+		"DoubleQuoteSChar",
+		"CommentContent",
 	];
 
 	private static readonly _LITERAL_NAMES: Array<string | undefined> = [
-		undefined, undefined, undefined, undefined, undefined, "'instanceof'", 
-		"'const'", "'var'", "'as'", "'cast as'", "'force as'", "'try as'", "'...'", 
-		"'switch'", "'case'", "'default'", "'break'", "'continue'", "'do'", "'while'", 
-		"'if'", "'else'", "'for'", "'enum'", "'def'", "'return'", "'call'", "'->'", 
-		"'class'", "'interface'", "'constructor'", "'new'", "'true'", "'false'", 
-		"'matches'", "'typeof'", "'try'", "'catch'", "'finally'", "'void'", "'null'", 
-		"'undefined'", "','", "';'", "'?'", "'??'", "':'", "'('", "')'", "'['", 
-		"']'", undefined, "'{'", "'}'", "'+'", "'++'", "'-'", "'--'", "'*'", "'/'", 
-		"'%'", "'**'", "'&&'", "'||'", "'!'", "'='", "'+='", "'-='", "'*='", "'/='", 
-		"'%='", "'=='", "'!='", "'<'", "'<='", "'>'", "'>='", "'&'", "'|'", "'^'", 
-		"'~'", "'<<'", "'>>'", "'>>>'", "'.'",
+		undefined,
+		undefined,
+		undefined,
+		undefined,
+		undefined,
+		"'instanceof'",
+		"'const'",
+		"'var'",
+		"'as'",
+		"'cast as'",
+		"'force as'",
+		"'try as'",
+		"'...'",
+		"'switch'",
+		"'case'",
+		"'default'",
+		"'break'",
+		"'continue'",
+		"'do'",
+		"'while'",
+		"'if'",
+		"'else'",
+		"'for'",
+		"'enum'",
+		"'def'",
+		"'return'",
+		"'call'",
+		"'->'",
+		"'class'",
+		"'interface'",
+		"'constructor'",
+		"'new'",
+		"'true'",
+		"'false'",
+		"'matches'",
+		"'typeof'",
+		"'try'",
+		"'catch'",
+		"'finally'",
+		"'void'",
+		"'null'",
+		"'undefined'",
+		"','",
+		"';'",
+		"'?'",
+		"'??'",
+		"':'",
+		"'('",
+		"')'",
+		"'['",
+		"']'",
+		undefined,
+		"'{'",
+		"'}'",
+		"'+'",
+		"'++'",
+		"'-'",
+		"'--'",
+		"'*'",
+		"'/'",
+		"'%'",
+		"'**'",
+		"'&&'",
+		"'||'",
+		"'!'",
+		"'='",
+		"'+='",
+		"'-='",
+		"'*='",
+		"'/='",
+		"'%='",
+		"'=='",
+		"'!='",
+		"'<'",
+		"'<='",
+		"'>'",
+		"'>='",
+		"'&'",
+		"'|'",
+		"'^'",
+		"'~'",
+		"'<<'",
+		"'>>'",
+		"'>>>'",
+		"'.'",
 	];
 	private static readonly _SYMBOLIC_NAMES: Array<string | undefined> = [
-		undefined, "FStringExpStart", "BlockComment", "LineComment", "Pragma", 
-		"InstanceOf", "Const", "Var", "As", "CastAs", "ForceAs", "TryAs", "Spread", 
-		"Switch", "Case", "Default", "Break", "Continue", "Do", "While", "If", 
-		"Else", "For", "Enum", "DefFunc", "Return", "CallFunc", "RetIndicator", 
-		"Class", "Interface", "Constructor", "New", "True", "False", "Matches", 
-		"Typeof", "Try", "Catch", "Finally", "Void", "Null", "Undefined", "Comma", 
-		"SemiColon", "QuestionMark", "DoubleQuestionMark", "Colon", "LeftParen", 
-		"RightParen", "LeftBracket", "RightBracket", "FStringExpEnd", "LeftBrace", 
-		"RightBrace", "Plus", "PlusPlus", "Minus", "MinusMinus", "Star", "Div", 
-		"Mod", "PowerTo", "AndAnd", "OrOr", "Not", "Assign", "PlusAssign", "MinusAssign", 
-		"StarAssign", "DivAssign", "ModAssign", "Equal", "NotEqual", "Less", "LessEqual", 
-		"Greater", "GreaterEqual", "BitwiseAnd", "BitwiseOr", "BitwiseXor", "BitwiseNot", 
-		"BitwiseZeroFillLeftShift", "BitwiseSignedRightShift", "BitwiseZeroFillRightShift", 
-		"Dot", "Identifier", "IntegerConstant", "SingleQuoteStringLiteral", "DoubleQuoteStringLiteral", 
-		"FloatingConstant", "Whitespace", "Newline", "FStringSingleQuoteStart", 
-		"FStringDoubleQuoteStart", "FStringSingleQuoteEnd", "FStringSingleQuoteAtom", 
-		"FStringDoubleQuoteEnd", "FStringDoubleQuoteAtom",
+		undefined,
+		"FStringExpStart",
+		"BlockComment",
+		"LineComment",
+		"Pragma",
+		"InstanceOf",
+		"Const",
+		"Var",
+		"As",
+		"CastAs",
+		"ForceAs",
+		"TryAs",
+		"Spread",
+		"Switch",
+		"Case",
+		"Default",
+		"Break",
+		"Continue",
+		"Do",
+		"While",
+		"If",
+		"Else",
+		"For",
+		"Enum",
+		"DefFunc",
+		"Return",
+		"CallFunc",
+		"RetIndicator",
+		"Class",
+		"Interface",
+		"Constructor",
+		"New",
+		"True",
+		"False",
+		"Matches",
+		"Typeof",
+		"Try",
+		"Catch",
+		"Finally",
+		"Void",
+		"Null",
+		"Undefined",
+		"Comma",
+		"SemiColon",
+		"QuestionMark",
+		"DoubleQuestionMark",
+		"Colon",
+		"LeftParen",
+		"RightParen",
+		"LeftBracket",
+		"RightBracket",
+		"FStringExpEnd",
+		"LeftBrace",
+		"RightBrace",
+		"Plus",
+		"PlusPlus",
+		"Minus",
+		"MinusMinus",
+		"Star",
+		"Div",
+		"Mod",
+		"PowerTo",
+		"AndAnd",
+		"OrOr",
+		"Not",
+		"Assign",
+		"PlusAssign",
+		"MinusAssign",
+		"StarAssign",
+		"DivAssign",
+		"ModAssign",
+		"Equal",
+		"NotEqual",
+		"Less",
+		"LessEqual",
+		"Greater",
+		"GreaterEqual",
+		"BitwiseAnd",
+		"BitwiseOr",
+		"BitwiseXor",
+		"BitwiseNot",
+		"BitwiseZeroFillLeftShift",
+		"BitwiseSignedRightShift",
+		"BitwiseZeroFillRightShift",
+		"Dot",
+		"Identifier",
+		"IntegerConstant",
+		"SingleQuoteStringLiteral",
+		"DoubleQuoteStringLiteral",
+		"FloatingConstant",
+		"Whitespace",
+		"Newline",
+		"FStringSingleQuoteStart",
+		"FStringDoubleQuoteStart",
+		"FStringSingleQuoteEnd",
+		"FStringSingleQuoteAtom",
+		"FStringDoubleQuoteEnd",
+		"FStringDoubleQuoteAtom",
 	];
-	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(KipperLexer._LITERAL_NAMES, KipperLexer._SYMBOLIC_NAMES, []);
+	public static readonly VOCABULARY: Vocabulary = new VocabularyImpl(
+		KipperLexer._LITERAL_NAMES,
+		KipperLexer._SYMBOLIC_NAMES,
+		[],
+	);
 
 	// @Override
 	// @NotNull
@@ -200,107 +456,116 @@ export class KipperLexer extends KipperLexerBase {
 	}
 	// tslint:enable:no-trailing-whitespace
 
-
 	constructor(input: CharStream) {
 		super(input);
 		this._interp = new LexerATNSimulator(KipperLexer._ATN, this);
 	}
 
 	// @Override
-	public get grammarFileName(): string { return "KipperLexer.g4"; }
+	public get grammarFileName(): string {
+		return "KipperLexer.g4";
+	}
 
 	// @Override
-	public get ruleNames(): string[] { return KipperLexer.ruleNames; }
+	public get ruleNames(): string[] {
+		return KipperLexer.ruleNames;
+	}
 
 	// @Override
-	public get serializedATN(): string { return KipperLexer._serializedATN; }
+	public get serializedATN(): string {
+		return KipperLexer._serializedATN;
+	}
 
 	// @Override
-	public get channelNames(): string[] { return KipperLexer.channelNames; }
+	public get channelNames(): string[] {
+		return KipperLexer.channelNames;
+	}
 
 	// @Override
-	public get modeNames(): string[] { return KipperLexer.modeNames; }
+	public get modeNames(): string[] {
+		return KipperLexer.modeNames;
+	}
 
 	// @Override
 	public action(_localctx: RuleContext, ruleIndex: number, actionIndex: number): void {
 		switch (ruleIndex) {
-		case 90:
-			this.FStringSingleQuoteStart_action(_localctx, actionIndex);
-			break;
+			case 90:
+				this.FStringSingleQuoteStart_action(_localctx, actionIndex);
+				break;
 
-		case 91:
-			this.FStringDoubleQuoteStart_action(_localctx, actionIndex);
-			break;
+			case 91:
+				this.FStringDoubleQuoteStart_action(_localctx, actionIndex);
+				break;
 
-		case 93:
-			this.FStringSingleQuoteEnd_action(_localctx, actionIndex);
-			break;
+			case 93:
+				this.FStringSingleQuoteEnd_action(_localctx, actionIndex);
+				break;
 
-		case 96:
-			this.FStringDoubleQuoteEnd_action(_localctx, actionIndex);
-			break;
+			case 96:
+				this.FStringDoubleQuoteEnd_action(_localctx, actionIndex);
+				break;
 		}
 	}
 	private FStringSingleQuoteStart_action(_localctx: RuleContext, actionIndex: number): void {
 		switch (actionIndex) {
-		case 0:
-			this.incrementFStringDepth()
-			break;
+			case 0:
+				this.incrementFStringDepth();
+				break;
 		}
 	}
 	private FStringDoubleQuoteStart_action(_localctx: RuleContext, actionIndex: number): void {
 		switch (actionIndex) {
-		case 1:
-			this.incrementFStringDepth()
-			break;
+			case 1:
+				this.incrementFStringDepth();
+				break;
 		}
 	}
 	private FStringSingleQuoteEnd_action(_localctx: RuleContext, actionIndex: number): void {
 		switch (actionIndex) {
-		case 2:
-			this.decrementFStringDepth()
-			break;
+			case 2:
+				this.decrementFStringDepth();
+				break;
 		}
 	}
 	private FStringDoubleQuoteEnd_action(_localctx: RuleContext, actionIndex: number): void {
 		switch (actionIndex) {
-		case 3:
-			this.decrementFStringDepth()
-			break;
+			case 3:
+				this.decrementFStringDepth();
+				break;
 		}
 	}
 	// @Override
 	public sempred(_localctx: RuleContext, ruleIndex: number, predIndex: number): boolean {
 		switch (ruleIndex) {
-		case 49:
-			return this.FStringExpEnd_sempred(_localctx, predIndex);
+			case 49:
+				return this.FStringExpEnd_sempred(_localctx, predIndex);
 
-		case 92:
-			return this.FStringSingleQuoteExpStart_sempred(_localctx, predIndex);
+			case 92:
+				return this.FStringSingleQuoteExpStart_sempred(_localctx, predIndex);
 
-		case 95:
-			return this.FStringDoubleQuoteExpStart_sempred(_localctx, predIndex);
+			case 95:
+				return this.FStringDoubleQuoteExpStart_sempred(_localctx, predIndex);
 		}
 		return true;
 	}
 	private FStringExpEnd_sempred(_localctx: RuleContext, predIndex: number): boolean {
 		switch (predIndex) {
-		case 0:
-			return this.insideFString();
+			case 0:
+				return this.insideFString();
 		}
 		return true;
 	}
 	private FStringSingleQuoteExpStart_sempred(_localctx: RuleContext, predIndex: number): boolean {
 		switch (predIndex) {
-		case 1:
-			return this.insideFString();
+			case 1:
+				return this.insideFString();
 		}
 		return true;
 	}
 	private FStringDoubleQuoteExpStart_sempred(_localctx: RuleContext, predIndex: number): boolean {
 		switch (predIndex) {
-		case 2:
-			return this.insideFString();
+			case 2:
+				return this.insideFString();
 		}
 		return true;
 	}
@@ -314,7 +579,7 @@ export class KipperLexer extends KipperLexerBase {
 		"\x04\x12\t\x12\x04\x13\t\x13\x04\x14\t\x14\x04\x15\t\x15\x04\x16\t\x16" +
 		"\x04\x17\t\x17\x04\x18\t\x18\x04\x19\t\x19\x04\x1A\t\x1A\x04\x1B\t\x1B" +
 		"\x04\x1C\t\x1C\x04\x1D\t\x1D\x04\x1E\t\x1E\x04\x1F\t\x1F\x04 \t \x04!" +
-		"\t!\x04\"\t\"\x04#\t#\x04$\t$\x04%\t%\x04&\t&\x04\'\t\'\x04(\t(\x04)\t" +
+		"\t!\x04\"\t\"\x04#\t#\x04$\t$\x04%\t%\x04&\t&\x04'\t'\x04(\t(\x04)\t" +
 		")\x04*\t*\x04+\t+\x04,\t,\x04-\t-\x04.\t.\x04/\t/\x040\t0\x041\t1\x04" +
 		"2\t2\x043\t3\x044\t4\x045\t5\x046\t6\x047\t7\x048\t8\x049\t9\x04:\t:\x04" +
 		";\t;\x04<\t<\x04=\t=\x04>\t>\x04?\t?\x04@\t@\x04A\tA\x04B\tB\x04C\tC\x04" +
@@ -347,10 +612,10 @@ export class KipperLexer extends KipperLexerBase {
 		"\x1D\x03\x1D\x03\x1D\x03\x1D\x03\x1D\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03" +
 		"\x1E\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03\x1E\x03\x1F\x03" +
 		"\x1F\x03\x1F\x03\x1F\x03 \x03 \x03 \x03 \x03 \x03!\x03!\x03!\x03!\x03" +
-		"!\x03!\x03\"\x03\"\x03\"\x03\"\x03\"\x03\"\x03\"\x03\"\x03#\x03#\x03#" +
+		'!\x03!\x03"\x03"\x03"\x03"\x03"\x03"\x03"\x03"\x03#\x03#\x03#' +
 		"\x03#\x03#\x03#\x03#\x03$\x03$\x03$\x03$\x03%\x03%\x03%\x03%\x03%\x03" +
-		"%\x03&\x03&\x03&\x03&\x03&\x03&\x03&\x03&\x03\'\x03\'\x03\'\x03\'\x03" +
-		"\'\x03(\x03(\x03(\x03(\x03(\x03)\x03)\x03)\x03)\x03)\x03)\x03)\x03)\x03" +
+		"%\x03&\x03&\x03&\x03&\x03&\x03&\x03&\x03&\x03'\x03'\x03'\x03'\x03" +
+		"'\x03(\x03(\x03(\x03(\x03(\x03)\x03)\x03)\x03)\x03)\x03)\x03)\x03)\x03" +
 		")\x03)\x03*\x03*\x03+\x03+\x03,\x03,\x03-\x03-\x03-\x03.\x03.\x03/\x03" +
 		"/\x030\x030\x031\x031\x032\x032\x033\x033\x033\x033\x033\x034\x034\x03" +
 		"5\x035\x036\x036\x037\x037\x037\x038\x038\x039\x039\x039\x03:\x03:\x03" +
@@ -381,9 +646,9 @@ export class KipperLexer extends KipperLexerBase {
 		"\u0359\v\x82\x03\u010D\x02\x02\x83\x05\x02\x04\x07\x02\x05\t\x02\x06\v" +
 		"\x02\x07\r\x02\b\x0F\x02\t\x11\x02\n\x13\x02\v\x15\x02\f\x17\x02\r\x19" +
 		"\x02\x0E\x1B\x02\x0F\x1D\x02\x10\x1F\x02\x11!\x02\x12#\x02\x13%\x02\x14" +
-		"\'\x02\x15)\x02\x16+\x02\x17-\x02\x18/\x02\x191\x02\x1A3\x02\x1B5\x02" +
-		"\x1C7\x02\x1D9\x02\x1E;\x02\x1F=\x02 ?\x02!A\x02\"C\x02#E\x02$G\x02%I" +
-		"\x02&K\x02\'M\x02(O\x02)Q\x02*S\x02+U\x02,W\x02-Y\x02.[\x02/]\x020_\x02" +
+		"'\x02\x15)\x02\x16+\x02\x17-\x02\x18/\x02\x191\x02\x1A3\x02\x1B5\x02" +
+		'\x1C7\x02\x1D9\x02\x1E;\x02\x1F=\x02 ?\x02!A\x02"C\x02#E\x02$G\x02%I' +
+		"\x02&K\x02'M\x02(O\x02)Q\x02*S\x02+U\x02,W\x02-Y\x02.[\x02/]\x020_\x02" +
 		"1a\x022c\x023e\x024g\x025i\x026k\x027m\x028o\x029q\x02:s\x02;u\x02<w\x02" +
 		"=y\x02>{\x02?}\x02@\x7F\x02A\x81\x02B\x83\x02C\x85\x02D\x87\x02E\x89\x02" +
 		"F\x8B\x02G\x8D\x02H\x8F\x02I\x91\x02J\x93\x02K\x95\x02L\x97\x02M\x99\x02" +
@@ -395,7 +660,7 @@ export class KipperLexer extends KipperLexerBase {
 		"\x02\x02\xE1\x02\x02\xE3\x02\x02\xE5\x02\x02\xE7\x02\x02\xE9\x02\x02\xEB" +
 		"\x02\x02\xED\x02\x02\xEF\x02\x02\xF1\x02\x02\xF3\x02\x02\xF5\x02\x02\xF7" +
 		"\x02\x02\xF9\x02\x02\xFB\x02\x02\xFD\x02\x02\xFF\x02\x02\u0101\x02\x02" +
-		"\u0103\x02\x02\u0105\x02\x02\x05\x02\x03\x04\x14\x06\x02\v\v\r\x0E\"\"" +
+		'\u0103\x02\x02\u0105\x02\x02\x05\x02\x03\x04\x14\x06\x02\v\v\r\x0E""' +
 		"\xA2\xA2\x05\x02\f\f\x0F\x0F\u202A\u202B\x05\x02C\\aac|\x03\x022;\x04" +
 		"\x02DDdd\x04\x02QQqq\x04\x02ZZzz\x03\x023;\x03\x0223\x03\x0229\x05\x02" +
 		"2;CHch\x04\x02GGgg\x04\x02--//\x06\x02\f\f\x0F\x0F))^^\x0E\x02$$))AA^" +
@@ -406,7 +671,7 @@ export class KipperLexer extends KipperLexerBase {
 		"\x02\x13\x03\x02\x02\x02\x02\x15\x03\x02\x02\x02\x02\x17\x03\x02\x02\x02" +
 		"\x02\x19\x03\x02\x02\x02\x02\x1B\x03\x02\x02\x02\x02\x1D\x03\x02\x02\x02" +
 		"\x02\x1F\x03\x02\x02\x02\x02!\x03\x02\x02\x02\x02#\x03\x02\x02\x02\x02" +
-		"%\x03\x02\x02\x02\x02\'\x03\x02\x02\x02\x02)\x03\x02\x02\x02\x02+\x03" +
+		"%\x03\x02\x02\x02\x02'\x03\x02\x02\x02\x02)\x03\x02\x02\x02\x02+\x03" +
 		"\x02\x02\x02\x02-\x03\x02\x02\x02\x02/\x03\x02\x02\x02\x021\x03\x02\x02" +
 		"\x02\x023\x03\x02\x02\x02\x025\x03\x02\x02\x02\x027\x03\x02\x02\x02\x02" +
 		"9\x03\x02\x02\x02\x02;\x03\x02\x02\x02\x02=\x03\x02\x02\x02\x02?\x03\x02" +
@@ -437,7 +702,7 @@ export class KipperLexer extends KipperLexerBase {
 		"\x02\x02\x13\u0140\x03\x02\x02\x02\x15\u0148\x03\x02\x02\x02\x17\u0151" +
 		"\x03\x02\x02\x02\x19\u0158\x03\x02\x02\x02\x1B\u015C\x03\x02\x02\x02\x1D" +
 		"\u0163\x03\x02\x02\x02\x1F\u0168\x03\x02\x02\x02!\u0170\x03\x02\x02\x02" +
-		"#\u0176\x03\x02\x02\x02%\u017F\x03\x02\x02\x02\'\u0182\x03\x02\x02\x02" +
+		"#\u0176\x03\x02\x02\x02%\u017F\x03\x02\x02\x02'\u0182\x03\x02\x02\x02" +
 		")\u0188\x03\x02\x02\x02+\u018B\x03\x02\x02\x02-\u0190\x03\x02\x02\x02" +
 		"/\u0194\x03\x02\x02\x021\u0199\x03\x02\x02\x023\u019D\x03\x02\x02\x02" +
 		"5\u01A4\x03\x02\x02\x027\u01A9\x03\x02\x02\x029\u01AC\x03\x02\x02\x02" +
@@ -500,12 +765,12 @@ export class KipperLexer extends KipperLexerBase {
 		"\x10\x03\x02\x02\x02\u013D\u013E\x07c\x02\x02\u013E\u013F\x07u\x02\x02" +
 		"\u013F\x12\x03\x02\x02\x02\u0140\u0141\x07e\x02\x02\u0141\u0142\x07c\x02" +
 		"\x02\u0142\u0143\x07u\x02\x02\u0143\u0144\x07v\x02\x02\u0144\u0145\x07" +
-		"\"\x02\x02\u0145\u0146\x07c\x02\x02\u0146\u0147\x07u\x02\x02\u0147\x14" +
+		'"\x02\x02\u0145\u0146\x07c\x02\x02\u0146\u0147\x07u\x02\x02\u0147\x14' +
 		"\x03\x02\x02\x02\u0148\u0149\x07h\x02\x02\u0149\u014A\x07q\x02\x02\u014A" +
 		"\u014B\x07t\x02\x02\u014B\u014C\x07e\x02\x02\u014C\u014D\x07g\x02\x02" +
-		"\u014D\u014E\x07\"\x02\x02\u014E\u014F\x07c\x02\x02\u014F\u0150\x07u\x02" +
+		'\u014D\u014E\x07"\x02\x02\u014E\u014F\x07c\x02\x02\u014F\u0150\x07u\x02' +
 		"\x02\u0150\x16\x03\x02\x02\x02\u0151\u0152\x07v\x02\x02\u0152\u0153\x07" +
-		"t\x02\x02\u0153\u0154\x07{\x02\x02\u0154\u0155\x07\"\x02\x02\u0155\u0156" +
+		't\x02\x02\u0153\u0154\x07{\x02\x02\u0154\u0155\x07"\x02\x02\u0155\u0156' +
 		"\x07c\x02\x02\u0156\u0157\x07u\x02\x02\u0157\x18\x03\x02\x02\x02\u0158" +
 		"\u0159\x070\x02\x02\u0159\u015A\x070\x02\x02\u015A\u015B\x070\x02\x02" +
 		"\u015B\x1A\x03\x02\x02\x02\u015C\u015D\x07u\x02\x02\u015D\u015E\x07y\x02" +
@@ -517,7 +782,7 @@ export class KipperLexer extends KipperLexerBase {
 		"\x02\u016C\u016D\x07w\x02\x02\u016D\u016E\x07n\x02\x02\u016E\u016F\x07" +
 		"v\x02\x02\u016F \x03\x02\x02\x02\u0170\u0171\x07d\x02\x02\u0171\u0172" +
 		"\x07t\x02\x02\u0172\u0173\x07g\x02\x02\u0173\u0174\x07c\x02\x02\u0174" +
-		"\u0175\x07m\x02\x02\u0175\"\x03\x02\x02\x02\u0176\u0177\x07e\x02\x02\u0177" +
+		'\u0175\x07m\x02\x02\u0175"\x03\x02\x02\x02\u0176\u0177\x07e\x02\x02\u0177' +
 		"\u0178\x07q\x02\x02\u0178\u0179\x07p\x02\x02\u0179\u017A\x07v\x02\x02" +
 		"\u017A\u017B\x07k\x02\x02\u017B\u017C\x07p\x02\x02\u017C\u017D\x07w\x02" +
 		"\x02\u017D\u017E\x07g\x02\x02\u017E$\x03\x02\x02\x02\u017F\u0180\x07f" +
@@ -586,7 +851,7 @@ export class KipperLexer extends KipperLexerBase {
 		"\x02\u022Cp\x03\x02\x02\x02\u022D\u022E\x07/\x02\x02\u022Er\x03\x02\x02" +
 		"\x02\u022F\u0230\x07/\x02\x02\u0230\u0231\x07/\x02\x02\u0231t\x03\x02" +
 		"\x02\x02\u0232\u0233\x07,\x02\x02\u0233v\x03\x02\x02\x02\u0234\u0235\x07" +
-		"1\x02\x02\u0235x\x03\x02\x02\x02\u0236\u0237\x07\'\x02\x02\u0237z\x03" +
+		"1\x02\x02\u0235x\x03\x02\x02\x02\u0236\u0237\x07'\x02\x02\u0237z\x03" +
 		"\x02\x02\x02\u0238\u0239\x07,\x02\x02\u0239\u023A\x07,\x02\x02\u023A|" +
 		"\x03\x02\x02\x02\u023B\u023C\x07(\x02\x02\u023C\u023D\x07(\x02\x02\u023D" +
 		"~\x03\x02\x02\x02\u023E\u023F\x07~\x02\x02\u023F\u0240\x07~\x02\x02\u0240" +
@@ -596,7 +861,7 @@ export class KipperLexer extends KipperLexerBase {
 		"/\x02\x02\u0249\u024A\x07?\x02\x02\u024A\x88\x03\x02\x02\x02\u024B\u024C" +
 		"\x07,\x02\x02\u024C\u024D\x07?\x02\x02\u024D\x8A\x03\x02\x02\x02\u024E" +
 		"\u024F\x071\x02\x02\u024F\u0250\x07?\x02\x02\u0250\x8C\x03\x02\x02\x02" +
-		"\u0251\u0252\x07\'\x02\x02\u0252\u0253\x07?\x02\x02\u0253\x8E\x03\x02" +
+		"\u0251\u0252\x07'\x02\x02\u0252\u0253\x07?\x02\x02\u0253\x8E\x03\x02" +
 		"\x02\x02\u0254\u0255\x07?\x02\x02\u0255\u0256\x07?\x02\x02\u0256\x90\x03" +
 		"\x02\x02\x02\u0257\u0258\x07#\x02\x02\u0258\u0259\x07?\x02\x02\u0259\x92" +
 		"\x03\x02\x02\x02\u025A\u025B\x07>\x02\x02\u025B\x94\x03\x02\x02\x02\u025C" +
@@ -713,10 +978,7 @@ export class KipperLexer extends KipperLexerBase {
 		"\x03\\\x02\x07\x03\x02\x03]\x03\x07\x04\x02\t\x03\x02\x07\x02\x02\x03" +
 		"_\x04\x03b\x05";
 	public static readonly _serializedATN: string = Utils.join(
-		[
-			KipperLexer._serializedATNSegment0,
-			KipperLexer._serializedATNSegment1,
-		],
+		[KipperLexer._serializedATNSegment0, KipperLexer._serializedATNSegment1],
 		"",
 	);
 	public static __ATN: ATN;
@@ -727,6 +989,4 @@ export class KipperLexer extends KipperLexerBase {
 
 		return KipperLexer.__ATN;
 	}
-
 }
-
