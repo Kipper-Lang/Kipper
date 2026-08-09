@@ -93,6 +93,6 @@ export async function assertRunnableCompiledSnippet(
 ): Promise<KipperCompileResult> {
 	const instance: KipperCompileResult = await compiler.compile(code, compilerOptions ?? { target: defaultTarget });
 	assert.isDefined(instance.programCtx);
-	assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+	assertErrorsAreEmpty(instance.programCtx!);
 	return instance;
 }

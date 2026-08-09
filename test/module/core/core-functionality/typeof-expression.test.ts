@@ -15,7 +15,7 @@ describe("Typeof Expression", () => {
 		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
-		assertCodeIncludesSnippet(code, "typeof(1) ===");
+		assertCodeIncludesSnippet(code, ".typeOf(1) ===");
 	});
 
 	const values = [
