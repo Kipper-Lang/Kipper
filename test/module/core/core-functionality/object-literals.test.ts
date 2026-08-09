@@ -1,6 +1,7 @@
 import type { KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
 import { compiler, defaultTarget } from ".";
+import { assertRunnableCompiledSnippet } from "..";
 
 describe("Object literals", () => {
 	it("should be able to create an object literal", async () => {
@@ -15,10 +16,7 @@ describe("Object literals", () => {
 
 	it("should create an object with different types of properties", async () => {
 		const fileContent = "{ numProp: 1, strProp: '2', boolProp: true };";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		const written = instance.write();
 		assert.include(
 			written,
@@ -29,10 +27,7 @@ describe("Object literals", () => {
 
 	it("should create an object with nested objects", async () => {
 		const fileContent = "{ outerProp: { innerProp: 1 } };";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		const written = instance.write();
 		assert.include(
 			written,
@@ -43,10 +38,7 @@ describe("Object literals", () => {
 
 	it("should create an object with array properties", async () => {
 		const fileContent = "{ arrProp: [1, 2, 3] };";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		const written = instance.write();
 		assert.include(
 			written,
@@ -57,10 +49,7 @@ describe("Object literals", () => {
 
 	it("should create an object with method properties", async () => {
 		const fileContent = "{ methodProp: (): num -> 1 };";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		const written = instance.write();
 		assert.include(
 			written,

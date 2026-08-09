@@ -2,8 +2,7 @@ import type { KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
-import { compiler, defaultTarget } from ".";
-import { testPrintOutput } from "..";
+import { assertRunnableCompiledSnippet, testPrintOutput } from "..";
 
 describe("Member access", () => {
 	describe("Dot notation", () => {});
@@ -11,10 +10,7 @@ describe("Member access", () => {
 	describe("Bracket notation", () => {
 		it("Simple access of a string", async () => {
 			const fileContent = 'var x: str = "1234"[1]; print(x);';
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 			assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 			assert.include(
 				instance.write(),
@@ -31,10 +27,7 @@ describe("Member access", () => {
 		describe("str", () => {
 			it("Simple slice with both start and end", async () => {
 				const fileContent = 'var x: str = "1234"[1:2]; print(x);';
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
@@ -48,10 +41,7 @@ describe("Member access", () => {
 
 			it("Simple slice with only start", async () => {
 				const fileContent = 'var x: str = "1234"[1:]; print(x);';
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
@@ -65,10 +55,7 @@ describe("Member access", () => {
 
 			it("Simple slice with only end", async () => {
 				const fileContent = 'var x: str = "1234"[:2]; print(x);';
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
@@ -82,10 +69,7 @@ describe("Member access", () => {
 
 			it("Simple slice with neither start nor end", async () => {
 				const fileContent = 'var x: str = "1234"[:]; print(x);';
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
@@ -102,10 +86,7 @@ describe("Member access", () => {
 			// TODO Add ts ignore to fix this
 			it("Simple slice with both start and end", async () => {
 				const fileContent = "var x: Array<num> = [1, 2, 3, 4][1:2]; print(x[0]);";
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
@@ -116,10 +97,7 @@ describe("Member access", () => {
 
 			it("Simple slice with only start", async () => {
 				const fileContent = "var x: Array<num> = [1, 2, 3, 4][1:]; print(x[0]);";
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
@@ -130,10 +108,7 @@ describe("Member access", () => {
 
 			it("Simple slice with only end", async () => {
 				const fileContent = "var x: Array<num> = [1, 2, 3, 4][:2]; print(x[0]);";
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),
@@ -144,10 +119,7 @@ describe("Member access", () => {
 
 			it("Simple slice with neither start nor end", async () => {
 				const fileContent = "var x: Array<num> = [1, 2, 3, 4][:]; print(x[0]);";
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 				assert.include(
 					instance.write(),

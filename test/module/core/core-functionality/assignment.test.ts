@@ -2,16 +2,12 @@ import type { KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
-import { compiler, defaultTarget } from ".";
-import { testPrintOutput } from "..";
+import { assertRunnableCompiledSnippet, testPrintOutput } from "..";
 
 describe("Assignment", () => {
 	it("to 'num'", async () => {
 		const fileContent = "var x: num = 4;\nx = 5;";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		assert(
 			instance.write().includes("let x: number = 4;\nx = 5;"),
 			"Invalid TypeScript code (Expected different output)",
@@ -20,10 +16,7 @@ describe("Assignment", () => {
 
 	it("to 'str'", async () => {
 		const fileContent = 'var x: str = "4";\nx = "5";';
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		assert(
 			instance.write().includes('let x: string = "4";\nx = "5";'),
 			"Invalid TypeScript code (Expected different output)",
@@ -32,10 +25,7 @@ describe("Assignment", () => {
 
 	it("to 'bool'", async () => {
 		const fileContent = "var x: bool = true;\nx = false;";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		assert(
 			instance.write().includes("let x: boolean = true;\nx = false;"),
 			"Invalid TypeScript code (Expected different output)",
@@ -44,10 +34,7 @@ describe("Assignment", () => {
 
 	it("to 'array'", async () => {
 		const fileContent = "var x: Array<num> = [1, 2, 3];\nx = [4, 5, 6];";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		assert(
 			instance
 				.write()
@@ -60,10 +47,7 @@ describe("Assignment", () => {
 
 	it("to 'func'", async () => {
 		const fileContent = "var x: Func<str, void> = print;\nx = print;";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		assert(
 			instance.write().includes("let x: (arg0: string) => void = __kipper.print;\nx = __kipper.print;"),
 			"Invalid TypeScript code (Expected different output)",
@@ -72,10 +56,7 @@ describe("Assignment", () => {
 
 	it("to 'array[]'", async () => {
 		const fileContent = "var x: Array<num> = [1, 2, 3];\nx[0] = 4;\nprint(x[0]);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 		assert(
 			instance
 				.write()

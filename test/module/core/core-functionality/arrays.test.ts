@@ -3,15 +3,12 @@ import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
 import { compiler, defaultTarget } from ".";
-import { assertCodeIncludesSnippet, testPrintOutput } from "..";
+import { assertCodeIncludesSnippet, assertRunnableCompiledSnippet, testPrintOutput } from "..";
 
 describe("Arrays", () => {
 	it("simple array declaration", async () => {
 		const fileContent = `var x: Array<num> = [1, 2, 3];`;
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assertCodeIncludesSnippet(

@@ -2,16 +2,12 @@ import type { KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
-import { compiler, defaultTarget } from ".";
-import { testPrintOutput } from "..";
+import { assertRunnableCompiledSnippet, testPrintOutput } from "..";
 
 describe("For loop", () => {
 	it("Simple Loop with compound statement", async () => {
 		const fileContent = "var x: num = 1; for (var i: num = 0; i < 10; i += 1) { x = i; }; print(x as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(
@@ -26,10 +22,7 @@ describe("For loop", () => {
 
 	it("Simple Loop with expression statement", async () => {
 		const fileContent = "var x: num = 1; for (var i: num = 0; i < 10; i += 1) x = i; print(x as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(
@@ -44,10 +37,7 @@ describe("For loop", () => {
 
 	it("Simple Loop with if statement", async () => {
 		const fileContent = "var x: num = 1; for (var i: num = 0; i < 10; i += 1) if (i != 10) x = i; print(x as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(
@@ -63,10 +53,7 @@ describe("For loop", () => {
 	it("Can be interrupted with break", async () => {
 		const fileContent =
 			"var x: num = 1; for (var i: num = 0; i < 10; i += 1) { if (i == 5) break; x = i; }; print(x as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(
@@ -82,10 +69,7 @@ describe("For loop", () => {
 	it("Can be interrupted with continue", async () => {
 		const fileContent =
 			"var x: num = 1; for (var i: num = 0; i < 10; i += 1) { if (i == 5) continue; x = i; }; print(x as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(

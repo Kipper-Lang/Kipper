@@ -19,7 +19,7 @@ To use development versions of Kipper download the
 ### Added
 
 - Error handling support using `try {} catch (e) {} finally {}` statements to catch and handle runtime errors.
-	([#654](https://github.com/Kipper-Lang/Kipper/issues/654))
+  ([#654](https://github.com/Kipper-Lang/Kipper/issues/654))
 - New cast keywords `cast as`, `force as` and `try as`, which allow for various type-safe cast operations.
   ([#685](https://github.com/Kipper-Lang/Kipper/issues/685))
 - Implemented new `T?` and `T??` nullable type operator which marks the given type as `T | null` and `T | undefined`
