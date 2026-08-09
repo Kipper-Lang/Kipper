@@ -81,6 +81,8 @@ To use development versions of Kipper download the
 - Fixed class members not being allowed to use names already used in a parent scope.
 - Fixed incorrect parentheses binding for typeof expressions causing `typeof(...) === ...` checks always returning
   `true`. [#733](https://github.com/Kipper-Lang/Kipper/issues/733)
+- Fixed Kipper CLI command `run` not properly executing generated TypeScript code due to a failing type check within 
+	the internal Kipper dependencies. [#730](https://github.com/Kipper-Lang/Kipper/issues/730)
 
 ### Deprecated
 
