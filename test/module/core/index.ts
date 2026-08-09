@@ -1,6 +1,5 @@
 import { assert } from "chai";
-import type { CompileConfig, KipperCompileResult, KipperCompileTarget, KipperProgramContext } from "@kipper/core";
-import type { KipperTypeScriptTarget } from "@kipper/target-ts";
+import type { CompileConfig, KipperCompileResult, KipperProgramContext } from "@kipper/core";
 import { compiler, defaultTarget } from "./core-functionality";
 
 /**
@@ -85,7 +84,7 @@ export function assertCodeIncludesSnippet(code: string, snippet: string): void {
 /**
  * Asserts that the given code snippet is compilable and can be translated
  * @param code The code in Kipper format to translate.
- * @param compilerOptions The config to use. Defaults to using {@link defaultTarget} of type {@link KipperTypeScriptTarget}.
+ * @param compilerOptions The config to use. Defaults to only specifying the target as {@link defaultTarget}.
  */
 export async function assertRunnableCompiledSnippet(
 	code: string,
