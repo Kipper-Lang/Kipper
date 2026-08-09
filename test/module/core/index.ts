@@ -1,5 +1,5 @@
 import { assert } from "chai";
-import type { KipperCompileResult, KipperCompileTarget, KipperProgramContext } from "@kipper/core";
+import type { CompileConfig, KipperCompileResult, KipperCompileTarget, KipperProgramContext } from "@kipper/core";
 import type { KipperTypeScriptTarget } from "@kipper/target-ts";
 import { compiler, defaultTarget } from "./core-functionality";
 
@@ -85,13 +85,13 @@ export function assertCodeIncludesSnippet(code: string, snippet: string): void {
 /**
  * Asserts that the given code snippet is compilable and can be translated
  * @param code The code in Kipper format to translate.
- * @param target The target to use. Defaults to {@link defaultTarget} of type {@link KipperTypeScriptTarget}.
+ * @param compilerOptions The config to use. Defaults to using {@link defaultTarget} of type {@link KipperTypeScriptTarget}.
  */
 export async function assertRunnableCompiledSnippet(
 	code: string,
-	target: KipperCompileTarget | undefined = undefined,
+	compilerOptions: CompileConfig | undefined = undefined,
 ): Promise<KipperCompileResult> {
-	const instance: KipperCompileResult = await compiler.compile(code, { target: target ?? defaultTarget });
+	const instance: KipperCompileResult = await compiler.compile(code, compilerOptions ?? { target: defaultTarget });
 	assert.isDefined(instance.programCtx);
 	assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
 	return instance;
