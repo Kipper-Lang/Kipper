@@ -122,6 +122,7 @@ export class JavaScriptTargetCodeGenerator extends KipperTargetCodeGenerator {
 			["// @ts-ignore"],
 			[createKipper({ inlinedRequirements: requirements })],
 			// global __kipper variable
+			["// @ts-ignore"],
 			["var __kipper = __globalScope.__kipper = (__globalScope.__kipper || __createKipper());"],
 		];
 	};
