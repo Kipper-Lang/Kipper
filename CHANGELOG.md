@@ -79,6 +79,8 @@ To use development versions of Kipper download the
   matches the required type set by the declaration or parameter. ([#696](https://github.com/Kipper-Lang/Kipper/issues/696))
 - Fixed class members being accessible without the use of 'this' causing a runtime error. ([#721](https://github.com/Kipper-Lang/Kipper/issues/721))
 - Fixed class members not being allowed to use names already used in a parent scope.
+- Fixed incorrect parentheses binding for typeof expressions causing `typeof(...) === ...` checks always returning
+  `true`. [#733](https://github.com/Kipper-Lang/Kipper/issues/733)
 
 ### Deprecated
 

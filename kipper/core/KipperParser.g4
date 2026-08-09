@@ -341,7 +341,7 @@ incrementOrDecrementPostfixExpression
 	;
 
 typeofExpression
-	:	'typeof' assignmentExpression
+	:	'typeof' '(' assignmentExpression ')'
  	;
 
 unaryExpression
