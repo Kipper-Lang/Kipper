@@ -9,11 +9,9 @@
 [![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)](https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14927961.svg)](https://doi.org/10.5281/zenodo.14927961)
 
-Kipper is a JavaScript-wrapping strongly and strictly typed language with Python flavour. It aims to provide
-straightforward, secure and type-safe coding by integrating strict type handling, runtime types, compiler
-checks, runtime casts, among many other features, for a safer development experience!
+Kipper is a strongly typed language with Python flavour that targets both JavaScript & TypeScript. It aims to make web development straightforward, secure, and type-safe by combining stricter type handling, reflective runtime types, compiler checks, secure runtime casts, among many other features, for an all-round smooth development process on the web!
 
-It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
+It compiles to a dependency-free output, bundling everything it needs into one neat package. It can be set up directly in your terminal using the Kipper CLI, with Node.js or run right in your browser.  🦊💻
 
 _For more details, you can read more about this project in the sections ["Goals & Planned Features"](#goals--planned-features) and ["Why Kipper?"](#why-kipper-)._
 
