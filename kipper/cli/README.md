@@ -26,6 +26,7 @@ and the [Kipper website](https://kipper-lang.org)._
 - [Kipper CLI - `@kipper/cli` 🦊✨](#kipper-cli---kippercli-)
 - [Usage](#usage)
 - [Commands](#commands)
+
 <!-- tocstop -->
 
 ## General Information
