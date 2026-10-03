@@ -236,10 +236,30 @@ which can be included and used inside a browser without any dependencies.
     ```bash
     pnpm run add-next-tag MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]
     ```
-    
+
 ## Test a Kipper Compiler build using .kip source code with debugging
 
-To test a file simply place your source code you wish to test into `./test/DEBUG_FILE.kip`. This file can be picked up 
-by the PNPM scripts `test-compile` and `test-run`, which can compile and/or run it. Since PNPM scripts can be 
-picked up by most contemporary IDEs used you can directly attach the process to a debugger and watch the 
+To test a file simply place your source code you wish to test into `./test/DEBUG_FILE.kip`. This file can be picked up
+by the PNPM scripts `test-compile` and `test-run`, which can compile and/or run it. Since PNPM scripts can be
+picked up by most contemporary IDEs used you can directly attach the process to a debugger and watch the
 compiler work through the given source code.
+
+Examples:
+
+- Compiling the source code (per default using the JavaScript target):
+
+```bash
+pnpm run test-compile
+```
+
+Alternatively for TypeScript:
+
+```bash
+pnpm run test-compile --target=ts
+```
+
+- Executing the source code using the current dev build:
+
+```bash
+pnpm run test-compile
+```
