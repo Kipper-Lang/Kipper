@@ -16,9 +16,7 @@ export * from "./declaration-ast-factory";
  * @since 0.10.0
  */
 export type ConstructableASTNodeClass =
-	| ConstructableASTStatementClass
-	| ConstructableASTExpressionClass
-	| ConstructableASTDeclarationClass;
+	ConstructableASTStatementClass | ConstructableASTExpressionClass | ConstructableASTDeclarationClass;
 
 /**
  * A union of all construable AST nodes. Uses {@link ConstructableASTNodeClass} to infer the type.

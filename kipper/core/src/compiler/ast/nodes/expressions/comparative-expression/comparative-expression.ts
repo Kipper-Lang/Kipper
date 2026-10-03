@@ -14,8 +14,7 @@ import type { ASTNodeMapper } from "../../../mapping";
  * @since 0.10.0
  */
 export type ASTComparativeExpressionKind =
-	| typeof ParseRuleKindMapping.RULE_equalityExpression
-	| typeof ParseRuleKindMapping.RULE_relationalExpression;
+	typeof ParseRuleKindMapping.RULE_equalityExpression | typeof ParseRuleKindMapping.RULE_relationalExpression;
 
 /**
  * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link ComparativeExpression} AST node.

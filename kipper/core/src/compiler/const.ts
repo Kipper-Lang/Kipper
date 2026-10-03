@@ -384,10 +384,7 @@ export const kipperBitwiseNotOperator: KipperBitwiseNotOperator = "~";
  * @since 0.9.0
  */
 export type KipperBitwiseOperator =
-	| KipperBitwiseAndOperator
-	| KipperBitwiseOrOperator
-	| KipperBitwiseXorOperator
-	| KipperBitwiseShiftOperator;
+	KipperBitwiseAndOperator | KipperBitwiseOrOperator | KipperBitwiseXorOperator | KipperBitwiseShiftOperator;
 
 /**
  * All available equality operators inside Kipper, which can be used to compare two expressions against each other.

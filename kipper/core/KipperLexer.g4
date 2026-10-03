@@ -163,9 +163,9 @@ BitwiseAnd : '&';
 BitwiseOr : '|';
 BitwiseXor : '^';
 BitwiseNot : '~';
-BitwiseZeroFillLeftShift : '<<';
-BitwiseSignedRightShift : '>>';
-BitwiseZeroFillRightShift : '>>>';
+
+// Due to #736, '<<', '>>' and '>>>' have to be individually strung together using '<' and '>' tokens to avoid the parser
+// greedily matching '>>' as bitwise operators instead of a potential nested generic type
 
 // Property accessing
 Dot : '.';

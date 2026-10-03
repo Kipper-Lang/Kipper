@@ -405,8 +405,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 	 */
 	public validUnaryExpression(operand: UnaryExpression | IncrementOrDecrementPostfixExpression): void {
 		const semanticData = operand.getSemanticData() as
-			| UnaryExpressionSemantics
-			| IncrementOrDecrementPostfixExpressionSemantics;
+			UnaryExpressionSemantics | IncrementOrDecrementPostfixExpressionSemantics;
 		const expTypeSemantics = semanticData.operand.getTypeSemanticData();
 		const expType = expTypeSemantics.evaluatedType;
 

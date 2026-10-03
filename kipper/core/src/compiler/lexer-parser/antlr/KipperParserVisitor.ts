@@ -142,6 +142,7 @@ import { AssignmentExpressionContext } from "./KipperParser";
 import { AssignmentOperatorContext } from "./KipperParser";
 import { ExpressionContext } from "./KipperParser";
 import { TypeSpecifierExpressionContext } from "./KipperParser";
+import { NonAmbigiousTypeSpecifierExpressionContext } from "./KipperParser";
 import { IdentifierTypeSpecifierExpressionContext } from "./KipperParser";
 import { GenericTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeofTypeSpecifierExpressionContext } from "./KipperParser";
@@ -1141,6 +1142,13 @@ export interface KipperParserVisitor<Result> extends ParseTreeVisitor<Result> {
 	 * @return the visitor result
 	 */
 	visitTypeSpecifierExpression?: (ctx: TypeSpecifierExpressionContext) => Result;
+
+	/**
+	 * Visit a parse tree produced by `KipperParser.nonAmbigiousTypeSpecifierExpression`.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	visitNonAmbigiousTypeSpecifierExpression?: (ctx: NonAmbigiousTypeSpecifierExpressionContext) => Result;
 
 	/**
 	 * Visit a parse tree produced by `KipperParser.identifierTypeSpecifierExpression`.

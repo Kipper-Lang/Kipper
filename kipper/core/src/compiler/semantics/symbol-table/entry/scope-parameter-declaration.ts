@@ -112,10 +112,7 @@ export class ScopeParameterDeclaration extends ScopeDeclaration {
 	 * @since 0.10.0
 	 */
 	public get func():
-		| FunctionDeclaration
-		| LambdaPrimaryExpression
-		| ClassMethodDeclaration
-		| ClassConstructorDeclaration {
+		FunctionDeclaration | LambdaPrimaryExpression | ClassMethodDeclaration | ClassConstructorDeclaration {
 		return this.semanticData.func;
 	}
 

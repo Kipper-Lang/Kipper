@@ -310,7 +310,7 @@ computedPrimaryExpression
 	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
 	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
 	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
-	|   'new' typeSpecifierExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_newInstantiationExpression } # newInstantiationExpression
+	|   'new' identifierTypeSpecifierExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_newInstantiationExpression } # newInstantiationExpression
 	;
 
 argumentExpressionList
@@ -375,19 +375,19 @@ castOrConvertExpression
     ;
 
 convertExpression
-	:	unaryExpression 'as' typeSpecifierExpression
+	:	unaryExpression 'as' nonAmbigiousTypeSpecifierExpression
 	;
 
 castExpression
-	:	unaryExpression 'cast as' typeSpecifierExpression
+	:	unaryExpression 'cast as' nonAmbigiousTypeSpecifierExpression
 	;
 
 forceCastExpression
-	:	unaryExpression 'force as' typeSpecifierExpression
+	:	unaryExpression 'force as' nonAmbigiousTypeSpecifierExpression
 	;
 
 tryCastExpression
-	:	unaryExpression 'try as' typeSpecifierExpression
+	:	unaryExpression 'try as' nonAmbigiousTypeSpecifierExpression
 	;
 
 multiplicativeExpression
@@ -406,17 +406,17 @@ bitwiseShiftExpression
     ;
 
 bitwiseShiftOperators
-	:   '<<' | '>>' | '>>>'
+	:   ('<' '<') | ('>' '>') | ('>' '>' '>')
 	;
 
 instanceOfExpression
     : 	bitwiseShiftExpression #passOnInstanceOfExpression
-    | 	instanceOfExpression 'instanceof' typeSpecifierExpression #actualInstanceOfExpression
+    | 	instanceOfExpression 'instanceof' nonAmbigiousTypeSpecifierExpression #actualInstanceOfExpression
     ;
 
 matchesExpression
 	:	instanceOfExpression # passOnMatchesExpression
-	|	matchesExpression 'matches' typeSpecifierExpression # actualMatchesExpression
+	|	matchesExpression 'matches' nonAmbigiousTypeSpecifierExpression # actualMatchesExpression
 	;
 
 relationalExpression
@@ -473,26 +473,29 @@ expression
     ;
 
 typeSpecifierExpression
-    :   identifierTypeSpecifierExpression
-    |	genericTypeSpecifierExpression
+    :   nonAmbigiousTypeSpecifierExpression
     |	typeofTypeSpecifierExpression
     |	nullableTypeSpecifierExpression
     ;
 
+nonAmbigiousTypeSpecifierExpression
+	:	{this.pushTypeExpressionDepth();} (identifierTypeSpecifierExpression | genericTypeSpecifierExpression) {this.popTypeExpressionDepth();} // Types that can be used with 'new', 'matches', 'instanceof' etc. expressions
+	;
+
 identifierTypeSpecifierExpression
-	:	typeSpecifierIdentifier
+	:	{this.pushTypeExpressionDepth();} typeSpecifierIdentifier {this.popTypeExpressionDepth();}
 	;
 
 genericTypeSpecifierExpression
-	:	typeSpecifierIdentifier '<' (typeSpecifierExpression (',' typeSpecifierExpression)*)? '>'
+	:	{this.pushTypeExpressionDepth();} typeSpecifierIdentifier '<' (typeSpecifierExpression (',' typeSpecifierExpression)*)? '>' {this.popTypeExpressionDepth();}
 	;
 
 typeofTypeSpecifierExpression
-	:	'typeof' '(' typeSpecifierIdentifier ')'
+	:	{this.pushTypeExpressionDepth();} 'typeof' '(' typeSpecifierIdentifier ')' {this.popTypeExpressionDepth();}
 	;
 
 nullableTypeSpecifierExpression
-	:	(identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression) ('?' | '??') // Union with null or undefined
+	:	{this.pushTypeExpressionDepth();} (identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression) ('?' | '??') {this.popTypeExpressionDepth();} // Union with null or undefined
 	;
 
 typeSpecifierIdentifier
