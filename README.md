@@ -40,7 +40,6 @@ To verify the installation run a simple "Hello world!" like this:
 kipper run -s "print('Hello world!');"
 ```
 
-
 ## Project Packages
 
 - [`kipper`](https://www.npmjs.com/package/kipper): The Kipper compiler and API, which ships with all child packages.
@@ -51,28 +50,6 @@ kipper run -s "print('Hello world!');"
   compiler.
 - [`@kipper/target-ts`](https://www.npmjs.com/package/@kipper/target-ts): The TypeScript target for the Kipper
   compiler.
-
-## Goals & Planned Features
-
-_View the current implementation state in the [Kipper Roadmap 🦊🚧](https://github.com/Kipper-Lang/Kipper/discussions/139)._
-
-- Full compiler ensured type safety, by analysing and reporting code during compilation.
-- Duck typing type checking with TypeScript-like interface types for both compile and runtime.
-- Runtime type and type checking features, where original compile time type issues can be
-  resolved during runtime.
-- Strict cast and conversion handling, so that potentially or definitely problematic usage
-  is detected by the compiler and ensures the developer has to handle them.
-- Avoidance of `any` type issues, with ensurance of compiler checks that operations and data
-  access are valid.
-- Runtime errors and safety checks in case of incomplete or faulty typing. This should avoid
-  issues, such as "TypeError: can't access property "..." of undefined".
-- Null safety, by enforcing non-null types unless explicitly allowed.
-- Conversion behaviour functions in classes to customise conversion behaviour.
-- Operator overloading and additional customisation behaviour.
-- Type Conversion Overloading to customise conversion behaviour.
-- Full translation to/and integration with JavaScript and TypeScript.
-- Import Support for `.ts` files, as well as `.d.ts` + `.js` files.
-- Translation support for all ES versions as far as ES6 (JavaScript target specific)
 
 ## How to use Kipper?
 
