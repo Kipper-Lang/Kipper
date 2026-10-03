@@ -375,19 +375,19 @@ castOrConvertExpression
     ;
 
 convertExpression
-	:	unaryExpression 'as' nonAmbigiousTypeSpecifierExpression
+	:	unaryExpression 'as' nonAmbiguousTypeSpecifierExpression
 	;
 
 castExpression
-	:	unaryExpression 'cast as' nonAmbigiousTypeSpecifierExpression
+	:	unaryExpression 'cast as' nonAmbiguousTypeSpecifierExpression
 	;
 
 forceCastExpression
-	:	unaryExpression 'force as' nonAmbigiousTypeSpecifierExpression
+	:	unaryExpression 'force as' nonAmbiguousTypeSpecifierExpression
 	;
 
 tryCastExpression
-	:	unaryExpression 'try as' nonAmbigiousTypeSpecifierExpression
+	:	unaryExpression 'try as' nonAmbiguousTypeSpecifierExpression
 	;
 
 multiplicativeExpression
@@ -411,12 +411,12 @@ bitwiseShiftOperators
 
 instanceOfExpression
     : 	bitwiseShiftExpression #passOnInstanceOfExpression
-    | 	instanceOfExpression 'instanceof' nonAmbigiousTypeSpecifierExpression #actualInstanceOfExpression
+    | 	instanceOfExpression 'instanceof' nonAmbiguousTypeSpecifierExpression #actualInstanceOfExpression
     ;
 
 matchesExpression
 	:	instanceOfExpression # passOnMatchesExpression
-	|	matchesExpression 'matches' nonAmbigiousTypeSpecifierExpression # actualMatchesExpression
+	|	matchesExpression 'matches' nonAmbiguousTypeSpecifierExpression # actualMatchesExpression
 	;
 
 relationalExpression
@@ -473,12 +473,12 @@ expression
     ;
 
 typeSpecifierExpression
-    :   nonAmbigiousTypeSpecifierExpression
+    :   nonAmbiguousTypeSpecifierExpression
     |	typeofTypeSpecifierExpression
     |	nullableTypeSpecifierExpression
     ;
 
-nonAmbigiousTypeSpecifierExpression
+nonAmbiguousTypeSpecifierExpression
 	:	{this.pushTypeExpressionDepth();} (identifierTypeSpecifierExpression | genericTypeSpecifierExpression) {this.popTypeExpressionDepth();} // Types that can be used with 'new', 'matches', 'instanceof' etc. expressions
 	;
 

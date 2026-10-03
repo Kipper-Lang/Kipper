@@ -219,7 +219,7 @@ export class KipperParser extends KipperParserBase {
 	public static readonly RULE_assignmentOperator = 91;
 	public static readonly RULE_expression = 92;
 	public static readonly RULE_typeSpecifierExpression = 93;
-	public static readonly RULE_nonAmbigiousTypeSpecifierExpression = 94;
+	public static readonly RULE_nonAmbiguousTypeSpecifierExpression = 94;
 	public static readonly RULE_identifierTypeSpecifierExpression = 95;
 	public static readonly RULE_genericTypeSpecifierExpression = 96;
 	public static readonly RULE_typeofTypeSpecifierExpression = 97;
@@ -321,7 +321,7 @@ export class KipperParser extends KipperParserBase {
 		"assignmentOperator",
 		"expression",
 		"typeSpecifierExpression",
-		"nonAmbigiousTypeSpecifierExpression",
+		"nonAmbiguousTypeSpecifierExpression",
 		"identifierTypeSpecifierExpression",
 		"genericTypeSpecifierExpression",
 		"typeofTypeSpecifierExpression",
@@ -4132,7 +4132,7 @@ export class KipperParser extends KipperParserBase {
 				this.state = 716;
 				this.match(KipperParser.As);
 				this.state = 717;
-				this.nonAmbigiousTypeSpecifierExpression();
+				this.nonAmbiguousTypeSpecifierExpression();
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -4159,7 +4159,7 @@ export class KipperParser extends KipperParserBase {
 				this.state = 720;
 				this.match(KipperParser.CastAs);
 				this.state = 721;
-				this.nonAmbigiousTypeSpecifierExpression();
+				this.nonAmbiguousTypeSpecifierExpression();
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -4186,7 +4186,7 @@ export class KipperParser extends KipperParserBase {
 				this.state = 724;
 				this.match(KipperParser.ForceAs);
 				this.state = 725;
-				this.nonAmbigiousTypeSpecifierExpression();
+				this.nonAmbiguousTypeSpecifierExpression();
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -4213,7 +4213,7 @@ export class KipperParser extends KipperParserBase {
 				this.state = 728;
 				this.match(KipperParser.TryAs);
 				this.state = 729;
-				this.nonAmbigiousTypeSpecifierExpression();
+				this.nonAmbiguousTypeSpecifierExpression();
 			}
 		} catch (re) {
 			if (re instanceof RecognitionException) {
@@ -4583,7 +4583,7 @@ export class KipperParser extends KipperParserBase {
 								this.state = 778;
 								this.match(KipperParser.InstanceOf);
 								this.state = 779;
-								this.nonAmbigiousTypeSpecifierExpression();
+								this.nonAmbiguousTypeSpecifierExpression();
 							}
 						}
 					}
@@ -4653,7 +4653,7 @@ export class KipperParser extends KipperParserBase {
 								this.state = 789;
 								this.match(KipperParser.Matches);
 								this.state = 790;
-								this.nonAmbigiousTypeSpecifierExpression();
+								this.nonAmbiguousTypeSpecifierExpression();
 							}
 						}
 					}
@@ -5397,7 +5397,7 @@ export class KipperParser extends KipperParserBase {
 					this.enterOuterAlt(_localctx, 1);
 					{
 						this.state = 899;
-						this.nonAmbigiousTypeSpecifierExpression();
+						this.nonAmbiguousTypeSpecifierExpression();
 					}
 					break;
 
@@ -5431,12 +5431,12 @@ export class KipperParser extends KipperParserBase {
 		return _localctx;
 	}
 	// @RuleVersion(0)
-	public nonAmbigiousTypeSpecifierExpression(): NonAmbigiousTypeSpecifierExpressionContext {
-		let _localctx: NonAmbigiousTypeSpecifierExpressionContext = new NonAmbigiousTypeSpecifierExpressionContext(
+	public nonAmbiguousTypeSpecifierExpression(): NonAmbiguousTypeSpecifierExpressionContext {
+		let _localctx: NonAmbiguousTypeSpecifierExpressionContext = new NonAmbiguousTypeSpecifierExpressionContext(
 			this._ctx,
 			this.state,
 		);
-		this.enterRule(_localctx, 188, KipperParser.RULE_nonAmbigiousTypeSpecifierExpression);
+		this.enterRule(_localctx, 188, KipperParser.RULE_nonAmbiguousTypeSpecifierExpression);
 		try {
 			this.enterOuterAlt(_localctx, 1);
 			{
@@ -9741,8 +9741,8 @@ export class ConvertExpressionContext extends KipperParserRuleContext {
 	public As(): TerminalNode {
 		return this.getToken(KipperParser.As, 0);
 	}
-	public nonAmbigiousTypeSpecifierExpression(): NonAmbigiousTypeSpecifierExpressionContext {
-		return this.getRuleContext(0, NonAmbigiousTypeSpecifierExpressionContext);
+	public nonAmbiguousTypeSpecifierExpression(): NonAmbiguousTypeSpecifierExpressionContext {
+		return this.getRuleContext(0, NonAmbiguousTypeSpecifierExpressionContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -9780,8 +9780,8 @@ export class CastExpressionContext extends KipperParserRuleContext {
 	public CastAs(): TerminalNode {
 		return this.getToken(KipperParser.CastAs, 0);
 	}
-	public nonAmbigiousTypeSpecifierExpression(): NonAmbigiousTypeSpecifierExpressionContext {
-		return this.getRuleContext(0, NonAmbigiousTypeSpecifierExpressionContext);
+	public nonAmbiguousTypeSpecifierExpression(): NonAmbiguousTypeSpecifierExpressionContext {
+		return this.getRuleContext(0, NonAmbiguousTypeSpecifierExpressionContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -9819,8 +9819,8 @@ export class ForceCastExpressionContext extends KipperParserRuleContext {
 	public ForceAs(): TerminalNode {
 		return this.getToken(KipperParser.ForceAs, 0);
 	}
-	public nonAmbigiousTypeSpecifierExpression(): NonAmbigiousTypeSpecifierExpressionContext {
-		return this.getRuleContext(0, NonAmbigiousTypeSpecifierExpressionContext);
+	public nonAmbiguousTypeSpecifierExpression(): NonAmbiguousTypeSpecifierExpressionContext {
+		return this.getRuleContext(0, NonAmbiguousTypeSpecifierExpressionContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -9858,8 +9858,8 @@ export class TryCastExpressionContext extends KipperParserRuleContext {
 	public TryAs(): TerminalNode {
 		return this.getToken(KipperParser.TryAs, 0);
 	}
-	public nonAmbigiousTypeSpecifierExpression(): NonAmbigiousTypeSpecifierExpressionContext {
-		return this.getRuleContext(0, NonAmbigiousTypeSpecifierExpressionContext);
+	public nonAmbiguousTypeSpecifierExpression(): NonAmbiguousTypeSpecifierExpressionContext {
+		return this.getRuleContext(0, NonAmbiguousTypeSpecifierExpressionContext);
 	}
 	constructor(parent: ParserRuleContext | undefined, invokingState: number) {
 		super(parent, invokingState);
@@ -10229,8 +10229,8 @@ export class ActualInstanceOfExpressionContext extends InstanceOfExpressionConte
 	public InstanceOf(): TerminalNode {
 		return this.getToken(KipperParser.InstanceOf, 0);
 	}
-	public nonAmbigiousTypeSpecifierExpression(): NonAmbigiousTypeSpecifierExpressionContext {
-		return this.getRuleContext(0, NonAmbigiousTypeSpecifierExpressionContext);
+	public nonAmbiguousTypeSpecifierExpression(): NonAmbiguousTypeSpecifierExpressionContext {
+		return this.getRuleContext(0, NonAmbiguousTypeSpecifierExpressionContext);
 	}
 	constructor(ctx: InstanceOfExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -10306,8 +10306,8 @@ export class ActualMatchesExpressionContext extends MatchesExpressionContext {
 	public Matches(): TerminalNode {
 		return this.getToken(KipperParser.Matches, 0);
 	}
-	public nonAmbigiousTypeSpecifierExpression(): NonAmbigiousTypeSpecifierExpressionContext {
-		return this.getRuleContext(0, NonAmbigiousTypeSpecifierExpressionContext);
+	public nonAmbiguousTypeSpecifierExpression(): NonAmbiguousTypeSpecifierExpressionContext {
+		return this.getRuleContext(0, NonAmbiguousTypeSpecifierExpressionContext);
 	}
 	constructor(ctx: MatchesExpressionContext) {
 		super(ctx.parent, ctx.invokingState);
@@ -11149,8 +11149,8 @@ export class ExpressionContext extends KipperParserRuleContext {
 }
 
 export class TypeSpecifierExpressionContext extends KipperParserRuleContext {
-	public nonAmbigiousTypeSpecifierExpression(): NonAmbigiousTypeSpecifierExpressionContext | undefined {
-		return this.tryGetRuleContext(0, NonAmbigiousTypeSpecifierExpressionContext);
+	public nonAmbiguousTypeSpecifierExpression(): NonAmbiguousTypeSpecifierExpressionContext | undefined {
+		return this.tryGetRuleContext(0, NonAmbiguousTypeSpecifierExpressionContext);
 	}
 	public typeofTypeSpecifierExpression(): TypeofTypeSpecifierExpressionContext | undefined {
 		return this.tryGetRuleContext(0, TypeofTypeSpecifierExpressionContext);
@@ -11187,7 +11187,7 @@ export class TypeSpecifierExpressionContext extends KipperParserRuleContext {
 	}
 }
 
-export class NonAmbigiousTypeSpecifierExpressionContext extends KipperParserRuleContext {
+export class NonAmbiguousTypeSpecifierExpressionContext extends KipperParserRuleContext {
 	public identifierTypeSpecifierExpression(): IdentifierTypeSpecifierExpressionContext | undefined {
 		return this.tryGetRuleContext(0, IdentifierTypeSpecifierExpressionContext);
 	}
@@ -11199,24 +11199,24 @@ export class NonAmbigiousTypeSpecifierExpressionContext extends KipperParserRule
 	}
 	// @Override
 	public get ruleIndex(): number {
-		return KipperParser.RULE_nonAmbigiousTypeSpecifierExpression;
+		return KipperParser.RULE_nonAmbiguousTypeSpecifierExpression;
 	}
 	// @Override
 	public enterRule(listener: KipperParserListener): void {
-		if (listener.enterNonAmbigiousTypeSpecifierExpression) {
-			listener.enterNonAmbigiousTypeSpecifierExpression(this);
+		if (listener.enterNonAmbiguousTypeSpecifierExpression) {
+			listener.enterNonAmbiguousTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public exitRule(listener: KipperParserListener): void {
-		if (listener.exitNonAmbigiousTypeSpecifierExpression) {
-			listener.exitNonAmbigiousTypeSpecifierExpression(this);
+		if (listener.exitNonAmbiguousTypeSpecifierExpression) {
+			listener.exitNonAmbiguousTypeSpecifierExpression(this);
 		}
 	}
 	// @Override
 	public accept<Result>(visitor: KipperParserVisitor<Result>): Result {
-		if (visitor.visitNonAmbigiousTypeSpecifierExpression) {
-			return visitor.visitNonAmbigiousTypeSpecifierExpression(this);
+		if (visitor.visitNonAmbiguousTypeSpecifierExpression) {
+			return visitor.visitNonAmbiguousTypeSpecifierExpression(this);
 		} else {
 			return visitor.visitChildren(this);
 		}

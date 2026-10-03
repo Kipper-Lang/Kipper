@@ -287,7 +287,7 @@ assignmentExpression
 assignmentOperator
 expression
 typeSpecifierExpression
-nonAmbigiousTypeSpecifierExpression
+nonAmbiguousTypeSpecifierExpression
 identifierTypeSpecifierExpression
 genericTypeSpecifierExpression
 typeofTypeSpecifierExpression
