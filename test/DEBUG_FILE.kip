@@ -1,0 +1,6 @@
+/**
+ * DEBUG FILE FOR TESTING PURPOSES! USE `pnpm run test-compile` AND THIS FILE WILL BE COMPILED OR USE `pnpm run test-run`
+ * FOR COMPILATION AND LIVE NODE EXECUTION. THE OUTPUT WILL BE IN `build/DEBUG_FILE.js`
+ */
+
+print("Hello world!");

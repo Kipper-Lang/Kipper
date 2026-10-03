@@ -17,13 +17,6 @@ experience, but other options such as VSCode are also viable. Generally speaking
 
 [Download page of Node.js](https://nodejs.org/en/download/)
 
-Please be aware that Kipper only supports the following versions:
-
-- `16.x`
-- `18.x`
-- `20.x`
-- `22.x`
-
 ### Install PNPM for the monorepo management
 
 Before working on Kipper, it's important to install pnpm which provides the toolset required to manage a monorepo such
@@ -243,3 +236,10 @@ which can be included and used inside a browser without any dependencies.
     ```bash
     pnpm run add-next-tag MAJOR.MINOR.PATCH[-SUFFIX_IF_PRESENT]
     ```
+    
+## Test a Kipper Compiler build using .kip source code with debugging
+
+To test a file simply place your source code you wish to test into `./test/DEBUG_FILE.kip`. This file can be picked up 
+by the PNPM scripts `test-compile` and `test-run`, which can compile and/or run it. Since PNPM scripts can be 
+picked up by most contemporary IDEs used you can directly attach the process to a debugger and watch the 
+compiler work through the given source code.

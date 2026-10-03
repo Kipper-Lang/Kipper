@@ -94,6 +94,8 @@
     "cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib",
     "add-next-tag": "run-script-os",
     "add-next-tag:linux:macos:default": "bash ./add-next-tag.sh",
-    "add-next-tag:windows": "powershell.exe .\\add-next-tag.ps1"
+    "add-next-tag:windows": "powershell.exe .\\add-next-tag.ps1",
+		"test-compile": "node ./kipper/cli/bin/run compile ./test/DEBUG_FILE.kip",
+		"test-run": "node ./kipper/cli/bin/run run ./test/DEBUG_FILE.kip"
   }
 }
