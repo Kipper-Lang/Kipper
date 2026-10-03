@@ -7,13 +7,11 @@
 [![codecov](https://codecov.io/gh/Kipper-Lang/Kipper/branch/main/graph/badge.svg?token=S4RQT7X3YP)](https://codecov.io/gh/Kipper-Lang/Kipper)
 [![Issues](https://img.shields.io/github/issues/Kipper-Lang/Kipper)](https://github.com/Kipper-Lang/Kipper/issues)
 [![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)](https://github.com/Kipper-Lang/Kipper/blob/main/LICENSE)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
-[![DOI](https://zenodo.org/badge/411260595.svg)](https://zenodo.org/badge/latestdoi/411260595)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14927961.svg)](https://doi.org/10.5281/zenodo.14927961)
 
-Kipper is a JavaScript-like strongly and strictly typed language with Python flavour. It aims to provide
-straightforward, simple, secure and type-safe coding with better efficiency and developer satisfaction!
+Kipper is a strongly typed language with Python flavour that targets both JavaScript & TypeScript. It aims to make web development straightforward, secure, and type-safe by combining stricter type handling, reflective runtime types, compiler checks, secure runtime casts, among many other features, for an all-round smooth development process on the web!
 
-It compiles to both JavaScript and TypeScript, and can be set up in your terminal, Node.js or ES6+ browser. 🦊💻
+It compiles to a dependency-free output, bundling everything it needs into one neat package. It can be set up directly in your terminal using the Kipper CLI, with Node.js or run right in your browser.  🦊💻
 
 _For more details, you can read more about this project in the sections ["Goals & Planned Features"](#goals--planned-features) and ["Why Kipper?"](#why-kipper-)._
 
@@ -31,10 +29,17 @@ _For more details, you can read more about this project in the sections ["Goals 
 To install the whole Kipper package with its CLI, run the following command:
 
 ```bash
-npm i kipper
+npm i -g kipper @kipper/cli
 ```
 
-If you are using `pnpm` or `yarn`, use `pnpm i kipper` or `yarn add kipper`.
+If you are using `pnpm` or `yarn`, use `pnpm i -g kipper @kipper/cli` or `yarn global add kipper @kipper/cli`.
+
+To verify the installation run a simple "Hello world!" like this:
+
+```bash
+kipper run -s "print('Hello world!');"
+```
+
 
 ## Project Packages
 
@@ -185,36 +190,43 @@ Simple example of using the Kipper Compiler in Node.js:
 _Skip this section, if you are not interested in the details behind Kipper and this
 project. It is not required knowledge for using or trying out Kipper._
 
-The primary use case and reason for the development of Kipper is the
-simplification of the development process for developers, both in the web
-and server-side space, by improving on common issues and helping developers
-fix them more easily and quickly.
+The primary reason for the development of Kipper is the simplification of the development process for developers, both
+in the web and server-side space, by improving on common type and non-type-related issues. Through this, the language
+should help developers fix those issues more reliably and quickly.
 
-Therefore this programming language, like TypeScript, aims to provide more
-safety and functionality using a compiler and pre-runtime error checking.
-This primarily also utilises type checking, as a way to ensure that programs
-work as intended and that developers can discover errors before they run their
-code.
+Therefore, this programming language, like TypeScript, aims to provide more safety and functionality using, among other
+things, compile-time error checking and transpilation. This primarily relies on the addition of types and type checking,
+as a way to ensure that programs work as intended and that developers can discover errors before they run their code.
 
-TypeScript already does a great job at this, so why is Kipper needed or how does
-it do things differently? TypeScript is an amazing language, which is why Kipper
-has many of its designs and features similarly implemented. Though a big issue
-that TypeScript can't detect is and properly resolve is the issue of inconsistent
-or incomplete typing. This is a huge issue when working with dynamic data or JavaScript
-code, where types are unknown or can't be known before runtime, since due to the
-compile time typing of TypeScript type checking often is not able to detect
-issues and many will simply bypass error checks altogether. Even with
-`instanceof` and `typeof` checks, it becomes a tedious effort that often results
-in more errors, due to issues arising while trying to fix the original problems.
+TypeScript already does a great job at this, so why is Kipper needed and how does it do things differently? TypeScript is
+an amazing language, which is why Kipper has many of its designs and features similarly implemented. A big issue
+that TypeScript can't detect and properly resolve is the issue of inconsistent or non-determined typing. This is a
+fundamental issue when working with dynamic data or JavaScript code in TypeScript, where types are unknown or can't be
+known before runtime. TypeScript is unable to work with this code appropriately and requires the user to make
+assumptions about its types at compile-time. This leads to many issues where the compiler is unable to check for many
+potential issues and is often largely turned off, as the developers themselves are required to decide what is correct
+and often make serious mistakes in the process, causing code to become unpredictable and error-prone during execution.
+Even with runtime-bound `instanceof` and `typeof` checks, it becomes a tedious effort that often results in more errors,
+due to issues arising while trying to fix the original problems.
 
-Kipper therefore tries to implement a way to easily solve those issues in a
-standardised way, by allowing for more complex runtime type checks and runtime
-error handling. This means Kipper will still be there to assist the developer
-during runtime, by handling many cases where type issues could arise. This also
-means functionality like casts or conversions are more strictly handled and don't
-overwrite type checking behaviour. Even so though, Kipper will always try to not
-be invasive, and developers can choose during development time how to handle
-different cases and how Kipper should handle them during runtime.
+Kipper therefore tries to implement a standardised way to easily solve those issues, by providing consistent compile- and
+runtime types, type checks, and error handling. This means the compiler will be there to assist the developer both during
+compile time and runtime, extending its capabilities of ensuring code is secure and providing methods for developers to handle
+them in a consistent and easy-to-understand way. This also means functionality like casts or conversions is more
+strictly handled and doesn't overwrite type-checking behaviour. Even so, Kipper will always try not to be invasive,
+and developers can choose during development time how to handle different cases and how Kipper should handle them during
+runtime.
+
+Using this approach, Kipper will add many features developers know from other languages, such as:
+- Runtime Casting
+- Runtime Type Casting
+- Pattern Matching
+- Consistent Typing and Compile Time Cast Checks
+- Custom Runtime Types
+
+Beyond this, there is a whole paper illustrating the design, implementation and reasons behind Kipper, which can be found at
+<a href="https://raw.githubusercontent.com/Kipper-Lang/Thesis/refs/heads/main/Kipper-Thesis-2025-04-08.pdf">"Kipper - Programming Language for Improved Runtime Type-Safety"</a> (written in English,
+with additional German oath and abstract).
 
 ## Contributing to Kipper
 
@@ -228,10 +240,9 @@ We appreciate any feedback or help! Kipper is open-source and free for anyone, h
 ## Copyright and License
 
 ![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FLuna-Klatzer%2FKipper?ref=badge_shield)
 
-Copyright (C) 2021-2024 Luna Klatzer
-
+ Copyright © 2021-2026 Luna Klatzer, 2024-2025 Lorenz Holzbauer & Fabian Baitura
+ 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or
