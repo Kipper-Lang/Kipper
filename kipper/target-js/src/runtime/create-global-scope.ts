@@ -15,4 +15,6 @@ export const createGlobalScope = (): string =>
           : typeof self !== "undefined"
             ? self
             : {};
-`.replace(/\n| {2}|	/g, "");
+	`
+		.replace(/ {2,}|	/g, "")
+		.replace(/\n/g, " ");
