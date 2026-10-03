@@ -834,7 +834,7 @@ export class KipperTypeChecker extends KipperSemanticsAsserter {
 			const expectedType = children[0].getTypeSemanticData().evaluatedType;
 
 			for (const child of children) {
-				if (child.getTypeSemanticData().evaluatedType !== expectedType) {
+				if (!child.getTypeSemanticData().evaluatedType.isAssignableTo(expectedType)) {
 					// Arrays may only have a single type of elements (for now)
 					throw this.notImplementedError(
 						new KipperNotImplementedError("Arrays with multiple types of elements are not implemented yet."),
