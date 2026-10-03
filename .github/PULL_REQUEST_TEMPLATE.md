@@ -10,11 +10,9 @@ Note: Comments are marked by arrows, like here. They will not be visible in the 
 
 <!-- Explain the reason for this pr, changes, and solution briefly. -->
 
-<!-- REPLACE ME -->
+Fixed/Implemented/Updated ...
 
-<!-- Uncomment if this closes an issue:
 Closes #INSERT_NR
--->
 
 ## Does this PR create new warnings?
 
@@ -23,7 +21,3 @@ Closes #INSERT_NR
 - Warning Nr. 1
 - Warning Nr. 2
 - ...
-
-<!-- Just write none if they are no warnings, like this:
-None.
--->
