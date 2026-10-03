@@ -15,8 +15,7 @@ import type { ASTNodeMapper } from "../../../mapping";
  * @since 0.10.0
  */
 export type ASTLogicalExpressionKind =
-	| typeof ParseRuleKindMapping.RULE_logicalAndExpression
-	| typeof ParseRuleKindMapping.RULE_logicalOrExpression;
+	typeof ParseRuleKindMapping.RULE_logicalAndExpression | typeof ParseRuleKindMapping.RULE_logicalOrExpression;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} context classes for a constructable

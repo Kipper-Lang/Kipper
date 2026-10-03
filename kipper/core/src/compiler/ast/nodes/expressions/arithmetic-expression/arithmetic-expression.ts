@@ -15,8 +15,7 @@ import { Expression } from "../expression";
  * @since 0.10.0
  */
 export type ASTArithmeticExpressionKind =
-	| typeof ParseRuleKindMapping.RULE_additiveExpression
-	| typeof ParseRuleKindMapping.RULE_multiplicativeExpression;
+	typeof ParseRuleKindMapping.RULE_additiveExpression | typeof ParseRuleKindMapping.RULE_multiplicativeExpression;
 
 /**
  * Union type of all possible {@link ParserASTNode} context classes for a constructable {@link ArithmeticExpression} AST node.

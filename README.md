@@ -11,7 +11,7 @@
 
 Kipper is a strongly typed language with Python flavour that targets both JavaScript & TypeScript. It aims to make web development straightforward, secure, and type-safe by combining stricter type handling, reflective runtime types, compiler checks, secure runtime casts, among many other features, for an all-round smooth development process on the web!
 
-It compiles to a dependency-free output, bundling everything it needs into one neat package. It can be set up directly in your terminal using the Kipper CLI, with Node.js or run right in your browser.  🦊💻
+It compiles to a dependency-free output, bundling everything it needs into one neat package. It can be set up directly in your terminal using the Kipper CLI, with Node.js or run right in your browser. 🦊💻
 
 _For more details, you can read more about this project in the sections ["Goals & Planned Features"](#goals--planned-features) and ["Why Kipper?"](#why-kipper-)._
 
@@ -39,7 +39,6 @@ To verify the installation run a simple "Hello world!" like this:
 ```bash
 kipper run -s "print('Hello world!');"
 ```
-
 
 ## Project Packages
 
@@ -218,6 +217,7 @@ and developers can choose during development time how to handle different cases 
 runtime.
 
 Using this approach, Kipper will add many features developers know from other languages, such as:
+
 - Runtime Casting
 - Runtime Type Casting
 - Pattern Matching
@@ -241,8 +241,8 @@ We appreciate any feedback or help! Kipper is open-source and free for anyone, h
 
 ![License](https://img.shields.io/github/license/Kipper-Lang/Kipper?color=cyan)
 
- Copyright © 2021-2026 Luna Klatzer, 2024-2025 Lorenz Holzbauer & Fabian Baitura
- 
+Copyright © 2021-2026 Luna Klatzer, 2024-2025 Lorenz Holzbauer & Fabian Baitura
+
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free Software
 Foundation, either version 3 of the License, or

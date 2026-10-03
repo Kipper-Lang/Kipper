@@ -84,6 +84,7 @@ To use development versions of Kipper download the
 - Fixed Kipper CLI command `run` not properly executing generated TypeScript code due to a failing type check within
   the internal Kipper dependencies. [#730](https://github.com/Kipper-Lang/Kipper/issues/730)
 - Fixed nested Arrays throwing type compatibility errors despite being both-way assignable types. [#737](https://github.com/Kipper-Lang/Kipper/issues/737)
+- Fixed lexer bug not allowing the recognition of nested generic types. [#736](https://github.com/Kipper-Lang/Kipper/issues/736)
 
 ### Deprecated
 

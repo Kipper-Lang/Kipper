@@ -142,6 +142,7 @@ import { AssignmentExpressionContext } from "./KipperParser";
 import { AssignmentOperatorContext } from "./KipperParser";
 import { ExpressionContext } from "./KipperParser";
 import { TypeSpecifierExpressionContext } from "./KipperParser";
+import { NonAmbiguousTypeSpecifierExpressionContext } from "./KipperParser";
 import { IdentifierTypeSpecifierExpressionContext } from "./KipperParser";
 import { GenericTypeSpecifierExpressionContext } from "./KipperParser";
 import { TypeofTypeSpecifierExpressionContext } from "./KipperParser";
@@ -1719,6 +1720,17 @@ export interface KipperParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitTypeSpecifierExpression?: (ctx: TypeSpecifierExpressionContext) => void;
+
+	/**
+	 * Enter a parse tree produced by `KipperParser.nonAmbiguousTypeSpecifierExpression`.
+	 * @param ctx the parse tree
+	 */
+	enterNonAmbiguousTypeSpecifierExpression?: (ctx: NonAmbiguousTypeSpecifierExpressionContext) => void;
+	/**
+	 * Exit a parse tree produced by `KipperParser.nonAmbiguousTypeSpecifierExpression`.
+	 * @param ctx the parse tree
+	 */
+	exitNonAmbiguousTypeSpecifierExpression?: (ctx: NonAmbiguousTypeSpecifierExpressionContext) => void;
 
 	/**
 	 * Enter a parse tree produced by `KipperParser.identifierTypeSpecifierExpression`.

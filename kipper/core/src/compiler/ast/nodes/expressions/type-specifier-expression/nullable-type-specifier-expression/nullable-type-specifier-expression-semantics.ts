@@ -18,9 +18,7 @@ export interface NullableTypeSpecifierExpressionSemantics extends TypeSpecifierE
 	 * @since 0.13.0
 	 */
 	innerTypeSpecifier:
-		| IdentifierTypeSpecifierExpression
-		| GenericTypeSpecifierExpression
-		| TypeofTypeSpecifierExpression;
+		IdentifierTypeSpecifierExpression | GenericTypeSpecifierExpression | TypeofTypeSpecifierExpression;
 	/**
 	 * The operator that is used to make the inner type specifier nullable.
 	 * @since 0.13.0

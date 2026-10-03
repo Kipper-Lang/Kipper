@@ -36,9 +36,9 @@ export type CompilableNodeChild = CompilableASTNode;
  * @since 0.8.0
  */
 export abstract class CompilableASTNode<
-		Semantics extends SemanticData = SemanticData,
-		TypeSemantics extends TypeData = TypeData,
-	>
+	Semantics extends SemanticData = SemanticData,
+	TypeSemantics extends TypeData = TypeData,
+>
 	extends AnalysableASTNode<Semantics, TypeSemantics>
 	implements TargetCompilableNode
 {

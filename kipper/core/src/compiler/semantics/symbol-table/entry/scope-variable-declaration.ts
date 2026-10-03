@@ -21,13 +21,9 @@ import type { ErrorBindingDeclaration } from "../../../ast/nodes/declarations/er
 
 type ScopeVariableDeclarationASTNode = VariableDeclaration | ClassPropertyDeclaration | ErrorBindingDeclaration;
 type ScopeVariableDeclarationSemantics =
-	| VariableDeclarationSemantics
-	| ClassPropertyDeclarationSemantics
-	| ErrorBindingDeclarationSemantics;
+	VariableDeclarationSemantics | ClassPropertyDeclarationSemantics | ErrorBindingDeclarationSemantics;
 type ScopeVariableDeclarationTypeSemantics =
-	| VariableDeclarationTypeSemantics
-	| ClassPropertyDeclarationTypeSemantics
-	| ErrorBindingDeclarationTypeSemantics;
+	VariableDeclarationTypeSemantics | ClassPropertyDeclarationTypeSemantics | ErrorBindingDeclarationTypeSemantics;
 
 /**
  * Represents a variable scope entry that may be a child of the global scope or local scope.
