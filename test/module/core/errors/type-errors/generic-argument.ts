@@ -43,6 +43,18 @@ describe("GenericArgumentTypeError", () => {
 	});
 
 	describe("NoError", () => {
+		it("Array = Array", async () => {
+			let result: KipperCompileResult | undefined = undefined;
+			try {
+				result = await new KipperCompiler().compile(`var x: Array<any> = [];`, defaultConfig);
+			} catch (e) {
+				assert.fail(`Expected no error. Received '${e}'.`);
+			}
+			assert.isDefined(result, "Expected defined compilation result");
+			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
+			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
+		});
+
 		it("Array<num> = Array<num>", async () => {
 			let result: KipperCompileResult | undefined = undefined;
 			try {
@@ -79,13 +91,18 @@ describe("GenericArgumentTypeError", () => {
 			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
 		});
 
-		it("Array = Array", async () => {
+		it("Array<Array<num>> = Array<Array<num>>", async () => {
 			let result: KipperCompileResult | undefined = undefined;
+
 			try {
-				result = await new KipperCompiler().compile(`var x: Array<any> = [];`, defaultConfig);
+				result = await new KipperCompiler().compile(
+					"var x: Array<Array<num>> = [[1, 2, 3, 4], [1, 2, 3, 4]];",
+					defaultConfig,
+				);
 			} catch (e) {
 				assert.fail(`Expected no error. Received '${e}'.`);
 			}
+
 			assert.isDefined(result, "Expected defined compilation result");
 			assert.isDefined(result?.programCtx, "Expected programCtx to be defined");
 			assert.isFalse(result?.programCtx?.hasFailed, "Expected no errors");
