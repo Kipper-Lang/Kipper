@@ -110,6 +110,7 @@ export class TypeofTypeSpecifierExpression extends TypeSpecifierExpression<
 			storedType: refTarget.type,
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	public checkForWarnings = undefined; // TODO!

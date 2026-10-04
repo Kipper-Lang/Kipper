@@ -3,8 +3,7 @@
  * @since 0.12.0
  */
 import type { ScopeFunctionDeclaration } from "../../../../../../../semantics";
-import { BuiltInTypeFunc } from "../../../../../../../semantics";
-import { BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
+import { BuiltInTypeFunc, BuiltInTypes, FunctionScope } from "../../../../../../../semantics";
 import type { ClassConstructorDeclarationContext } from "../../../../../../../lexer-parser";
 import { KindParseRuleMapping, ParseRuleKindMapping } from "../../../../../../../lexer-parser";
 import type { CompilableNodeParent } from "../../../../../../compilable-ast-node";
@@ -95,6 +94,7 @@ export class ClassConstructorDeclaration
 	public override get antlrRuleCtx(): ClassConstructorDeclarationContext {
 		return this._antlrRuleCtx;
 	}
+
 	/**
 	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
 	 * in the {@link scope parent scope}.
@@ -168,6 +168,7 @@ export class ClassConstructorDeclaration
 			valueType: new BuiltInTypeFunc(paramTypes, BuiltInTypes.void),
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

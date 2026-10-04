@@ -141,6 +141,15 @@ export class KipperJavaScriptTarget extends KipperCompileTarget {
 	public static getInterfaceIdentifier(type: CustomType): string {
 		return `${this.internalInterfacePrefix}_${type.identifier}`;
 	}
+
+	/**
+	 * Generates a new internal reserved symbol that does not clash with any user-defined symbols.
+	 * This should be used for generating temporary variables during code generation.
+	 * @returns A new unique internal reserved symbol.
+	 */
+	public static getInternalIdentifier(name: string): string {
+		return `${this.internalObjectIdentifier}_${name}`;
+	}
 }
 
 /**

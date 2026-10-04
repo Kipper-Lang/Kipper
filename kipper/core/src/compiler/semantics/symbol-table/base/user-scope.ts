@@ -16,10 +16,12 @@ export abstract class UserScope<VarT = any, FuncT = any, TypeT = any> extends Sc
 	 * Ensures that the given declaration is not already used in the current scope.
 	 * @param identifier The identifier to check.
 	 * @param declaration The declaration to check.
+	 * @param isClass Whether this is a class scope. If true, the check will only check for class members as they do not
+	 * clash with other scopes.
 	 * @private
 	 * @since 0.12.0
 	 */
-	protected ensureNotUsed(identifier: string, declaration: Declaration): void {
-		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(declaration, identifier, this);
+	protected ensureNotUsed(identifier: string, declaration: Declaration, isClass: boolean = false): void {
+		this.ctx.programCtx.semanticCheck(declaration).identifierNotUsed(declaration, identifier, isClass, this);
 	}
 }

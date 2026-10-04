@@ -48,7 +48,7 @@ export class BuiltInTypeArray extends GenericBuiltInType<BuiltInTypeArrayGeneric
 
 	public assertAssignableTo(type: ProcessedType, propertyName?: string, argumentName?: string) {
 		let e: TypeError | undefined = undefined;
-		if (this === type || type === BuiltInTypes.any || type === BuiltInTypes.Array) {
+		if (this === type || type === BuiltInTypes.any || type === /* Array<any> */ BuiltInTypes.Array) {
 			return;
 		} else if (type instanceof UnionType) {
 			if (type.unionTypes.some((unionType: ProcessedType) => this.isAssignableTo(unionType))) {

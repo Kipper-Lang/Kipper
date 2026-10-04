@@ -54,6 +54,9 @@ export const ParseRuleKindMapping = {
 	RULE_doWhileLoopIterationStatement: KipperParser.RULE_doWhileLoopIterationStatement,
 	RULE_jumpStatement: KipperParser.RULE_jumpStatement,
 	RULE_returnStatement: KipperParser.RULE_returnStatement,
+	RULE_tryCatchStatement: KipperParser.RULE_tryCatchStatement,
+	RULE_catchClause: KipperParser.RULE_catchClause,
+	RULE_errorBindingDeclaration: KipperParser.RULE_errorBindingDeclaration,
 	RULE_primaryExpression: KipperParser.RULE_primaryExpression,
 	RULE_lambdaPrimaryExpression: KipperParser.RULE_lambdaPrimaryExpression,
 	RULE_tangledPrimaryExpression: KipperParser.RULE_tangledPrimaryExpression,
@@ -87,6 +90,8 @@ export const ParseRuleKindMapping = {
 	RULE_castExpression: KipperParser.RULE_castExpression,
 	RULE_forceCastExpression: KipperParser.RULE_forceCastExpression,
 	RULE_tryCastExpression: KipperParser.RULE_tryCastExpression,
+	RULE_instanceofExpression: KipperParser.RULE_instanceOfExpression,
+	RULE_matchesExpression: KipperParser.RULE_matchesExpression,
 	RULE_multiplicativeExpression: KipperParser.RULE_multiplicativeExpression,
 	RULE_additiveExpression: KipperParser.RULE_additiveExpression,
 	RULE_bitwiseShiftExpression: KipperParser.RULE_bitwiseShiftExpression,
@@ -104,13 +109,12 @@ export const ParseRuleKindMapping = {
 	RULE_assignmentOperator: KipperParser.RULE_assignmentOperator,
 	RULE_expression: KipperParser.RULE_expression,
 	RULE_typeSpecifierExpression: KipperParser.RULE_typeSpecifierExpression,
+	RULE_nonAmbiguousTypeSpecifierExpression: KipperParser.RULE_nonAmbiguousTypeSpecifierExpression,
 	RULE_identifierTypeSpecifierExpression: KipperParser.RULE_identifierTypeSpecifierExpression,
 	RULE_genericTypeSpecifierExpression: KipperParser.RULE_genericTypeSpecifierExpression,
 	RULE_typeofTypeSpecifierExpression: KipperParser.RULE_typeofTypeSpecifierExpression,
 	RULE_nullableTypeSpecifierExpression: KipperParser.RULE_nullableTypeSpecifierExpression,
 	RULE_typeSpecifierIdentifier: KipperParser.RULE_typeSpecifierIdentifier,
-	RULE_instanceofExpression: KipperParser.RULE_instanceOfExpression,
-	RULE_matchesExpression: KipperParser.RULE_matchesExpression,
 	// Labelled rules, which don't have a corresponding identifier number in KipperParser.
 	RULE_memberAccessExpression: 1001, // -> See 'computedPrimaryExpression'
 	RULE_functionCallExpression: 1002, // -> See 'computedPrimaryExpression'

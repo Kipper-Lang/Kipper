@@ -2,16 +2,12 @@ import type { KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
-import { compiler, defaultTarget } from ".";
-import { testPrintOutput } from "..";
+import { assertRunnableCompiledSnippet, testPrintOutput } from "..";
 
 describe("Do-While loop", () => {
 	it("Simple Loop with compound statement", async () => {
 		const fileContent = "var x: num = 1; do { x += 1; } while (x <= 5); print(x as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(code, "do {\n  x += 1;\n} while (x <= 5)", "Invalid TypeScript code (Expected different output)");
@@ -22,10 +18,7 @@ describe("Do-While loop", () => {
 
 	it("Simple Loop with expression statement", async () => {
 		const fileContent = "var x: num = 1; do x += 1; while (x <= 10); print(x as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(code, "do \n  x += 1;\nwhile (x <= 10)", "Invalid TypeScript code (Expected different output)");
@@ -36,10 +29,7 @@ describe("Do-While loop", () => {
 
 	it("Simple Loop with if statement", async () => {
 		const fileContent = "var x: num = 1; do { if (x != 10) x += 1; } while (x < 10); print(x as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(
@@ -54,10 +44,7 @@ describe("Do-While loop", () => {
 
 	it("Can be interrupted with break", async () => {
 		const fileContent = "var x: num = 1; do { if (x == 5) break; x += 1; } while (x < 10); print(x as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(
@@ -73,10 +60,7 @@ describe("Do-While loop", () => {
 	it("Can be interrupted with continue", async () => {
 		const fileContent =
 			"var x: num = 1; var y: num = 1; do { x++; if (x > 5) continue; y++; } while (x < 10); print(y as str);";
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assert.include(

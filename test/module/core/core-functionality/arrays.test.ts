@@ -3,15 +3,12 @@ import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
 import { compiler, defaultTarget } from ".";
-import { assertCodeIncludesSnippet, testPrintOutput } from "..";
+import { assertCodeIncludesSnippet, assertRunnableCompiledSnippet, testPrintOutput } from "..";
 
 describe("Arrays", () => {
 	it("simple array declaration", async () => {
 		const fileContent = `var x: Array<num> = [1, 2, 3];`;
-		const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-		assert.isDefined(instance.programCtx);
-		assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+		const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 
 		const code = instance.write();
 		assertCodeIncludesSnippet(
@@ -143,6 +140,31 @@ describe("Arrays", () => {
 				tsCode,
 				"return __kipper.assignTypeMeta(__kipper.assignTypeMeta([],__kipper.newArrayT(__kipper.builtIn.any)),__kipper.newArrayT(__kipper.builtIn.num));",
 			);
+		});
+
+		it("nested array declaration", async () => {
+			const code = "var x: Array<Array<num>> = [[1, 2, 3, 4], [1, 2, 3, 4]];";
+			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(code);
+
+			assertCodeIncludesSnippet(instance.write(), "let x: Array<Array<number>> =");
+
+			const tsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
+			testPrintOutput((message: any) => assert.equal(message, "3", "Expected different output"), tsCode);
+		});
+
+		it("assign nested array to nested array", async () => {
+			const code =
+				"var x: Array<Array<num>> = [[1, 2, 3, 4], [1, 2, 3, 4]]; " +
+				"var y: Array<Array<num>> = x; " +
+				"print(y[1][2] as str);";
+
+			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(code);
+
+			assertCodeIncludesSnippet(instance.write(), "let x: Array<Array<number>> =");
+			assertCodeIncludesSnippet(instance.write(), "let y: Array<Array<number>> = x;");
+
+			const tsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
+			testPrintOutput((message: any) => assert.equal(message, "3", "Expected different output"), tsCode);
 		});
 	});
 });

@@ -21,6 +21,26 @@ export abstract class ProcessedType extends Type {
 	}
 
 	/**
+	 * Returns whether the type is an interface.
+	 *
+	 * This is false unless overridden by a subclass.
+	 * @since 0.13.0
+	 */
+	public get isInterface(): boolean {
+		return false;
+	}
+
+	/**
+	 * Returns whether the type is a class.
+	 *
+	 * This is false unless overridden by a subclass.
+	 * @since 0.13.0
+	 */
+	public get isClass(): boolean {
+		return false;
+	}
+
+	/**
 	 * Returns whether the type is compilable.
 	 *
 	 * This function exists, since during type checking an undefined/invalid type may be encountered that should still

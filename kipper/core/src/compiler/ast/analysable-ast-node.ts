@@ -33,9 +33,9 @@ export type AnalysableNodeChild = AnalysableASTNode;
  * @since 0.10.0
  */
 export abstract class AnalysableASTNode<
-		Semantics extends SemanticData = SemanticData,
-		TypeSemantics extends TypeData = TypeData,
-	>
+	Semantics extends SemanticData = SemanticData,
+	TypeSemantics extends TypeData = TypeData,
+>
 	extends ParserASTNode<Semantics, TypeSemantics>
 	implements TargetAnalysableNode
 {

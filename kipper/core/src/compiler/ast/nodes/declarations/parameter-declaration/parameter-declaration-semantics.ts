@@ -1,6 +1,6 @@
 /**
- * Semantics for AST Node {@link FunctionDeclaration}.
- * @since 0.3.0
+ * Semantics for AST Node {@link ParameterDeclaration}.
+ * @since 0.5.0
  */
 import type { RawType } from "../../../../semantics";
 import type { DeclarationSemantics } from "../declaration-semantics";

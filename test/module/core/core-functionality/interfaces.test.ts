@@ -11,7 +11,7 @@ describe("Interfaces", async () => {
 		assert.isDefined(instance.programCtx);
 		assertErrorsAreEmpty(instance.programCtx!);
 
-		let written = instance.write();
+		const written = instance.write();
 		assertCodeIncludesSnippet(written, "interface Test {\n}");
 	});
 
@@ -22,7 +22,7 @@ describe("Interfaces", async () => {
 		assert.isDefined(instance.programCtx);
 		assertErrorsAreEmpty(instance.programCtx!);
 
-		let written = instance.write();
+		const written = instance.write();
 		assertCodeIncludesSnippet(
 			written,
 			`interface Test {\n` +
@@ -43,7 +43,7 @@ describe("Interfaces", async () => {
 		assert.isDefined(instance.programCtx);
 		assertErrorsAreEmpty(instance.programCtx!);
 
-		let written = instance.write();
+		const written = instance.write();
 		assertCodeIncludesSnippet(
 			written,
 			"interface Test {\n  x: number;\n  y: string;\n  greet(name: string): string;\n}",
@@ -57,7 +57,7 @@ describe("Interfaces", async () => {
 		assert.isDefined(instance.programCtx);
 		assertErrorsAreEmpty(instance.programCtx!);
 
-		let written = instance.write();
+		const written = instance.write();
 		assertCodeIncludesSnippet(
 			written,
 			"interface Test {\n  x: number;\n  isTrue(f: boolean): string;\n  y: string;\n  greet(name: string):" +

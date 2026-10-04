@@ -95,6 +95,7 @@ export class ClassMethodDeclaration
 	public override get antlrRuleCtx(): ClassMethodDeclarationContext {
 		return this._antlrRuleCtx;
 	}
+
 	/**
 	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
 	 * in the {@link scope parent scope}.
@@ -187,6 +188,7 @@ export class ClassMethodDeclaration
 			valueType: new BuiltInTypeFunc(paramTypes, returnType),
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

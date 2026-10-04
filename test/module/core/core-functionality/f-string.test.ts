@@ -2,8 +2,7 @@ import type { KipperCompileResult } from "@kipper/core";
 import { assert } from "chai";
 import * as ts from "typescript";
 import { ScriptTarget } from "typescript";
-import { compiler, defaultTarget } from ".";
-import { testPrintOutput } from "..";
+import { assertRunnableCompiledSnippet, testPrintOutput } from "..";
 
 describe("F-String", () => {
 	const types = [
@@ -17,10 +16,7 @@ describe("F-String", () => {
 		describe(`Inserting [${arg.type}]`, () => {
 			it("Inserting single value", async () => {
 				const fileContent = `print(f"Test: 1. {${arg.value}}");`;
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 				const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -37,10 +33,7 @@ describe("F-String", () => {
 
 			it("Inserting two values", async () => {
 				const fileContent = `print(f"Test: 1. {${arg.value}} - 2. {${arg.value}}");`;
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 				const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -57,10 +50,7 @@ describe("F-String", () => {
 
 			it("Inserting three values", async () => {
 				const fileContent = `print(f"Test: 1. {${arg.value}} - 2. {${arg.value}} - 3. {${arg.value}}");`;
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 				const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -85,10 +75,7 @@ describe("F-String", () => {
 		describe(`Inserting additive expression [${arg.type}]`, () => {
 			it("Inserting single value", async () => {
 				const fileContent = `print(f"Test: 1. {${arg.value1} + ${arg.value2}}");`;
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 				const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -105,10 +92,7 @@ describe("F-String", () => {
 
 			it("Inserting two values", async () => {
 				const fileContent = `print(f"Test: 1. {${arg.value1} + ${arg.value2}} - 2. {${arg.value1} + ${arg.value2}}");`;
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 				const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -125,10 +109,7 @@ describe("F-String", () => {
 
 			it("Inserting three values", async () => {
 				const fileContent = `print(f"Test: 1. {${arg.value1} + ${arg.value2}} - 2. {${arg.value1} + ${arg.value2}} - 3. {${arg.value1} + ${arg.value2}}");`;
-				const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-				assert.isDefined(instance.programCtx);
-				assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+				const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 				assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 				const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -153,10 +134,7 @@ describe("F-String", () => {
 
 		it("Inserting single value", async () => {
 			const fileContent = `${functionContent}; print(f"Test: 1. {test()}");`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 			assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 			const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -173,10 +151,7 @@ describe("F-String", () => {
 
 		it("Inserting two values", async () => {
 			const fileContent = `${functionContent}; print(f"Test: 1. {test()} - 2. {test()}");`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 			assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 			const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -193,10 +168,7 @@ describe("F-String", () => {
 
 		it("Inserting three values", async () => {
 			const fileContent = `${functionContent}; print(f"Test: 1. {test()} - 2. {test()} - 3. {test()}");`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 			assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 			const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -215,10 +187,7 @@ describe("F-String", () => {
 	describe("Inserting nested f-strings", () => {
 		it("One level", async () => {
 			const fileContent = `print(f"Test: 1. {f'{1 + 1}'}");`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 			assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 			const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -235,10 +204,7 @@ describe("F-String", () => {
 
 		it("Two levels", async () => {
 			const fileContent = `print(f"Test: 1. {f'{f'{1 + 1}'}'}");`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 			assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 			const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });
@@ -255,10 +221,7 @@ describe("F-String", () => {
 
 		it("Three levels", async () => {
 			const fileContent = `print(f"Test: 1. {f'{f'{f'{1 + 1}'}'}'}");`;
-			const instance: KipperCompileResult = await compiler.compile(fileContent, { target: defaultTarget });
-
-			assert.isDefined(instance.programCtx);
-			assert.deepEqual(instance.programCtx?.errors, [], "Expected no compilation errors");
+			const instance: KipperCompileResult = await assertRunnableCompiledSnippet(fileContent);
 			assert(instance.programCtx?.stream.stringContent === fileContent, "Expected matching streams");
 
 			const jsCode = ts.transpile(instance.write(), { target: ScriptTarget.ES2015 });

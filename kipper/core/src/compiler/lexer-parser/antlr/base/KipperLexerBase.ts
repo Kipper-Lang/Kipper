@@ -15,6 +15,7 @@ export default abstract class KipperLexerBase extends Lexer {
 		this.fStringDepth = 0;
 	}
 
+	// -- START F-String Stack Management START --
 	protected insideFString(): boolean {
 		return this.fStringDepth > 0;
 	}
@@ -26,4 +27,5 @@ export default abstract class KipperLexerBase extends Lexer {
 	protected decrementFStringDepth(): void {
 		this.fStringDepth--;
 	}
+	// -- END F-String Stack Management END --
 }

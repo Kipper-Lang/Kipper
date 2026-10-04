@@ -82,6 +82,7 @@ export class InterfacePropertyDeclaration extends InterfaceMemberDeclaration<
 	public override get antlrRuleCtx(): InterfacePropertyDeclarationContext {
 		return this._antlrRuleCtx;
 	}
+
 	/**
 	 * The {@link ScopeDeclaration} context instance for this declaration, which is used to register the declaration
 	 * in the {@link scope parent scope}.
@@ -139,6 +140,7 @@ export class InterfacePropertyDeclaration extends InterfaceMemberDeclaration<
 			valueType: valueType,
 		};
 	}
+
 	public readonly primarySemanticTypeChecking: undefined;
 
 	/**

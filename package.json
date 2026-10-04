@@ -19,22 +19,22 @@
     "@types/node": "20.16.5",
     "@types/semver": "7.5.8",
     "@typescript-eslint/eslint-plugin": "7.16.0",
+		"coverage-badge-creator": "1.0.19",
     "ansi-regex": "6.0.1",
     "antlr4ts": "0.5.0-alpha.4",
     "browserify": "17.0.0",
     "chai": "4.3.6",
-    "coverage-badge-creator": "1.0.19",
     "eslint": "8.57.0",
-    "json-parse-even-better-errors": "3.0.2",
     "minimist": "1.2.8",
     "mkdirp": "3.0.1",
-    "mocha": "10.6.0",
-    "nyc": "17.0.0",
-    "prettier": "3.3.3",
+    "mocha": "11.8.0",
+		"yargs": "17.7.3",
+    "nyc": "18.0.0",
+    "prettier": "3.9.9",
     "run-script-os": "1.1.6",
     "semver": "7.6.3",
     "source-map-support": "0.5.21",
-    "ts-mocha": "10.0.0",
+    "ts-mocha": "11.1.0",
     "ts-node": "10.9.2",
     "tsify": "5.0.4",
     "typescript": "5.1.3",
@@ -43,7 +43,7 @@
     "watchify": "4.0.0"
   },
   "engines": {
-    "node": "16.x || 18.x || 20.x || 22.x",
+    "node": "16.x || 18.x || 20.x || 22.x || 24.x || 26.x",
     "pnpm": "8"
   },
   "homepage": "https://kipper-lang.org",
@@ -88,11 +88,14 @@
     "bump": "run-script-os",
     "bump:linux:macos:default": "bash ./bump.sh",
     "bump:windows": "powershell.exe .\\bump.ps1",
+		"clean": "pnpm run cleanup",
     "cleanup": "run-script-os",
     "cleanup:linux:macos:default": "rm -rf ./lib/; rm -rf ./kipper/**/lib",
     "cleanup:windows": "powershell.exe Remove-Item -R -Force ./lib/; powershell.exe Remove-Item -R -Force ./kipper/**/lib",
     "add-next-tag": "run-script-os",
     "add-next-tag:linux:macos:default": "bash ./add-next-tag.sh",
-    "add-next-tag:windows": "powershell.exe .\\add-next-tag.ps1"
+    "add-next-tag:windows": "powershell.exe .\\add-next-tag.ps1",
+		"test-compile": "node ./kipper/cli/bin/run compile ./test/DEBUG_FILE.kip",
+		"test-run": "node ./kipper/cli/bin/run run ./test/DEBUG_FILE.kip"
   }
 }

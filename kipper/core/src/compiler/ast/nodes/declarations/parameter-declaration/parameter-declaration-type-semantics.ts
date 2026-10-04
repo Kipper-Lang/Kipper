@@ -1,5 +1,5 @@
 /**
- * Type semantics for AST Node {@link FunctionDeclaration}.
+ * Type semantics for AST Node {@link ParameterDeclaration}.
  * @since 0.10.0
  */
 import type { ProcessedType } from "../../../../semantics";

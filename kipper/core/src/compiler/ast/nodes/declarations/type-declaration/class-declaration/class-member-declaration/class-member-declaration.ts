@@ -36,7 +36,9 @@ export abstract class ClassMemberDeclaration<
 	TypeSemantics extends ClassMemberDeclarationTypeSemantics = ClassMemberDeclarationTypeSemantics,
 > extends Declaration<Semantics, TypeSemantics> {
 	protected abstract readonly _antlrRuleCtx: ParserClassMemberDeclarationContext;
+
 	public abstract get kind(): ASTClassMemberDeclarationKind;
+
 	public abstract get ruleName(): ParserClassMemberDeclarationRuleName;
 
 	/**

@@ -16,6 +16,7 @@ import type { ScopeDeclaration, ScopeFunctionDeclaration, ScopeTypeDeclaration }
 import { ScopeVariableDeclaration } from "./entry";
 import { KipperNotImplementedError } from "../../../errors";
 import { UserScope } from "./base/user-scope";
+import type { ErrorBindingDeclaration } from "../../ast/nodes/declarations/error-binding-declaration";
 
 /**
  * A scope that is bound to a {@link CompoundStatement} and not the global namespace.
@@ -50,6 +51,15 @@ export class LocalScope extends UserScope<VariableDeclaration, FunctionDeclarati
 		return scopeDeclaration;
 	}
 
+	public addErrorBinding(declaration: ErrorBindingDeclaration): ScopeVariableDeclaration {
+		const identifier = declaration.getSemanticData().identifier;
+		this.ensureNotUsed(identifier, declaration);
+
+		const scopeDeclaration = ScopeVariableDeclaration.fromErrorBindingDeclaration(declaration);
+		this._entries.set(identifier, scopeDeclaration);
+		return scopeDeclaration;
+	}
+
 	public addType(declaration: TypeDeclaration): ScopeTypeDeclaration {
 		throw this.ctx.programCtx
 			.semanticCheck(declaration)
@@ -61,10 +71,10 @@ export class LocalScope extends UserScope<VariableDeclaration, FunctionDeclarati
 	}
 
 	public getEntryRecursively(identifier: string): ScopeDeclaration | undefined {
-		const localRef = this.getEntry(identifier);
-		if (!localRef) {
+		const ref = this.getEntry(identifier);
+		if (!ref) {
 			return this.parent.getEntryRecursively(identifier);
 		}
-		return localRef;
+		return ref;
 	}
 }

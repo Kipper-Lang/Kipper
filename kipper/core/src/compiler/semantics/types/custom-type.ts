@@ -126,6 +126,22 @@ export class CustomType extends ProcessedType {
 	}
 
 	/**
+	 * Returns whether the type is an interface.
+	 * @since 0.13.0
+	 */
+	public get isInterface(): boolean {
+		return this.kind === "interface";
+	}
+
+	/**
+	 * Returns whether the type is a class.
+	 * @since 0.13.0
+	 */
+	public get isClass(): boolean {
+		return this.kind === "class";
+	}
+
+	/**
 	 * Creates a custom type from a class declaration.
 	 *
 	 * This can only be run AFTER the class declaration has passed semantic validation.

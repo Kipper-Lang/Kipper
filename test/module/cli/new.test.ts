@@ -27,7 +27,7 @@ describe("Kipper CLI 'new'", () => {
 	test
 		.stdout()
 		.command(["new", tempFolder, "-d"])
-		.it("using '-d' (Default Config)", async (ctx) => {
+		.it("using '-d' (Default Config)", async (ctx: any) => {
 			assert.isNotEmpty(ctx.stdout);
 			assert.include(ctx.stdout, "Using default settings. Skipping setup wizard.");
 			assert.include(ctx.stdout, "Project 'new-kipper-project' created successfully!");

@@ -13,6 +13,7 @@ import type {
 	BoolPrimaryExpressionContext,
 	BracketNotationMemberAccessExpressionContext,
 	CastOrConvertExpressionContext,
+	CatchClauseContext,
 	ClassConstructorDeclarationContext,
 	ClassDeclarationContext,
 	ClassMethodDeclarationContext,
@@ -22,6 +23,7 @@ import type {
 	DotNotationMemberAccessExpressionContext,
 	DoWhileLoopIterationStatementContext,
 	EqualityExpressionContext,
+	ErrorBindingDeclarationContext,
 	ExpressionStatementContext,
 	ForLoopIterationStatementContext,
 	FStringPrimaryExpressionContext,
@@ -53,6 +55,7 @@ import type {
 	StringPrimaryExpressionContext,
 	SwitchStatementContext,
 	TangledPrimaryExpressionContext,
+	TryCatchStatementContext,
 	TypeofTypeSpecifierExpressionContext,
 	VariableDeclarationContext,
 	VoidOrNullOrUndefinedPrimaryExpressionContext,
@@ -111,7 +114,9 @@ export type ParserStatementContext =
 	| WhileLoopIterationStatementContext
 	| ForLoopIterationStatementContext
 	| JumpStatementContext
-	| ReturnStatementContext;
+	| TryCatchStatementContext
+	| ReturnStatementContext
+	| CatchClauseContext;
 
 /**
  * Union type of all usable definition/declaration rule context classes implemented by the {@link ParseRuleKindMapping}
@@ -127,7 +132,8 @@ export type ParserDeclarationContext =
 	| ClassDeclarationContext
 	| ClassPropertyDeclarationContext
 	| ClassMethodDeclarationContext
-	| ClassConstructorDeclarationContext;
+	| ClassConstructorDeclarationContext
+	| ErrorBindingDeclarationContext;
 
 /**
  * Union type of all rule context classes implemented by the {@link ParseRuleKindMapping} that have a corresponding AST node class.
@@ -153,7 +159,8 @@ export type ASTDeclarationKind =
 	| typeof ParseRuleKindMapping.RULE_classDeclaration
 	| typeof ParseRuleKindMapping.RULE_classPropertyDeclaration
 	| typeof ParseRuleKindMapping.RULE_classMethodDeclaration
-	| typeof ParseRuleKindMapping.RULE_classConstructorDeclaration;
+	| typeof ParseRuleKindMapping.RULE_classConstructorDeclaration
+	| typeof ParseRuleKindMapping.RULE_errorBindingDeclaration;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values for a {@link Statement} AST node.
@@ -168,7 +175,9 @@ export type ASTStatementKind =
 	| typeof ParseRuleKindMapping.RULE_whileLoopIterationStatement
 	| typeof ParseRuleKindMapping.RULE_forLoopIterationStatement
 	| typeof ParseRuleKindMapping.RULE_jumpStatement
-	| typeof ParseRuleKindMapping.RULE_returnStatement;
+	| typeof ParseRuleKindMapping.RULE_tryCatchStatement
+	| typeof ParseRuleKindMapping.RULE_returnStatement
+	| typeof ParseRuleKindMapping.RULE_catchClause;
 
 /**
  * Union type of all possible {@link ParserASTNode.kind} values that have a constructable {@link Expression} AST node.
@@ -244,7 +253,8 @@ export type ASTDeclarationRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classPropertyDeclaration]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classMethodDeclaration]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classConstructorDeclaration];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_classConstructorDeclaration]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_errorBindingDeclaration];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link Statement} AST
@@ -260,7 +270,9 @@ export type ASTStatementRuleName =
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_whileLoopIterationStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_forLoopIterationStatement]
 	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_jumpStatement]
-	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_returnStatement];
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_tryCatchStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_returnStatement]
+	| (typeof KindParseRuleMapping)[typeof ParseRuleKindMapping.RULE_catchClause];
 
 /**
  * Union type of all possible {@link ParserASTNode.ruleName} values that have a constructable {@link Expression} AST

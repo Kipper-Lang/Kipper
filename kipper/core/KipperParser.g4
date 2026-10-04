@@ -133,6 +133,7 @@ statement
     |   jumpStatement
     | 	returnStatement
     |	compoundStatement
+    |	tryCatchStatement
     ;
 
 compoundStatement
@@ -190,6 +191,26 @@ jumpStatement
 
 returnStatement
 	: 	'return' expression? SemiColon
+	;
+
+tryCatchStatement
+	:	tryClause catchClause* finallyClause?
+ 	;
+
+tryClause
+	:	'try' compoundStatement
+	;
+
+catchClause
+	:	'catch' '(' errorBindingDeclaration ')' compoundStatement
+	;
+
+errorBindingDeclaration
+	:	declarator (':' typeSpecifierExpression)?
+	;
+
+finallyClause
+	:	'finally' compoundStatement
 	;
 
 // -- Expressions
@@ -289,7 +310,7 @@ computedPrimaryExpression
 	|	computedPrimaryExpression sliceNotation { _localctx._labelASTKind = ParseRuleKindMapping.RULE_memberAccessExpression } # sliceNotationMemberAccessExpression
 	|	computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # functionCallExpression
 	|	'call' computedPrimaryExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_functionCallExpression } # explicitCallFunctionCallExpression
-	|   'new' typeSpecifierExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_newInstantiationExpression } # newInstantiationExpression
+	|   'new' identifierTypeSpecifierExpression '(' argumentExpressionList? ')' { _localctx._labelASTKind = ParseRuleKindMapping.RULE_newInstantiationExpression } # newInstantiationExpression
 	;
 
 argumentExpressionList
@@ -320,7 +341,7 @@ incrementOrDecrementPostfixExpression
 	;
 
 typeofExpression
-	:	'typeof' assignmentExpression
+	:	'typeof' '(' assignmentExpression ')'
  	;
 
 unaryExpression
@@ -354,19 +375,19 @@ castOrConvertExpression
     ;
 
 convertExpression
-	:	unaryExpression 'as' typeSpecifierExpression
+	:	unaryExpression 'as' nonAmbiguousTypeSpecifierExpression
 	;
 
 castExpression
-	:	unaryExpression 'cast as' typeSpecifierExpression
+	:	unaryExpression 'cast as' nonAmbiguousTypeSpecifierExpression
 	;
 
 forceCastExpression
-	:	unaryExpression 'force as' typeSpecifierExpression
+	:	unaryExpression 'force as' nonAmbiguousTypeSpecifierExpression
 	;
 
 tryCastExpression
-	:	unaryExpression 'try as' typeSpecifierExpression
+	:	unaryExpression 'try as' nonAmbiguousTypeSpecifierExpression
 	;
 
 multiplicativeExpression
@@ -385,17 +406,17 @@ bitwiseShiftExpression
     ;
 
 bitwiseShiftOperators
-	:   '<<' | '>>' | '>>>'
+	:   ('<' '<') | ('>' '>') | ('>' '>' '>')
 	;
 
 instanceOfExpression
     : 	bitwiseShiftExpression #passOnInstanceOfExpression
-    | 	instanceOfExpression 'instanceof' typeSpecifierExpression #actualInstanceOfExpression
+    | 	instanceOfExpression 'instanceof' nonAmbiguousTypeSpecifierExpression #actualInstanceOfExpression
     ;
 
 matchesExpression
 	:	instanceOfExpression # passOnMatchesExpression
-	|	matchesExpression 'matches' typeSpecifierExpression # actualMatchesExpression
+	|	matchesExpression 'matches' nonAmbiguousTypeSpecifierExpression # actualMatchesExpression
 	;
 
 relationalExpression
@@ -452,26 +473,29 @@ expression
     ;
 
 typeSpecifierExpression
-    :   identifierTypeSpecifierExpression
-    |	genericTypeSpecifierExpression
+    :   nonAmbiguousTypeSpecifierExpression
     |	typeofTypeSpecifierExpression
     |	nullableTypeSpecifierExpression
     ;
 
+nonAmbiguousTypeSpecifierExpression
+	:	{this.pushTypeExpressionDepth();} (identifierTypeSpecifierExpression | genericTypeSpecifierExpression) {this.popTypeExpressionDepth();} // Types that can be used with 'new', 'matches', 'instanceof' etc. expressions
+	;
+
 identifierTypeSpecifierExpression
-	:	typeSpecifierIdentifier
+	:	{this.pushTypeExpressionDepth();} typeSpecifierIdentifier {this.popTypeExpressionDepth();}
 	;
 
 genericTypeSpecifierExpression
-	:	typeSpecifierIdentifier '<' (typeSpecifierExpression (',' typeSpecifierExpression)*)? '>'
+	:	{this.pushTypeExpressionDepth();} typeSpecifierIdentifier '<' (typeSpecifierExpression (',' typeSpecifierExpression)*)? '>' {this.popTypeExpressionDepth();}
 	;
 
 typeofTypeSpecifierExpression
-	:	'typeof' '(' typeSpecifierIdentifier ')'
+	:	{this.pushTypeExpressionDepth();} 'typeof' '(' typeSpecifierIdentifier ')' {this.popTypeExpressionDepth();}
 	;
 
 nullableTypeSpecifierExpression
-	:	(identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression) ('?' | '??') // Union with null or undefined
+	:	{this.pushTypeExpressionDepth();} (identifierTypeSpecifierExpression | genericTypeSpecifierExpression | typeofTypeSpecifierExpression) ('?' | '??') {this.popTypeExpressionDepth();} // Union with null or undefined
 	;
 
 typeSpecifierIdentifier

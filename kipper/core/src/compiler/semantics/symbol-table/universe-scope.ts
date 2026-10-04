@@ -31,21 +31,20 @@ export const BuiltInTypes = {
 	any: any,
 	type: new BuiltInTypeType(),
 	obj: new BuiltInTypeObj(),
-	undefined: new BuiltInTypeUndefined(),
-	void: new BuiltInTypeVoid(),
-	null: new BuiltInTypeNull(),
 	bool: new BuiltInTypeBool(),
 	num: new BuiltInTypeNum(),
 	str: new BuiltInTypeStr(),
 	Func: new BuiltInTypeFunc([], any),
 	Array: new BuiltInTypeArray(any),
+	void: new BuiltInTypeVoid(),
+	null: new BuiltInTypeNull(),
+	undefined: new BuiltInTypeUndefined(),
 } satisfies Record<KipperBuiltInTypeLiteral, BuiltInType>;
 
 /**
  * Contains all the built-in functions in Kipper that are available per default in every program.
  */
 export const BuiltInFunctions = {
-	print: new BuiltInFunction("print", [new BuiltInFunctionArgument("msg", BuiltInTypes.any)], BuiltInTypes.void),
 	len: new BuiltInFunction(
 		"len",
 		[
@@ -54,6 +53,33 @@ export const BuiltInFunctions = {
 				new UnionType<[BuiltInTypeStr, BuiltInTypeArray]>([BuiltInTypes.str, BuiltInTypes.Array]),
 			),
 		],
+		BuiltInTypes.num,
+	),
+	print: new BuiltInFunction("print", [new BuiltInFunctionArgument("msg", BuiltInTypes.any)], BuiltInTypes.void),
+	isNaN: new BuiltInFunction("isNaN", [new BuiltInFunctionArgument("numLike", BuiltInTypes.num)], BuiltInTypes.bool),
+	isFinite: new BuiltInFunction(
+		"isFinite",
+		[new BuiltInFunctionArgument("numLike", BuiltInTypes.num)],
+		BuiltInTypes.bool,
+	),
+	isInteger: new BuiltInFunction(
+		"isInteger",
+		[new BuiltInFunctionArgument("numLike", BuiltInTypes.num)],
+		BuiltInTypes.bool,
+	),
+	isSafeInteger: new BuiltInFunction(
+		"isSafeInteger",
+		[new BuiltInFunctionArgument("numLike", BuiltInTypes.num)],
+		BuiltInTypes.bool,
+	),
+	parseInt: new BuiltInFunction(
+		"parseInt",
+		[new BuiltInFunctionArgument("toParse", BuiltInTypes.str), new BuiltInFunctionArgument("radix", BuiltInTypes.num)],
+		BuiltInTypes.num,
+	),
+	parseFloat: new BuiltInFunction(
+		"parseFloat",
+		[new BuiltInFunctionArgument("toParse", BuiltInTypes.str)],
 		BuiltInTypes.num,
 	),
 } satisfies Record<string, BuiltInFunction>;
@@ -65,6 +91,7 @@ export const BuiltInFunctions = {
 export const BuiltInVariables = {
 	__name__: new BuiltInVariable("__name__", BuiltInTypes.str, true),
 	NaN: new BuiltInVariable("NaN", BuiltInTypes.num, false),
+	Infinity: new BuiltInVariable("Infinity", BuiltInTypes.num, false),
 } satisfies Record<string, BuiltInVariable>;
 
 /**

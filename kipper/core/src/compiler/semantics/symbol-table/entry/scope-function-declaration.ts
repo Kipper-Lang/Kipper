@@ -87,10 +87,7 @@ export class ScopeFunctionDeclaration extends ScopeDeclaration {
 	 * @private
 	 */
 	private get semanticData():
-		| FunctionDeclarationSemantics
-		| ClassMethodDeclarationSemantics
-		| ClassConstructorDeclarationSemantics
-		| undefined {
+		FunctionDeclarationSemantics | ClassMethodDeclarationSemantics | ClassConstructorDeclarationSemantics | undefined {
 		return this._declaration?.getSemanticData();
 	}
 

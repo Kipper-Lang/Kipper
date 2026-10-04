@@ -10,3 +10,4 @@ export * from "./parameter-declaration/";
 export * from "./function-declaration/";
 export * from "./variable-declaration/";
 export * from "./type-declaration/";
+export * from "./error-binding-declaration/";

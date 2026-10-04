@@ -21,6 +21,7 @@ export interface GenericType<T extends GenericTypeArguments> extends ProcessedTy
 	 * @since 0.12.0
 	 */
 	readonly genericTypeArguments: T;
+
 	/**
 	 * Changes the generic type arguments for this generic type and returns a new generic type instance with the new
 	 * arguments where the types have been adjusted.
