@@ -175,8 +175,55 @@ export class JavaScriptTargetBuiltInGenerator extends KipperTargetBuiltInGenerat
 		return genJSFunction(signature, `{ return ${lenArgIdentifier}.length; }`);
 	}
 
+	async isNaN(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const numberIdentifier = signature.params[0];
+
+		return genJSFunction(signature, `{ return Number.isNaN(${numberIdentifier}); }`);
+	}
+
+	async isFinite(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const numberIdentifier = signature.params[0];
+
+		return genJSFunction(signature, `{ return Number.isFinite(${numberIdentifier}); }`);
+	}
+
+	async isInteger(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const numberIdentifier = signature.params[0];
+
+		return genJSFunction(signature, `{ return Number.isInteger(${numberIdentifier}); }`);
+	}
+
+	async isSafeInteger(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const numberIdentifier = signature.params[0];
+
+		return genJSFunction(signature, `{ return Number.isSafeInteger(${numberIdentifier}); }`);
+	}
+
+	async parseInt(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const stringIdentifier = signature.params[0];
+		const radixIdentifier = signature.params[1];
+
+		return genJSFunction(signature, `{ return Number.parseInt(${stringIdentifier}, ${radixIdentifier}); }`);
+	}
+
+	async parseFloat(funcSpec: BuiltInFunction): Promise<Array<TranslatedCodeLine>> {
+		const signature = getJSFunctionSignature(funcSpec);
+		const stringIdentifier = signature.params[0];
+
+		return genJSFunction(signature, `{ return Number.parseFloat(${stringIdentifier}); }`);
+	}
+
 	async NaN(varSpec: BuiltInVariable): Promise<Array<TranslatedCodeLine>> {
 		return [genJSVariable(varSpec, "NaN")];
+	}
+
+	async Infinity(varSpec: BuiltInVariable): Promise<Array<TranslatedCodeLine>> {
+		return [genJSVariable(varSpec, "Infinity")];
 	}
 
 	async __name__(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>> {

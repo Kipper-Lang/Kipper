@@ -145,7 +145,7 @@ export abstract class KipperTargetBuiltInGenerator {
 	// ===================================================================================================================
 
 	/**
-	 * Print function which provides default IO console output functionality.
+	 * `print()` function which provides default IO console output functionality.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @param programCtx The program context of the environment that is being compiled.
@@ -154,13 +154,70 @@ export abstract class KipperTargetBuiltInGenerator {
 	abstract print(funcSpec: BuiltInFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
-	 * Len function which provides the ability to get the length of an iterable array-like type.
+	 * `len()` function which provides the ability to get the length of an iterable array-like type.
 	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
 	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
 	 * @param programCtx The program context of the environment that is being compiled.
 	 * @since 0.10.0
 	 */
 	abstract len(funcSpec: BuiltInFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * `isNaN()` function which checks whether a number is `NaN` or not.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.13.0
+	 */
+	abstract isNaN(funcSpec: BuiltInFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * `isFinite()` function which checks whether a number is `Infinity` (or `-Infinity`) or not.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.13.0
+	 */
+	abstract isFinite(funcSpec: BuiltInFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * `isInteger()` function which checks whether a number is an integer.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.13.0
+	 */
+	abstract isInteger(funcSpec: BuiltInFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * `isSafeInteger()` function which checks whether a number is a safely representable integer in standard ECMAScript.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.13.0
+	 */
+	abstract isSafeInteger(
+		funcSpec: BuiltInFunction,
+		programCtx: KipperProgramContext,
+	): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * `parseInt()` function which parses a string and generates an int of type `num`.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.13.0
+	 */
+	abstract parseInt(funcSpec: BuiltInFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * `parseFloat()` function which parses a string and generates a float of type `num`.
+	 * @param funcSpec The specification for the function. This contains the overall metadata for the function that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.13.0
+	 */
+	abstract parseFloat(funcSpec: BuiltInFunction, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 
 	/**
 	 * Built-in variable '__name__' that provides the name of the current file being run.
@@ -179,4 +236,13 @@ export abstract class KipperTargetBuiltInGenerator {
 	 * @since 0.12.0
 	 */
 	abstract NaN(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
+
+	/**
+	 * Built-in variable 'Infinity' that provides the Infinity value.
+	 * @param varSpec The specification for the variable. This contains the overall metadata for the variable that
+	 * should be followed. This is auto-inserted by the code-generator in {@link KipperProgramContext}.
+	 * @param programCtx The program context of the environment that is being compiled.
+	 * @since 0.13.0
+	 */
+	abstract Infinity(varSpec: BuiltInVariable, programCtx: KipperProgramContext): Promise<Array<TranslatedCodeLine>>;
 }
