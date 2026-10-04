@@ -156,7 +156,7 @@ describe("Built-ins", () => {
 					const result: KipperCompileResult = await compiler.compile(fileContent, config);
 
 					const code: string = getJSEvalCode(result);
-					testPrintOutput((out) => assert.equal(out, "13"), code);
+					testPrintOutput((out) => assert.equal(out, 13), code, false);
 				});
 
 				it("should return the length of an array", async () => {
@@ -164,7 +164,163 @@ describe("Built-ins", () => {
 					const result: KipperCompileResult = await compiler.compile(fileContent, config);
 
 					const code: string = getJSEvalCode(result);
-					testPrintOutput((out) => assert.equal(out, "3"), code);
+					testPrintOutput((out) => assert.equal(out, 3), code, false);
+				});
+			});
+
+			describe(`isNaN [${target.fileExtension}]`, () => {
+				it("should return true if the value is NaN", async () => {
+					const fileContent = "print(isNaN(NaN));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, true), code, false);
+				});
+
+				it("should return false if the value is a regular number", async () => {
+					const fileContent = "print(isNaN(1234));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, false), code, false);
+				});
+
+				it("should return false if the value is Infinity", async () => {
+					const fileContent = "print(isNaN(+Infinity));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, false), code, false);
+				});
+			});
+
+			describe(`isFinite [${target.fileExtension}]`, () => {
+				it("should return true if the value is a finite number", async () => {
+					const fileContent = "print(isFinite(1234));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, true), code, false);
+				});
+
+				it("should return false if the value is Infinity", async () => {
+					const fileContent = "print(isFinite(+Infinity));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, false), code, false);
+				});
+
+				it("should return false if the value is NaN", async () => {
+					const fileContent = "print(isFinite(NaN));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, false), code, false);
+				});
+			});
+
+			describe(`isInteger [${target.fileExtension}]`, () => {
+				it("should return true if the value is an integer", async () => {
+					const fileContent = "print(isInteger(1234));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, true), code, false);
+				});
+
+				it("should return false if the value is a fraction", async () => {
+					const fileContent = "print(isInteger(12.34));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, false), code, false);
+				});
+
+				it("should return false if the value is Infinity", async () => {
+					const fileContent = "print(isInteger(+Infinity));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, false), code, false);
+				});
+			});
+
+			describe(`isSafeInteger [${target.fileExtension}]`, () => {
+				it("should return true for the largest safely representable integer", async () => {
+					const fileContent = "print(isSafeInteger(9007199254740991));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, true), code, false);
+				});
+
+				it("should return false for an integer outside the safe range", async () => {
+					const fileContent = "print(isSafeInteger(9007199254740992));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, false), code, false);
+				});
+
+				it("should return false if the value is a fraction", async () => {
+					const fileContent = "print(isSafeInteger(12.34));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, false), code, false);
+				});
+			});
+
+			describe(`parseFloat [${target.fileExtension}]`, () => {
+				it("should parse a decimal string", async () => {
+					const fileContent = "print(parseFloat('12.34'));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, 12.34), code, false);
+				});
+
+				it("should parse the numeric prefix of a string", async () => {
+					const fileContent = "print(parseFloat('12.34px'));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, 12.34), code, false);
+				});
+
+				it("should return NaN if the string does not start with a number", async () => {
+					const fileContent = "print(parseFloat('not a number'));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.isNaN(out), code, false);
+				});
+			});
+
+			describe(`parseInt [${target.fileExtension}]`, () => {
+				it("should parse a decimal integer string", async () => {
+					const fileContent = "print(parseInt('1234', 10));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, 1234), code, false);
+				});
+
+				it("should parse an integer using the given radix", async () => {
+					const fileContent = "print(parseInt('101', 2));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.equal(out, 5), code, false);
+				});
+
+				it("should return NaN if the string does not start with an integer", async () => {
+					const fileContent = "print(parseInt('not a number', 10));";
+					const result: KipperCompileResult = await compiler.compile(fileContent, config);
+
+					const code: string = getJSEvalCode(result);
+					testPrintOutput((out) => assert.isNaN(out), code, false);
 				});
 			});
 		});
@@ -191,6 +347,41 @@ describe("Built-ins", () => {
 
 			const code: string = getJSEvalCode(result);
 			testPrintOutput((out) => assert.equal(out, "NaN"), code);
+		});
+
+		describe("Infinity", () => {
+			it("Infinity", async () => {
+				const stream = new KipperFileStream({ stringContent: "print(Infinity);", name: "test.kip" });
+				const result = await compiler.compile(stream, { target: new TargetTS() });
+
+				assert.include(result.write(), "__kipper.Infinity");
+				assert.equal(result.programCtx!!.builtInVariableReferences.length, 1);
+
+				const code: string = getJSEvalCode(result);
+				testPrintOutput((out) => assert.equal(out, Infinity), code, false);
+			});
+
+			it("+Infinity", async () => {
+				const stream = new KipperFileStream({ stringContent: "print(+Infinity);", name: "test.kip" });
+				const result = await compiler.compile(stream, { target: new TargetTS() });
+
+				assert.include(result.write(), "+__kipper.Infinity");
+				assert.equal(result.programCtx!!.builtInVariableReferences.length, 1);
+
+				const code: string = getJSEvalCode(result);
+				testPrintOutput((out) => assert.equal(out, Infinity), code, false);
+			});
+
+			it("-Infinity", async () => {
+				const stream = new KipperFileStream({ stringContent: "print(-Infinity);", name: "test.kip" });
+				const result = await compiler.compile(stream, { target: new TargetTS() });
+
+				assert.include(result.write(), "-__kipper.Infinity");
+				assert.equal(result.programCtx!!.builtInVariableReferences.length, 1);
+
+				const code: string = getJSEvalCode(result);
+				testPrintOutput((out) => assert.equal(out, -Infinity), code, false);
+			});
 		});
 	});
 });
