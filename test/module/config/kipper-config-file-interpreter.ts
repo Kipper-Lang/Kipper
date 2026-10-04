@@ -8,6 +8,17 @@ import { KipperTypeScriptTarget } from "@kipper/target-ts";
 const basicKipConfig = getFileName("kip-config.basic.json");
 const extendsKipConfig = getFileName("kip-config.extended.json");
 
+function n(path: string): string {
+	return path.replace(/\\/g, "/");
+}
+
+function nProps(obj: { [k: string]: any }, props: Array<string>): { [k: string]: any } {
+	for (const prop of props) {
+		obj[prop] = n(obj[prop]);
+	}
+	return obj;
+}
+
 describe("KipperConfigInterpreter", () => {
 	describe("loadConfig", () => {
 		const interpreter = new KipperConfigInterpreter();
@@ -29,22 +40,32 @@ describe("KipperConfigInterpreter", () => {
 				const kipperConfigFile = await KipperConfigFile.fromFile(basicKipConfig, "utf8");
 				const config = await interpreter.loadConfig(kipperConfigFile);
 
-				const pwd = process.cwd();
-				assert.equal(config.basePath, pwd);
-				assert.equal(config.srcDir, `${pwd}/test/kipper-files`);
-				assert.equal(config.outDir, `${pwd}/dist`);
+				const pwd = n(process.cwd());
+				assert.equal(n(config.basePath), pwd);
+				assert.equal(n(config.srcDir || ""), `${pwd}/test/kipper-files`);
+				assert.equal(n(config.outDir), `${pwd}/dist`);
 				assert.deepEqual(config.compiler.version, semver.parse(semver.clean(kipConfigVersion)));
 				assert.instanceOf(config.compiler.target, KipperTypeScriptTarget);
-				assert.deepEqual(config.files, [
-					{
-						src: `${pwd}/test/kipper-files/main.kip`,
-						outDir: `${pwd}/dist`,
-					},
-				]);
-				assert.deepEqual(config.resources, [
-					{ src: `${pwd}/img/icon.png`, out: `${pwd}/dist/img/icon.png` },
-					{ src: `${pwd}/img/Kipper-Logo-without-head.png`, out: `${pwd}/dist/new-img-folder/icon.png` },
-				]);
+
+				config.files[0].src = n(config.files[0].src);
+				config.files[0].outDir = n(config.files[0].outDir);
+				assert.deepEqual(
+					config.files.map((obj) => nProps(obj, ["src", "outDir"])),
+					[
+						{
+							src: `${pwd}/test/kipper-files/main.kip`,
+							outDir: `${pwd}/dist`,
+						},
+					],
+				);
+
+				assert.deepEqual(
+					config.resources.map((obj) => nProps(obj, ["src", "out"])),
+					[
+						{ src: `${pwd}/img/icon.png`, out: `${pwd}/dist/img/icon.png` },
+						{ src: `${pwd}/img/Kipper-Logo-without-head.png`, out: `${pwd}/dist/new-img-folder/icon.png` },
+					],
+				);
 			});
 		});
 
@@ -53,23 +74,30 @@ describe("KipperConfigInterpreter", () => {
 				const kipperConfigFile = await KipperConfigFile.fromFile(extendsKipConfig, "utf8");
 				const config = await interpreter.loadConfig(kipperConfigFile);
 
-				const pwd = process.cwd();
-				assert.equal(config.basePath, pwd);
-				assert.equal(config.srcDir, `${pwd}/test/kipper-files`);
-				assert.equal(config.outDir, `${pwd}/dist`);
+				const pwd = n(process.cwd());
+				assert.equal(n(config.basePath), pwd);
+				assert.equal(n(config.srcDir || ""), `${pwd}/test/kipper-files`);
+				assert.equal(n(config.outDir), `${pwd}/dist`);
 				assert.deepEqual(config.compiler.version, semver.parse(semver.clean(kipConfigVersion)));
 				assert.instanceOf(config.compiler.target, KipperTypeScriptTarget);
-				assert.deepEqual(config.files, [
-					{ src: `${pwd}/test/kipper-files/multi-function-definition.kip`, outDir: `${pwd}/dist` },
-					{ src: `${pwd}/test/kipper-files/multi-function-call.kip`, outDir: `${pwd}/dist` },
-					{ src: `${pwd}/test/kipper-files/main.kip`, outDir: `${pwd}/dist` },
-				]);
-				assert.deepEqual(config.resources, [
-					{ src: `${pwd}/img/Kipper-Logo-with-head.png`, out: `${pwd}/dist/img/Kipper-Logo-with-head.png` },
-					{ src: `${pwd}/img/Kipper-Icon.png`, out: `${pwd}/dist/img/Kipper-Icon.png` },
-					{ src: `${pwd}/img/icon.png`, out: `${pwd}/dist/img/icon.png` },
-					{ src: `${pwd}/img/Kipper-Logo-without-head.png`, out: `${pwd}/dist/new-img-folder/icon.png` },
-				]);
+				assert.deepEqual(
+					config.files.map((obj) => nProps(obj, ["src", "outDir"])),
+					[
+						{ src: `${pwd}/test/kipper-files/multi-function-definition.kip`, outDir: `${pwd}/dist` },
+						{ src: `${pwd}/test/kipper-files/multi-function-call.kip`, outDir: `${pwd}/dist` },
+						{ src: `${pwd}/test/kipper-files/main.kip`, outDir: `${pwd}/dist` },
+					],
+				);
+
+				assert.deepEqual(
+					config.resources.map((obj) => nProps(obj, ["src", "out"])),
+					[
+						{ src: `${pwd}/img/Kipper-Logo-with-head.png`, out: `${pwd}/dist/img/Kipper-Logo-with-head.png` },
+						{ src: `${pwd}/img/Kipper-Icon.png`, out: `${pwd}/dist/img/Kipper-Icon.png` },
+						{ src: `${pwd}/img/icon.png`, out: `${pwd}/dist/img/icon.png` },
+						{ src: `${pwd}/img/Kipper-Logo-without-head.png`, out: `${pwd}/dist/new-img-folder/icon.png` },
+					],
+				);
 			});
 		});
 
