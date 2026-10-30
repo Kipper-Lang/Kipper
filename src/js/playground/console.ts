@@ -15,6 +15,90 @@ const shellOutputResult: HTMLElement = document.querySelector("#shell-sidebar-hi
 const consoleOutputButton: HTMLButtonElement = document.querySelector("#console-output-button button");
 const compilerOutputButton: HTMLButtonElement = document.querySelector("#compiler-output-button button");
 
+// Startup message to display in the console output when the playground is first loaded
+const STARTUP_MESSAGE = `--- Welcome to the Kipper Playground! ---
+
+Try out your first program by writing:
+
+  print("Hello world");
+
+Create your first variable by writing:
+
+  var myString: str = "Hello world!";
+  print(myString);
+
+Perform your first calculations by writing:
+
+  var result: num = 3.14 * 9;
+  print(result);
+
+Like any other language, Kipper provides loops like while-loops:
+
+  var i: num = 0;
+  while (i < 5) {
+    print(i);
+    i = i + 1;
+  }
+
+And you can also use classic loops:
+
+  for (var i: num = 0; i < 5; i = i + 1) {
+    print(i);
+  }
+
+You can use conditionals:
+
+  var x: num = 10;
+  if (x > 5) {
+    print("x is greater than 5");
+  } else {
+    print("x is less than or equal to 5");
+  }
+
+You can define functions:
+
+  def isPrime(x: num) -> bool {
+    if (x <= 1) {
+      return false;
+    }
+		for (var i: num = 2; i < x; i = i + 1) {
+			if (x % i == 0) {
+				return false;
+			}
+		}
+		return true;
+  }
+  print(isPrime(17));
+  print(isPrime(50));
+
+You can also work with interface, classes and other higher level programming concepts:
+
+	class Calculator {
+		balance: num;
+
+		constructor() {
+			this.balance = 0;
+		}
+
+		add(x: num): void {
+			this.balance = this.balance + x;
+		}
+
+		subtract(x: num): void {
+			this.balance = this.balance - x;
+		}
+
+		getBalance(): num {
+			return this.balance;
+		}
+	}
+
+	var calc: Calculator = new Calculator();
+	calc.add(10);
+	calc.subtract(3);
+	print(calc.getBalance() as str);
+`;
+
 /**
  * Returns whether the console output is selected or not (the compiler logs are selected).
  */
@@ -50,68 +134,13 @@ export function switchToCompilerOutput() {
  * Write to the console the default welcome message
  */
 export function writeConsoleOutputDefaultMessage(): void {
-	// Clear output
 	clearConsoleOutput();
-
-	const welcomeMessage: Array<string> = `--- Welcome to the Kipper Playground! ---
-
-Try out your first program by writing:
-
-  print("Hello world");
-
-Create your first variable by writing:
-
-  var myString: str = "Hello world!";
-  print(myString);
-
-Perform your first calculations by writing:
-
-  var result: num = 3.14 * 9;
-  print(result as str);
-
-Like other languages, Kipper provides loops like while-loops:
-
-  var i: num = 0;
-  while (i < 5) {
-    print(i as str);
-    i = i + 1;
-  }
-
-And you can also use for-loops:
-
-  for (var i: num = 0; i < 5; i = i + 1) {
-    print(i as str);
-  }
-
-You can also use conditionals:
-
-  var x: num = 10;
-  if (x > 5) {
-    print("x is greater than 5");
-  } else {
-    print("x is less than or equal to 5");
-  }
-
-You can also define functions:
-
-  func add(a: num, b: num): num {
-    return a + b;
-  }
-  print(add(3, 4) as str);
-`.split("\n");
+	const welcomeMessage: Array<string> = STARTUP_MESSAGE.split("\n");
 
 	// Write to the console
 	for (const msg of welcomeMessage) {
 		writeLineToConsoleOutput(msg);
 	}
-}
-
-/**
- * Prints the passed exit status onto the console
- * @param exitCode The exit code to print.
- */
-export function printProgramExitCode(exitCode: number) {
-	writeLineToConsoleOutput(`\nFinished execution with exit code ${exitCode}.`);
 }
 
 /**
@@ -181,7 +210,7 @@ export function clearCompilerOutput(): void {
 }
 
 /**
- * Initializes the event listeners for this script.
+ * Initialises the event listeners for this script.
  */
 export function init(): void {
 	// Print default message to the console output

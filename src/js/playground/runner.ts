@@ -6,7 +6,6 @@ import {
 	clearCompilerOutput,
 	clearConsoleOutput,
 	isConsoleOutputSelected,
-	printProgramExitCode,
 	switchToCompilerOutput,
 	switchToConsoleOutput,
 	writeLineToCompilerOutput,
@@ -27,9 +26,6 @@ let activeEnvVersion: string = getKipperVersion();
 // Global web worker that will run the code
 let worker: Worker = createCompilerWebWorker();
 
-// Status code returns
-const STATUS_FAILURE = 1;
-
 // Program states
 let compiling = false;
 let running = false;
@@ -40,7 +36,7 @@ let warmUp: Promise<void> | undefined = undefined;
 /**
  * Wrap up function that will be called once the compiler has been downloaded and initialised in the web worker.
  *
- * Called by {@link warmUpCompiler warmUpCompiler()}.
+ * Called by {@link warmUpCompiler()}.
  */
 export async function wrapUpWarmUp(): Promise<void> {
 	warmUp = undefined;
@@ -176,7 +172,6 @@ export async function runCode(): Promise<void> {
 				} else {
 					// End of the program
 					resetRunnerState();
-					printProgramExitCode(statusCode);
 					switchButtonToRun();
 				}
 			} else {
@@ -189,7 +184,7 @@ export async function runCode(): Promise<void> {
 		const currentCode = codeTextArea.value;
 		worker.postMessage(currentCode);
 	} else {
-		alert("Your browser does not support web-workers! Aborting operation.");
+		alert("Your browser does not support WebWorkers! Aborting operation.");
 	}
 }
 
@@ -210,7 +205,7 @@ export async function safeAbortWorker(): Promise<void> {
 		// Recreate the worker now to save time for the next run call.
 		worker = createCompilerWebWorker();
 	} else {
-		alert("Your browser does not support web-workers! Aborting operation.");
+		alert("Your browser does not support WebWorkers! Aborting operation.");
 	}
 }
 
@@ -224,10 +219,9 @@ export async function stopCode(): Promise<void> {
 	let consoleOutputSelected = isConsoleOutputSelected();
 	if (compiling || !consoleOutputSelected) {
 		switchToCompilerOutput();
-		writeLineToCompilerOutput("\nCompilation terminated.");
+		writeLineToCompilerOutput("\nCompilation terminated!");
 	} else if (running || consoleOutputSelected) {
 		switchToConsoleOutput();
-		printProgramExitCode(STATUS_FAILURE);
 	} // If nothing is going on rn, just keep the console output as it is
 
 	resetRunnerState();
@@ -258,5 +252,5 @@ export function init(): void {
 
 	// Afterwards display the ready message
 	clearCompilerOutput();
-	writeLineToCompilerOutput("--- Kipper Compiler ready for compilation --- ");
+	writeLineToCompilerOutput("--- Embedded Kipper Compiler --- ");
 }
