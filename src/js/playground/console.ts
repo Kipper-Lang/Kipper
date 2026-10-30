@@ -29,7 +29,7 @@ Create your first variable by writing:
 
 Perform your first calculations by writing:
 
-  var result: num = 3.14 * 9;
+  var result: num = (3.14 * 9) / 10;
   print(result);
 
 Like any other language, Kipper provides loops like while-loops:
@@ -71,7 +71,7 @@ You can define functions:
   print(isPrime(17));
   print(isPrime(50));
 
-You can also work with interface, classes and other higher level programming concepts:
+You can also work with interface and classes:
 
 	class Calculator {
 		balance: num;
