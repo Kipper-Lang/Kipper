@@ -96,7 +96,7 @@ You can also work with interface and classes:
 	var calc: Calculator = new Calculator();
 	calc.add(10);
 	calc.subtract(3);
-	print(calc.getBalance() as str);
+	print(f"Current balance: {calc.getBalance()}");
 `;
 
 /**

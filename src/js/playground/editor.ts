@@ -21,6 +21,66 @@ const runCodeListItem: HTMLLIElement = document.querySelector("#run-code-list-it
 const copyCodeButton: HTMLButtonElement = document.querySelector("#copy-code-list-item button");
 const clearContentButton: HTMLButtonElement = document.querySelector("#clear-content-list-item button");
 
+const STARTUP_CODE_SAMPLE = `/**
+ * Welcome to the Kipper Playground!
+ * Kipper is heavily inspired by JavaScript and some Python syntax sugar, so getting familiar with it should be easy!
+ */
+
+// Defining a function works like this:
+def isPrime(x: num) -> bool {
+	if (x <= 1) {
+		return false;
+	}
+	for (var i: num = 2; i < x; i = i + 1) {
+		if (x % i == 0) {
+			return false;
+		}
+	}
+	return true;
+}
+
+// And a standard class can be implemented like this:
+class Calculator {
+	balance: num;
+
+	constructor() {
+		this.balance = 0;
+	}
+
+	add(x: num): void {
+		this.balance = this.balance + x;
+	}
+
+	subtract(x: num): void {
+		this.balance = this.balance - x;
+	}
+
+	getBalance(): num {
+		return this.balance;
+	}
+}
+
+var calc: Calculator = new Calculator();
+calc.add(10);
+calc.subtract(3);
+print(f"Current balance: {calc.getBalance()}");
+
+// But the biggest feature is the pattern matching system!
+interface Shape {
+	width: num;
+	height: num;
+	color: str;
+}
+
+const someWebFunc: Func<obj> = (): obj -> ({ width: 10, height: 20, color: "red", dotted: true });
+const someData: obj = someWebFunc();
+if (someData matches Shape) {
+	print("We got a shape over here!");
+} else {
+	print("Doesn't fit the shape category apparently");
+}
+`;
+
 let disappear: ReturnType<typeof setTimeout>;
 /**
  * Writes the given text to the text saving state.
@@ -209,20 +269,17 @@ export function init(): void {
 		{ once: false },
 	);
 
-	// Initialize the code input of the editor of the page
+	// Initialise the code input of the editor of the page
 	// Restore the code if there has been a previous session
-	const localStorageCodeInput = localStorage.getItem(localStorageIdentifier);
-	if (localStorageCodeInput != undefined) {
+	const localStorageCodeInput: string | null = localStorage.getItem(localStorageIdentifier);
+	if (localStorageCodeInput && localStorageCodeInput.trim() !== "") { // Non-null and non-empty string
 		codeTextArea.value = localStorageCodeInput;
 		writeEditorResultAndHighlight(localStorageCodeInput);
-	} else {
-		codeTextArea.value = "";
-	}
-
-	// If the input is not empty, signalize that code was restored
-	if (codeTextArea.value.trim() !== "") {
 		void writeTextSavingState(
 			`<p class="gray-text">${window.locale["values"]["playground"]["save-state"]["loaded"]}</p>`,
 		);
+	} else {
+		codeTextArea.value = STARTUP_CODE_SAMPLE;
+		writeEditorResultAndHighlight(STARTUP_CODE_SAMPLE);
 	}
 }
