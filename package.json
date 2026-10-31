@@ -12,7 +12,7 @@
   "author": "Luna Klatzer",
   "engines": {
     "node": ">=16.0.0",
-    "pnpm": "8"
+    "pnpm": "8 || 9 || 10"
   },
   "scripts": {
     "build": "ts-node ./tools/build/build-webpages.ts",
