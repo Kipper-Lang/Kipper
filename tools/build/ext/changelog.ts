@@ -1,5 +1,7 @@
 import fetch from "node-fetch";
 
+const CHANGELOG_URL = "https://raw.githubusercontent.com/Kipper-Lang/Kipper/next/CHANGELOG.md";
+
 // Fix bug where in the changelog the '<details>' and '<summary>' tags are wrapped using a '<p>' tag
 export function registerChangelogFixExtension(showdown: {
 	extension: (name: string, func: () => Array<object>) => void;
@@ -24,6 +26,6 @@ export function registerChangelogFixExtension(showdown: {
  * Downloads the latest CHANGELOG.md from the Kipper repository.
  */
 export async function downloadLatestChangelog(): Promise<string> {
-	const response = await fetch("https://raw.githubusercontent.com/Kipper-Lang/Kipper/main/CHANGELOG.md");
+	const response = await fetch(CHANGELOG_URL);
 	return await response.text();
 }
