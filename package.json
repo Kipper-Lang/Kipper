@@ -28,9 +28,11 @@
     "tslint": "eslint ./src/ --ext .ts --config .eslintrc",
     "tslint:fix": "eslint ./src/ --ext .ts --config .eslintrc --fix",
     "posttest": "pnpm run lint & pnpm run prettier",
-    "predev": "pnpm run build",
     "host": "http-server ./dist -p 1234 -e html --cors",
+    "predev": "pnpm run build",
     "dev": "pnpm run host",
+    "predev-no-api-docs": "pnpm run build --no-api-docs",
+    "dev-no-api-docs": "pnpm run host",
     "push-new-version": "ts-node ./tools/versioning/push-new-version.ts",
     "clean": "rm -rf ./.parcel-cache ./build ./dist"
   },
