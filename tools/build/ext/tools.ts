@@ -12,18 +12,13 @@ import {
 	URLPath,
 	WebURLPath,
 } from "./base-types";
-import { log } from "./logger";
-import { destRootDir, ejsOptions, srcRootDir, srcRootDocs } from "./const-config";
+import { destRootDir, ejsOptions, srcRootDir } from "./const-config";
 import { existsSync, statSync } from "fs";
 import * as cheerio from "cheerio";
 import * as path from "path";
 import * as fs from "fs/promises";
 import * as ejs from "ejs";
-import fetch from "node-fetch";
-import { KIPPER_NPMJS_URL } from "../const";
 import { downloadLatestChangelog } from "./changelog";
-import { getDocsVersions } from "./get-docs-version";
-import { getLocales } from "./get-locales";
 
 /**
  * Returns whether 'copyToRoot' is true for the specified version.
