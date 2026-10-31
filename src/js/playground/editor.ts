@@ -23,8 +23,17 @@ const clearContentButton: HTMLButtonElement = document.querySelector("#clear-con
 
 const STARTUP_CODE_SAMPLE = `/**
  * Welcome to the Kipper Playground!
- * Kipper is heavily inspired by JavaScript and some Python syntax sugar, so getting familiar with it should be easy!
+ *
+ * Kipper transpiles to both JavaScript and TypeScript,
+ * so concepts should feel familiar to experienced
+ * developers. While the fundamentals are similar,
+ * Kipper enforces strict safe typing on all variables,
+ * functions and objects. This avoids ambiguity and
+ * allows errors to be caught right at the source!
+ *
+ * Here is a brief overview what Kipper can do:
  */
+print("--    Welcome to Kipper!   --\\n--  Happy to have you here!  --\\n");
 
 // Defining a function works like this:
 def isPrime(x: num) -> bool {
@@ -38,8 +47,10 @@ def isPrime(x: num) -> bool {
 	}
 	return true;
 }
+print(f"Is 13 prime? {isPrime(13) ? 'yes' : 'no'}");
+print(f"Is 25 prime? {isPrime(25) ? 'yes' : 'no'}");
 
-// And a standard class can be implemented like this:
+// And a class can be implemented like this:
 class Calculator {
 	balance: num;
 
@@ -60,19 +71,26 @@ class Calculator {
 	}
 }
 
+// Variables and objects can be defined like this:
 var calc: Calculator = new Calculator();
 calc.add(10);
 calc.subtract(3);
 print(f"Current balance: {calc.getBalance()}");
 
-// But the biggest feature is the pattern matching system!
+// One of the biggest feature is pattern matching!
 interface Shape {
 	width: num;
 	height: num;
 	color: str;
 }
 
-const someWebFunc: Func<obj> = (): obj -> ({ width: 10, height: 20, color: "red", dotted: true });
+// We get some unknown data and can then see if it
+// matches the shape interface we defined earlier!
+// Interfaces in this way are tangible types that
+// can be used beyond just compiler checks!
+const someWebFunc: Func<obj> = (): obj -> {
+	return { width: 10, height: 20, color: "red", dotted: true };
+};
 const someData: obj = someWebFunc();
 if (someData matches Shape) {
 	print("We got a shape over here!");
@@ -272,7 +290,8 @@ export function init(): void {
 	// Initialise the code input of the editor of the page
 	// Restore the code if there has been a previous session
 	const localStorageCodeInput: string | null = localStorage.getItem(localStorageIdentifier);
-	if (localStorageCodeInput && localStorageCodeInput.trim() !== "") { // Non-null and non-empty string
+	if (localStorageCodeInput && localStorageCodeInput.trim() !== "") {
+		// Non-null and non-empty string
 		codeTextArea.value = localStorageCodeInput;
 		writeEditorResultAndHighlight(localStorageCodeInput);
 		void writeTextSavingState(
