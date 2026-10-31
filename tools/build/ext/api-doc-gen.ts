@@ -186,9 +186,9 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 
 		// First download the temp zip file
 		const { status, body } = await fetch(zipDownloadPath);
-    if (status !== 200) {
-      throw new Error(`Failed to download Kipper source code for version '${version}'`);
-    }
+		if (status !== 200) {
+			throw new Error(`Failed to download Kipper source code for version '${version}'`);
+		}
 		const fileStream = fsSync.createWriteStream(targetZipPath);
 
 		// @ts-ignore - For some reason the type definitions are wrong
@@ -285,16 +285,10 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 	 * @protected
 	 */
 	private async typedocBuild(rootProjectPath: AbsolutePath, options: APIDocsInternalOptions): Promise<void> {
-		// Create a new typedoc app
-		const app = new typedoc.Application();
-
-		log.debug(`Building API docs using typedoc for '${options.version}'`);
-
-		// Load the project tsconfig.json
-		app.options.addReader(new typedoc.TSConfigReader());
-
 		const entryFile = `${rootProjectPath}/${options.packageProjectPath}/${options.packageName}/src/index.ts`;
 		const tsconfig = `${rootProjectPath}/${options.packageProjectPath}/${options.packageName}/tsconfig.json`;
+
+		// Read in the typedoc.json file and merge it with the options for the typedoc build
 		const typedocJSON = await this.readInJSON(`${rootDir}/typedoc.json`);
 		const typedocOptions: Partial<typedoc.TypeDocOptions> = {
 			...typedocJSON,
@@ -307,10 +301,14 @@ export class APIDocsBuilder extends MarkdownDocsBuilder {
 			exclude: ["**/node_modules/**"],
 			titleLink: `${NPM_KIPPER_SCOPE_URL}/${options.packageName}`,
 		};
-		await app.bootstrapWithPlugins(typedocOptions);
+
+		// Create a new typedoc application and bootstrap it with the specified options
+		const app = await typedoc.Application.bootstrapWithPlugins(typedocOptions);
+		app.options.addReader(new typedoc.TSConfigReader());
+		log.debug(`Building API docs using typedoc for '${options.version}'`);
 
 		// The project that should be converted
-		const project = app.convert();
+		const project = await app.convert();
 		const outputDir = options.apiVersionDestPath;
 		if (project) {
 			// Rendered markdown files
